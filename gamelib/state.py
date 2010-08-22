@@ -1,7 +1,7 @@
 """Utilities and base classes for dealing with scenes."""
 
 from albow.resource import get_image, get_sound
-
+from pygame.locals import BLEND_ADD
 
 def initial_state():
     """Load the initial state."""
@@ -40,14 +40,15 @@ class Scene(object):
         self._background = get_image([self.FOLDER, self.BACKGROUND])
 
     def draw_background(self, surface):
-        pass
+        surface.blit(self._background, (0, 0), None, BLEND_ADD)
 
-    def draw_sprites(self, surface):
-        pass
+    def draw_things(self, surface):
+        for thing in self.things.itervalues():
+            thing.draw(surface)
 
     def draw(self, surface):
         self.draw_background(surface)
-        self.draw_sprites(surface)
+        self.draw_things(surface)
 
 
 class Thing(object):
@@ -59,10 +60,14 @@ class Thing(object):
     def interact(self, item):
         pass
 
+    def draw(self, surface):
+        pass
+
 
 class Item(object):
     """Base class for inventory items."""
 
     def __init__(self):
         pass
+        # needs cursor
 
