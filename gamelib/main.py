@@ -24,7 +24,7 @@ class MainShell(Shell):
 def main():
     pygame.display.init()
     pygame.font.init()
-    display =  pygame.display.set_mode(SCREEN)
+    display =  pygame.display.set_mode(SCREEN, SRCALPHA)
     shell = MainShell(display)
     shell.run()
 

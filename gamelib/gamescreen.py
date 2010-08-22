@@ -2,6 +2,8 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
+from state import initial_state
+
 from pygame.color import Color
 from albow.screen import Screen
 from albow.controls import Button, Label
@@ -57,6 +59,8 @@ class GameScreen(Screen):
         self.inventory = InventoryView()
         self.inventory.bottomleft = self.bottomleft
         self.add(self.inventory)
+        # TODO: Randomly plonk the state here for now
+        self.state = initial_state()
 
     def main_menu(self):
         print 'Returning to menu'
