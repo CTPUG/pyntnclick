@@ -26,8 +26,8 @@ class State(object):
         self.scenes = {}
         # map of item name -> Item object
         self.items = {}
-        # map of item name -> Item object in inventory
-        self.inventory = {}
+        # list of item objects in inventory
+        self.inventory = []
         # current scene
         self.current_scene = None
 
@@ -46,10 +46,10 @@ class State(object):
         self.current_scene = self.scenes[name]
 
     def add_inventory_item(self, name):
-        self.inventory[name] = self.items[name]
+        self.inventory.append(self.items[name])
 
     def remove_inventory_item(self, name):
-        del self.inventory[name]
+        self.inventory.remove([self.items[name])
 
     def draw(self, surface):
         self.current_scene.draw(surface)
