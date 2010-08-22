@@ -1,4 +1,4 @@
-# menu.py
+# gamescreen.py
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
@@ -71,6 +71,9 @@ class GameScreen(Screen):
             StartButton,
             QuitButton,
             AddItemButton,
+            Button('Use hand', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(None)),
+            Button('Use triangle', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['triangle'])),
+            Button('Use titanium_leg', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['titanium_leg'])),
             ], align='l', spacing=20)
         self.add_centered(menu)
         self.menubutton = Button('M', action=self.main_menu)
@@ -88,7 +91,7 @@ class GameScreen(Screen):
 
         # Test items
         self.state.add_inventory_item('triangle')
-        self.state.add_inventory_item('square')
+        self.state.add_inventory_item('titanium_leg')
 
     def main_menu(self):
         print 'Returning to menu'
