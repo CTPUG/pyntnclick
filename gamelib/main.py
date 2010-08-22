@@ -5,11 +5,10 @@ Contains the entry point used by the run_game.py script.
 '''
 
 import pygame
-from pygame.locals import SWSURFACE, SRCALPHA
+from pygame.locals import SWSURFACE
 from albow.dialogs import alert
 from albow.shell import Shell
 
-import data
 from menu import MenuScreen
 from gamescreen import GameScreen
 from constants import SCREEN
@@ -24,7 +23,7 @@ class MainShell(Shell):
 def main():
     pygame.display.init()
     pygame.font.init()
-    display =  pygame.display.set_mode(SCREEN, SRCALPHA)
+    display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     shell = MainShell(display)
     shell.run()
 
