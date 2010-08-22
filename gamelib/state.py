@@ -24,27 +24,44 @@ class State(object):
         self.scenes = {}
         # map of item name -> Item object
         self.items = {}
+        # map of item name -> Item object in inventory
+        self.inventory = {}
 
 
 class Scene(object):
     """Base class for scenes."""
 
+    FOLDER = None
+    BACKGROUND = None
+
+    def __init__(self):
+        # map of thing names -> Thing objects
+        self.things = {}
+        self._background = get_image([self.FOLDER, self.BACKGROUND])
+
+    def draw_background(self, surface):
+        pass
+
+    def draw_sprites(self, surface):
+        pass
+
+    def draw(self, surface):
+        self.draw_background(surface)
+        self.draw_sprites(surface)
+
+
+class Thing(object):
+    """Base class for things in a scene that you can interact with."""
+
     def __init__(self):
         pass
 
-    def draw_background(self, screen):
+    def interact(self, item):
         pass
-
-    def draw_sprites(self, screen):
-        pass
-
-    def draw(self, screen):
-        self.draw_background(screen)
-        self.draw_sprites(screen)
 
 
 class Item(object):
-    """Base class for items."""
+    """Base class for inventory items."""
 
     def __init__(self):
         pass
