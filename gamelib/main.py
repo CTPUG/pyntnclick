@@ -4,12 +4,12 @@ Contains the entry point used by the run_game.py script.
 
 '''
 
-import data
-
 import pygame
 from pygame.locals import SWSURFACE, SRCALPHA
 from albow.dialogs import alert
 from albow.shell import Shell
+
+import data
 from menu import MenuScreen
 from gamescreen import GameScreen
 from constants import SCREEN
