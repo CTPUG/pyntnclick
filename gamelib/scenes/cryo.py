@@ -1,4 +1,4 @@
-from gamelib.state import Scene
+from gamelib.state import Scene, Item
 
 class Cryo(Scene):
 
@@ -7,6 +7,18 @@ class Cryo(Scene):
 
     def __init__(self, state):
         super(Cryo, self).__init__(state)
+        self.add_item(Triangle("triangle"))
+        self.add_item(Square("square"))
+
+
+class Triangle(Item):
+
+    INVENTORY_IMAGE = "triangle.png"
+
+
+class Square(Item):
+
+    INVENTORY_IMAGE = "square.png"
 
 
 SCENES = [Cryo]

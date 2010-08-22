@@ -35,7 +35,7 @@ class State(object):
         self.scenes[scene.name] = scene
 
     def add_item(self, item):
-        self.scenes[item.name] = item
+        self.items[item.name] = item
 
     def load_scenes(self, modname):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
@@ -76,6 +76,9 @@ class Scene(object):
         self.things = {}
         self._background = get_image(self.FOLDER, self.BACKGROUND)
 
+    def add_item(self, item):
+        self.state.add_item(item)
+
     def draw_background(self, surface):
         surface.blit(self._background, (0, 0), None, BLEND_ADD)
 
@@ -106,13 +109,12 @@ class Thing(object):
 class Item(object):
     """Base class for inventory items."""
 
-    # name of item
-    NAME = None
+    # image for inventory
+    INVENTORY_IMAGE = None
 
-    def __init__(self):
-        self.name = self.NAME
-
-        self.inventory_image = get_image('items', self.name)
+    def __init__(self, name):
+        self.name = name
+        self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
         # TODO: needs cursor
 
     def get_inventory_image(self):

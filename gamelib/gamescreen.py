@@ -6,6 +6,7 @@ from state import initial_state, Item
 
 from pygame.color import Color
 from pygame import Rect
+from pygame.locals import BLEND_ADD
 from albow.screen import Screen
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
@@ -46,7 +47,7 @@ class InventoryView(PaletteView):
 class StateWidget(Widget):
 
     def __init__(self, state):
-        Widget.__init__(self, Rect(0, 0, 800, 600))
+        Widget.__init__(self, Rect(0, 0, 800, 550))
         self.state = state
 
     def draw(self, surface):
