@@ -5,8 +5,9 @@
 from state import initial_state
 
 from pygame.color import Color
+from pygame import Rect
 from albow.screen import Screen
-from albow.controls import Button, Label
+from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
 
@@ -41,10 +42,26 @@ class InventoryView(PaletteView):
         self.info.append(colstr)
 
 
+class StateWidget(Widget):
+
+    def __init__(self, state):
+        Widget.__init__(self, Rect(0, 0, 800, 600))
+        self.state = state
+
+    def draw(self, surface):
+        self.state.draw(surface)
+
+
 class GameScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
         self.shell = shell
+
+        # TODO: Randomly plonk the state here for now
+        self.state = initial_state()
+        self.state_widget = StateWidget(self.state)
+        self.add(self.state_widget)
+
         StartButton = Button('Main Menu', action = self.main_menu)
         QuitButton = Button('Quit', action = shell.quit)
         AddItemButton = Button('Add item', action = self.add_item)
@@ -56,11 +73,10 @@ class GameScreen(Screen):
             AddItemButton,
             ], align='l', spacing=20)
         self.add_centered(menu)
+
         self.inventory = InventoryView()
         self.inventory.bottomleft = self.bottomleft
         self.add(self.inventory)
-        # TODO: Randomly plonk the state here for now
-        self.state = initial_state()
 
     def main_menu(self):
         print 'Returning to menu'

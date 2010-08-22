@@ -40,7 +40,7 @@ class State(object):
             self.add_scene(scene_cls(self))
 
     def set_current_scene(self, name):
-        self.current_scence = self.scenes[name]
+        self.current_scene = self.scenes[name]
 
     def draw(self, surface):
         self.current_scene.draw(surface)
