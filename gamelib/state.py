@@ -79,6 +79,9 @@ class Scene(object):
     def add_item(self, item):
         self.state.add_item(item)
 
+    def add_thing(self, thing):
+        self.things[thing.name] = thing
+
     def draw_background(self, surface):
         surface.blit(self._background, (0, 0), None, BLEND_ADD)
 
@@ -94,10 +97,20 @@ class Scene(object):
 class Thing(object):
     """Base class for things in a scene that you can interact with."""
 
-    def __init__(self, rect):
+    def __init__(self, name, rect):
+        self.name = name
+        # area within scene that triggers calls to interact
         self.rect = rect
+        # these are set by set_scene
+        self.scene = None
+        self.state = None
         # TODO: add masks
         # TODO: add images
+
+    def set_scene(self, scene):
+        assert self.scene is None
+        self.scene = scene
+        self.state = scene.state
 
     def interact(self, item):
         pass
