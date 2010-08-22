@@ -11,6 +11,7 @@ from pygame.locals import SWSURFACE, SRCALPHA
 from albow.dialogs import alert
 from albow.shell import Shell
 from menu import MenuScreen
+from constants import SCREEN
 
 class MainShell(Shell):
     def __init__(self, display):
@@ -20,7 +21,7 @@ class MainShell(Shell):
 
 def main():
     pygame.init()
-    display =  pygame.display.set_mode((800, 600))
+    display =  pygame.display.set_mode(SCREEN)
     shell = MainShell(display)
     shell.run()
 
