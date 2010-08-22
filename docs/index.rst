@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   walkthrough
+   artists
+
 Indices and tables
 ==================
 
