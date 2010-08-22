@@ -42,6 +42,12 @@ class State(object):
     def set_current_scene(self, name):
         self.current_scene = self.scenes[name]
 
+    def add_inventory_item(self, name):
+        self.inventory[name] = self.items[name]
+
+    def remove_inventory_item(self, name):
+        del self.inventory[name]
+
     def draw(self, surface):
         self.current_scene.draw(surface)
 
