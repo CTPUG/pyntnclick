@@ -34,6 +34,9 @@ class State(object):
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
 
+    def add_item(self, item):
+        self.scenes[item.name] = item
+
     def load_scenes(self, modname):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
         for scene_cls in mod.SCENES:
@@ -88,8 +91,10 @@ class Scene(object):
 class Thing(object):
     """Base class for things in a scene that you can interact with."""
 
-    def __init__(self):
-        pass
+    def __init__(self, rect):
+        self.rect = rect
+        # TODO: add masks
+        # TODO: add images
 
     def interact(self, item):
         pass
@@ -101,7 +106,11 @@ class Thing(object):
 class Item(object):
     """Base class for inventory items."""
 
+    # name of item
+    NAME = None
+
     def __init__(self):
-        pass
-        # needs cursor
+        self.name = self.NAME
+        # TODO: needs image
+        # TODO: needs cursor
 
