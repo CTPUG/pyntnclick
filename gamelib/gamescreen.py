@@ -2,7 +2,7 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from state import initial_state
+from state import initial_state, Item
 
 from pygame.color import Color
 from pygame import Rect
@@ -14,23 +14,21 @@ from albow.palette_view import PaletteView
 
 class InventoryView(PaletteView):
 
-    info = ["red", "green", "blue", "cyan", "magenta", "yellow"]
-
     sel_color = Color("white")
     sel_width = 2
 
-    def __init__(self):
+    def __init__(self, state):
         PaletteView.__init__(self, (50, 50), 1, 6, scrolling=True)
+        self.state = state
         self.selection = None
 
     def num_items(self):
-        return len(self.info)
+        return len(self.state.inventory)
 
     def draw_item(self, surface, item_no, rect):
         d = -2 * self.sel_width
         r = rect.inflate(d, d)
-        color = Color(self.info[item_no])
-        surface.fill(color, r)
+        surface.blit(self.state.inventory[item_no].get_inventory_image(), r, None, BLEND_ADD)
 
     def click_item(self, item_no, event):
         self.selection = item_no
@@ -38,8 +36,11 @@ class InventoryView(PaletteView):
     def item_is_selected(self, item_no):
         return self.selection == item_no
 
-    def add_item(self, colstr):
-        self.info.append(colstr)
+    def add_item(self, item):
+        self.info.append(item)
+
+    def remove_item(self, item):
+        self.info.remove(item)
 
 
 class StateWidget(Widget):
@@ -55,7 +56,6 @@ class StateWidget(Widget):
 class GameScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
-        self.shell = shell
 
         # TODO: Randomly plonk the state here for now
         self.state = initial_state()
@@ -74,9 +74,13 @@ class GameScreen(Screen):
             ], align='l', spacing=20)
         self.add_centered(menu)
 
-        self.inventory = InventoryView()
+        self.inventory = InventoryView(self.state)
         self.inventory.bottomleft = self.bottomleft
         self.add(self.inventory)
+
+        # Test items
+        self.state.add_inventory_item('triangle')
+        self.state.add_inventory_item('square')
 
     def main_menu(self):
         print 'Returning to menu'

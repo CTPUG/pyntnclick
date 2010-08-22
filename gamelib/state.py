@@ -49,7 +49,7 @@ class State(object):
         self.inventory.append(self.items[name])
 
     def remove_inventory_item(self, name):
-        self.inventory.remove([self.items[name])
+        self.inventory.remove(self.items[name])
 
     def draw(self, surface):
         self.current_scene.draw(surface)
@@ -111,6 +111,10 @@ class Item(object):
 
     def __init__(self):
         self.name = self.NAME
-        # TODO: needs image
+
+        self.inventory_image = get_image('items', self.name)
         # TODO: needs cursor
+
+    def get_inventory_image(self):
+        return self.inventory_image
 

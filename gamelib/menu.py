@@ -9,7 +9,6 @@ from albow.layout import Column
 class MenuScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
-        self.shell = shell
         StartButton = Button('Start New Game', action = self.start)
         QuitButton = Button('Quit', action = shell.quit)
         Title = Label('Caught! ... In SPAACE')
