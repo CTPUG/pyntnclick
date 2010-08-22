@@ -16,7 +16,7 @@ from albow.palette_view import PaletteView
 
 class InventoryView(PaletteView):
 
-    sel_color = Color("white")
+    sel_color = Color("yellow")
     sel_width = 2
 
     def __init__(self, state, handbutton):
@@ -29,9 +29,8 @@ class InventoryView(PaletteView):
         return len(self.state.inventory)
 
     def draw_item(self, surface, item_no, rect):
-        d = -2 * self.sel_width
-        r = rect.inflate(d, d)
-        surface.blit(self.state.inventory[item_no].get_inventory_image(), r, None, BLEND_ADD)
+        item_image = self.state.inventory[item_no].get_inventory_image()
+        surface.blit(item_image, rect, None, BLEND_ADD)
 
     def click_item(self, item_no, event):
         self.selection = item_no
@@ -42,6 +41,7 @@ class InventoryView(PaletteView):
 
     def unselect(self):
         self.selection = None
+
 
 class StateWidget(Widget):
 
