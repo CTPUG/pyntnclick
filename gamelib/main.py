@@ -2,12 +2,25 @@
 
 Contains the entry point used by the run_game.py script.
 
-Feel free to put all your game code here, or in other modules in this "gamelib"
-package.
 '''
 
 import data
 
+import pygame
+from pygame.locals import SWSURFACE, SRCALPHA
+from albow.dialogs import alert
+from albow.shell import Shell
+from menu import MenuScreen
+
+class MainShell(Shell):
+    def __init__(self, display):
+        Shell.__init__(self, display)
+        self.menu_screen = MenuScreen(self)
+        self.show_screen(self.menu_screen)
+
 def main():
-    print "Hello from your game's main()"
-    print data.load('sample.txt').read()
+    pygame.init()
+    display =  pygame.display.set_mode((800, 600))
+    shell = MainShell(display)
+    shell.run()
+
