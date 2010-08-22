@@ -1,40 +1,74 @@
 Your Game Title
 ===============
 
-Entry in PyWeek #4  <http://www.pyweek.org/4/>
-Team: YOUR TEAM NAME (leave the "Team: bit")
-Members: YOUR TEAM MEMBERS (leave the "Members: bit")
+Entry in PyWeek #11  <http://www.pyweek.org/11/>
+Team: Boomslang
+Members:
 
+    Adrianna Pinska
+    Jeremy Thurgood
+    Neil Muller
+    Simon Cross
+    Stefano Rivera
 
-DEPENDENCIES:
+A second PyWeek entry by the hackers of the Cape Town Python Users Group
+(CTPUG). The theme for PyWeek 11 was "Caught".
 
-You might need to install some of these before running the game:
+RUNNING THE GAME
+================
 
-  Python:     http://www.python.org/
-  PyGame:     http://www.pygame.org/
-  PyOpenGL:   http://pyopengl.sf.net/
+It is likely that you have obtain the game in one of four possible ways:
 
+Windows:
 
+If you have the Windows .zip file, unzip it, find foxassault.exe and
+doube-click it to launch the game.
 
-RUNNING THE GAME:
+Unix:
 
-On Windows or Mac OS X, locate the "run_game.pyw" file and double-click it.
+If you have the Unix .tgz file, make sure you have Python and pygame
+installed. The extract the tar file and run "python run_game.py" from
+inside the extracted folder.
 
-Othewise open a terminal / console and "cd" to the game directory and run:
+Mac OS X:
 
-  python run_game.py
+If you have the Mac OS X .dmg file, double-click to open it. Drag
+Operation Fox Assault to Applications to install. Alternatively,
+double-click on Operation Fox Assault to run it.
 
+Source:
 
+If you have obtained the source directly, you need to install the
+dependencies listed further down. Then run "python run_game.py".
 
-HOW TO PLAY THE GAME:
+HOW TO PLAY THE GAME
+====================
 
-Move the cursor around the screen with the mouse.
+???
 
-Press the left mouse button to fire the ducks.
+DEPENDENCIES
+============
 
+You will need to install these before running the game:
 
+  Python:                   http://www.python.org/
+  PyGame:                   http://www.pygame.org/
+  Albow:                    http://www.cosc.canterbury.ac.nz/greg.ewing/python/Albow/
 
-LICENSE:
+??? requires python 2.5 or later, pygame 1.8 or later and
+Albow 2.1.0.
 
-This game skellington is placed in the Public Domain.
+LICENSE
+=======
 
+MIT License. See COPYING.
+
+LINKS
+=====
+
+- http://ctpug.org.za/
+- IRC: #ctpug on Atrum (http://www.atrum.org)
+
+- http://www.pyweek.org/11/
+- IRC: #pyweek on FreeNode
+- http://search.twitter.com/search?q=pyweek
