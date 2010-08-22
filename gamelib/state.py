@@ -1,5 +1,12 @@
 """Utilities and base classes for dealing with scenes."""
 
+def initial_state():
+    """Load the initial state."""
+    state = State()
+    # TODO: populate state
+    return state
+
+
 class State(object):
     """Complete game state.
 
