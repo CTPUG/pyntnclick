@@ -55,6 +55,7 @@ class GameScreen(Screen):
             ], align='l', spacing=20)
         self.add_centered(menu)
         self.inventory = InventoryView()
+        self.inventory.bottomleft = self.bottomleft
         self.add(self.inventory)
 
     def main_menu(self):
