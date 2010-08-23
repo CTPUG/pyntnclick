@@ -5,6 +5,7 @@
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
+from albow.dialogs import Dialog
 from pygame import Rect
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
@@ -75,6 +76,15 @@ class StateWidget(CursorWidget):
         CursorWidget.mouse_move(self, event)
 
 
+class DetailWindow(CursorWidget):
+    def mouse_down(self, e):
+        if e not in self:
+            self.dismiss()
+
+    def draw(self, surface):
+        surface.fill(Color('green'))
+
+
 class GameScreen(CursorSpriteScreen):
     def __init__(self, shell):
         CursorSpriteScreen.__init__(self, shell)
@@ -89,12 +99,20 @@ class GameScreen(CursorSpriteScreen):
                 action=self.popup_menu.show_menu)
         self.menubutton.bottomleft = self.bottomleft
         self.add(self.menubutton)
+
+        self.detail = DetailWindow()
+        self.detail.rect = Rect(0, 0, 200, 200)
+
+        self.testbutton = Button('Test', action=self.detail.present)
+        self.testbutton.bottomright = self.bottomright
+        self.add(self.testbutton)
+
         self.handbutton = HandButton(action=self.hand_pressed)
         self.handbutton.bottomleft = self.bottomleft
         self.handbutton.get_rect().move_ip(BUTTON_SIZE, 0)
         self.add(self.handbutton)
-        self.inventory = InventoryView(self.state, self.handbutton)
 
+        self.inventory = InventoryView(self.state, self.handbutton)
         self.inventory.bottomleft = self.bottomleft
         self.inventory.get_rect().move_ip(2 * BUTTON_SIZE, 0)
         self.add(self.inventory)
