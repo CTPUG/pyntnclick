@@ -35,7 +35,22 @@ class TitaniumLeg(Item):
 
 
 class CryoUnitAlpha(Thing):
-    pass
+    "Cryo unit containing titanium leg."
+
+    FOLDER = "cryo"
+    IMAGE = "cryo_unit_alpha"
+
+    INITIAL_DATA = {
+        'contains_titanium_leg': True,
+        }
+
+    def interact_without(self):
+        self.message("The corpse in this cryo unit has a prosthetic leg made out of titanium. You take it.")
+        self.state.add_inventory_item('titanium_leg')
+        self.set_data('contains_titanium_leg', False)
+
+    def is_interactive(self):
+        return self.get_data('contains_titanium_leg')
 
 
 class CryoRoomDoor(Thing):
@@ -68,6 +83,7 @@ class CryoRoomDoor(Thing):
     def open_door(self):
         self.set_data('open', True)
         self.state.scenes['bridge'].set_data('accessible', True)
+        self.state.remove_inventory_item('titanium_leg')
 
     def get_description(self):
         if self.get_data('open'):

@@ -21,6 +21,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
     def test_cryo_door_closed_titanium_leg(self):
         "The door is closed and we touch it with the titanium leg. It opens."
 
+        self.state.add_inventory_item('titanium_leg')
         self.assert_game_data('accessible', True)
         self.assert_game_data('accessible', False, scene='bridge')
         self.assert_game_data('open', False, 'cryo.door')
@@ -30,6 +31,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('accessible', True)
         self.assert_game_data('accessible', True, scene='bridge')
         self.assert_game_data('open', True, 'cryo.door')
+        self.assert_inventory_item('titanium_leg', False)
 
     def test_cryo_door_open_hand(self):
         "The door is open and we touch it with the hand. No change."
@@ -54,3 +56,14 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('accessible', True)
         self.assert_game_data('accessible', True, scene='bridge')
         self.assert_game_data('open', True, 'cryo.door')
+
+    def test_cryo_unit_alpha_full_hand(self):
+        "The cryo unit has the leg in it and we touch it. We get the leg."
+
+        self.assert_game_data('contains_titanium_leg', True, 'cryo.unit.1')
+        self.assert_inventory_item('titanium_leg', False)
+
+        self.interact_thing('cryo.unit.1')
+
+        self.assert_game_data('contains_titanium_leg', False, 'cryo.unit.1')
+        self.assert_inventory_item('titanium_leg', True)

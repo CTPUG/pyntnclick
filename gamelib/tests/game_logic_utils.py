@@ -36,8 +36,11 @@ class GameLogicTestCase(unittest.TestCase):
             gizmo = gizmo.things[thing]
         self.assertEquals(value, gizmo.get_data(key))
 
-    def interact_thing(self, thing_name, item_name=None):
-        item = None
-        if item_name is not None:
-            item = self.state.items[item_name]
-        self.state.scenes[self.CURRENT_SCENE].things[thing_name].interact(item)
+    def assert_inventory_item(self, item, in_inventory=True):
+        self.assertEquals(in_inventory, self.state.items[item] in self.state.inventory)
+
+    def interact_thing(self, thing, item=None):
+        item_obj = None
+        if item is not None:
+            item_obj = self.state.items[item]
+        self.state.scenes[self.CURRENT_SCENE].things[thing].interact(item_obj)
