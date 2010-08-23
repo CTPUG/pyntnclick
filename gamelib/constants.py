@@ -1,6 +1,7 @@
 # Useful constants
 # copyright boomslang team (see COPYRIGHT file for details)
 
+
 SCREEN = (800, 600)
 FREQ = 44100   # same as audio CD
 BITSIZE = -16  # unsigned 16 bit

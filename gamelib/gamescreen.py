@@ -5,18 +5,17 @@
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
-from albow.resource import get_font
 from pygame import Rect
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
 
 from constants import BUTTON_SIZE
-from cursor import CursorSpriteScreen
+from cursor import CursorSpriteScreen, CursorWidget
 from hand import HandButton
-from popupmenu import PopupMenu
+from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
 
-class InventoryView(PaletteView):
+class InventoryView(PaletteView, CursorWidget):
 
     sel_color = Color("yellow")
     sel_width = 2
@@ -45,7 +44,7 @@ class InventoryView(PaletteView):
         self.selection = None
 
 
-class StateWidget(Widget):
+class StateWidget(CursorWidget):
 
     def __init__(self, state):
         Widget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
@@ -70,6 +69,7 @@ class StateWidget(Widget):
         if self.state.check_for_new_description(event.pos):
             # queue a redraw
             self.invalidate()
+        CursorWidget.mouse_move(self, event)
 
 
 class GameScreen(CursorSpriteScreen):
@@ -82,11 +82,9 @@ class GameScreen(CursorSpriteScreen):
         self.add(self.state_widget)
 
         self.popup_menu = PopupMenu(shell)
-        self.menubutton = Button('Menu', action=self.popup_menu.show_menu)
-        self.menubutton.font = get_font(16, 'Vera.ttf')
-        self.menubutton.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
+        self.menubutton = PopupMenuButton('Menu',
+                action=self.popup_menu.show_menu)
         self.menubutton.bottomleft = self.bottomleft
-        self.menubutton.margin = (BUTTON_SIZE - self.menubutton.font.get_linesize()) / 2
         self.add(self.menubutton)
         self.handbutton = HandButton(action=self.hand_pressed)
         self.handbutton.bottomleft = self.bottomleft
