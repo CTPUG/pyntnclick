@@ -18,8 +18,8 @@ class Cryo(Scene):
         super(Cryo, self).__init__(state)
         self.add_item(Triangle("triangle"))
         self.add_item(TitaniumLeg("titanium_leg"))
-        self.add_thing(CryoUnitAlpha("cryo.unit.1", (20, 20, 400, 500)))
-        self.add_thing(CryoRoomDoor("cryo.door", (30, 30, 400, 300)))
+        self.add_thing(CryoUnitAlpha("cryo.unit.1", (20, 20, 200, 200)))
+        self.add_thing(CryoRoomDoor("cryo.door", (200, 200, 400, 300)))
 
 
 class Triangle(Item):
@@ -68,6 +68,11 @@ class CryoRoomDoor(Thing):
     def open_door(self):
         self.set_data('open', True)
         self.state.scenes['bridge'].set_data('accessible', True)
+
+    def get_description(self):
+        if self.get_data('open'):
+            return 'An open doorway leads to the rest of the ship'
+        return 'A rusty door. It is currently closed'
 
 
 SCENES = [Cryo]

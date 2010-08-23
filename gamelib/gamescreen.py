@@ -51,10 +51,25 @@ class StateWidget(Widget):
     def __init__(self, state):
         Widget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
         self.state = state
+        # current mouse-over thing description
+        self.description = None
 
     def draw(self, surface):
         self.state.draw(surface)
+        if self.description:
+            print self.description
+        msg = self.state.get_message()
+        if msg:
+            # FIXME: add some timer to invalidate msgs
+            print msg
+            self.state.clear_message()
 
+    def mouse_move(self, event):
+        old_desc = self.description
+        self.description = self.state.get_description(event.pos)
+        if self.description != old_desc:
+            # queue a redraw
+            self.invalidate()
 
 class GameScreen(Screen):
     def __init__(self, shell):
@@ -94,6 +109,7 @@ class GameScreen(Screen):
         self.state.add_inventory_item('triangle')
         self.state.add_inventory_item('titanium_leg')
 
+
     # Albow uses magic method names (command + '_cmd'). Yay.
     # Albow's search order means they need to be defined here, not in
     # PopMenu, which is annoying.
@@ -110,4 +126,5 @@ class GameScreen(Screen):
     def hand_pressed(self):
         self.handbutton.toggle_selected()
         self.inventory.unselect()
+
 

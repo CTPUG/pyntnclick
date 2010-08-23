@@ -2,6 +2,7 @@
 
 from albow.resource import get_image, get_sound
 from pygame.locals import BLEND_ADD
+from pygame.rect import Rect
 
 
 def initial_state():
@@ -33,6 +34,8 @@ class State(object):
         self.items = {}
         # list of item objects in inventory
         self.inventory = []
+        # Result of the most recent action
+        self.msg = None
         # current scene
         self.current_scene = None
 
@@ -59,8 +62,18 @@ class State(object):
     def draw(self, surface):
         self.current_scene.draw(surface)
 
+    def get_message(self):
+        return self.msg
+
+    def clear_message(self):
+        self.msg = None
+
+    def get_description(self, pos):
+        """Get the description associated with current mouse position"""
+        return self.current_scene.get_description(pos)
+
     def message(self, msg):
-        print msg
+        self.msg = msg
 
 
 class StatefulGizmo(object):
@@ -123,6 +136,14 @@ class Scene(StatefulGizmo):
         self.draw_background(surface)
         self.draw_things(surface)
 
+    def get_description(self, pos):
+        desc = None
+        for thing in self.things.itervalues():
+            # Last thing in the list that matches wins
+            if Rect(thing.rect).collidepoint(pos):
+                desc = thing.get_description()
+        return desc
+
 
 class Thing(StatefulGizmo):
     """Base class for things in a scene that you can interact with."""
@@ -151,6 +172,9 @@ class Thing(StatefulGizmo):
 
     def message(self, msg):
         self.state.message(msg)
+
+    def get_description(self):
+        return None
 
     def is_interactive(self):
         return True
