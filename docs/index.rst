@@ -13,6 +13,7 @@ Contents:
 
    walkthrough
    artists
+   artcredits
 
 Indices and tables
 ==================
