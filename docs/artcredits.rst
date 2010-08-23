@@ -13,6 +13,8 @@ Cryo Chambers
 
   * Titanium Prostethic Leg:
 
+  * Hand Icon: From openclipart.org (http://www.openclipart.org/detail/7580) - drawn by johnny_automatic
+
 Bridge
 ^^^^^^
 * Background:
