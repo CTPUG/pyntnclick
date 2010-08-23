@@ -4,7 +4,7 @@ GAME_NAME="captured"
 
 mkdir -p build/${GAME_NAME} dist
 
-cp -r README.txt run_game.py gamelib Resources build/${GAME_NAME}
+cp -r README.txt run_game.py gamelib tests Resources build/${GAME_NAME}
 
 cd build
 
