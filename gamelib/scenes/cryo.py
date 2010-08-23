@@ -41,7 +41,7 @@ class CryoUnitAlpha(Thing):
     NAME = "cryo.unit.1"
 
     INTERACTS = {
-        "unit": InteractNoImage(100, 300, 100, 100),
+        "unit": InteractNoImage(520, 430, 80, 50),
     }
 
     INITIAL = "unit"
@@ -65,8 +65,8 @@ class CryoRoomDoor(Thing):
     NAME = "cryo.door"
 
     INTERACTS = {
-        "ajar": InteractImage(200, 200, "door_ajar.png"),
-        "open": InteractImage(200, 200, "door_open.png"),
+        "ajar": InteractImage(290, 260, "door_ajar.png"),
+        "open": InteractImage(290, 260, "door_open.png"),
         }
 
     INITIAL = "ajar"
