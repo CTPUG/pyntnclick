@@ -36,6 +36,7 @@ class State(object):
         self.inventory = []
         # Result of the most recent action
         self.msg = None
+        self.description = None
         # current scene
         self.current_scene = None
 
@@ -68,9 +69,16 @@ class State(object):
     def clear_message(self):
         self.msg = None
 
-    def get_description(self, pos):
-        """Get the description associated with current mouse position"""
-        return self.current_scene.get_description(pos)
+    # FIXME: sort out how state.interact and description updating should work
+
+    def check_for_new_description(self, pos):
+        """Check if the current mouse position causes a new description"""
+        old_desc = self.description
+        self.description = self.current_scene.check_description(pos)
+        return old_desc != self.description
+
+    def get_description(self):
+        return self.description
 
     def message(self, msg):
         self.msg = msg
@@ -136,7 +144,7 @@ class Scene(StatefulGizmo):
         self.draw_background(surface)
         self.draw_things(surface)
 
-    def get_description(self, pos):
+    def check_description(self, pos):
         desc = None
         for thing in self.things.itervalues():
             # Last thing in the list that matches wins

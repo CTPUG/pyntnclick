@@ -63,11 +63,12 @@ class StateWidget(Widget):
             # FIXME: add some timer to invalidate msgs
             print msg
             self.state.clear_message()
+        desc = self.state.get_description()
+        if desc:
+            print desc
 
     def mouse_move(self, event):
-        old_desc = self.description
-        self.description = self.state.get_description(event.pos)
-        if self.description != old_desc:
+        if self.state.check_for_new_description(event.pos):
             # queue a redraw
             self.invalidate()
 
