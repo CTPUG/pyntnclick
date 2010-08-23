@@ -132,7 +132,12 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = Label(text)
-        label.margin = 5
+        # TODO: create derived label class that does this
+        # manually recalculate size
+        d = 5
+        w, h = label.size
+        label.margin = d
+        label.size = (w+2*d, h+2*d)
         label.border_width = 1
         label.border_color = (0, 0, 0)
         label.bg_color = (127, 127, 127)
@@ -141,7 +146,9 @@ class Scene(StatefulGizmo):
 
     def draw_description(self, surface):
         if self._current_description is not None:
-            self._current_description.draw(surface)
+            sub = surface.subsurface(
+                Rect(5, 5, *self._current_description.size))
+            self._current_description.draw_all(sub)
 
     def draw_background(self, surface):
         surface.blit(self._background, (0, 0), None, BLEND_ADD)
