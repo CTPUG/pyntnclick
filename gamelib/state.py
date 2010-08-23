@@ -9,6 +9,12 @@ from pygame.color import Color
 
 import constants
 
+class Result(object):
+    """Result of interacting with a thing"""
+
+    def __init__(self, message=None):
+        self.message = message
+
 
 def initial_state():
     """Load the initial state."""
@@ -71,7 +77,7 @@ class State(object):
         self.current_scene.draw(surface)
 
     def interact(self, pos):
-        self.current_scene.interact(self.tool, pos)
+        return self.current_scene.interact(self.tool, pos)
 
     def mouse_move(self, pos):
         self.current_scene.mouse_move(self.tool, pos)
@@ -166,11 +172,18 @@ class Scene(StatefulGizmo):
         """Interact with a particular position.
 
         Item may be an item in the list of items or None for the hand.
+
+        Returns a Result object to provide feedback to the player.
         """
         for thing in self.things.itervalues():
             if thing.rect.collidepoint(pos):
-                thing.interact(item)
-                break
+                result = thing.interact(item)
+                if result:
+                    if self._current_thing:
+                        # Also update descriptions if needed
+                        self._current_description = self._make_description(
+                                self._current_thing.get_description())
+                    return result
 
     def mouse_move(self, item, pos):
         """Call to check whether the cursor has entered / exited a thing.
@@ -227,9 +240,6 @@ class Thing(StatefulGizmo):
         self.scene = scene
         self.state = scene.state
 
-    def message(self, msg):
-        self.state.message(msg)
-
     def get_description(self):
         return None
 
@@ -248,19 +258,19 @@ class Thing(StatefulGizmo):
         if not self.is_interactive():
             return
         if item is None:
-            self.interact_without()
+            return self.interact_without()
         else:
             handler = getattr(self, 'interact_with_' + item.name, None)
             if handler is not None:
-                handler(item)
+                return handler(item)
             else:
-                self.interact_default(item)
+                return self.interact_default(item)
 
     def interact_without(self):
-        self.interact_default(None)
+        return self.interact_default(None)
 
     def interact_default(self, item):
-        self.message("It doesn't work.")
+        return Result("It doesn't work.")
 
     def draw(self, surface):
         if self._interact_hilight_color is not None:

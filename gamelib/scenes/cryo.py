@@ -2,7 +2,7 @@
 
 import random
 
-from gamelib.state import Scene, Item, Thing
+from gamelib.state import Scene, Item, Thing, Result
 
 
 class Cryo(Scene):
@@ -45,9 +45,9 @@ class CryoUnitAlpha(Thing):
         }
 
     def interact_without(self):
-        self.message("The corpse in this cryo unit has a prosthetic leg made out of titanium. You take it.")
         self.state.add_inventory_item('titanium_leg')
         self.set_data('contains_titanium_leg', False)
+        return Result("The corpse in this cryo unit has a prosthetic leg made out of titanium. You take it.")
 
     def is_interactive(self):
         return self.get_data('contains_titanium_leg')
@@ -64,14 +64,14 @@ class CryoRoomDoor(Thing):
         }
 
     def interact_with_titanium_leg(self, item):
-        self.message("You wedge the titanium leg into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
         self.open_door()
+        return Result("You wedge the titanium leg into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
 
     def interact_without(self):
-        self.message("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
+        return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
 
     def interact_default(self, item):
-        self.message(random.choice([
+        return Result(random.choice([
                     "Sadly, this isn't that sort of game.",
                     "Your valiant efforts are foiled by the Evil Game Designer.",
                     "The door resists. Try something else, perhaps?",

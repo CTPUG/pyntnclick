@@ -5,7 +5,7 @@
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
-from albow.dialogs import Dialog
+from albow.dialogs import Dialog, wrapped_label
 from pygame import Rect
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
@@ -54,7 +54,15 @@ class StateWidget(CursorWidget):
         self.state.draw(surface)
 
     def mouse_down(self, event):
-        self.state.interact(event.pos)
+        result = self.state.interact(event.pos)
+        if result and result.message:
+            # Display the message as a modal dialog
+            msg_label = wrapped_label(result.message, 60)
+            dialog = Dialog(msg_label)
+            dialog.click_outside_response = -1
+            dialog.present()
+            # queue a redraw to show updated state
+            self.invalidate()
 
     def mouse_move(self, event):
         self.state.mouse_move(event.pos)
