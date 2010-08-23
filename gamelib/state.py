@@ -68,7 +68,7 @@ class State(object):
         self.current_scene.draw(surface)
 
     def interact(self, item, pos):
-        self.current_scene.iteract(item, pos)
+        self.current_scene.interact(item, pos)
 
     def mouse_move(self, item, pos):
         self.current_scene.mouse_move(item, pos)
