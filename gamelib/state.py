@@ -1,8 +1,12 @@
 """Utilities and base classes for dealing with scenes."""
 
 from albow.resource import get_image, get_sound
+from albow.utils import frame_rect
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
+from pygame.color import Color
+
+import constants
 
 
 def initial_state():
@@ -162,11 +166,20 @@ class Thing(StatefulGizmo):
     # name of image resource
     IMAGE = None
 
+    # Interact rectangle hi-light color (for debugging)
+    # (set to None to turn off)
+    if constants.DEBUG:
+        _interact_hilight_color = Color('Red')
+    else:
+        _interact_hilight_color = None
+
     def __init__(self, name, rect):
         StatefulGizmo.__init__(self)
         self.name = name
+        # area within scene to render to
+        self.rect = Rect(rect)
         # area within scene that triggers calls to interact
-        self.rect = rect
+        self.interact_rect = Rect(rect)
         # these are set by set_scene
         self.scene = None
         self.state = None
@@ -206,7 +219,10 @@ class Thing(StatefulGizmo):
         self.message("It doesn't work.")
 
     def draw(self, surface):
-        pass
+        if self._interact_hilight_color is not None:
+            frame_rect(surface, self._interact_hilight_color,
+                self.interact_rect.inflate(1, 1), 1)
+        # TODO: draw image if there is one
 
 
 class Item(object):

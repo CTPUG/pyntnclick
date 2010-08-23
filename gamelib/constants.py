@@ -8,3 +8,5 @@ CHANNELS = 2   # 1 == mono, 2 == stereo
 BUFFER = 1024  # audio buffer size in no. of samples
 
 BUTTON_SIZE = 50
+
+DEBUG = True
