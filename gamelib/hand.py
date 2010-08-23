@@ -19,7 +19,6 @@ class HandButton(ImageButton):
 
     def draw(self, surface):
         """Draw the widget"""
-        print 'drawing widget', self.selected
         ImageButton.draw(self, surface)
         if self.selected:
             rect = surface.get_rect().inflate(-self.sel_width, -self.sel_width)
