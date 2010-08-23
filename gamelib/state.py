@@ -2,7 +2,7 @@
 
 from albow.resource import get_image, get_sound
 from albow.utils import frame_rect
-from albow.controls import Label
+from widgets import BoomLabel
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
 from pygame.color import Color
@@ -137,13 +137,8 @@ class Scene(StatefulGizmo):
     def _make_description(self, text):
         if text is None:
             return None
-        label = Label(text)
-        # TODO: create derived label class that does this
-        # manually recalculate size
-        d = 5
-        w, h = label.size
-        label.margin = d
-        label.size = (w+2*d, h+2*d)
+        label = BoomLabel(text)
+        label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)
         label.bg_color = (127, 127, 127)
