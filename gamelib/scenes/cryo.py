@@ -55,7 +55,7 @@ class CryoUnitAlpha(Thing):
     def interact_without(self):
         self.state.add_inventory_item('titanium_leg')
         self.set_data('contains_titanium_leg', False)
-        return Result("The corpse in this cryo unit has a prosthetic leg made out of titanium. You take it.")
+        return Result("The skeletal occupant of this cryo unit has an artificial femur made of titanium. You take it.")
 
     def is_interactive(self):
         return self.get_data('contains_titanium_leg')
@@ -72,21 +72,27 @@ class CryoRoomDoor(Thing):
     NAME = "cryo.door"
 
     INTERACTS = {
+        "shut": InteractNoImage(290, 260, 99, 152),
         "ajar": InteractImage(290, 260, "door_ajar.png"),
         "open": InteractImage(290, 260, "door_open.png"),
         }
 
-    INITIAL = "ajar"
+    INITIAL = "shut"
 
     INITIAL_DATA = {
-        'open': False,
+        'door': "shut",
         }
 
     def interact_with_titanium_leg(self, item):
-        self.open_door()
-        return Result("You wedge the titanium leg into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
+        if self.get_data('door') == "ajar":
+            self.open_door()
+            return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
+        else:
+            return Result("You bang on the door with the titanium femur. It makes a clanging sound.")
 
     def interact_without(self):
+        if self.get_data('door') == "shut":
+            self.half_open_door()
         return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
 
     def interact_default(self, item):
@@ -97,18 +103,24 @@ class CryoRoomDoor(Thing):
                     ]))
 
     def is_interactive(self):
-        return not self.get_data('open')
+        return self.get_data('door') != "open"
+
+    def half_open_door(self):
+        self.set_data('door', "ajar")
+        self.set_interact("ajar")
 
     def open_door(self):
-        self.set_data('open', True)
+        self.set_data('door', "open")
         self.set_interact("open")
         self.state.scenes['bridge'].set_data('accessible', True)
         self.state.remove_inventory_item('titanium_leg')
 
     def get_description(self):
-        if self.get_data('open'):
-            return 'An open doorway leads to the rest of the ship'
-        return 'A rusty door. It is currently closed'
+        if self.get_data('door') == "open":
+            return 'An open doorway leads to the rest of the ship.'
+        elif self.get_data('door') == "open":
+            return "A rusty door.  It can't open all the way because of a chain on the other side."
+        return 'A rusty door. It is currently closed.'
 
 
 class CryoComputer(Thing):
