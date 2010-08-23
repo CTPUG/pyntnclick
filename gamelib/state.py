@@ -67,6 +67,12 @@ class State(object):
     def draw(self, surface):
         self.current_scene.draw(surface)
 
+    def interact(self, item, pos):
+        self.current_scene.iteract(item, pos)
+
+    def mouse_move(self, item, pos):
+        self.current_scene.mouse_move(item, pos)
+
     def get_message(self):
         return self.msg
 
@@ -82,6 +88,9 @@ class State(object):
         return old_desc != self.description
 
     def get_description(self):
+        #
+        # DEPRECATED
+        #
         return self.description
 
     def message(self, msg):
@@ -126,6 +135,7 @@ class Scene(StatefulGizmo):
         # map of thing names -> Thing objects
         self.things = {}
         self._background = get_image(self.FOLDER, self.BACKGROUND)
+        self._current_thing = None
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -148,7 +158,37 @@ class Scene(StatefulGizmo):
         self.draw_background(surface)
         self.draw_things(surface)
 
+    def interact(self, item, pos):
+        """Interact with a particular position.
+
+        Item may be an item in the list of items or None for the hand.
+        """
+        for thing in self.things.itervalues():
+            if thing.rect.collidepoint(pos):
+                thing.interact(item)
+                break
+
+    def mouse_move(self, item, pos):
+        """Call to check whether the cursor has entered / exited a thing.
+
+        Item may be an item in the list of items or None for the hand.
+        """
+        if self._current_thing is not None:
+            if self._current_thing.rect.collidepoint(pos):
+                return
+            else:
+                self._current_thing.leave()
+                self._current_thing = None
+        for thing in self.things.itervalues():
+            if thing.rect.collidepoint(pos):
+                thing.enter(item)
+                self._current_thing = thing
+                break
+
     def check_description(self, pos):
+        #
+        # DEPRECATED
+        #
         desc = None
         for thing in self.things.itervalues():
             # Last thing in the list that matches wins
@@ -199,6 +239,14 @@ class Thing(StatefulGizmo):
 
     def is_interactive(self):
         return True
+
+    def enter(self, item):
+        """Called when the cursor enters the Thing."""
+        print "Enter %r -> %r" % (item, self)
+
+    def leave(self):
+        """Called when the cursr leaves the Thing."""
+        print "Leaves %r" % self
 
     def interact(self, item):
         if not self.is_interactive():

@@ -65,7 +65,13 @@ class StateWidget(CursorWidget):
         if desc:
             print desc
 
+    def mouse_down(self, event):
+        # TODO: replace None with the correct item
+        self.state.interact(None, event.pos)
+
     def mouse_move(self, event):
+        # TODO: replace None with the correct item
+        self.state.mouse_move(None, event.pos)
         if self.state.check_for_new_description(event.pos):
             # queue a redraw
             self.invalidate()
