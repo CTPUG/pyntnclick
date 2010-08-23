@@ -11,7 +11,7 @@ class MenuScreen(Screen):
         Screen.__init__(self, shell)
         StartButton = Button('Start New Game', action = self.start)
         QuitButton = Button('Quit', action = shell.quit)
-        Title = Label('Caught! ... In SPAACE')
+        Title = Label('Suspended Sentence')
         menu = Column([
             Title,
             StartButton,
