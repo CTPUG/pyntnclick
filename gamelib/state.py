@@ -214,7 +214,7 @@ class Thing(StatefulGizmo):
     # Interact rectangle hi-light color (for debugging)
     # (set to None to turn off)
     if constants.DEBUG:
-        _interact_hilight_color = Color('Red')
+        _interact_hilight_color = Color('red')
     else:
         _interact_hilight_color = None
 
