@@ -2,6 +2,7 @@
 
 from albow.resource import get_image, get_sound
 from albow.utils import frame_rect
+from albow.controls import Label
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
 from pygame.color import Color
@@ -40,9 +41,6 @@ class State(object):
         self.inventory = []
         # currently selected tool (item)
         self.tool = None
-        # Result of the most recent action
-        self.msg = None
-        self.description = None
         # current scene
         self.current_scene = None
 
@@ -77,29 +75,6 @@ class State(object):
 
     def mouse_move(self, pos):
         self.current_scene.mouse_move(self.tool, pos)
-
-    def get_message(self):
-        return self.msg
-
-    def clear_message(self):
-        self.msg = None
-
-    # FIXME: sort out how state.interact and description updating should work
-
-    def check_for_new_description(self, pos):
-        """Check if the current mouse position causes a new description"""
-        old_desc = self.description
-        self.description = self.current_scene.check_description(pos)
-        return old_desc != self.description
-
-    def get_description(self):
-        #
-        # DEPRECATED
-        #
-        return self.description
-
-    def message(self, msg):
-        self.msg = msg
 
 
 class StatefulGizmo(object):
@@ -141,6 +116,7 @@ class Scene(StatefulGizmo):
         self.things = {}
         self._background = get_image(self.FOLDER, self.BACKGROUND)
         self._current_thing = None
+        self._current_description = None
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -152,6 +128,21 @@ class Scene(StatefulGizmo):
     def remove_thing(self, thing):
         del self.things[thing.name]
 
+    def _make_description(self, text):
+        if text is None:
+            return None
+        label = Label(text)
+        label.margin = 5
+        label.border_width = 1
+        label.border_color = (0, 0, 0)
+        label.bg_color = (127, 127, 127)
+        label.fg_color = (0, 0, 0)
+        return label
+
+    def draw_description(self, surface):
+        if self._current_description is not None:
+            self._current_description.draw(surface)
+
     def draw_background(self, surface):
         surface.blit(self._background, (0, 0), None, BLEND_ADD)
 
@@ -162,6 +153,7 @@ class Scene(StatefulGizmo):
     def draw(self, surface):
         self.draw_background(surface)
         self.draw_things(surface)
+        self.draw_description(surface)
 
     def interact(self, item, pos):
         """Interact with a particular position.
@@ -184,22 +176,14 @@ class Scene(StatefulGizmo):
             else:
                 self._current_thing.leave()
                 self._current_thing = None
+                self._current_description = None
         for thing in self.things.itervalues():
             if thing.rect.collidepoint(pos):
                 thing.enter(item)
                 self._current_thing = thing
+                self._current_description = self._make_description(
+                    thing.get_description())
                 break
-
-    def check_description(self, pos):
-        #
-        # DEPRECATED
-        #
-        desc = None
-        for thing in self.things.itervalues():
-            # Last thing in the list that matches wins
-            if Rect(thing.rect).collidepoint(pos):
-                desc = thing.get_description()
-        return desc
 
 
 class Thing(StatefulGizmo):

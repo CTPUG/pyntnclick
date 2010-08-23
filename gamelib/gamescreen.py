@@ -49,30 +49,15 @@ class StateWidget(CursorWidget):
     def __init__(self, state):
         Widget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
         self.state = state
-        # current mouse-over thing description
-        self.description = None
 
     def draw(self, surface):
         self.state.draw(surface)
-        if self.description:
-            print self.description
-        msg = self.state.get_message()
-        if msg:
-            # FIXME: add some timer to invalidate msgs
-            print msg
-            self.state.clear_message()
-        desc = self.state.get_description()
-        if desc:
-            print desc
 
     def mouse_down(self, event):
         self.state.interact(event.pos)
 
     def mouse_move(self, event):
         self.state.mouse_move(event.pos)
-        if self.state.check_for_new_description(event.pos):
-            # queue a redraw
-            self.invalidate()
         CursorWidget.mouse_move(self, event)
 
 
