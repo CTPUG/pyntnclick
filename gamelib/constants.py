@@ -9,5 +9,6 @@ CHANNELS = 2   # 1 == mono, 2 == stereo
 BUFFER = 1024  # audio buffer size in no. of samples
 
 BUTTON_SIZE = 50
+SCENE_SIZE = (SCREEN[0], SCREEN[1] - BUTTON_SIZE)
 
 DEBUG = True

@@ -41,6 +41,8 @@ class State(object):
     def __init__(self):
         # map of scene name -> Scene object
         self.scenes = {}
+        # map of detail view name -> DetailView object
+        self.detail_views = {}
         # map of item name -> Item object
         self.items = {}
         # list of item objects in inventory
@@ -49,9 +51,14 @@ class State(object):
         self.tool = None
         # current scene
         self.current_scene = None
+        # current detail view
+        self.current_detail = None
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
+
+    def add_detail_view(self, detail_view):
+        self.detail_views[detail_view.name] = detail_view
 
     def add_item(self, item):
         self.items[item.name] = item

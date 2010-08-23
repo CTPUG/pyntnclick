@@ -5,14 +5,14 @@
 import textwrap
 
 from albow.controls import Button, Label, Widget
-from albow.layout import Column
+from albow.layout import Row
 from albow.palette_view import PaletteView
 from albow.screen import Screen
 from pygame import Rect, mouse
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
 
-from constants import BUTTON_SIZE
+from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE
 from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
@@ -67,7 +67,7 @@ class MessageDialog(BoomLabel):
 class StateWidget(CursorWidget):
 
     def __init__(self, state):
-        CursorWidget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
+        CursorWidget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.state = state
 
     def draw(self, surface):
@@ -83,17 +83,39 @@ class StateWidget(CursorWidget):
             self.invalidate()
 
     def mouse_move(self, event):
-        self.state.mouse_move(event.pos)
+        if not self.subwidgets:
+            self.state.mouse_move(event.pos)
         CursorWidget.mouse_move(self, event)
 
 
-class DetailWindow(Widget):
-    def mouse_down(self, e):
-        if e not in self:
-            self.dismiss()
+class DetailWindow(CursorWidget):
+    def __init__(self, state):
+        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+        self.state = state
+        self.draw_area = Rect(0, 0, 300, 300)
+        self.draw_area.center = self.center
 
     def draw(self, surface):
-        surface.fill(Color('green'))
+        surface.fill(Color('green'), self.draw_area)
+
+    def mouse_down(self, event):
+        if self.draw_area.collidepoint(event.pos):
+            # TODO: Interact with detail view
+            pass
+        else:
+            self.parent.remove(self)
+
+    def mouse_move(self, event):
+        if self.draw_area.collidepoint(event.pos):
+            # TODO: mouse_move stuff
+            pass
+        CursorWidget.mouse_move(self, event)
+
+
+class ToolBar(Row, CursorWidget):
+    def __init__(self, items):
+        CursorWidget.__init__(self)
+        Row.__init__(self, items, spacing=0, width=SCREEN[0])
 
 
 class GameScreen(Screen):
@@ -108,29 +130,29 @@ class GameScreen(Screen):
         self.popup_menu = PopupMenu(shell)
         self.menubutton = PopupMenuButton('Menu',
                 action=self.popup_menu.show_menu)
-        self.menubutton.bottomleft = self.bottomleft
-        self.add(self.menubutton)
-
-        self.detail = DetailWindow()
-        self.detail.rect = Rect(0, 0, 200, 200)
-
-        self.testbutton = Button('Test', action=self.detail.present)
-        self.testbutton.bottomright = self.bottomright
-        self.add(self.testbutton)
 
         self.handbutton = HandButton(action=self.hand_pressed)
-        self.handbutton.bottomleft = self.bottomleft
-        self.handbutton.get_rect().move_ip(BUTTON_SIZE, 0)
-        self.add(self.handbutton)
 
         self.inventory = InventoryView(self.state, self.handbutton)
-        self.inventory.bottomleft = self.bottomleft
-        self.inventory.get_rect().move_ip(2 * BUTTON_SIZE, 0)
-        self.add(self.inventory)
+
+        self.testbutton = Button('Test', action=self.show_detail)
+
+        self.toolbar = ToolBar([
+                self.menubutton,
+                self.handbutton,
+                self.inventory,
+                self.testbutton,
+                ])
+        self.toolbar.bottomleft = self.bottomleft
+        self.add(self.toolbar)
+
+        self.detail = DetailWindow(self.state)
 
         # Test items
         self.state.add_inventory_item('triangle')
 
+    def show_detail(self):
+        self.state_widget.add_centered(self.detail)
 
     # Albow uses magic method names (command + '_cmd'). Yay.
     # Albow's search order means they need to be defined here, not in
