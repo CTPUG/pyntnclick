@@ -13,6 +13,7 @@ class PopupMenu(Menu):
         self.shell = shell
         items = [
                 ('Resume Game', 'hide'),
+                ('Quit Game', 'quit'),
                 ('Exit to Main Menu', 'main_menu'),
                 ]
         # albow.menu.Menu ignores title string

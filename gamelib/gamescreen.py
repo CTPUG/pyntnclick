@@ -81,14 +81,6 @@ class GameScreen(CursorSpriteScreen):
         self.state_widget = StateWidget(self.state)
         self.add(self.state_widget)
 
-        AddItemButton = Button('Add item', action = self.add_item)
-        menu = Column([
-            AddItemButton,
-            Button('Use hand', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(None)),
-            Button('Use triangle', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['triangle'])),
-            Button('Use titanium_leg', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['titanium_leg'])),
-            ], align='l', spacing=20)
-        self.add_centered(menu)
         self.popup_menu = PopupMenu(shell)
         self.menubutton = Button('Menu', action=self.popup_menu.show_menu)
         self.menubutton.font = get_font(16, 'Vera.ttf')
@@ -108,7 +100,6 @@ class GameScreen(CursorSpriteScreen):
 
         # Test items
         self.state.add_inventory_item('triangle')
-        self.state.add_inventory_item('titanium_leg')
 
 
     # Albow uses magic method names (command + '_cmd'). Yay.
@@ -120,6 +111,9 @@ class GameScreen(CursorSpriteScreen):
 
     def main_menu_cmd(self):
         self.shell.show_screen(self.shell.menu_screen)
+
+    def quit_cmd(self):
+        self.shell.quit()
 
     def add_item(self):
         self.state.add_inventory_item("triangle")
