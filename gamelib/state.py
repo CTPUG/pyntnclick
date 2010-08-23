@@ -63,7 +63,24 @@ class State(object):
         print msg
 
 
-class Scene(object):
+class StatefulGizmo(object):
+
+    # initial data (optional, defaults to none)
+    INITIAL_DATA = None
+
+    def __init__(self):
+        self.data = {}
+        if self.INITIAL_DATA:
+            self.data.update(self.INITIAL_DATA)
+
+    def set_data(self, key, value):
+        self.data[key] = value
+
+    def get_data(self, key):
+        return self.data.get(key, None)
+
+
+class Scene(StatefulGizmo):
     """Base class for scenes."""
 
     # sub-folder to look for resources in
@@ -75,10 +92,8 @@ class Scene(object):
     # name of scene (optional, defaults to folder)
     NAME = None
 
-    # initial scene data (optional, defaults to none)
-    INITIAL_DATA = None
-
     def __init__(self, state):
+        StatefulGizmo.__init__(self)
         # scene name
         self.name = self.NAME if self.NAME is not None else self.FOLDER
         # link back to state object
@@ -86,9 +101,6 @@ class Scene(object):
         # map of thing names -> Thing objects
         self.things = {}
         self._background = get_image(self.FOLDER, self.BACKGROUND)
-        self.data = {}
-        if self.INITIAL_DATA:
-            self.data.update(self.INITIAL_DATA)
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -112,7 +124,7 @@ class Scene(object):
         self.draw_things(surface)
 
 
-class Thing(object):
+class Thing(StatefulGizmo):
     """Base class for things in a scene that you can interact with."""
 
     # sub-folder to look for resources in
@@ -122,6 +134,7 @@ class Thing(object):
     IMAGE = None
 
     def __init__(self, name, rect):
+        StatefulGizmo.__init__(self)
         self.name = name
         # area within scene that triggers calls to interact
         self.rect = rect

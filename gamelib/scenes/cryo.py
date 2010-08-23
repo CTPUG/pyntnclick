@@ -44,9 +44,19 @@ class CryoRoomDoor(Thing):
     FOLDER = "cryo"
     IMAGE = "cryo_door_closed"
 
+    INITIAL_DATA = {
+        'open': False,
+        }
+
+    def interact(self, item):
+        if self.get_data('open'):
+            print "Door open"
+            return
+        Thing.interact(self, item)
+
     def interact_with_titanium_leg(self, item):
         self.message("You wedge the titanium leg into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
-        self.scene.remove_thing(self)
+        self.open_door()
 
     def interact_without(self):
         self.message("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
@@ -57,6 +67,10 @@ class CryoRoomDoor(Thing):
                     "Your valiant efforts are foiled by the Evil Game Designer.",
                     "The door resists. Try something else, perhaps?",
                     ]))
+
+    def open_door(self):
+        self.set_data('open', True)
+        self.state.scenes['bridge'].set_data('accessible', True)
 
 
 SCENES = [Cryo]

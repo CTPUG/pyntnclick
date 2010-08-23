@@ -9,7 +9,7 @@ class Bridge(Scene):
     BACKGROUND = None # TODO
 
     INITIAL_DATA = {
-        'accessible': True,
+        'accessible': False,
         }
 
 
