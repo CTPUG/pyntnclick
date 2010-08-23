@@ -4,6 +4,7 @@
 
 from state import initial_state, Item
 from hand import HandButton
+from constants import BUTTON_SIZE
 
 from pygame.color import Color
 from pygame import Rect
@@ -21,7 +22,7 @@ class InventoryView(PaletteView):
     sel_width = 2
 
     def __init__(self, state, handbutton):
-        PaletteView.__init__(self, (50, 50), 1, 6, scrolling=True)
+        PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
         self.selection = None
         self.handbutton = handbutton
@@ -47,7 +48,7 @@ class InventoryView(PaletteView):
 class StateWidget(Widget):
 
     def __init__(self, state):
-        Widget.__init__(self, Rect(0, 0, 800, 550))
+        Widget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
         self.state = state
 
     def draw(self, surface):
@@ -79,18 +80,18 @@ class GameScreen(Screen):
         self.add_centered(menu)
         self.menubutton = Button('Menu', action=self.main_menu)
         self.menubutton.font = get_font(16, 'Vera.ttf')
-        self.menubutton.set_rect(Rect(0, 0, 50, 50))
+        self.menubutton.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.menubutton.bottomleft = self.bottomleft
-        self.menubutton.margin = (50 - self.menubutton.font.get_linesize()) / 2
+        self.menubutton.margin = (BUTTON_SIZE - self.menubutton.font.get_linesize()) / 2
         self.add(self.menubutton)
         self.handbutton = HandButton(action=self.hand_pressed)
         self.handbutton.bottomleft = self.bottomleft
-        self.handbutton.get_rect().move_ip(50, 0)
+        self.handbutton.get_rect().move_ip(BUTTON_SIZE, 0)
         self.add(self.handbutton)
         self.inventory = InventoryView(self.state, self.handbutton)
 
         self.inventory.bottomleft = self.bottomleft
-        self.inventory.get_rect().move_ip(100, 0)
+        self.inventory.get_rect().move_ip(2 * BUTTON_SIZE, 0)
         self.add(self.inventory)
 
         # Test items
