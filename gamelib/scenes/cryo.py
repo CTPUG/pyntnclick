@@ -21,6 +21,7 @@ class Cryo(Scene):
         self.add_item(TitaniumLeg("titanium_leg"))
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
+        self.add_thing(CryoComputer())
 
 
 class Triangle(Item):
@@ -102,6 +103,20 @@ class CryoRoomDoor(Thing):
         if self.get_data('open'):
             return 'An open doorway leads to the rest of the ship'
         return 'A rusty door. It is currently closed'
+
+
+class CryoComputer(Thing):
+    "Computer in the cryo room."
+
+    NAME = "cryo.computer"
+
+    INTERACTS = {
+        "info": InteractImage(416, 290, "comp_info.png"),
+        "warn": InteractImage(416, 290, "comp_warn.png"),
+        "error": InteractImage(416, 290, "comp_error.png"),
+        }
+
+    INITIAL = "info"
 
 
 SCENES = [Cryo]
