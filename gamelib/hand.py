@@ -1,7 +1,6 @@
 # Button for the hand image
 
 from constants import BUTTON_SIZE
-from cursor import CursorWidget
 
 from albow.controls import ImageButton
 from albow.resource import get_image
@@ -9,7 +8,7 @@ from albow.utils import frame_rect
 from pygame.color import Color
 from pygame.rect import Rect
 
-class HandButton(ImageButton, CursorWidget):
+class HandButton(ImageButton):
     """The fancy hand button for the widget"""
 
     sel_colour = Color('red')

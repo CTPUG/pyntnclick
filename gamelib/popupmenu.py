@@ -3,14 +3,13 @@
 # Popup menu for the game screen
 
 from constants import BUTTON_SIZE
-from cursor import CursorWidget
 
 from albow.menu import Menu
 from albow.controls import Button
 from albow.resource import get_font
 from pygame.rect import Rect
 
-class PopupMenuButton(Button, CursorWidget):
+class PopupMenuButton(Button):
 
     def __init__(self, text, action):
         Button.__init__(self, text, action)
@@ -18,10 +17,6 @@ class PopupMenuButton(Button, CursorWidget):
         self.font = get_font(16, 'Vera.ttf')
         self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
-
-    def get_cursor(self, event):
-        # Draw standard arrow, not the sprite cursor
-        return None
 
 class PopupMenu(Menu):
 

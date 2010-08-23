@@ -2,16 +2,12 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Sprite Cursor
 
-from albow.screen import Screen
 from albow.widget import Widget
 from albow.resource import get_image
 import pygame.mouse as mouse
 from pygame.sprite import Sprite, RenderUpdates
 import pygame.cursors
 import pygame.mouse
-
-# FIXME: make this a all transparent cursor
-BLANK_CURSOR=pygame.cursors.broken_x
 
 class CursorSprite(Sprite):
     "A Sprite that follows the Cursor"
@@ -27,29 +23,28 @@ class CursorSprite(Sprite):
 class CursorWidget(Widget):
     """Mix-in widget to ensure that mouse_move is propogated to parents"""
 
-    def mouse_move(self, event):
-        self.call_parent_handler('mouse_move', event)
-
-    def get_cursor(self, event):
-        return BLANK_CURSOR
-
-
-class CursorSpriteScreen(Screen):
-    "A Screen with a CursorSprite"
-
-    def __init__(self, shell):
-        Screen.__init__(self, shell)
-
-        sprite = CursorSprite('hand')
-        self.cursor_group = RenderUpdates(sprite)
+    def __init__(self, *args, **kwargs):
+        Widget.__init__(self, *args, **kwargs)
+        self._cursor_group = RenderUpdates()
+        self._cursor_name = ''
 
     def draw(self, surface):
-        if self.get_cursor(None) == pygame.mouse.get_cursor():
-            self.cursor_group.update()
-            self.cursor_group.draw(surface)
+        if self.rect.collidepoint(mouse.get_pos()):
+            cursor = self.get_sprite_cursor()
+            if cursor != self._cursor_name:
+                if self.get_sprite_cursor() is None:
+                    pygame.mouse.set_visible(1)
+                    self._cursor_group.empty()
+                else:
+                    pygame.mouse.set_visible(0)
+                    self._cursor_group.empty()
+                    self._cursor_group.add(CursorSprite(cursor))
+            if cursor is not None:
+                self._cursor_group.update()
+                self._cursor_group.draw(surface)
 
     def mouse_move(self, event):
         self.invalidate()
 
-    def get_cursor(self, event):
-        return BLANK_CURSOR
+    def get_sprite_cursor(self):
+        return 'hand'

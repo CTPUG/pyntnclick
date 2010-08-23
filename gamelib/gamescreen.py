@@ -7,19 +7,20 @@ import textwrap
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
-from pygame import Rect
+from albow.screen import Screen
+from pygame import Rect, mouse
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
 
 from constants import BUTTON_SIZE
-from cursor import CursorSpriteScreen, CursorWidget
+from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
 from widgets import BoomLabel
 
 
-class InventoryView(PaletteView, CursorWidget):
+class InventoryView(PaletteView):
 
     sel_color = Color("yellow")
     sel_width = 2
@@ -66,11 +67,12 @@ class MessageDialog(BoomLabel):
 class StateWidget(CursorWidget):
 
     def __init__(self, state):
-        Widget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
+        CursorWidget.__init__(self, Rect(0, 0, 800, 600 - BUTTON_SIZE))
         self.state = state
 
     def draw(self, surface):
         self.state.draw(surface)
+        CursorWidget.draw(self, surface)
 
     def mouse_down(self, event):
         result = self.state.interact(event.pos)
@@ -85,7 +87,7 @@ class StateWidget(CursorWidget):
         CursorWidget.mouse_move(self, event)
 
 
-class DetailWindow(CursorWidget):
+class DetailWindow(Widget):
     def mouse_down(self, e):
         if e not in self:
             self.dismiss()
@@ -94,9 +96,9 @@ class DetailWindow(CursorWidget):
         surface.fill(Color('green'))
 
 
-class GameScreen(CursorSpriteScreen):
+class GameScreen(Screen):
     def __init__(self, shell):
-        CursorSpriteScreen.__init__(self, shell)
+        Screen.__init__(self, shell)
 
         # TODO: Randomly plonk the state here for now
         self.state = initial_state()
@@ -150,4 +152,7 @@ class GameScreen(CursorSpriteScreen):
         self.handbutton.toggle_selected()
         self.inventory.unselect()
 
-
+    def mouse_delta(self, event):
+        w = self.shell.find_widget(event.pos)
+        if not isinstance(w, CursorWidget):
+            mouse.set_visible(1)
