@@ -9,6 +9,7 @@ from pygame.color import Color
 from pygame import Rect
 from pygame.locals import BLEND_ADD
 from albow.screen import Screen
+from albow.resource import get_font
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
@@ -76,8 +77,11 @@ class GameScreen(Screen):
             Button('Use titanium_leg', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['titanium_leg'])),
             ], align='l', spacing=20)
         self.add_centered(menu)
-        self.menubutton = Button('M', action=self.main_menu)
+        self.menubutton = Button('Menu', action=self.main_menu)
+        self.menubutton.font = get_font(16, 'Vera.ttf')
+        self.menubutton.set_rect(Rect(0, 0, 50, 50))
         self.menubutton.bottomleft = self.bottomleft
+        self.menubutton.margin = (50 - self.menubutton.font.get_linesize()) / 2
         self.add(self.menubutton)
         self.handbutton = HandButton(action=self.hand_pressed)
         self.handbutton.bottomleft = self.bottomleft
