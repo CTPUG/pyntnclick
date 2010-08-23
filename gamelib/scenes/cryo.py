@@ -2,7 +2,8 @@
 
 import random
 
-from gamelib.state import Scene, Item, Thing, Result
+from gamelib.state import Scene, Item, Thing, Result, \
+                          InteractImage, InteractNoImage
 
 
 class Cryo(Scene):
@@ -18,8 +19,8 @@ class Cryo(Scene):
         super(Cryo, self).__init__(state)
         self.add_item(Triangle("triangle"))
         self.add_item(TitaniumLeg("titanium_leg"))
-        self.add_thing(CryoUnitAlpha("cryo.unit.1", (20, 20, 200, 200)))
-        self.add_thing(CryoRoomDoor("cryo.door", (200, 200, 400, 300)))
+        self.add_thing(CryoUnitAlpha())
+        self.add_thing(CryoRoomDoor())
 
 
 class Triangle(Item):
@@ -37,8 +38,13 @@ class TitaniumLeg(Item):
 class CryoUnitAlpha(Thing):
     "Cryo unit containing titanium leg."
 
-    FOLDER = "cryo"
-    IMAGE = "cryo_unit_alpha"
+    NAME = "cryo.unit.1"
+
+    INTERACTS = {
+        "unit": InteractNoImage(100, 300, 100, 100),
+    }
+
+    INITIAL = "unit"
 
     INITIAL_DATA = {
         'contains_titanium_leg': True,
@@ -56,8 +62,14 @@ class CryoUnitAlpha(Thing):
 class CryoRoomDoor(Thing):
     "Door to the cryo room."
 
-    FOLDER = "cryo"
-    IMAGE = "cryo_door_closed"
+    NAME = "cryo.door"
+
+    INTERACTS = {
+        "ajar": InteractImage(200, 200, "door_ajar.png"),
+        "open": InteractImage(200, 200, "door_open.png"),
+        }
+
+    INITIAL = "ajar"
 
     INITIAL_DATA = {
         'open': False,
@@ -82,6 +94,7 @@ class CryoRoomDoor(Thing):
 
     def open_door(self):
         self.set_data('open', True)
+        self.set_interact("open")
         self.state.scenes['bridge'].set_data('accessible', True)
         self.state.remove_inventory_item('titanium_leg')
 

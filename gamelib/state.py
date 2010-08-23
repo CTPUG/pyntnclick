@@ -201,14 +201,54 @@ class Scene(StatefulGizmo):
                 break
 
 
+class Interact(object):
+
+    def __init__(self, image, rect, interact_rect):
+        self.image = image
+        self.rect = rect
+        self.interact_rect = interact_rect
+
+    def set_thing(self, thing):
+        pass
+
+    def draw(self, surface):
+        if self.image is not None:
+            surface.blit(self.image, self.rect, None, BLEND_ADD)
+
+
+class InteractNoImage(Interact):
+
+    def __init__(self, x, y, w, h):
+        super(InteractNoImage, self).__init__(None, None, Rect(x, y, w, h))
+
+
+class InteractImage(Interact):
+
+    def __init__(self, x, y, image_name):
+        super(InteractImage, self).__init__(None, None, None)
+        self._pos = (x, y)
+        self._image_name = image_name
+
+    def set_thing(self, thing):
+        self.image = get_image(thing.folder, self._image_name)
+        self.rect = Rect(self._pos, self.image.get_size())
+        self.interact_rect = self.rect
+
+
 class Thing(StatefulGizmo):
     """Base class for things in a scene that you can interact with."""
 
-    # sub-folder to look for resources in
+    # name of thing
+    NAME = None
+
+    # sub-folder to look for resources in (defaults to scenes folder)
     FOLDER = None
 
-    # name of image resource
-    IMAGE = None
+    # list of Interact objects
+    INTERACTS = {}
+
+    # name first interact
+    INITIAL = None
 
     # Interact rectangle hi-light color (for debugging)
     # (set to None to turn off)
@@ -217,23 +257,35 @@ class Thing(StatefulGizmo):
     else:
         _interact_hilight_color = None
 
-    def __init__(self, name, rect):
+    def __init__(self):
         StatefulGizmo.__init__(self)
-        self.name = name
-        # area within scene to render to
-        self.rect = Rect(rect)
-        # area within scene that triggers calls to interact
-        self.interact_rect = Rect(rect)
+        # name of the thing
+        self.name = self.NAME
+        # folder for resource (None is overridden by scene folder)
+        self.folder = self.FOLDER
+        # interacts
+        self.interacts = self.INTERACTS
         # these are set by set_scene
         self.scene = None
         self.state = None
+        self.current_interact = None
+        self.rect = None
         # TODO: add masks
-        # TODO: add images
 
     def set_scene(self, scene):
         assert self.scene is None
         self.scene = scene
+        if self.folder is None:
+            self.folder = scene.FOLDER
         self.state = scene.state
+        for interact in self.interacts.itervalues():
+            interact.set_thing(self)
+        self.set_interact(self.INITIAL)
+
+    def set_interact(self, name):
+        self.current_interact = self.interacts[name]
+        self.rect = self.current_interact.interact_rect
+        assert self.rect is not None, name
 
     def get_description(self):
         return None
@@ -268,10 +320,10 @@ class Thing(StatefulGizmo):
         return Result("It doesn't work.")
 
     def draw(self, surface):
+        self.current_interact.draw(surface)
         if self._interact_hilight_color is not None:
             frame_rect(surface, self._interact_hilight_color,
-                self.interact_rect.inflate(1, 1), 1)
-        # TODO: draw image if there is one
+                self.rect.inflate(1, 1), 1)
 
 
 class Item(object):
