@@ -1,5 +1,5 @@
-Your Game Title
-===============
+Suspended Sentence
+==================
 
 Entry in PyWeek #11  <http://www.pyweek.org/11/>
 Team: Boomslang
@@ -21,7 +21,7 @@ It is likely that you have obtain the game in one of four possible ways:
 
 Windows:
 
-If you have the Windows .zip file, unzip it, find foxassault.exe and
+If you have the Windows .zip file, unzip it, find suspended.exe and
 doube-click it to launch the game.
 
 Unix:
@@ -33,8 +33,8 @@ inside the extracted folder.
 Mac OS X:
 
 If you have the Mac OS X .dmg file, double-click to open it. Drag
-Operation Fox Assault to Applications to install. Alternatively,
-double-click on Operation Fox Assault to run it.
+Suspended Sentence to Applications to install. Alternatively,
+double-click on Suspended Sentence to run it.
 
 Source:
 
@@ -55,7 +55,7 @@ You will need to install these before running the game:
   PyGame:                   http://www.pygame.org/
   Albow:                    http://www.cosc.canterbury.ac.nz/greg.ewing/python/Albow/
 
-??? requires python 2.5 or later, pygame 1.8 or later and
+Suspended Sentence requires python 2.5 or later, pygame 1.8 or later and
 Albow 2.1.0.
 
 LICENSE
