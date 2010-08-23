@@ -33,7 +33,7 @@ class Triangle(Item):
 class TitaniumLeg(Item):
     "Titanium leg, found on a piratical corpse."
 
-    INVENTORY_IMAGE = "titanium_leg.png"
+    INVENTORY_IMAGE = "titanium_femur.png"
 
 
 class CryoUnitAlpha(Thing):
