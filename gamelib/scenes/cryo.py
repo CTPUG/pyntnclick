@@ -3,7 +3,7 @@
 import random
 
 from gamelib.state import Scene, Item, Thing, Result, \
-                          InteractImage, InteractNoImage
+                          InteractImage, InteractNoImage, InteractRectUnion
 
 
 class Cryo(Scene):
@@ -42,7 +42,8 @@ class CryoUnitAlpha(Thing):
     NAME = "cryo.unit.1"
 
     INTERACTS = {
-        "unit": InteractNoImage(520, 430, 80, 50),
+        "unit": InteractRectUnion(((520, 430, 80, 50), (550, 470, 90, 60),
+            (600, 510, 60, 40)))
     }
 
     INITIAL = "unit"
@@ -58,6 +59,11 @@ class CryoUnitAlpha(Thing):
 
     def is_interactive(self):
         return self.get_data('contains_titanium_leg')
+
+    def get_description(self):
+        if self.get_data('contains_titanium_leg'):
+            return "A broken cryo chamber, with an poor unfortunate corpse inside"
+        return "A broken cryo chamber. The corpse inside is missing a leg"
 
 
 class CryoRoomDoor(Thing):

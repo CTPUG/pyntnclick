@@ -178,7 +178,7 @@ class Scene(StatefulGizmo):
         Returns a Result object to provide feedback to the player.
         """
         for thing in self.things.itervalues():
-            if thing.rect.collidepoint(pos):
+            if thing.contains(pos):
                 result = thing.interact(item)
                 if result:
                     if self._current_thing:
@@ -193,14 +193,14 @@ class Scene(StatefulGizmo):
         Item may be an item in the list of items or None for the hand.
         """
         if self._current_thing is not None:
-            if self._current_thing.rect.collidepoint(pos):
+            if self._current_thing.contains(pos):
                 return
             else:
                 self._current_thing.leave()
                 self._current_thing = None
                 self._current_description = None
         for thing in self.things.itervalues():
-            if thing.rect.collidepoint(pos):
+            if thing.contains(pos):
                 thing.enter(item)
                 self._current_thing = thing
                 self._current_description = self._make_description(
@@ -227,6 +227,18 @@ class InteractNoImage(Interact):
 
     def __init__(self, x, y, w, h):
         super(InteractNoImage, self).__init__(None, None, Rect(x, y, w, h))
+
+class InteractRectUnion(Interact):
+
+    def __init__(self, rect_list):
+        # pygame.rect.Rect.unionall should do this, but is broken
+        # in some pygame versions (including 1.8, it appears)
+        rect_list = [Rect(x) for x in rect_list]
+        union_rect = rect_list[0]
+        for rect in rect_list[1:]:
+            union_rect = union_rect.union(rect)
+        super(InteractRectUnion, self).__init__(None, None, union_rect)
+        self.interact_rect = rect_list
 
 
 class InteractImage(Interact):
@@ -294,6 +306,16 @@ class Thing(StatefulGizmo):
         self.rect = self.current_interact.interact_rect
         assert self.rect is not None, name
 
+    def contains(self, pos):
+        if hasattr(self.rect, 'collidepoint'):
+            return self.rect.collidepoint(pos)
+        else:
+            # FIXME: add sanity check
+            for rect in list(self.rect):
+                if rect.collidepoint(pos):
+                    return True
+        return False
+
     def get_description(self):
         return None
 
@@ -329,8 +351,13 @@ class Thing(StatefulGizmo):
     def draw(self, surface):
         self.current_interact.draw(surface)
         if self._interact_hilight_color is not None:
-            frame_rect(surface, self._interact_hilight_color,
-                self.rect.inflate(1, 1), 1)
+            if hasattr(self.rect, 'collidepoint'):
+                frame_rect(surface, self._interact_hilight_color,
+                        self.rect.inflate(1, 1), 1)
+            else:
+                for rect in self.rect:
+                    frame_rect(surface, self._interact_hilight_color,
+                            rect.inflate(1, 1), 1)
 
 
 class Item(object):
