@@ -48,12 +48,6 @@ class CryoRoomDoor(Thing):
         'open': False,
         }
 
-    def interact(self, item):
-        if self.get_data('open'):
-            print "Door open"
-            return
-        Thing.interact(self, item)
-
     def interact_with_titanium_leg(self, item):
         self.message("You wedge the titanium leg into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
         self.open_door()
@@ -67,6 +61,9 @@ class CryoRoomDoor(Thing):
                     "Your valiant efforts are foiled by the Evil Game Designer.",
                     "The door resists. Try something else, perhaps?",
                     ]))
+
+    def is_interactive(self):
+        return not self.get_data('open')
 
     def open_door(self):
         self.set_data('open', True)

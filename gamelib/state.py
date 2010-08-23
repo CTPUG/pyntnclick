@@ -8,7 +8,7 @@ def initial_state():
     """Load the initial state."""
     state = State()
     state.load_scenes("cryo")
-    #state.load_scenes("bridge")
+    state.load_scenes("bridge")
     #state.load_scenes("mess")
     #state.load_scenes("engine")
     #state.load_scenes("machine")
@@ -152,7 +152,12 @@ class Thing(StatefulGizmo):
     def message(self, msg):
         self.state.message(msg)
 
+    def is_interactive(self):
+        return True
+
     def interact(self, item):
+        if not self.is_interactive():
+            return
         if item is None:
             self.interact_without()
         else:
