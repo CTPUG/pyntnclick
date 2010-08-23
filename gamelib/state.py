@@ -152,7 +152,7 @@ class Scene(StatefulGizmo):
             self._current_description.draw_all(sub)
 
     def draw_background(self, surface):
-        surface.blit(self._background, (0, 0), None, BLEND_ADD)
+        surface.blit(self._background, (0, 0), None)
 
     def draw_things(self, surface):
         for thing in self.things.itervalues():
@@ -213,7 +213,7 @@ class Interact(object):
 
     def draw(self, surface):
         if self.image is not None:
-            surface.blit(self.image, self.rect, None, BLEND_ADD)
+            surface.blit(self.image, self.rect, None)
 
 
 class InteractNoImage(Interact):
