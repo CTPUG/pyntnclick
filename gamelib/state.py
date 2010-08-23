@@ -38,6 +38,8 @@ class State(object):
         self.items = {}
         # list of item objects in inventory
         self.inventory = []
+        # currently selected tool (item)
+        self.tool = None
         # Result of the most recent action
         self.msg = None
         self.description = None
@@ -64,14 +66,17 @@ class State(object):
     def remove_inventory_item(self, name):
         self.inventory.remove(self.items[name])
 
+    def set_tool(self, item):
+        self.tool = item
+
     def draw(self, surface):
         self.current_scene.draw(surface)
 
-    def interact(self, item, pos):
-        self.current_scene.interact(item, pos)
+    def interact(self, pos):
+        self.current_scene.interact(self.tool, pos)
 
-    def mouse_move(self, item, pos):
-        self.current_scene.mouse_move(item, pos)
+    def mouse_move(self, pos):
+        self.current_scene.mouse_move(self.tool, pos)
 
     def get_message(self):
         return self.msg

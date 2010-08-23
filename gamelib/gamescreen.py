@@ -23,7 +23,6 @@ class InventoryView(PaletteView, CursorWidget):
     def __init__(self, state, handbutton):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
-        self.selection = None
         self.handbutton = handbutton
 
     def num_items(self):
@@ -34,14 +33,14 @@ class InventoryView(PaletteView, CursorWidget):
         surface.blit(item_image, rect, None, BLEND_ADD)
 
     def click_item(self, item_no, event):
-        self.selection = item_no
+        self.state.set_tool(self.state.inventory[item_no])
         self.handbutton.unselect()
 
     def item_is_selected(self, item_no):
-        return self.selection == item_no
+        return self.state.tool is self.state.inventory[item_no]
 
     def unselect(self):
-        self.selection = None
+        self.state.set_tool(None)
 
 
 class StateWidget(CursorWidget):
@@ -66,12 +65,10 @@ class StateWidget(CursorWidget):
             print desc
 
     def mouse_down(self, event):
-        # TODO: replace None with the correct item
-        self.state.interact(None, event.pos)
+        self.state.interact(event.pos)
 
     def mouse_move(self, event):
-        # TODO: replace None with the correct item
-        self.state.mouse_move(None, event.pos)
+        self.state.mouse_move(event.pos)
         if self.state.check_for_new_description(event.pos):
             # queue a redraw
             self.invalidate()
