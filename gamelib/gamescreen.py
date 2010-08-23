@@ -64,14 +64,8 @@ class GameScreen(Screen):
         self.state_widget = StateWidget(self.state)
         self.add(self.state_widget)
 
-        StartButton = Button('Main Menu', action = self.main_menu)
-        QuitButton = Button('Quit', action = shell.quit)
         AddItemButton = Button('Add item', action = self.add_item)
-        Title = Label('Caught! ... In SPAACE')
         menu = Column([
-            Title,
-            StartButton,
-            QuitButton,
             AddItemButton,
             Button('Use hand', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(None)),
             Button('Use triangle', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['triangle'])),
