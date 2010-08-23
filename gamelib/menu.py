@@ -6,9 +6,11 @@ from albow.screen import Screen
 from albow.controls import Button, Label
 from albow.layout import Column
 
-class MenuScreen(Screen):
+from cursor import CursorSpriteScreen
+
+class MenuScreen(CursorSpriteScreen):
     def __init__(self, shell):
-        Screen.__init__(self, shell)
+        CursorSpriteScreen.__init__(self, shell)
         StartButton = Button('Start New Game', action = self.start)
         QuitButton = Button('Quit', action = shell.quit)
         Title = Label('Suspended Sentence')

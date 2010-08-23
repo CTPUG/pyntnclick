@@ -2,20 +2,19 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from state import initial_state, Item
-from hand import HandButton
-from popupmenu import PopupMenu
-from constants import BUTTON_SIZE
-
-from pygame.color import Color
-from pygame import Rect
-from pygame.locals import BLEND_ADD
-from albow.screen import Screen
-from albow.resource import get_font
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
+from albow.resource import get_font
+from pygame import Rect
+from pygame.color import Color
+from pygame.locals import BLEND_ADD
 
+from constants import BUTTON_SIZE
+from cursor import CursorSpriteScreen
+from hand import HandButton
+from popupmenu import PopupMenu
+from state import initial_state, Item
 
 class InventoryView(PaletteView):
 
@@ -72,9 +71,10 @@ class StateWidget(Widget):
             # queue a redraw
             self.invalidate()
 
-class GameScreen(Screen):
+
+class GameScreen(CursorSpriteScreen):
     def __init__(self, shell):
-        Screen.__init__(self, shell)
+        CursorSpriteScreen.__init__(self, shell)
 
         # TODO: Randomly plonk the state here for now
         self.state = initial_state()
