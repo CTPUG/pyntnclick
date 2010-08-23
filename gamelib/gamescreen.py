@@ -4,6 +4,7 @@
 
 from state import initial_state, Item
 from hand import HandButton
+from popupmenu import PopupMenu
 from constants import BUTTON_SIZE
 
 from pygame.color import Color
@@ -72,7 +73,8 @@ class GameScreen(Screen):
             Button('Use titanium_leg', action = lambda: self.state.scenes['cryo'].things['cryo.door'].interact(self.state.items['titanium_leg'])),
             ], align='l', spacing=20)
         self.add_centered(menu)
-        self.menubutton = Button('Menu', action=self.main_menu)
+        self.popup_menu = PopupMenu(shell)
+        self.menubutton = Button('Menu', action=self.popup_menu.show_menu)
         self.menubutton.font = get_font(16, 'Vera.ttf')
         self.menubutton.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.menubutton.bottomleft = self.bottomleft
@@ -92,8 +94,14 @@ class GameScreen(Screen):
         self.state.add_inventory_item('triangle')
         self.state.add_inventory_item('titanium_leg')
 
-    def main_menu(self):
-        print 'Returning to menu'
+    # Albow uses magic method names (command + '_cmd'). Yay.
+    # Albow's search order means they need to be defined here, not in
+    # PopMenu, which is annoying.
+    def hide_cmd(self):
+        # This option does nothing, but the method needs to exist for albow
+        return
+
+    def main_menu_cmd(self):
         self.shell.show_screen(self.shell.menu_screen)
 
     def add_item(self):
