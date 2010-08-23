@@ -2,10 +2,11 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
+import textwrap
+
 from albow.controls import Button, Label, Widget
 from albow.layout import Column
 from albow.palette_view import PaletteView
-from albow.dialogs import Dialog, wrapped_label
 from pygame import Rect
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
@@ -15,6 +16,8 @@ from cursor import CursorSpriteScreen, CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
+from widgets import BoomLabel
+
 
 class InventoryView(PaletteView, CursorWidget):
 
@@ -44,6 +47,22 @@ class InventoryView(PaletteView, CursorWidget):
         self.state.set_tool(None)
 
 
+class MessageDialog(BoomLabel):
+
+    def __init__(self, text, wrap_width, **kwds):
+        paras = text.split("\n\n")
+        text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
+        Label.__init__(self, text, **kwds)
+        self.set_margin(5)
+        self.border_width = 1
+        self.border_color = (0, 0, 0)
+        self.bg_color = (127, 127, 127)
+        self.fg_color = (0, 0, 0)
+
+    def mouse_down(self, event):
+        self.dismiss()
+
+
 class StateWidget(CursorWidget):
 
     def __init__(self, state):
@@ -57,10 +76,7 @@ class StateWidget(CursorWidget):
         result = self.state.interact(event.pos)
         if result and result.message:
             # Display the message as a modal dialog
-            msg_label = wrapped_label(result.message, 60)
-            dialog = Dialog(msg_label)
-            dialog.click_outside_response = -1
-            dialog.present()
+            MessageDialog(result.message, 60).present()
             # queue a redraw to show updated state
             self.invalidate()
 
