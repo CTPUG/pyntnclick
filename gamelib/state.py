@@ -8,6 +8,11 @@ def initial_state():
     """Load the initial state."""
     state = State()
     state.load_scenes("cryo")
+    #state.load_scenes("bridge")
+    #state.load_scenes("mess")
+    #state.load_scenes("engine")
+    #state.load_scenes("machine")
+    #state.load_scenes("map")
     state.set_current_scene("cryo")
     return state
 
