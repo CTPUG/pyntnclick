@@ -126,13 +126,20 @@ class ToolBar(Row, CursorWidget):
 class GameScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
+        self.running = False
 
+    def _clear_all(self):
+        for widget in self.subwidgets[:]:
+            self.remove(widget)
+
+    def start_game(self):
+        self._clear_all()
         # TODO: Randomly plonk the state here for now
         self.state = initial_state()
         self.state_widget = StateWidget(self.state)
         self.add(self.state_widget)
 
-        self.popup_menu = PopupMenu(shell)
+        self.popup_menu = PopupMenu(self.shell)
         self.menubutton = PopupMenuButton('Menu',
                 action=self.popup_menu.show_menu)
 
@@ -153,8 +160,7 @@ class GameScreen(Screen):
 
         self.detail = DetailWindow(self.state)
 
-        # Test items
-        self.state.add_inventory_item('triangle')
+        self.running = True
 
     def show_detail(self):
         self.state_widget.add_centered(self.detail)
