@@ -48,9 +48,10 @@ class InventoryView(PaletteView):
         self.state.set_tool(None)
 
 
-class MessageDialog(BoomLabel):
+class MessageDialog(BoomLabel, CursorWidget):
 
     def __init__(self, text, wrap_width, **kwds):
+        CursorWidget.__init__(self)
         paras = text.split("\n\n")
         text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
         Label.__init__(self, text, **kwds)
@@ -59,6 +60,10 @@ class MessageDialog(BoomLabel):
         self.border_color = (0, 0, 0)
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
+
+    def draw(self, surface):
+        BoomLabel.draw(self, surface)
+        CursorWidget.draw(self, surface)
 
     def mouse_down(self, event):
         self.dismiss()
