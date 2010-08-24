@@ -20,6 +20,7 @@ class BoomLabel(albow.controls.Label):
         self.margin = margin
         self.size = (w + 2 * d, h + 2 * d)
 
+
 class MessageDialog(BoomLabel, CursorWidget):
 
     def __init__(self, text, wrap_width, **kwds):

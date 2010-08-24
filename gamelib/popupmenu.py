@@ -21,6 +21,7 @@ class PopupMenuButton(Button):
         self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
 
+
 class PopupMenu(Menu, CursorWidget):
 
     def __init__(self, shell):

@@ -29,6 +29,7 @@ def parse_args(args):
     opts, _ = parser.parse_args(args or [])
     return opts
 
+
 class MainShell(Shell):
     def __init__(self, display):
         Shell.__init__(self, display)

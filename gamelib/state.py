@@ -10,6 +10,7 @@ from pygame.color import Color
 import constants
 from sound import get_sound
 
+
 class Result(object):
     """Result of interacting with a thing"""
 

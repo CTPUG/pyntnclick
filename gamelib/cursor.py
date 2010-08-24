@@ -9,6 +9,7 @@ from pygame.sprite import Sprite, RenderUpdates
 import pygame.cursors
 import pygame.mouse
 
+
 class CursorSprite(Sprite):
     "A Sprite that follows the Cursor"
 
@@ -19,6 +20,7 @@ class CursorSprite(Sprite):
 
     def update(self):
         self.rect.midtop = mouse.get_pos()
+
 
 class CursorWidget(Widget):
     """Mix-in widget to ensure that mouse_move is propogated to parents"""

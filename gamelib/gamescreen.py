@@ -2,7 +2,7 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from albow.controls import Button, Label, Widget
+from albow.controls import Button, Widget
 from albow.layout import Row
 from albow.palette_view import PaletteView
 from albow.screen import Screen

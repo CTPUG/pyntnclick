@@ -6,6 +6,7 @@ from albow.screen import Screen
 from albow.controls import Button, Label
 from albow.layout import Column
 
+
 class MenuScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)

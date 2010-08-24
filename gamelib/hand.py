@@ -8,6 +8,7 @@ from albow.utils import frame_rect
 from pygame.color import Color
 from pygame.rect import Rect
 
+
 class HandButton(ImageButton):
     """The fancy hand button for the widget"""
 
