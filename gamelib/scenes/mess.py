@@ -10,7 +10,7 @@ class Mess(Scene):
     BACKGROUND = "mess_hall.png"
 
     INITIAL_DATA = {
-        'accessible': False,
+        'accessible': True,
         }
 
     def __init__(self, state):
@@ -21,6 +21,7 @@ class Mess(Scene):
         self.add_item(ReplacementTubes("replacement_tubes"))
         self.add_thing(CansOnShelf())
         self.add_thing(Tubes())
+        self.add_thing(ToMap())
 
 
 class EmptyCan(Item):
@@ -91,6 +92,23 @@ class Tubes(Thing):
         }
 
     INITIAL = "blocked"
+
+
+class ToMap(Thing):
+    "Way to map."
+
+    NAME = "bridge.tomap"
+    DEST = "map"
+
+    INTERACTS = {
+        "door": InteractNoImage(20, 390, 85, 150),
+        }
+
+    INITIAL = "door"
+
+    def interact_without(self):
+        """Go to map."""
+        self.state.set_current_scene("map")
 
 
 SCENES = [Mess]
