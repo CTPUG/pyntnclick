@@ -31,19 +31,18 @@ class CursorWidget(Widget):
     def draw_all(self, _surface):
         Widget.draw_all(self, _surface)
         surface = self.get_root().surface
-        if self.rect.collidepoint(mouse.get_pos()):
-            cursor = self.get_sprite_cursor()
-            if cursor != self._cursor_name:
-                if self.get_sprite_cursor() is None:
-                    pygame.mouse.set_visible(1)
-                    self._cursor_group.empty()
-                else:
-                    pygame.mouse.set_visible(0)
-                    self._cursor_group.empty()
-                    self._cursor_group.add(CursorSprite(cursor))
-            if cursor is not None:
-                self._cursor_group.update()
-                self._cursor_group.draw(surface)
+        cursor = self.get_sprite_cursor()
+        if cursor != self._cursor_name:
+            if self.get_sprite_cursor() is None:
+                pygame.mouse.set_visible(1)
+                self._cursor_group.empty()
+            else:
+                pygame.mouse.set_visible(0)
+                self._cursor_group.empty()
+                self._cursor_group.add(CursorSprite(cursor))
+        if cursor is not None:
+            self._cursor_group.update()
+            self._cursor_group.draw(surface)
 
     def mouse_delta(self, event):
         self.invalidate()
