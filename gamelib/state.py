@@ -9,6 +9,7 @@ from pygame.color import Color
 
 import constants
 from sound import get_sound
+from cursor import HAND
 
 
 class Result(object):
@@ -31,9 +32,9 @@ class Result(object):
             scene.invalidate()
 
 
-def initial_state():
+def initial_state(screen):
     """Load the initial state."""
-    state = State()
+    state = State(screen)
     state.load_scenes("cryo")
     state.load_scenes("bridge")
     #state.load_scenes("mess")
@@ -54,7 +55,7 @@ class State(object):
     * scenes
     """
 
-    def __init__(self):
+    def __init__(self, screen):
         # map of scene name -> Scene object
         self.scenes = {}
         # map of detail view name -> DetailView object
@@ -74,6 +75,8 @@ class State(object):
         # scene transion helpers
         self.do_check = None
         self.old_pos = None
+
+        self.screen = screen
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
@@ -117,6 +120,10 @@ class State(object):
 
     def set_tool(self, item):
         self.tool = item
+        if item is None:
+            self.screen.set_cursor(HAND)
+        else:
+            self.screen.set_cursor(item.CURSOR)
 
     def draw(self, surface):
         if self.do_check and self.previous_scene and self.do_check == constants.LEAVE:

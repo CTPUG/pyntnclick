@@ -129,7 +129,7 @@ class GameScreen(Screen, CursorWidget):
     def start_game(self):
         self._clear_all()
         # TODO: Randomly plonk the state here for now
-        self.state = initial_state()
+        self.state = initial_state(self)
         self.state_widget = StateWidget(self.state)
         self.add(self.state_widget)
 

@@ -40,6 +40,7 @@ class TitaniumLeg(Item):
     "Titanium leg, found on a piratical corpse."
 
     INVENTORY_IMAGE = "titanium_femur.png"
+    CURSOR = ('titanium_femur_cursor.png', 47, 3)
 
 
 class CryoUnitAlpha(Thing):
