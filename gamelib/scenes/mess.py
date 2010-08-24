@@ -97,7 +97,7 @@ class Tubes(Thing):
 class ToMap(Thing):
     "Way to map."
 
-    NAME = "bridge.tomap"
+    NAME = "mess.tomap"
     DEST = "map"
 
     INTERACTS = {
