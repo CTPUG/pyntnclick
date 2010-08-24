@@ -9,6 +9,9 @@ from albow.controls import Button
 from albow.resource import get_font
 from pygame.rect import Rect
 
+from cursor import CursorWidget
+
+
 class PopupMenuButton(Button):
 
     def __init__(self, text, action):
@@ -18,9 +21,10 @@ class PopupMenuButton(Button):
         self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
 
-class PopupMenu(Menu):
+class PopupMenu(Menu, CursorWidget):
 
     def __init__(self, shell):
+        CursorWidget.__init__(self)
         self.shell = shell
         items = [
                 ('Resume Game', 'hide'),
