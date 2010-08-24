@@ -324,11 +324,11 @@ class Thing(StatefulGizmo):
 
     def enter(self, item):
         """Called when the cursor enters the Thing."""
-        print "Enter %r -> %r" % (item, self)
+        pass
 
     def leave(self):
         """Called when the cursr leaves the Thing."""
-        print "Leaves %r" % self
+        pass
 
     def interact(self, item):
         if not self.is_interactive():
