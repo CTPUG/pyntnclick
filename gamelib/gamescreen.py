@@ -15,7 +15,7 @@ from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
-
+from widgets import MessageDialog
 
 class InventoryView(PaletteView):
 
@@ -77,6 +77,12 @@ class StateWidget(Widget):
     def mouse_move(self, event):
         if not self.subwidgets:
             self.state.mouse_move(event.pos)
+
+    def show_message(self, message):
+        # Display the message as a modal dialog
+        MessageDialog(message, 60).present()
+        # queue a redraw to show updated state
+        self.invalidate()
 
     def show_detail(self, detail):
         w, h = self.state.set_current_detail(detail)

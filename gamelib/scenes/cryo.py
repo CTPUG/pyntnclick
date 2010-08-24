@@ -49,8 +49,11 @@ class CryoUnitAlpha(Thing):
     NAME = "cryo.unit.1"
 
     INTERACTS = {
-        "unit": InteractRectUnion(((520, 430, 80, 50), (550, 470, 90, 60),
-            (600, 510, 60, 40)))
+        "unit": InteractRectUnion((
+                (520, 430, 80, 50),
+                (550, 470, 90, 60),
+                (600, 510, 60, 40),
+                ))
     }
 
     INITIAL = "unit"

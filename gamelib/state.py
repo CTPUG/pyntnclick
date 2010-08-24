@@ -2,7 +2,7 @@
 
 from albow.resource import get_image
 from albow.utils import frame_rect
-from widgets import BoomLabel, MessageDialog
+from widgets import BoomLabel
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
 from pygame.surface import Surface
@@ -16,22 +16,21 @@ from cursor import HAND
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None, soundfile=None):
+    def __init__(self, message=None, soundfile=None, detail_view=None):
         self.message = message
         self.sound = None
         if soundfile:
             self.sound = get_sound(soundfile)
+        self.detail_view = detail_view
 
-    def process(self, scene):
+    def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
         if self.sound:
             self.sound.play()
         if self.message:
-            # Display the message as a modal dialog
-            MessageDialog(self.message, 60).present()
-            # queue a redraw to show updated state
-            scene.invalidate()
-
+            scene_widget.show_message(self.message)
+        if self.detail_view:
+            scene_widget.show_detail(self.detail_view)
 
 def initial_state(screen):
     """Load the initial state."""
@@ -491,7 +490,7 @@ class Thing(StatefulGizmo):
         return None
 
     def is_interactive(self):
-        return True
+        return self.current_interact is not None
 
     def enter(self, item):
         """Called when the cursor enters the Thing."""

@@ -40,8 +40,13 @@ class DoorThing(Thing):
     def interact_without(self):
         """Go to destination."""
         if self.DEST in self.state.scenes:
-            self.state.set_current_scene(self.DEST)
-            return Result("You head for the %s." % self.DEST)
+            if self.state.scenes[self.DEST].get_data('accessible'):
+                self.state.set_current_scene(self.DEST)
+                return Result()
+            else:
+                return Result("You can't go there right now.")
+        else:
+            return Result("You *could* go there, but it doesn't actually exist.")
 
     def check_dest(self):
         if self.DEST in self.state.scenes:
