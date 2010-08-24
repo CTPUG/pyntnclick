@@ -28,7 +28,8 @@ class CursorWidget(Widget):
         self._cursor_group = RenderUpdates()
         self._cursor_name = ''
 
-    def draw(self, _surface):
+    def draw_over(self, _surface):
+        Widget.draw_over(self, _surface)
         surface = self.get_root().surface
         if self.rect.collidepoint(mouse.get_pos()):
             cursor = self.get_sprite_cursor()

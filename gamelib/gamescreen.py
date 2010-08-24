@@ -38,9 +38,9 @@ class InventoryView(PaletteView, CursorWidget):
         item_image = self.state.inventory[item_no].get_inventory_image()
         surface.blit(item_image, rect, None, BLEND_ADD)
 
-    def draw(self, surface):
-        PaletteView.draw(self, surface)
-        CursorWidget.draw(self, surface)
+    def draw_over(self, surface):
+        PaletteView.draw_over(self, surface)
+        CursorWidget.draw_over(self, surface)
 
     def click_item(self, item_no, event):
         self.state.set_tool(self.state.inventory[item_no])
@@ -66,9 +66,8 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
 
-    def draw(self, surface):
-        BoomLabel.draw(self, surface)
-        CursorWidget.draw(self, surface)
+    def draw_over(self, surface):
+        CursorWidget.draw_over(self, surface)
 
     def mouse_down(self, event):
         self.dismiss()
@@ -82,7 +81,6 @@ class StateWidget(CursorWidget):
 
     def draw(self, surface):
         self.state.draw(surface)
-        CursorWidget.draw(self, surface)
 
     def mouse_down(self, event):
         result = self.state.interact(event.pos)
@@ -108,7 +106,7 @@ class StateWidget(CursorWidget):
 
 class DetailWindow(CursorWidget):
     def __init__(self, state):
-        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+        CursorWidget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.state = state
         self.draw_area = Rect(0, 0, 300, 300)
         self.draw_area.center = self.center
