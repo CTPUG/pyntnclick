@@ -96,15 +96,21 @@ class CryoRoomDoor(Thing):
         if self.get_data('door') == "ajar":
             self.open_door()
             return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
-        else:
+        elif self.get_data('door') == "shut":
             text = "You bang on the door with the titanium femur. It makes a clanging sound."
             speech.say(self.name, text)
             return Result(text)
+        else:
+            return Result("You wave the femur in the doorway. Nothing happens.")
 
     def interact_without(self):
         if self.get_data('door') == "shut":
             self.half_open_door()
-        return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
+        if self.get_data('door') != "open":
+            return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
+        else:
+            self.state.set_current_scene('bridge')
+            return Result("you leave the room, hoping to never return.")
 
     def interact_default(self, item):
         return Result(random.choice([
@@ -114,7 +120,7 @@ class CryoRoomDoor(Thing):
                     ]))
 
     def is_interactive(self):
-        return self.get_data('door') != "open"
+        return True
 
     def half_open_door(self):
         self.set_data('door', "ajar")
