@@ -5,6 +5,7 @@ from albow.utils import frame_rect
 from widgets import BoomLabel, MessageDialog
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
+from pygame.surface import Surface
 from pygame.color import Color
 
 import constants
@@ -40,7 +41,7 @@ def initial_state(screen):
     #state.load_scenes("mess")
     #state.load_scenes("engine")
     #state.load_scenes("machine")
-    #state.load_scenes("map")
+    state.load_scenes("map")
     state.set_current_scene("cryo")
     state.set_do_enter_leave()
     return state
@@ -214,7 +215,10 @@ class Scene(StatefulGizmo):
         self.state = state
         # map of thing names -> Thing objects
         self.things = {}
-        self._background = get_image(self.FOLDER, self.BACKGROUND)
+        if self.BACKGROUND is not None:
+            self._background = get_image(self.FOLDER, self.BACKGROUND)
+        else:
+            self._background = None
         self._current_thing = None
         self._current_description = None
 
@@ -246,7 +250,10 @@ class Scene(StatefulGizmo):
             self._current_description.draw_all(sub)
 
     def draw_background(self, surface):
-        surface.blit(self._background, (0, 0), None)
+        if self._background is not None:
+            surface.blit(self._background, (0, 0), None)
+        else:
+            surface.fill((200, 200, 200))
 
     def draw_things(self, surface):
         for thing in self.things.itervalues():
@@ -337,6 +344,22 @@ class InteractNoImage(Interact):
 
     def __init__(self, x, y, w, h):
         super(InteractNoImage, self).__init__(None, None, Rect(x, y, w, h))
+
+
+class InteractText(Interact):
+    """Display box with text to interact with -- mostly for debugging."""
+
+    def __init__(self, x, y, text):
+        label = BoomLabel(text)
+        label.set_margin(5)
+        label.border_width = 1
+        label.border_color = (0, 0, 0)
+        label.bg_color = (127, 127, 127)
+        label.fg_color = (0, 0, 0)
+        image = Surface(label.size)
+        rect = Rect((x, y), label.size)
+        label.draw_all(image)
+        super(InteractText, self).__init__(image, rect, rect)
 
 
 class InteractRectUnion(Interact):
