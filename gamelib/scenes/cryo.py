@@ -63,12 +63,7 @@ class CryoUnitAlpha(Thing):
         }
 
     def interact_without(self):
-        self.state.add_inventory_item('titanium_leg')
-        self.set_data('contains_titanium_leg', False)
-        return Result("The skeletal occupant of this cryo unit has an artificial femur made of titanium. You take it.")
-
-    def is_interactive(self):
-        return self.get_data('contains_titanium_leg')
+        return Result(detail_view='cryo_detail')
 
     def get_description(self):
         if self.get_data('contains_titanium_leg'):
@@ -169,16 +164,16 @@ class TitaniumLegThing(Thing):
     NAME = "cryo.titanium_leg"
 
     INTERACTS = {
-        "triangular": InteractImage(50, 50, "triangle.png"),
+        "leg": InteractImage(50, 50, "triangle.png"),
         }
 
-    INITIAL = "triangular"
+    INITIAL = "leg"
 
     def interact_without(self):
-        return Result("You interacted.")
-
-    def is_interactive(self):
-        return True
+        self.state.add_inventory_item('titanium_leg')
+        self.state.current_scene.things['cryo.unit.1'].set_data('contains_titanium_leg', False)
+        self.scene.remove_thing(self)
+        return Result("The skeletal occupant of this cryo unit has an artificial femur made of titanium. You take it.")
 
 
 class CryoUnitWithCorpse(Scene):

@@ -114,6 +114,12 @@ class DetailWindow(Widget):
     def mouse_move(self, event):
         self.state.mouse_move_detail(event.pos)
 
+    def show_message(self, message):
+        # Display the message as a modal dialog
+        MessageDialog(message, 60).present()
+        # queue a redraw to show updated state
+        self.invalidate()
+
 
 class ToolBar(Row):
     def __init__(self, items):
