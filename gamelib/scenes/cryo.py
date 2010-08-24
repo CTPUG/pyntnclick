@@ -2,6 +2,8 @@
 
 import random
 from albow.music import change_playlist, get_music, PlayList
+from pygame.colordict import THECOLORS
+from pygame.color import Color
 
 from gamelib import speech
 from gamelib.sound import get_sound
@@ -9,6 +11,7 @@ from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
+from gamelib.constants import DEBUG
 
 
 class Cryo(Scene):
@@ -36,6 +39,25 @@ class Cryo(Scene):
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
+        self.add_thing(GenericCryoUnit(2,
+            "An empty cryo chamber.",
+            "Prisoner 81e4-c8900480e635. Embezzlement. 10 years.",
+            ((155, 430, 50, 35), (125, 450, 60, 35), (95, 470, 60, 35),
+                (55, 490, 60, 55))))
+        self.add_thing(GenericCryoUnit(3,
+            "A working cryo chamber. The frosted glass obscures the details of the occupant.",
+            "Prisoner 9334-ce1eb0243bab. Murder. 40 years.",
+            ((215, 430, 50, 35), (205, 450, 50, 35), (185, 470, 50, 35),
+                (125, 505, 80, 40))))
+        self.add_thing(GenericCryoUnit(4,
+            "A broken cryo chamber. The skeleton inside has been picked clean.",
+            "Prisoner bfbc-8bf4c6b7492b. Importing illegal alien biomatter. 15 years.",
+            ((275, 430, 50, 70), (255, 460, 50, 70), (235, 490, 50, 60))))
+        self.add_thing(GenericCryoUnit(5,
+            "A working cryo chamber. The frosted glass obscures the details of the occupant.",
+            "Prisoner b520-99495b8c41ce. Copyright infringment. 60 years.",
+            ((340, 430, 50, 70), (330, 500, 60, 50))))
+
 
     def enter(self):
         # Setup music
@@ -70,9 +92,9 @@ class CryoUnitAlpha(Thing):
 
     INTERACTS = {
         "unit": InteractRectUnion((
-                (520, 430, 80, 50),
-                (550, 470, 90, 60),
-                (600, 510, 60, 40),
+                (530, 430, 80, 50),
+                (560, 470, 70, 50),
+                (600, 510, 70, 40),
                 ))
     }
 
@@ -87,8 +109,31 @@ class CryoUnitAlpha(Thing):
 
     def get_description(self):
         if self.get_data('contains_titanium_leg'):
-            return "A broken cryo chamber, with an poor unfortunate corpse inside"
-        return "A broken cryo chamber. The corpse inside is missing a leg"
+            return "A broken cryo chamber, with an poor unfortunate corpse inside."
+        return "A broken cryo chamber. The corpse inside is missing a leg."
+
+class GenericCryoUnit(Thing):
+    "Generic Cryo unit"
+
+    INITIAL = 'unit'
+
+    def __init__(self, number, description, detailed_description, areas):
+        super(GenericCryoUnit, self).__init__()
+        self.description = description
+        self.detailed_description = detailed_description
+        self.name = 'cryo.unit.%d' % number
+        self.interacts = {
+                'unit' : InteractRectUnion(areas)
+                }
+        if DEBUG:
+            # Individual colors to make debugging easier
+            self._interact_hilight_color = Color(THECOLORS.keys()[number])
+
+    def interact_without(self):
+        return Result(self.detailed_description)
+
+    def get_description(self):
+        return self.description
 
 
 class CryoRoomDoor(Thing):
@@ -191,6 +236,23 @@ class TitaniumLegThing(Thing):
     def get_description(self):
         return "This femur looks synthetic."
 
+class PlaqueThing(Thing):
+    "Plaque on the detailed cryo chamber"
+
+    NAME = "cryo.plaque"
+
+    INTERACTS = {
+        "plaque": InteractImage(150, 150, "triangle.png"),
+        }
+
+    INITIAL = "plaque"
+
+    def interact_without(self):
+        return Result("The plaque is welded to the unit. You can't shift it")
+
+    def get_description(self):
+        return "'Prisoner 98cc-764e646391ee. War crimes. 45 years."
+
 
 class CryoUnitWithCorpse(Scene):
 
@@ -203,6 +265,7 @@ class CryoUnitWithCorpse(Scene):
     def __init__(self, state):
         super(CryoUnitWithCorpse, self).__init__(state)
         self.add_thing(TitaniumLegThing())
+        self.add_thing(PlaqueThing())
 
 
 SCENES = [Cryo]
