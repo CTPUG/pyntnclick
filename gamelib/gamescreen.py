@@ -34,7 +34,10 @@ class InventoryView(PaletteView):
         surface.blit(item_image, rect, None, BLEND_ADD)
 
     def click_item(self, item_no, event):
-        self.state.set_tool(self.state.inventory[item_no])
+        if self.item_is_selected(item_no):
+            self.unselect()
+        else:
+            self.state.set_tool(self.state.inventory[item_no])
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
