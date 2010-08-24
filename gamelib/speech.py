@@ -35,7 +35,6 @@ def get_speech(thing_name, text):
         return _SPEECH_CACHE[key]
     filename = get_filename(thing_name, text)
     _SPEECH_CACHE[key] = sound = get_sound("speech", filename)
-    print filename, sound
     return sound
 
 
