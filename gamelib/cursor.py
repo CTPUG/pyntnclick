@@ -27,6 +27,7 @@ class CursorSprite(Sprite):
             self.highlight = pygame.Surface(self.rect.size)
             color = pygame.color.Color(255, 100, 100, 0)
             self.highlight.fill(color)
+            self.highlighted = False
 
     def update(self):
         pos = pygame.mouse.get_pos()
@@ -34,9 +35,12 @@ class CursorSprite(Sprite):
         self.rect.top = pos[1] - self.pointer_y
 
     def set_highlight(self, enable):
-        self.image = self.plain_image.copy()
-        if enable:
-            self.image.blit(self.highlight, self.highlight.get_rect(), None, pygame.BLEND_MULT)
+        if enable != self.highlighted:
+            self.highlighted = enable
+            self.image = self.plain_image.copy()
+            if enable:
+                self.image.blit(self.highlight, self.highlight.get_rect(),
+                                None, pygame.BLEND_MULT)
 
 
 HAND = CursorSprite('hand.png', 12, 0)
@@ -51,6 +55,12 @@ class CursorWidget(Widget):
         Widget.__init__(self, *args, **kwargs)
         self._cursor_group = RenderUpdates()
         self._loaded_cursor = None
+
+    def enter_screen(self):
+        pygame.mouse.set_visible(0)
+
+    def leave_screen(self):
+        pygame.mouse.set_visible(1)
 
     def draw_all(self, _surface):
         Widget.draw_all(self, _surface)

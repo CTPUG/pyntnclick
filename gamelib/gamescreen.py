@@ -79,15 +79,19 @@ class StateWidget(Widget):
             self.state.mouse_move(event.pos)
 
     def show_message(self, message):
+        self.parent.cursor_highlight(False)
         # Display the message as a modal dialog
         MessageDialog(message, 60).present()
         # queue a redraw to show updated state
         self.invalidate()
+        # The cursor could have gone anywhere
+        self.state.current_scene.mouse_move(self.state.tool, mouse.get_pos())
 
     def show_detail(self, detail):
         w, h = self.state.set_current_detail(detail)
         self.detail.set_image_rect(Rect(0, 0, w, h))
         self.add_centered(self.detail)
+        self.parent.cursor_highlight(False)
 
 
 class DetailWindow(Widget):
@@ -171,8 +175,13 @@ class GameScreen(Screen, CursorWidget):
         # This option does nothing, but the method needs to exist for albow
         return
 
+    def enter_screen(self):
+        CursorWidget.enter_screen(self)
+
+    def leave_screen(self):
+        CursorWidget.leave_screen(self)
+
     def main_menu_cmd(self):
-        mouse.set_visible(1)
         self.shell.show_screen(self.shell.menu_screen)
 
     def quit_cmd(self):
@@ -185,3 +194,8 @@ class GameScreen(Screen, CursorWidget):
     def begin_frame(self):
         if self.running:
             self.state_widget.animate()
+
+    def mouse_delta(self, event):
+        CursorWidget.mouse_delta(self, event)
+        if not self.state_widget.rect.collidepoint(event.pos):
+            self.cursor_highlight(False)

@@ -305,6 +305,7 @@ class Scene(StatefulGizmo):
         """
         if self._current_thing is not None:
             if self._current_thing.contains(pos):
+                self.state.screen.cursor_highlight(True)
                 return
             else:
                 self._current_thing.leave()
@@ -317,6 +318,7 @@ class Scene(StatefulGizmo):
                 self._current_description = self._make_description(
                     thing.get_description())
                 break
+        self.state.screen.cursor_highlight(self._current_thing is not None)
 
     def get_detail_size(self):
         return self._background.get_size()
@@ -495,11 +497,11 @@ class Thing(StatefulGizmo):
 
     def enter(self, item):
         """Called when the cursor enters the Thing."""
-        self.state.screen.cursor_highlight(True)
+        pass
 
     def leave(self):
         """Called when the cursr leaves the Thing."""
-        self.state.screen.cursor_highlight(False)
+        pass
 
     def interact(self, item):
         if not self.is_interactive():
