@@ -52,5 +52,8 @@ def main():
         disable_sound()
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     shell = MainShell(display)
-    shell.run()
+    try:
+        shell.run()
+    except KeyboardInterrupt:
+        pass
 
