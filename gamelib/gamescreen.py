@@ -20,12 +20,13 @@ from state import initial_state, Item
 from widgets import BoomLabel
 
 
-class InventoryView(PaletteView):
+class InventoryView(PaletteView, CursorWidget):
 
     sel_color = Color("yellow")
     sel_width = 2
 
     def __init__(self, state, handbutton):
+        CursorWidget.__init__(self)
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
         self.handbutton = handbutton
@@ -36,6 +37,10 @@ class InventoryView(PaletteView):
     def draw_item(self, surface, item_no, rect):
         item_image = self.state.inventory[item_no].get_inventory_image()
         surface.blit(item_image, rect, None, BLEND_ADD)
+
+    def draw(self, surface):
+        PaletteView.draw(self, surface)
+        CursorWidget.draw(self, surface)
 
     def click_item(self, item_no, event):
         self.state.set_tool(self.state.inventory[item_no])
