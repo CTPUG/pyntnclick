@@ -20,13 +20,12 @@ from state import initial_state, Item
 from widgets import BoomLabel
 
 
-class InventoryView(PaletteView, CursorWidget):
+class InventoryView(PaletteView):
 
     sel_color = Color("yellow")
     sel_width = 2
 
     def __init__(self, state, handbutton):
-        CursorWidget.__init__(self)
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
         self.handbutton = handbutton
@@ -37,10 +36,6 @@ class InventoryView(PaletteView, CursorWidget):
     def draw_item(self, surface, item_no, rect):
         item_image = self.state.inventory[item_no].get_inventory_image()
         surface.blit(item_image, rect, None, BLEND_ADD)
-
-    def draw_over(self, surface):
-        PaletteView.draw_over(self, surface)
-        CursorWidget.draw_over(self, surface)
 
     def click_item(self, item_no, event):
         self.state.set_tool(self.state.inventory[item_no])
@@ -66,17 +61,14 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
 
-    def draw_over(self, surface):
-        CursorWidget.draw_over(self, surface)
-
     def mouse_down(self, event):
         self.dismiss()
 
 
-class StateWidget(CursorWidget):
+class StateWidget(Widget):
 
     def __init__(self, state):
-        CursorWidget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.state = state
 
     def draw(self, surface):
@@ -101,12 +93,11 @@ class StateWidget(CursorWidget):
     def mouse_move(self, event):
         if not self.subwidgets:
             self.state.mouse_move(event.pos)
-        CursorWidget.mouse_move(self, event)
 
 
-class DetailWindow(CursorWidget):
+class DetailWindow(Widget):
     def __init__(self, state):
-        CursorWidget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.state = state
         self.draw_area = Rect(0, 0, 300, 300)
         self.draw_area.center = self.center
@@ -125,17 +116,16 @@ class DetailWindow(CursorWidget):
         if self.draw_area.collidepoint(event.pos):
             # TODO: mouse_move stuff
             pass
-        CursorWidget.mouse_move(self, event)
 
 
-class ToolBar(Row, CursorWidget):
+class ToolBar(Row):
     def __init__(self, items):
-        CursorWidget.__init__(self)
         Row.__init__(self, items, spacing=0, width=SCREEN[0])
 
 
-class GameScreen(Screen):
+class GameScreen(Screen, CursorWidget):
     def __init__(self, shell):
+        CursorWidget.__init__(self)
         Screen.__init__(self, shell)
         self.running = False
 
@@ -200,8 +190,3 @@ class GameScreen(Screen):
     def begin_frame(self):
         if self.running:
             self.state_widget.animate()
-
-    def mouse_delta(self, event):
-        w = self.shell.find_widget(event.pos)
-        if not isinstance(w, CursorWidget):
-            mouse.set_visible(1)
