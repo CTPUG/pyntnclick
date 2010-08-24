@@ -118,7 +118,7 @@ class CryoRoomDoor(Thing):
     def get_description(self):
         if self.get_data('door') == "open":
             return 'An open doorway leads to the rest of the ship.'
-        elif self.get_data('door') == "open":
+        elif self.get_data('door') == "ajar":
             return "A rusty door.  It can't open all the way because of a chain on the other side."
         return 'A rusty door. It is currently closed.'
 
