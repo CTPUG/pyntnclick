@@ -4,6 +4,8 @@
 # a) work around an annoying bugs
 # b) add some missing functionality (disable_sound)
 
+import os
+
 from albow.resource import _resource_path, dummy_sound
 
 sound_cache = {}
@@ -14,6 +16,9 @@ def get_sound(*names):
     path = _resource_path("sounds", names)
     sound = sound_cache.get(path)
     if not sound:
+        if not os.path.isfile(path):
+            missing_sound("File does not exist", path)
+            return dummy_sound
         try:
             from pygame.mixer import Sound
         except ImportError, e:
