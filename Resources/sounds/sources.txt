@@ -1,0 +1,32 @@
+[clang.ogg]
+URL: http://www.archive.org/download/tamtam44old/tamtam44old.zip
+Source: http://www.archive.org/details/tamtam44old
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples for tamtam recorded by Richard Boulanger for use in the One Laptop per Child music library.  See http://wiki.laptop.org/go/Sound_samples for details
+Wavfile: clang.wav
+
+[drip2.ogg]
+URL: http://www.archive.org/download/tamtam44old/tamtam44old.zip
+Source: http://www.archive.org/details/tamtam44old
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples for tamtam recorded by Richard Boulanger for use in the One Laptop per Child music library.  See http://wiki.laptop.org/go/Sound_samples for details
+Wavfile: drum3cup.wav
+
+[drip1.ogg]
+URL: http://www.archive.org/download/LouCohen/LouCohen44.zip
+Source: http://www.archive.org/details/LouCohen
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples by Lou Cohen recorded for Richard Boulanger for use in the One Laptop per Child music library. See http://wiki.laptop.org/go/Sound_samples for details.
+Wavfile: miscClunk1.wav
+
+[creaking.ogg]
+URL: http://www.archive.org/download/Berklee44Barkovich/Berklee44Barkovich.zip
+Source: http://www.archive.org/details/Berklee44Barkovich
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples from Berklee recorded for Richard Boulanger for use in the One Laptop per Child music library. See http://wiki.laptop.org/go/Sound_samples for details.
+Wavfile: creaking.wav
+
+[silent.ogg]
+generated 2 secs of silence - dd if=/dev/zero of=silence.pcm bs=176400 count=2
+Not copyrightable.
+

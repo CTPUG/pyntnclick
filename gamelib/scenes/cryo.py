@@ -1,8 +1,10 @@
 """Cryo room where the prisoner starts out."""
 
 import random
+from albow.music import change_playlist, get_music, PlayList
 
 from gamelib import speech
+from gamelib.sound import get_sound
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
@@ -19,6 +21,15 @@ class Cryo(Scene):
         'greet' : True
         }
 
+    # sounds that will be played randomly as background noise
+    MUSIC = [
+            'drip1.ogg',
+            'drip2.ogg',
+            'creaking.ogg',
+            'silent.ogg',
+            'silent.ogg',
+            ]
+
     def __init__(self, state):
         super(Cryo, self).__init__(state)
         self.add_item(TitaniumLeg("titanium_leg"))
@@ -27,6 +38,10 @@ class Cryo(Scene):
         self.add_thing(CryoComputer())
 
     def enter(self):
+        # Setup music
+        pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
+        background_playlist = PlayList(pieces, random=True, repeat=True)
+        change_playlist(background_playlist)
         if self.get_data('greet'):
             self.set_data('greet', False)
             return Result("Greetings Prisoner id. You have woken early under"
@@ -35,6 +50,10 @@ class Cryo(Scene):
                     " be added to your record and will be relayed to "
                     " prison officials when we reach the destination."
                     " Please report to the bridge.")
+
+    def leave(self):
+        # Stop music
+        change_playlist(None)
 
 
 class TitaniumLeg(Item):
@@ -103,7 +122,7 @@ class CryoRoomDoor(Thing):
         elif self.get_data('door') == "shut":
             text = "You bang on the door with the titanium femur. It makes a clanging sound."
             speech.say(self.name, text)
-            return Result(text)
+            return Result(text, soundfile='clang.ogg')
         else:
             return Result("You wave the femur in the doorway. Nothing happens.")
 
