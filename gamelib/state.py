@@ -94,7 +94,7 @@ class State(object):
             self.current_detail = None
         else:
             self.current_detail = self.detail_views[name]
-            return self.current_detail.SIZE
+            return self.current_detail.get_detail_size()
 
     def add_inventory_item(self, name):
         self.inventory.append(self.items[name])
@@ -185,6 +185,9 @@ class Scene(StatefulGizmo):
 
     # name of scene (optional, defaults to folder)
     NAME = None
+
+    # size (for detail views)
+    SIZE = constants.SCENE_SIZE
 
     def __init__(self, state):
         StatefulGizmo.__init__(self)
@@ -290,6 +293,9 @@ class Scene(StatefulGizmo):
                 self._current_description = self._make_description(
                     thing.get_description())
                 break
+
+    def get_detail_size(self):
+        return self.SIZE
 
 
 class Interact(object):

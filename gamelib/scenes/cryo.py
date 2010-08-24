@@ -20,7 +20,6 @@ class Cryo(Scene):
 
     def __init__(self, state):
         super(Cryo, self).__init__(state)
-        self.add_item(Triangle("triangle"))
         self.add_item(TitaniumLeg("titanium_leg"))
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
@@ -35,11 +34,6 @@ class Cryo(Scene):
                     " be added to your record and will be relayed to "
                     " prison officials when we reach the destination."
                     " Please report to the bridge.")
-
-class Triangle(Item):
-    "Test item. Needs to go away at some point."
-
-    INVENTORY_IMAGE = "triangle.png"
 
 
 class TitaniumLeg(Item):
@@ -165,13 +159,13 @@ class CryoComputer(Thing):
     INITIAL = "info"
 
 
-class CryoTriangle(Thing):
+class TitaniumLegThing(Thing):
     "Triangle in the cryo room."
 
-    NAME = "cryo.triangle"
+    NAME = "cryo.titanium_leg"
 
     INTERACTS = {
-        "triangular": InteractImage(50, 50, "door_open.png"),
+        "triangular": InteractImage(50, 50, "triangle.png"),
         }
 
     INITIAL = "triangular"
@@ -193,8 +187,7 @@ class CryoUnitWithCorpse(Scene):
 
     def __init__(self, state):
         super(CryoUnitWithCorpse, self).__init__(state)
-        self.add_thing(CryoTriangle())
-
+        self.add_thing(TitaniumLegThing())
 
 
 SCENES = [Cryo]

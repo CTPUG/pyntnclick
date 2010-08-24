@@ -127,6 +127,8 @@ class DetailWindow(Widget):
 
 class ToolBar(Row):
     def __init__(self, items):
+        for item in items:
+            item.height = BUTTON_SIZE
         Row.__init__(self, items, spacing=0, width=SCREEN[0])
 
 
