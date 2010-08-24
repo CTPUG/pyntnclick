@@ -2,10 +2,11 @@
 
 import random
 
+from gamelib import speech
+from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
-from gamelib import speech
 
 
 class Cryo(Scene):
@@ -40,7 +41,7 @@ class TitaniumLeg(Item):
     "Titanium leg, found on a piratical corpse."
 
     INVENTORY_IMAGE = "titanium_femur.png"
-    CURSOR = ('titanium_femur_cursor.png', 47, 3)
+    CURSOR = CursorSprite('titanium_femur_cursor.png', 47, 3)
 
 
 class CryoUnitAlpha(Thing):

@@ -494,11 +494,11 @@ class Thing(StatefulGizmo):
 
     def enter(self, item):
         """Called when the cursor enters the Thing."""
-        pass
+        self.state.screen.cursor_highlight(True)
 
     def leave(self):
         """Called when the cursr leaves the Thing."""
-        pass
+        self.state.screen.cursor_highlight(False)
 
     def interact(self, item):
         if not self.is_interactive():
