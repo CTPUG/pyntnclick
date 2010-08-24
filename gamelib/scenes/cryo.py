@@ -5,6 +5,7 @@ import random
 from gamelib.state import Scene, Item, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
+from gamelib import speech
 
 
 class Cryo(Scene):
@@ -84,12 +85,21 @@ class CryoRoomDoor(Thing):
         'door': "shut",
         }
 
+    SPEECH = [
+        "Sadly, this isn't that sort of game.",
+        "Your valiant efforts are foiled by the Evil Game Designer.",
+        "The door resists. Try something else, perhaps?",
+        "You bang on the door with the titanium femur. It makes a clanging sound.",
+    ]
+
     def interact_with_titanium_leg(self, item):
         if self.get_data('door') == "ajar":
             self.open_door()
             return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
         else:
-            return Result("You bang on the door with the titanium femur. It makes a clanging sound.")
+            text = "You bang on the door with the titanium femur. It makes a clanging sound."
+            speech.say(self.name, text)
+            return Result(text)
 
     def interact_without(self):
         if self.get_data('door') == "shut":
