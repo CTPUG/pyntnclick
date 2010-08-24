@@ -147,7 +147,6 @@ class CryoRoomDoor(Thing):
         self.set_interact("open")
         self.state.scenes['bridge'].set_data('accessible', True)
         self.state.scenes['mess'].set_data('accessible', True)
-        self.state.remove_inventory_item('titanium_leg')
 
     def get_description(self):
         if self.get_data('door') == "open":
