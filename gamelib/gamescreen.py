@@ -109,7 +109,7 @@ class StateWidget(Widget):
 
     def show_detail(self, detail):
         w, h = self.state.set_current_detail(detail)
-        self.detail.set_rect(Rect(0, 0, w, h))
+        self.detail.set_image_rect(Rect(0, 0, w, h))
         self.add_centered(self.detail)
 
 
@@ -117,9 +117,17 @@ class DetailWindow(Widget):
     def __init__(self, state):
         Widget.__init__(self)
         self.state = state
+        self.border_width = 5
+        self.border_color = (0, 0, 0)
+
+    def set_image_rect(self, rect):
+        bw = self.border_width
+        self.image_rect = rect
+        self.image_rect.topleft = (bw, bw)
+        self.set_rect(rect.inflate(bw*2, bw*2))
 
     def draw(self, surface):
-        self.state.draw_detail(surface)
+        self.state.draw_detail(surface.subsurface(self.image_rect))
 
     def mouse_down(self, event):
         result = self.state.interact_detail(self.global_to_local(event.pos))
