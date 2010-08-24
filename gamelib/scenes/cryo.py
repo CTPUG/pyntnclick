@@ -114,8 +114,8 @@ class CryoRoomDoor(Thing):
         if self.get_data('door') != "open":
             return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
         else:
-            self.state.set_current_scene('bridge')
-            return Result("you leave the room, hoping to never return.")
+            self.state.set_current_scene('map')
+            return Result("You leave the room, hoping to never return.")
 
     def interact_default(self, item):
         return Result(random.choice([

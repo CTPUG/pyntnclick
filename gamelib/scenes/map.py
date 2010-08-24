@@ -7,7 +7,7 @@
    Many parts of the ship are derelict and inaccessible.
    """
 
-from gamelib.state import Scene, Item, Thing, InteractText
+from gamelib.state import Scene, Item, Thing, InteractText, Result
 
 
 class Map(Scene):
@@ -28,10 +28,23 @@ class Map(Scene):
         self.add_thing(ToMachine())
 
 
-class ToCryo(Thing):
+class DoorThing(Thing):
+
+    # name of destination
+    DEST = None
+
+    def interact_without(self):
+        """Go to destination."""
+        if self.DEST in self.state.scenes:
+            self.state.set_current_scene('bridge')
+            return Result("You head for the %s." % self.DEST)
+
+
+class ToCryo(DoorThing):
     "Way to cryo room."
 
     NAME = "map.tocryo"
+    DEST = "cryo"
 
     INTERACTS = {
         "room": InteractText(100, 200, "To Cryo"),
@@ -40,10 +53,11 @@ class ToCryo(Thing):
     INITIAL = "room"
 
 
-class ToBridge(Thing):
+class ToBridge(DoorThing):
     "Way to bridge room."
 
     NAME = "map.tobridge"
+    DEST = "bridge"
 
     INTERACTS = {
         "room": InteractText(300, 200, "To Bridge"),
@@ -52,10 +66,11 @@ class ToBridge(Thing):
     INITIAL = "room"
 
 
-class ToMess(Thing):
+class ToMess(DoorThing):
     "Way to cryo room."
 
     NAME = "map.tomess"
+    DEST = "mess"
 
     INTERACTS = {
         "room": InteractText(100, 300, "To Mess"),
@@ -68,6 +83,7 @@ class ToEngine(Thing):
     "Way to engine room."
 
     NAME = "map.toengine"
+    DEST = "engine"
 
     INTERACTS = {
         "room": InteractText(300, 300, "To Engine"),
@@ -76,10 +92,11 @@ class ToEngine(Thing):
     INITIAL = "room"
 
 
-class ToMachine(Thing):
+class ToMachine(DoorThing):
     "Way to machine room."
 
     NAME = "map.tomachine"
+    DEST = "machine"
 
     INTERACTS = {
         "room": InteractText(100, 400, "To Machine"),
