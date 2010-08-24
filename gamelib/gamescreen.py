@@ -167,6 +167,7 @@ class GameScreen(Screen):
         return
 
     def main_menu_cmd(self):
+        mouse.set_visible(1)
         self.shell.show_screen(self.shell.menu_screen)
 
     def quit_cmd(self):
