@@ -22,10 +22,9 @@ class InventoryView(PaletteView):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, state, handbutton):
+    def __init__(self, state):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
-        self.handbutton = handbutton
 
     def num_items(self):
         return len(self.state.inventory)
@@ -36,7 +35,6 @@ class InventoryView(PaletteView):
 
     def click_item(self, item_no, event):
         self.state.set_tool(self.state.inventory[item_no])
-        self.handbutton.unselect()
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
@@ -153,20 +151,23 @@ class GameScreen(Screen, CursorWidget):
 
         self.handbutton = HandButton(action=self.hand_pressed)
 
-        self.inventory = InventoryView(self.state, self.handbutton)
-
-        self.testbutton = Button('Test', lambda: self.state_widget.show_detail('cryo_detail'))
+        self.inventory = InventoryView(self.state)
 
         self.toolbar = ToolBar([
                 self.menubutton,
                 self.handbutton,
                 self.inventory,
-                self.testbutton,
                 ])
         self.toolbar.bottomleft = self.bottomleft
         self.add(self.toolbar)
 
         self.running = True
+
+    def enter_screen(self):
+        CursorWidget.enter_screen(self)
+
+    def leave_screen(self):
+        CursorWidget.leave_screen(self)
 
     # Albow uses magic method names (command + '_cmd'). Yay.
     # Albow's search order means they need to be defined here, not in
@@ -175,12 +176,6 @@ class GameScreen(Screen, CursorWidget):
         # This option does nothing, but the method needs to exist for albow
         return
 
-    def enter_screen(self):
-        CursorWidget.enter_screen(self)
-
-    def leave_screen(self):
-        CursorWidget.leave_screen(self)
-
     def main_menu_cmd(self):
         self.shell.show_screen(self.shell.menu_screen)
 
@@ -188,7 +183,6 @@ class GameScreen(Screen, CursorWidget):
         self.shell.quit()
 
     def hand_pressed(self):
-        self.handbutton.toggle_selected()
         self.inventory.unselect()
 
     def begin_frame(self):

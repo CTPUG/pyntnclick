@@ -108,13 +108,6 @@ class CryoRoomDoor(Thing):
         'door': "shut",
         }
 
-    SPEECH = [
-        "Sadly, this isn't that sort of game.",
-        "Your valiant efforts are foiled by the Evil Game Designer.",
-        "The door resists. Try something else, perhaps?",
-        "You bang on the door with the titanium femur. It makes a clanging sound.",
-    ]
-
     def interact_with_titanium_leg(self, item):
         if self.get_data('door') == "ajar":
             self.open_door()
@@ -133,7 +126,7 @@ class CryoRoomDoor(Thing):
             return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
         else:
             self.state.set_current_scene('map')
-            return Result("You leave the room, hoping to never return.")
+            return None
 
     def interact_default(self, item):
         return Result(random.choice([
