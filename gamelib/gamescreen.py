@@ -2,8 +2,6 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-import textwrap
-
 from albow.controls import Button, Label, Widget
 from albow.layout import Row
 from albow.palette_view import PaletteView
@@ -17,7 +15,7 @@ from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
-from widgets import BoomLabel
+from widgets import MessageDialog
 
 
 class InventoryView(PaletteView):
@@ -46,23 +44,6 @@ class InventoryView(PaletteView):
 
     def unselect(self):
         self.state.set_tool(None)
-
-
-class MessageDialog(BoomLabel, CursorWidget):
-
-    def __init__(self, text, wrap_width, **kwds):
-        CursorWidget.__init__(self)
-        paras = text.split("\n\n")
-        text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
-        Label.__init__(self, text, **kwds)
-        self.set_margin(5)
-        self.border_width = 1
-        self.border_color = (0, 0, 0)
-        self.bg_color = (127, 127, 127)
-        self.fg_color = (0, 0, 0)
-
-    def mouse_down(self, event):
-        self.dismiss()
 
 
 class StateWidget(Widget):
