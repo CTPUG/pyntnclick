@@ -168,9 +168,6 @@ class GameScreen(Screen, CursorWidget):
     def quit_cmd(self):
         self.shell.quit()
 
-    def add_item(self):
-        self.state.add_inventory_item("triangle")
-
     def hand_pressed(self):
         self.handbutton.toggle_selected()
         self.inventory.unselect()
