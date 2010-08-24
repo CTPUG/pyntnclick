@@ -115,9 +115,7 @@ class DetailWindow(Widget):
         self.state.mouse_move_detail(self.global_to_local(event.pos))
 
     def show_message(self, message):
-        # Display the message as a modal dialog
-        MessageDialog(message, 60).present()
-        # queue a redraw to show updated state
+        self.parent.show_message(message)
         self.invalidate()
 
 

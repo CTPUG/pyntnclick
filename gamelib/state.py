@@ -245,7 +245,7 @@ class Scene(StatefulGizmo):
 
     def draw_description(self, surface):
         if self._current_description is not None:
-            sub = surface.subsurface(
+            sub = self.state.screen.get_root().surface.subsurface(
                 Rect(5, 5, *self._current_description.size))
             self._current_description.draw_all(sub)
 
