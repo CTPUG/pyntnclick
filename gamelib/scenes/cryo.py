@@ -180,7 +180,7 @@ class TitaniumLegThing(Thing):
 class CryoUnitWithCorpse(Scene):
 
     FOLDER = "cryo"
-    BACKGROUND = "cryo_room.png"
+    BACKGROUND = "cryo_unit_detail.png"
     NAME = "cryo_detail"
 
     SIZE = (300, 300)

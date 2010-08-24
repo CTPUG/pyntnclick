@@ -305,7 +305,7 @@ class Scene(StatefulGizmo):
                 break
 
     def get_detail_size(self):
-        return self.SIZE
+        return self._background.get_size()
 
 
 class Interact(object):
