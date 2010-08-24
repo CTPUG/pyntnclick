@@ -1,1 +1,7 @@
-Everything.
+General:
+  * Lots of artwork.
+  * Lots of game logic and plot.
+  * Lots of refactoring.
+
+Bugs:
+  - change_playlist() crashes when used with --no-sound.
