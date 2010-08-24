@@ -155,4 +155,37 @@ class CryoComputer(Thing):
     INITIAL = "info"
 
 
+class CryoTriangle(Thing):
+    "Triangle in the cryo room."
+
+    NAME = "cryo.triangle"
+
+    INTERACTS = {
+        "triangular": InteractImage(50, 50, "door_open.png"),
+        }
+
+    INITIAL = "triangular"
+
+    def interact_without(self):
+        return Result("You interacted.")
+
+    def is_interactive(self):
+        return True
+
+
+class CryoUnitWithCorpse(Scene):
+
+    FOLDER = "cryo"
+    BACKGROUND = "cryo_room.png"
+    NAME = "cryo_detail"
+
+    SIZE = (300, 300)
+
+    def __init__(self, state):
+        super(CryoUnitWithCorpse, self).__init__(state)
+        self.add_thing(CryoTriangle())
+
+
+
 SCENES = [Cryo]
+DETAIL_VIEWS = [CryoUnitWithCorpse]

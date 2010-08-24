@@ -71,9 +71,19 @@ class State(object):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
         for scene_cls in mod.SCENES:
             self.add_scene(scene_cls(self))
+        if hasattr(mod, 'DETAIL_VIEWS'):
+            for scene_cls in mod.DETAIL_VIEWS:
+                self.add_detail_view(scene_cls(self))
 
     def set_current_scene(self, name):
         self.current_scene = self.scenes[name]
+
+    def set_current_detail(self, name):
+        if name is None:
+            self.current_detail = None
+        else:
+            self.current_detail = self.detail_views[name]
+            return self.current_detail.SIZE
 
     def add_inventory_item(self, name):
         self.inventory.append(self.items[name])
@@ -90,14 +100,23 @@ class State(object):
     def draw(self, surface):
         self.current_scene.draw(surface)
 
+    def draw_detail(self, surface):
+        self.current_detail.draw(surface)
+
     def interact(self, pos):
         return self.current_scene.interact(self.tool, pos)
+
+    def interact_detail(self, pos):
+        return self.current_detail.interact(self.tool, pos)
 
     def animate(self):
         return self.current_scene.animate()
 
     def mouse_move(self, pos):
         self.current_scene.mouse_move(self.tool, pos)
+
+    def mouse_move_detail(self, pos):
+        self.current_detail.mouse_move(self.tool, pos)
 
 
 class StatefulGizmo(object):

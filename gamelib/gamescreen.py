@@ -70,20 +70,25 @@ class StateWidget(Widget):
     def __init__(self, state):
         Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.state = state
+        self.detail = DetailWindow(state)
 
     def draw(self, surface):
         self.state.draw(surface)
 
     def mouse_down(self, event):
-        result = self.state.interact(event.pos)
-        if result:
-            if result.sound:
-                result.sound.play()
-            if result.message:
-                # Display the message as a modal dialog
-                MessageDialog(result.message, 60).present()
-                # queue a redraw to show updated state
-                self.invalidate()
+        if self.subwidgets:
+            self.remove(self.detail)
+            self.state.set_current_detail(None)
+        else:
+            result = self.state.interact(event.pos)
+            if result:
+                if result.sound:
+                    result.sound.play()
+                if result.message:
+                    # Display the message as a modal dialog
+                    MessageDialog(result.message, 60).present()
+                    # queue a redraw to show updated state
+                    self.invalidate()
 
     def animate(self):
         if self.state.animate():
@@ -94,28 +99,33 @@ class StateWidget(Widget):
         if not self.subwidgets:
             self.state.mouse_move(event.pos)
 
+    def show_detail(self, detail):
+        w, h = self.state.set_current_detail(detail)
+        self.detail.set_rect(Rect(0, 0, w, h))
+        self.add_centered(self.detail)
+
 
 class DetailWindow(Widget):
     def __init__(self, state):
-        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+        Widget.__init__(self)
         self.state = state
-        self.draw_area = Rect(0, 0, 300, 300)
-        self.draw_area.center = self.center
 
     def draw(self, surface):
-        surface.fill(Color('green'), self.draw_area)
+        self.state.draw_detail(surface)
 
     def mouse_down(self, event):
-        if self.draw_area.collidepoint(event.pos):
-            # TODO: Interact with detail view
-            pass
-        else:
-            self.parent.remove(self)
+        result = self.state.interact_detail(self.global_to_local(event.pos))
+        if result:
+            if result.sound:
+                result.sound.play()
+            if result.message:
+                # Display the message as a modal dialog
+                MessageDialog(result.message, 60).present()
+                # queue a redraw to show updated state
+                self.invalidate()
 
     def mouse_move(self, event):
-        if self.draw_area.collidepoint(event.pos):
-            # TODO: mouse_move stuff
-            pass
+        self.state.mouse_move_detail(event.pos)
 
 
 class ToolBar(Row):
@@ -148,7 +158,7 @@ class GameScreen(Screen, CursorWidget):
 
         self.inventory = InventoryView(self.state, self.handbutton)
 
-        self.testbutton = Button('Test', action=self.show_detail)
+        self.testbutton = Button('Test', lambda: self.state_widget.show_detail('cryo_detail'))
 
         self.toolbar = ToolBar([
                 self.menubutton,
@@ -159,12 +169,7 @@ class GameScreen(Screen, CursorWidget):
         self.toolbar.bottomleft = self.bottomleft
         self.add(self.toolbar)
 
-        self.detail = DetailWindow(self.state)
-
         self.running = True
-
-    def show_detail(self):
-        self.state_widget.add_centered(self.detail)
 
     # Albow uses magic method names (command + '_cmd'). Yay.
     # Albow's search order means they need to be defined here, not in
