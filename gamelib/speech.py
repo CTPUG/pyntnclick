@@ -41,5 +41,4 @@ def get_speech(thing_name, text):
 def say(thing_name, text):
     """Play text as speech."""
     sound = get_speech(thing_name, text)
-    if sound is not None:
-        sound.play()
+    sound.play()
