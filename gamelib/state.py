@@ -38,9 +38,9 @@ def initial_state(screen):
     state = State(screen)
     state.load_scenes("cryo")
     state.load_scenes("bridge")
-    #state.load_scenes("mess")
-    #state.load_scenes("engine")
-    #state.load_scenes("machine")
+    state.load_scenes("mess")
+    # state.load_scenes("engine")
+    # state.load_scenes("machine")
     state.load_scenes("map")
     state.set_current_scene("cryo")
     state.set_do_enter_leave()
@@ -349,12 +349,14 @@ class InteractNoImage(Interact):
 class InteractText(Interact):
     """Display box with text to interact with -- mostly for debugging."""
 
-    def __init__(self, x, y, text):
+    def __init__(self, x, y, text, bg_color=None):
+        if bg_color is None:
+            bg_color = (127, 127, 127)
         label = BoomLabel(text)
         label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)
-        label.bg_color = (127, 127, 127)
+        label.bg_color = bg_color
         label.fg_color = (0, 0, 0)
         image = Surface(label.size)
         rect = Rect((x, y), label.size)

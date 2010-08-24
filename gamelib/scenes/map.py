@@ -27,6 +27,10 @@ class Map(Scene):
         self.add_thing(ToEngine())
         self.add_thing(ToMachine())
 
+    def enter(self):
+        for door_thing in self.things.values():
+            door_thing.check_dest()
+
 
 class DoorThing(Thing):
 
@@ -36,8 +40,15 @@ class DoorThing(Thing):
     def interact_without(self):
         """Go to destination."""
         if self.DEST in self.state.scenes:
-            self.state.set_current_scene('bridge')
+            self.state.set_current_scene(self.DEST)
             return Result("You head for the %s." % self.DEST)
+
+    def check_dest(self):
+        if self.DEST in self.state.scenes:
+            if self.state.scenes[self.DEST].get_data('accessible'):
+                self.set_interact('accessible')
+            else:
+                self.set_interact('inaccessible')
 
 
 class ToCryo(DoorThing):
@@ -47,10 +58,11 @@ class ToCryo(DoorThing):
     DEST = "cryo"
 
     INTERACTS = {
-        "room": InteractText(100, 200, "To Cryo"),
+        "inaccessible": InteractText(100, 200, "To Cryo"),
+        "accessible": InteractText(100, 200, "To Cryo", (0, 127, 0)),
         }
 
-    INITIAL = "room"
+    INITIAL = "inaccessible"
 
 
 class ToBridge(DoorThing):
@@ -60,10 +72,11 @@ class ToBridge(DoorThing):
     DEST = "bridge"
 
     INTERACTS = {
-        "room": InteractText(300, 200, "To Bridge"),
+        "inaccessible": InteractText(300, 200, "To Bridge"),
+        "accessible": InteractText(300, 200, "To Bridge", (0, 127, 0)),
         }
 
-    INITIAL = "room"
+    INITIAL = "inaccessible"
 
 
 class ToMess(DoorThing):
@@ -73,23 +86,25 @@ class ToMess(DoorThing):
     DEST = "mess"
 
     INTERACTS = {
-        "room": InteractText(100, 300, "To Mess"),
+        "inaccessible": InteractText(100, 300, "To Mess"),
+        "accessible": InteractText(100, 300, "To Mess", (0, 127, 0)),
         }
 
-    INITIAL = "room"
+    INITIAL = "inaccessible"
 
 
-class ToEngine(Thing):
+class ToEngine(DoorThing):
     "Way to engine room."
 
     NAME = "map.toengine"
     DEST = "engine"
 
     INTERACTS = {
-        "room": InteractText(300, 300, "To Engine"),
+        "inaccessible": InteractText(300, 300, "To Engine"),
+        "accessible": InteractText(300, 300, "To Engine", (0, 127, 0)),
         }
 
-    INITIAL = "room"
+    INITIAL = "inaccessible"
 
 
 class ToMachine(DoorThing):
@@ -99,10 +114,11 @@ class ToMachine(DoorThing):
     DEST = "machine"
 
     INTERACTS = {
-        "room": InteractText(100, 400, "To Machine"),
+        "inaccessible": InteractText(100, 400, "To Machine"),
+        "accessible": InteractText(100, 400, "To Machine", (0, 127, 0)),
         }
 
-    INITIAL = "room"
+    INITIAL = "inaccessible"
 
 
 SCENES = [Map]
