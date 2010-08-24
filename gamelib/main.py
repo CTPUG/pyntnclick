@@ -18,13 +18,14 @@ from albow.shell import Shell
 
 from menu import MenuScreen
 from gamescreen import GameScreen
-from constants import SCREEN
+from constants import SCREEN, FRAME_RATE
 
 class MainShell(Shell):
     def __init__(self, display):
         Shell.__init__(self, display)
         self.menu_screen = MenuScreen(self)
         self.game_screen = GameScreen(self)
+        self.set_timer(FRAME_RATE)
         self.show_screen(self.menu_screen)
 
 def main():

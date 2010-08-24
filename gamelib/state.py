@@ -86,6 +86,9 @@ class State(object):
     def interact(self, pos):
         return self.current_scene.interact(self.tool, pos)
 
+    def animate(self):
+        return self.current_scene.animate()
+
     def mouse_move(self, pos):
         self.current_scene.mouse_move(self.tool, pos)
 
@@ -187,6 +190,16 @@ class Scene(StatefulGizmo):
                                 self._current_thing.get_description())
                     return result
 
+    def animate(self):
+        """Animate all the things in the scene.
+
+           Return true if any of them need to queue a redraw"""
+        result = False
+        for thing in self.things.itervalues():
+            if thing.animate():
+                result = True
+        return result
+
     def mouse_move(self, item, pos):
         """Call to check whether the cursor has entered / exited a thing.
 
@@ -222,11 +235,15 @@ class Interact(object):
         if self.image is not None:
             surface.blit(self.image, self.rect, None)
 
+    def animate(self):
+        return False
+
 
 class InteractNoImage(Interact):
 
     def __init__(self, x, y, w, h):
         super(InteractNoImage, self).__init__(None, None, Rect(x, y, w, h))
+
 
 class InteractRectUnion(Interact):
 
@@ -252,6 +269,41 @@ class InteractImage(Interact):
         self.image = get_image(thing.folder, self._image_name)
         self.rect = Rect(self._pos, self.image.get_size())
         self.interact_rect = self.rect
+
+
+class InteractAnimated(Interact):
+    """Interactive with an animation rather than an image"""
+
+    # FIXME: Assumes all images are the same size
+    # anim_seq - sequence of image names
+    # delay - number of frames to wait between changing images
+
+    def __init__(self, x, y, anim_seq, delay):
+        self._pos = (x, y)
+        self._anim_pos = 0
+        self._names = anim_seq
+        self._frame_count = 0
+        self._anim_seq = None
+        self._delay = delay
+
+    def set_thing(self, thing):
+        self._anim_seq = [get_image(thing.folder, x) for x in self._names]
+        self.image = self._anim_seq[0]
+        self.rect = Rect(self._pos, self.image.get_size())
+        self.interact_rect = self.rect
+
+    def animate(self):
+        if self._anim_seq:
+            self._frame_count += 1
+            if self._frame_count > self._delay:
+                self._frame_count = 0
+                self._anim_pos += 1
+                if self._anim_pos >= len(self._anim_seq):
+                    self._anim_pos = 0
+                self.image = self._anim_seq[self._anim_pos]
+                # queue redraw
+                return True
+        return False
 
 
 class Thing(StatefulGizmo):
@@ -341,6 +393,9 @@ class Thing(StatefulGizmo):
                 return handler(item)
             else:
                 return self.interact_default(item)
+
+    def animate(self):
+        return self.current_interact.animate()
 
     def interact_without(self):
         return self.interact_default(None)

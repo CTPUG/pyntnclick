@@ -87,6 +87,11 @@ class StateWidget(CursorWidget):
             # queue a redraw to show updated state
             self.invalidate()
 
+    def animate(self):
+        if self.state.animate():
+            # queue a redraw
+            self.invalidate()
+
     def mouse_move(self, event):
         if not self.subwidgets:
             self.state.mouse_move(event.pos)
@@ -185,6 +190,10 @@ class GameScreen(Screen):
     def hand_pressed(self):
         self.handbutton.toggle_selected()
         self.inventory.unselect()
+
+    def begin_frame(self):
+        if self.running:
+            self.state_widget.animate()
 
     def mouse_delta(self, event):
         w = self.shell.find_widget(event.pos)

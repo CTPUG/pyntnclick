@@ -3,7 +3,8 @@
 import random
 
 from gamelib.state import Scene, Item, Thing, Result, \
-                          InteractImage, InteractNoImage, InteractRectUnion
+                          InteractImage, InteractNoImage, InteractRectUnion, \
+                          InteractAnimated
 
 
 class Cryo(Scene):
@@ -129,7 +130,8 @@ class CryoComputer(Thing):
     NAME = "cryo.computer"
 
     INTERACTS = {
-        "info": InteractImage(416, 290, "comp_info.png"),
+        "info": InteractAnimated(416, 290, ["comp_info.png", "comp_warn.png"],
+            10),
         "warn": InteractImage(416, 290, "comp_warn.png"),
         "error": InteractImage(416, 290, "comp_error.png"),
         }
