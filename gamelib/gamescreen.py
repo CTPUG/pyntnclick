@@ -86,11 +86,14 @@ class StateWidget(CursorWidget):
 
     def mouse_down(self, event):
         result = self.state.interact(event.pos)
-        if result and result.message:
-            # Display the message as a modal dialog
-            MessageDialog(result.message, 60).present()
-            # queue a redraw to show updated state
-            self.invalidate()
+        if result:
+            if result.sound:
+                result.sound.play()
+            if result.message:
+                # Display the message as a modal dialog
+                MessageDialog(result.message, 60).present()
+                # queue a redraw to show updated state
+                self.invalidate()
 
     def animate(self):
         if self.state.animate():

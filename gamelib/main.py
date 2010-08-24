@@ -10,6 +10,7 @@ import sys
 import os.path
 right_path = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, right_path)
+from optparse import OptionParser
 
 import pygame
 from pygame.locals import SWSURFACE
@@ -18,7 +19,15 @@ from albow.shell import Shell
 
 from menu import MenuScreen
 from gamescreen import GameScreen
-from constants import SCREEN, FRAME_RATE
+from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER
+from sound import no_sound, disable_sound
+
+def parse_args(args):
+    parser = OptionParser()
+    parser.add_option("--no-sound", action="store_false", default=True,
+            dest="sound", help="disable sound")
+    opts, _ = parser.parse_args(args or [])
+    return opts
 
 class MainShell(Shell):
     def __init__(self, display):
@@ -29,8 +38,17 @@ class MainShell(Shell):
         self.show_screen(self.menu_screen)
 
 def main():
+    opts = parse_args(sys.argv)
     pygame.display.init()
     pygame.font.init()
+    if opts.sound:
+        try:
+            pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
+        except pygame.error, exc:
+            no_sound(exc)
+    else:
+        # Ensure get_sound returns nothing, so everything else just works
+        disable_sound()
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     shell = MainShell(display)
     shell.run()

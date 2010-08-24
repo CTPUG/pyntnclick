@@ -1,6 +1,6 @@
 """Utilities and base classes for dealing with scenes."""
 
-from albow.resource import get_image, get_sound
+from albow.resource import get_image
 from albow.utils import frame_rect
 from widgets import BoomLabel
 from pygame.locals import BLEND_ADD
@@ -8,12 +8,16 @@ from pygame.rect import Rect
 from pygame.color import Color
 
 import constants
+from sound import get_sound
 
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None):
+    def __init__(self, message=None, soundfile=None):
         self.message = message
+        self.sound = None
+        if soundfile:
+            self.sound = get_sound(soundfile)
 
 
 def initial_state():
