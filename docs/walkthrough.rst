@@ -7,7 +7,7 @@ constraints.
 Cryo Room
 ---------
 
-#. Grab the Titanium femur from the body in th e second right-most
+#. Grab the Titanium femur from the body in the second right-most
    cryo-chamber.
 #. Try to open the door (it opens part-way)
 #. Pry it open with the femur.
