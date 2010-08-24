@@ -2,7 +2,7 @@
 
 from albow.resource import get_image
 from albow.utils import frame_rect
-from widgets import BoomLabel
+from widgets import BoomLabel, MessageDialog
 from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
 from pygame.color import Color
@@ -19,6 +19,16 @@ class Result(object):
         self.sound = None
         if soundfile:
             self.sound = get_sound(soundfile)
+
+    def process(self, scene):
+        """Helper function to do the right thing with a result object"""
+        if self.sound:
+            self.sound.play()
+        if self.message:
+            # Display the message as a modal dialog
+            MessageDialog(self.message, 60).present()
+            # queue a redraw to show updated state
+            scene.invalidate()
 
 
 def initial_state():

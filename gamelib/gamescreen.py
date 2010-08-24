@@ -15,7 +15,6 @@ from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item
-from widgets import MessageDialog
 
 
 class InventoryView(PaletteView):
@@ -56,24 +55,14 @@ class StateWidget(Widget):
     def draw(self, surface):
         self.state.draw(surface)
 
-    def _process_result(self, result):
-        """Helper function to do the right thing with a result object"""
-        if result:
-            if result.sound:
-                result.sound.play()
-            if result.message:
-                # Display the message as a modal dialog
-                MessageDialog(result.message, 60).present()
-                # queue a redraw to show updated state
-                self.invalidate()
-
     def mouse_down(self, event):
         if self.subwidgets:
             self.remove(self.detail)
             self.state.set_current_detail(None)
         else:
             result = self.state.interact(event.pos)
-            self._process_result(result)
+            if result:
+                result.process(self)
 
     def animate(self):
         if self.state.animate():
@@ -82,7 +71,8 @@ class StateWidget(Widget):
         # We do this here so we can get enter and leave events regardless
         # of what happens
         result = self.state.check_enter_leave()
-        self._process_result(result)
+        if result:
+            result.process(self)
 
     def mouse_move(self, event):
         if not self.subwidgets:
@@ -113,13 +103,7 @@ class DetailWindow(Widget):
     def mouse_down(self, event):
         result = self.state.interact_detail(self.global_to_local(event.pos))
         if result:
-            if result.sound:
-                result.sound.play()
-            if result.message:
-                # Display the message as a modal dialog
-                MessageDialog(result.message, 60).present()
-                # queue a redraw to show updated state
-                self.invalidate()
+            result.process(self)
 
     def mouse_move(self, event):
         self.state.mouse_move_detail(event.pos)
