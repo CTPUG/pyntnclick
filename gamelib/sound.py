@@ -7,7 +7,9 @@
 import os
 
 import pygame
+from pygame.mixer import music
 from albow.resource import _resource_path, dummy_sound
+import albow.music
 
 sound_cache = {}
 
@@ -43,7 +45,22 @@ def no_sound(e):
 def disable_sound():
     global sound_cache
     sound_cache = None
+    albow.music.music_enabled = False
 
 def missing_sound(e, name):
     print "albow.resource.get_sound: %s: %s" % (name, e)
 
+
+def start_next_music():
+    """Start playing the next item from the current playlist immediately."""
+    if albow.music.music_enabled and albow.music.current_playlist:
+        next_music = albow.music.current_playlist.next()
+        if next_music:
+            #print "albow.music: loading", repr(next_music)
+            music.load(next_music)
+            music.play()
+            albow.music.next_change_delay = albow.music.change_delay
+        albow.music.current_music = next_music
+
+# Monkey patch
+albow.music.start_next_music = start_next_music
