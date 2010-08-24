@@ -6,7 +6,7 @@ from gamelib.state import Scene, Item, Thing
 class Mess(Scene):
 
     FOLDER = "mess"
-    BACKGROUND = None # TODO
+    BACKGROUND = "mess_hall.png"
 
     INITIAL_DATA = {
         'accessible': False,
