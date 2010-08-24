@@ -6,6 +6,7 @@
 
 import os
 
+import pygame
 from albow.resource import _resource_path, dummy_sound
 
 sound_cache = {}
