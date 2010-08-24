@@ -112,7 +112,7 @@ class DetailWindow(Widget):
             result.process(self)
 
     def mouse_move(self, event):
-        self.state.mouse_move_detail(event.pos)
+        self.state.mouse_move_detail(self.global_to_local(event.pos))
 
     def show_message(self, message):
         # Display the message as a modal dialog

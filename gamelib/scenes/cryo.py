@@ -176,6 +176,9 @@ class TitaniumLegThing(Thing):
         self.scene.remove_thing(self)
         return Result("The skeletal occupant of this cryo unit has an artificial femur made of titanium. You take it.")
 
+    def get_description(self):
+        return "This femur looks synthetic."
+
 
 class CryoUnitWithCorpse(Scene):
 
