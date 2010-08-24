@@ -30,6 +30,7 @@ def initial_state():
     #state.load_scenes("machine")
     #state.load_scenes("map")
     state.set_current_scene("cryo")
+    state.set_do_enter_leave()
     return state
 
 
@@ -57,6 +58,11 @@ class State(object):
         self.current_scene = None
         # current detail view
         self.current_detail = None
+        # scene we came from, for enter and leave processing
+        self.previous_scene = None
+        # scene transion helpers
+        self.do_check = None
+        self.old_pos = None
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
@@ -76,7 +82,11 @@ class State(object):
                 self.add_detail_view(scene_cls(self))
 
     def set_current_scene(self, name):
+        old_scene = self.current_scene
         self.current_scene = self.scenes[name]
+        if old_scene and old_scene != self.current_scene:
+            self.previous_scene = old_scene
+            self.set_do_enter_leave()
 
     def set_current_detail(self, name):
         if name is None:
@@ -98,7 +108,11 @@ class State(object):
         self.tool = item
 
     def draw(self, surface):
-        self.current_scene.draw(surface)
+        if self.do_check and self.previous_scene and self.do_check == constants.LEAVE:
+            # We still need to handle leave events, so still display the scene
+            self.previous_scene.draw(surface)
+        else:
+            self.current_scene.draw(surface)
 
     def draw_detail(self, surface):
         self.current_detail.draw(surface)
@@ -110,10 +124,33 @@ class State(object):
         return self.current_detail.interact(self.tool, pos)
 
     def animate(self):
-        return self.current_scene.animate()
+        if not self.do_check:
+            return self.current_scene.animate()
+
+    def check_enter_leave(self):
+        if not self.do_check:
+            return None
+        if self.do_check == constants.LEAVE:
+            self.do_check = constants.ENTER
+            if self.previous_scene:
+                return self.previous_scene.leave()
+            return None
+        elif self.do_check == constants.ENTER:
+            self.do_check = None
+            # Fix descriptions, etc.
+            if self.old_pos:
+                self.current_scene.mouse_move(self.tool, self.old_pos)
+            return self.current_scene.enter()
+        raise RuntimeError('invalid do_check value %s' % self.do_check)
 
     def mouse_move(self, pos):
         self.current_scene.mouse_move(self.tool, pos)
+        # So we can do sensible things on enter and leave
+        self.old_pos = pos
+
+    def set_do_enter_leave(self):
+        """Flag that we need to run the enter loop"""
+        self.do_check = constants.LEAVE
 
     def mouse_move_detail(self, pos):
         self.current_detail.mouse_move(self.tool, pos)
@@ -225,6 +262,13 @@ class Scene(StatefulGizmo):
             if thing.animate():
                 result = True
         return result
+
+    def enter(self):
+        return None
+
+    def leave(self):
+        self._current_description = None
+        return None
 
     def mouse_move(self, item, pos):
         """Call to check whether the cursor has entered / exited a thing.

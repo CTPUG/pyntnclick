@@ -15,6 +15,7 @@ class Cryo(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
+        'greet' : True
         }
 
     def __init__(self, state):
@@ -25,6 +26,15 @@ class Cryo(Scene):
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
 
+    def enter(self):
+        if self.get_data('greet'):
+            self.set_data('greet', False)
+            return Result("Greetings Prisoner id. You have woken early under"
+                    " the terms of the emergency conscription act to help with"
+                    " repairs to the ship. Your behaviour during this time will"
+                    " be added to your record and will be relayed to "
+                    " prison officials when we reach the destination."
+                    " Please report to the bridge.")
 
 class Triangle(Item):
     "Test item. Needs to go away at some point."

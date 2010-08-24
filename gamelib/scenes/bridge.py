@@ -1,6 +1,6 @@
 """Bridge where the final showdown with the AI occurs."""
 
-from gamelib.state import Scene, Item, Thing
+from gamelib.state import Scene, Item, Thing, Result
 
 
 class Bridge(Scene):
@@ -16,6 +16,10 @@ class Bridge(Scene):
     INITIAL_DATA = {
         'accessible': False,
         }
+
+    def enter(self):
+        return Result("The bridge is in a sorry, shabby state")
+
 
 
 SCENES = [Bridge]
