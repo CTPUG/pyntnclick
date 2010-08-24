@@ -80,6 +80,9 @@ class State(object):
 
     def remove_inventory_item(self, name):
         self.inventory.remove(self.items[name])
+        # Unselect tool if it's removed
+        if self.tool == self.items[name]:
+            self.set_tool(None)
 
     def set_tool(self, item):
         self.tool = item
