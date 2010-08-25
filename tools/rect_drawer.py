@@ -59,6 +59,9 @@ class AppPalette(PaletteView):
 
 class AppImage(Widget):
 
+    rect_thick = 3
+    draw_thick = 1
+
     def __init__(self, state):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0, 800, 600))
@@ -83,9 +86,9 @@ class AppImage(Widget):
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
-            frame_rect(surface, self.draw_color, rect, 2)
+            frame_rect(surface, self.draw_color, rect, self.draw_thick)
         for (col, rect) in self.rects:
-            frame_rect(surface, col, rect, 1)
+            frame_rect(surface, col, rect, self.rect_thick)
 
     def _make_dict(self):
         d = {}
