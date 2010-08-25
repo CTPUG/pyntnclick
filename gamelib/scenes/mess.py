@@ -28,13 +28,13 @@ class EmptyCan(Item):
     "After emptying the full can."
 
     INVENTORY_IMAGE = "empty_can.png"
-    CURSOR = CursorSprite('empty_can_cursor.png', 47, 3)
+    CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
 
 class FullCan(Item):
     "Found on the shelf."
 
     INVENTORY_IMAGE = "full_can.png"
-    CURSOR = CursorSprite('full_can_cursor.png', 47, 3)
+    CURSOR = CursorSprite('full_can_cursor.png', 20, 30)
 
     def interact_with_titanium_leg(self, tool, state):
         state.replace_inventory_item(self, DentedCan("dented_can"))
@@ -52,14 +52,14 @@ class TubeFragments(Item):
     "Old tubes that need repair."
 
     INVENTORY_IMAGE = "tube_fragments.png"
-    CURSOR = CursorSprite('tube_fragments_cursor.png', 47, 3)
+    CURSOR = CursorSprite('tube_fragments_cursor.png', 3, 60)
 
 
 class ReplacementTubes(Item):
     "Repaired tubes."
 
     INVENTORY_IMAGE = "replacement_tubes.png"
-    CURSOR = CursorSprite('replacement_tubes.png', 47, 3)
+    CURSOR = CursorSprite('replacement_tubes.png', 53, 46)
 
 
 class CansOnShelf(Thing):
