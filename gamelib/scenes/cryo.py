@@ -268,13 +268,22 @@ class CryoComputer(Thing):
     NAME = "cryo.computer"
 
     INTERACTS = {
-        "info": InteractAnimated(416, 290, ["comp_info.png", "comp_warn.png"],
+        "info": InteractAnimated(416, 290, ["comp_info.png", "comp_info2.png"],
             10),
         "warn": InteractImage(416, 290, "comp_warn.png"),
         "error": InteractImage(416, 290, "comp_error.png"),
         }
 
     INITIAL = "info"
+
+    def interact_without(self):
+        return Result(detail_view='cryo_comp_detail')
+
+    def interact_with_titanium_leg(self, item):
+        return Result("Hitting it with the leg accomplishes nothing.")
+
+    def get_description(self):
+        return "A computer terminal, with some text on it."
 
 
 class TitaniumLegThing(Thing):
@@ -314,6 +323,17 @@ class PlaqueThing(Thing):
     def get_description(self):
         return "'Prisoner 98cc-764e646391ee. War crimes. 45 years."
 
+class CryoCompDetail(Scene):
+
+    FOLDER = "cryo"
+    BACKGROUND = "comp_info_detail.png"
+    NAME = "cryo_comp_detail"
+
+    SIZE = (640, 400)
+
+    def __init__(self, state):
+        super(CryoCompDetail, self).__init__(state)
+
 
 class CryoUnitWithCorpse(Scene):
 
@@ -330,4 +350,4 @@ class CryoUnitWithCorpse(Scene):
 
 
 SCENES = [Cryo]
-DETAIL_VIEWS = [CryoUnitWithCorpse]
+DETAIL_VIEWS = [CryoUnitWithCorpse, CryoCompDetail]
