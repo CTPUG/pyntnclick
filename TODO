@@ -3,6 +3,9 @@ General:
   * Lots of game logic and plot.
   * Lots of refactoring.
 
+Specific:
+  * Create icon for windows executable.
+
 Cleanups:
   * Clean-up finding and loading of speech strings.
   * Move interacts out into their own module?
