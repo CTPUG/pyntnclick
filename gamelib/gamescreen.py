@@ -77,7 +77,10 @@ class StateWidget(Widget):
 
     def mouse_move(self, event):
         if not self.subwidgets:
-            self.state.mouse_move(event.pos)
+            self._mouse_move(event.pos)
+
+    def _mouse_move(self, pos):
+        self.state.mouse_move(pos)
 
     def show_message(self, message):
         self.parent.cursor_highlight(False)
@@ -86,7 +89,10 @@ class StateWidget(Widget):
         # queue a redraw to show updated state
         self.invalidate()
         # The cursor could have gone anywhere
-        self.state.current_scene.mouse_move(self.state.tool, mouse.get_pos())
+        if self.subwidgets:
+            self.subwidgets[0]._mouse_move(mouse.get_pos())
+        else:
+            self._mouse_move(mouse.get_pos())
 
     def show_detail(self, detail):
         w, h = self.state.set_current_detail(detail)
@@ -117,7 +123,10 @@ class DetailWindow(Widget):
             result.process(self)
 
     def mouse_move(self, event):
-        self.state.mouse_move_detail(self.global_to_local(event.pos))
+        self._mouse_move(event.pos)
+
+    def _mouse_move(self, pos):
+        self.state.mouse_move_detail(self.global_to_local(pos))
 
     def show_message(self, message):
         self.parent.show_message(message)
