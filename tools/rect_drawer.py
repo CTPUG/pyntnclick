@@ -2,14 +2,25 @@
 # interactive regions in Suspended Sentence
 
 import sys
+import os.path
+
+script_path = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(script_path)
 
 from albow.root import RootWidget
 from albow.utils import frame_rect
-from albow.controls import Image, Button
+from albow.widget import Widget
+from albow.controls import Button
 from albow.palette_view import PaletteView
 from pygame.locals import SWSURFACE
 import pygame
 from pygame.colordict import THECOLORS
+
+from gamelib.state import initial_state
+from gamelib import constants
+
+constants.DEBUG = True
+
 
 
 class AppPalette(PaletteView):
@@ -46,11 +57,11 @@ class AppPalette(PaletteView):
 
 
 
-class AppImage(Image):
+class AppImage(Widget):
 
-    def __init__(self, filename):
-        draw_image = pygame.image.load(filename)
-        super(AppImage, self).__init__(draw_image)
+    def __init__(self, state):
+        self.state = state
+        super(AppImage, self).__init__(pygame.rect.Rect(0, 0, 800, 600))
         self.mode = 'draw'
         self.rects = []
         self.start_pos = None
@@ -67,7 +78,7 @@ class AppImage(Image):
         self.end_pos = None
 
     def draw(self, surface):
-        super(AppImage, self).draw(surface)
+        self.state.draw(surface)
         if self.mode == 'draw' and self.start_pos:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -124,12 +135,21 @@ class AppImage(Image):
 if __name__ == "__main__":
     # FIXME: should load an actual scene with current things, not just a
     # background image
+    if len(sys.argv) < 2:
+        print 'Please provide a scene name'
+        sys.exit(0)
     pygame.display.init()
     pygame.font.init()
     display = pygame.display.set_mode((1000, 600))
-    imagefile = sys.argv[1]
+    state = initial_state(None)
+    try:
+        state.set_current_scene(sys.argv[1])
+        state.do_check = None
+    except KeyError:
+        print 'Invalid scene name'
+        sys.exit(1)
     app = RootWidget(display)
-    image = AppImage(imagefile)
+    image = AppImage(state)
     app.add(image)
     draw = Button('Draw Rect', action=image.draw_mode)
     app.add(draw)
