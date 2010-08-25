@@ -1,6 +1,6 @@
 """Suspended Sentence Version Information"""
 
-VERSION = (0, 1, 0, 'alpha', 1)
+VERSION = (0, 2, 0, 'alpha', 1)
 BASE_VERSION_STR = '.'.join([str(x) for x in VERSION[:3]])
 VERSION_STR = {
     'final': BASE_VERSION_STR,

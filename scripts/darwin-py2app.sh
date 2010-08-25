@@ -4,9 +4,11 @@
 #
 # Usage: darwin-py2app
 
+GAME_NAME="suspended-sentence"
+
 SS_VERSION=`PYTHONPATH=. python -c "from gamelib import version; print version.VERSION_STR"`
-BUILD_NAME="suspended-sentence-${SS_VERSION}"
-BUILD_FOLDER="build/captured"
+BUILD_NAME="${GAME_NAME}-${SS_VERSION}"
+BUILD_FOLDER="build/${GAME_NAME}"
 DMG_NAME="${BUILD_NAME}.dmg"
 PY2APP_LOG="py2app.log"
 
@@ -14,7 +16,6 @@ BASEDIR=`pwd`
 
 echo "=== Setting up build environment ==="
 
-./scripts/clean.sh
 ./scripts/build_unix.sh
 
 cd ${BUILD_FOLDER}

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-GAME_NAME="captured"
+GAME_NAME="suspended-sentence"
 
+rm -rf build/${GAME_NAME}
 mkdir -p build/${GAME_NAME} dist
 
 cp -r COPYING README.txt run_game.py setup.py gamelib Resources build/${GAME_NAME}
