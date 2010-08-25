@@ -38,6 +38,28 @@ class Cryo(Scene):
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
+        # Flavour items
+        # pipes
+        self.add_thing(GenericDescThing('cryo.pipes', 1,
+            "These pipes carry cooling fluid to the cryo units.",
+            (
+                (552, 145, 129, 66),
+                (621, 191, 69, 227),
+                (636, 82, 165, 60),
+                (756, 127, 52, 393),
+                (140, 135, 112, 73),
+                (125, 192, 27, 258),
+                (11, 63, 140, 67),
+                (2, 130, 44, 394),
+                )))
+        # leaks
+        self.add_thing(GenericDescThing('cryo.leaks', 2,
+            "Fluid leaks disturbingly from the bulkheads",
+            (
+                (444, 216, 125, 67),
+                (44, 133, 74, 107),
+                )))
+        # cryo units
         self.add_thing(GenericCryoUnit(2,
             "An empty cryo chamber.",
             "Prisoner 81e4-c8900480e635. Embezzlement. 20 years.",
