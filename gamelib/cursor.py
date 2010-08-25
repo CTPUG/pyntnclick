@@ -52,10 +52,11 @@ class CursorWidget(Widget):
 
     cursor = HAND
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, screen, *args, **kwargs):
         Widget.__init__(self, *args, **kwargs)
         self._cursor_group = RenderUpdates()
         self._loaded_cursor = None
+        self.screen = screen
 
     def enter_screen(self):
         pygame.mouse.set_visible(0)
@@ -65,6 +66,11 @@ class CursorWidget(Widget):
 
     def draw_all(self, _surface):
         Widget.draw_all(self, _surface)
+        item = self.screen.state.tool
+        if item is None:
+            self.set_cursor(HAND)
+        else:
+            self.set_cursor(item.CURSOR)
         surface = self.get_root().surface
         if self.cursor != self._loaded_cursor:
             self._loaded_cursor = self.cursor

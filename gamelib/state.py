@@ -34,9 +34,9 @@ class Result(object):
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
 
-def initial_state(screen):
+def initial_state():
     """Load the initial state."""
-    state = State(screen)
+    state = State()
     state.load_scenes("cryo")
     state.load_scenes("bridge")
     state.load_scenes("mess")
@@ -58,7 +58,7 @@ class State(object):
     * scenes
     """
 
-    def __init__(self, screen):
+    def __init__(self):
         # map of scene name -> Scene object
         self.scenes = {}
         # map of detail view name -> DetailView object
@@ -78,8 +78,6 @@ class State(object):
         # scene transion helpers
         self.do_check = None
         self.old_pos = None
-
-        self.screen = screen
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
@@ -136,20 +134,16 @@ class State(object):
 
     def set_tool(self, item):
         self.tool = item
-        if item is None:
-            self.screen.set_cursor(HAND)
-        else:
-            self.screen.set_cursor(item.CURSOR)
 
-    def draw(self, surface):
+    def draw(self, surface, screen):
         if self.do_check and self.previous_scene and self.do_check == constants.LEAVE:
             # We still need to handle leave events, so still display the scene
-            self.previous_scene.draw(surface)
+            self.previous_scene.draw(surface, screen)
         else:
-            self.current_scene.draw(surface)
+            self.current_scene.draw(surface, screen)
 
-    def draw_detail(self, surface):
-        self.current_detail.draw(surface)
+    def draw_detail(self, surface, screen):
+        self.current_detail.draw(surface, screen)
 
     def interact(self, pos):
         return self.current_scene.interact(self.tool, pos)
@@ -161,7 +155,7 @@ class State(object):
         if not self.do_check:
             return self.current_scene.animate()
 
-    def check_enter_leave(self):
+    def check_enter_leave(self, screen):
         if not self.do_check:
             return None
         if self.do_check == constants.LEAVE:
@@ -173,12 +167,12 @@ class State(object):
             self.do_check = None
             # Fix descriptions, etc.
             if self.old_pos:
-                self.current_scene.mouse_move(self.tool, self.old_pos)
+                self.current_scene.mouse_move(self.tool, self.old_pos, screen)
             return self.current_scene.enter()
         raise RuntimeError('invalid do_check value %s' % self.do_check)
 
-    def mouse_move(self, pos):
-        self.current_scene.mouse_move(self.tool, pos)
+    def mouse_move(self, pos, screen):
+        self.current_scene.mouse_move(self.tool, pos, screen)
         # So we can do sensible things on enter and leave
         self.old_pos = pos
 
@@ -186,8 +180,8 @@ class State(object):
         """Flag that we need to run the enter loop"""
         self.do_check = constants.LEAVE
 
-    def mouse_move_detail(self, pos):
-        self.current_detail.mouse_move(self.tool, pos)
+    def mouse_move_detail(self, pos, screen):
+        self.current_detail.mouse_move(self.tool, pos, screen)
 
 
 class StatefulGizmo(object):
@@ -258,9 +252,9 @@ class Scene(StatefulGizmo):
         label.fg_color = (0, 0, 0)
         return label
 
-    def draw_description(self, surface):
+    def draw_description(self, surface, screen):
         if self._current_description is not None:
-            sub = self.state.screen.get_root().surface.subsurface(
+            sub = screen.get_root().surface.subsurface(
                 Rect(5, 5, *self._current_description.size))
             self._current_description.draw_all(sub)
 
@@ -274,10 +268,10 @@ class Scene(StatefulGizmo):
         for thing in self.things.itervalues():
             thing.draw(surface)
 
-    def draw(self, surface):
+    def draw(self, surface, screen):
         self.draw_background(surface)
         self.draw_things(surface)
-        self.draw_description(surface)
+        self.draw_description(surface, screen)
 
     def interact(self, item, pos):
         """Interact with a particular position.
@@ -313,14 +307,14 @@ class Scene(StatefulGizmo):
         self._current_description = None
         return None
 
-    def mouse_move(self, item, pos):
+    def mouse_move(self, item, pos, screen):
         """Call to check whether the cursor has entered / exited a thing.
 
         Item may be an item in the list of items or None for the hand.
         """
         if self._current_thing is not None:
             if self._current_thing.contains(pos):
-                self.state.screen.cursor_highlight(True)
+                screen.cursor_highlight(True)
                 return
             else:
                 self._current_thing.leave()
@@ -333,7 +327,7 @@ class Scene(StatefulGizmo):
                 self._current_description = self._make_description(
                     thing.get_description())
                 break
-        self.state.screen.cursor_highlight(self._current_thing is not None)
+        screen.cursor_highlight(self._current_thing is not None)
 
     def get_detail_size(self):
         return self._background.get_size()

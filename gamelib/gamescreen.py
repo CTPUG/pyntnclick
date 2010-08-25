@@ -22,10 +22,10 @@ class InventoryView(PaletteView):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, state, scene_widget):
+    def __init__(self, screen):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
-        self.state = state
-        self.scene_widget = scene_widget
+        self.state = screen.state
+        self.state_widget = screen.state_widget
 
     def num_items(self):
         return len(self.state.inventory)
@@ -41,7 +41,7 @@ class InventoryView(PaletteView):
             if self.state.tool:
                 result = self.state.inventory[item_no].interact(self.state.tool, self.state)
                 if result:
-                    result.process(self.scene_widget)
+                    result.process(self.state_widget)
             else:
                 self.state.set_tool(self.state.inventory[item_no])
 
@@ -54,13 +54,14 @@ class InventoryView(PaletteView):
 
 class StateWidget(Widget):
 
-    def __init__(self, state):
+    def __init__(self, screen):
         Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
-        self.state = state
-        self.detail = DetailWindow(state)
+        self.screen = screen
+        self.state = screen.state
+        self.detail = DetailWindow(screen)
 
     def draw(self, surface):
-        self.state.draw(surface)
+        self.state.draw(surface, self.screen)
 
     def mouse_down(self, event):
         if self.subwidgets:
@@ -78,7 +79,7 @@ class StateWidget(Widget):
             self.invalidate()
         # We do this here so we can get enter and leave events regardless
         # of what happens
-        result = self.state.check_enter_leave()
+        result = self.state.check_enter_leave(self.screen)
         if result:
             result.process(self)
 
@@ -87,12 +88,12 @@ class StateWidget(Widget):
             self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.mouse_move(pos)
+        self.state.mouse_move(pos, self.screen)
 
     def show_message(self, message):
         self.parent.cursor_highlight(False)
         # Display the message as a modal dialog
-        MessageDialog(message, 60).present()
+        MessageDialog(self.screen, message, 60).present()
         # queue a redraw to show updated state
         self.invalidate()
         # The cursor could have gone anywhere
@@ -109,9 +110,10 @@ class StateWidget(Widget):
 
 
 class DetailWindow(Widget):
-    def __init__(self, state):
+    def __init__(self, screen):
         Widget.__init__(self)
-        self.state = state
+        self.screen = screen
+        self.state = screen.state
         self.border_width = 5
         self.border_color = (0, 0, 0)
 
@@ -122,7 +124,7 @@ class DetailWindow(Widget):
         self.set_rect(rect.inflate(bw*2, bw*2))
 
     def draw(self, surface):
-        self.state.draw_detail(surface.subsurface(self.image_rect))
+        self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
 
     def mouse_down(self, event):
         result = self.state.interact_detail(self.global_to_local(event.pos))
@@ -133,7 +135,7 @@ class DetailWindow(Widget):
         self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.mouse_move_detail(self.global_to_local(pos))
+        self.state.mouse_move_detail(self.global_to_local(pos), self.screen)
 
     def show_message(self, message):
         self.parent.show_message(message)
@@ -149,7 +151,7 @@ class ToolBar(Row):
 
 class GameScreen(Screen, CursorWidget):
     def __init__(self, shell):
-        CursorWidget.__init__(self)
+        CursorWidget.__init__(self, self)
         Screen.__init__(self, shell)
         self.running = False
 
@@ -160,17 +162,17 @@ class GameScreen(Screen, CursorWidget):
     def start_game(self):
         self._clear_all()
         # TODO: Randomly plonk the state here for now
-        self.state = initial_state(self)
-        self.state_widget = StateWidget(self.state)
+        self.state = initial_state()
+        self.state_widget = StateWidget(self)
         self.add(self.state_widget)
 
-        self.popup_menu = PopupMenu(self.shell)
+        self.popup_menu = PopupMenu(self)
         self.menubutton = PopupMenuButton('Menu',
                 action=self.popup_menu.show_menu)
 
         self.handbutton = HandButton(action=self.hand_pressed)
 
-        self.inventory = InventoryView(self.state, self.state_widget)
+        self.inventory = InventoryView(self)
 
         self.toolbar = ToolBar([
                 self.menubutton,

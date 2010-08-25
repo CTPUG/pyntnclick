@@ -23,8 +23,8 @@ class BoomLabel(albow.controls.Label):
 
 class MessageDialog(BoomLabel, CursorWidget):
 
-    def __init__(self, text, wrap_width, **kwds):
-        CursorWidget.__init__(self)
+    def __init__(self, screen, text, wrap_width, **kwds):
+        CursorWidget.__init__(self, screen)
         paras = text.split("\n\n")
         text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
         albow.controls.Label.__init__(self, text, **kwds)

@@ -24,9 +24,10 @@ class PopupMenuButton(Button):
 
 class PopupMenu(Menu, CursorWidget):
 
-    def __init__(self, shell):
-        CursorWidget.__init__(self)
-        self.shell = shell
+    def __init__(self, screen):
+        CursorWidget.__init__(self, screen)
+        self.screen = screen
+        self.shell = screen.shell
         items = [
                 ('Resume Game', 'hide'),
                 ('Quit Game', 'quit'),
