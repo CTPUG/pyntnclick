@@ -26,11 +26,11 @@ setup   (   # Metadata
             # url = version.SOURCEFORGE_URL,
             # download_url = version.PYPI_URL,
 
-            # license = version.LICENSE,
+            license = version.LICENSE,
 
-            # classifiers = version.CLASSIFIERS,
+            classifiers = version.CLASSIFIERS,
 
-            # platforms = version.PLATFORMS,
+            platforms = version.PLATFORMS,
 
             # Dependencies
             install_requires = version.INSTALL_REQUIRES,
@@ -40,44 +40,44 @@ setup   (   # Metadata
             scripts = ['run_game.py'],
 
             # py2exe
-            # console = ['scripts/testconsole.py'],
-            # windows = [{
-            #     'script': 'scripts/foxassault.py',
-            #     'icon_resources': [(0, "data/icons/foxassault.ico")],
-            # }],
+            console = ['scripts/testconsole.py'],
+            windows = [{
+                'script': 'scripts/suspended.py',
+            #     'icon_resources': [(0, "Resources/icons/suspended.ico")],
+            }],
             app = ['run_game.py'],
             options = {
-            # 'py2exe': {
-            #     'skip_archive': 1,
-            #     'dist_dir': 'dist/foxassault-%s' % version.VERSION_STR,
-            #     'packages': [
-            #         'logging', 'encodings',
-            #     ],
-            #     'includes': [
-            #         # pygame
-            #         'pygame', 'pgu',
-            #     ],
-            #     'excludes': [
-            #         'numpy',
-            #     ],
-            #     'ignores': [
-            #         # all database modules
-            #         'pgdb', 'Sybase', 'adodbapi',
-            #         'kinterbasdb', 'psycopg', 'psycopg2', 'pymssql',
-            #         'sapdb', 'pysqlite2', 'sqlite', 'sqlite3',
-            #         'MySQLdb', 'MySQLdb.connections',
-            #         'MySQLdb.constants.CR', 'MySQLdb.constants.ER',
-            #         # old datetime equivalents
-            #         'DateTime', 'DateTime.ISO',
-            #         'mx', 'mx.DateTime', 'mx.DateTime.ISO',
-            #         # email modules
-            #         'email.Generator', 'email.Iterators', 'email.Utils',
-            #     ],
-            # },
+            'py2exe': {
+                'skip_archive': 1,
+                'dist_dir': 'dist/suspended-sentence-%s' % version.VERSION_STR,
+                'packages': [
+                    'logging', 'encodings', 'gamelib',
+                ],
+                'includes': [
+                    # pygame
+                    'pygame', 'albow',
+                ],
+                'excludes': [
+                    'numpy',
+                ],
+                'ignores': [
+                    # all database modules
+                    'pgdb', 'Sybase', 'adodbapi',
+                    'kinterbasdb', 'psycopg', 'psycopg2', 'pymssql',
+                    'sapdb', 'pysqlite2', 'sqlite', 'sqlite3',
+                    'MySQLdb', 'MySQLdb.connections',
+                    'MySQLdb.constants.CR', 'MySQLdb.constants.ER',
+                    # old datetime equivalents
+                    'DateTime', 'DateTime.ISO',
+                    'mx', 'mx.DateTime', 'mx.DateTime.ISO',
+                    # email modules
+                    'email.Generator', 'email.Iterators', 'email.Utils',
+                ],
+            },
             'py2app': {
                 'argv_emulation': 1,
-                # 'iconfile': 'data/icons/foxassault.icns',
-#                 'dist_dir': 'dist/foxassault-%s' % version.VERSION_STR,
+                # 'iconfile': 'Resources/icons/suspended.icns',
+#                 'dist_dir': 'dist/suspended-sentence-%s' % version.VERSION_STR,
 #                 'bdist_base': 'build/bdist',
                 'packages': [
                     'logging', 'encodings', 'pygame', 'albow', 'gamelib', 'Resources',
