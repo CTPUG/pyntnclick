@@ -108,6 +108,7 @@ class State(object):
         else:
             self.current_detail = self.detail_views[name]
             self.current_scene._current_description = None
+            self.current_scene._current_thing = None
             return self.current_detail.get_detail_size()
 
     def add_inventory_item(self, name):

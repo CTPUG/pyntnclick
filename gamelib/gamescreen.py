@@ -60,6 +60,7 @@ class StateWidget(Widget):
         if self.subwidgets:
             self.remove(self.detail)
             self.state.set_current_detail(None)
+            self._mouse_move(event.pos)
         else:
             result = self.state.interact(event.pos)
             if result:
