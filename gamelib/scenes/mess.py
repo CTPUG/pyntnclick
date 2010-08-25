@@ -1,5 +1,7 @@
 """Mess where crew eat. Fun stuff."""
 
+from random import choice
+
 from gamelib.state import Scene, Item, Thing, InteractImage, InteractNoImage, Result
 from gamelib.cursor import CursorSprite
 
@@ -78,21 +80,24 @@ class CansOnShelf(Thing):
     INITIAL = "cans"
 
     INITIAL_DATA = {
-        "cans": True,
+        'taken_one': False,
     }
 
     def interact_without(self):
-        if self.data['cans']:
-            self.state.add_inventory_item('full_can')
-            self.set_data("cans", False)
-            self.set_interact("nocans")
+        self.state.add_inventory_item('full_can')
+        if not self.data['taken_one']:
+            self.set_data('taken_one', True)
             return Result("Best before along time in the past. Better not eat these.")
+        else:
+            return Result(choice((
+                'Another can of imitation chicken? Great.',
+                'Mmmm. Nutritious Bacteria Stew.',
+                "The label has rusted off, I don't want to know what's inside.",
+                "I hope I don't get hungry enough to open these.",
+            )))
 
     def get_description(self):
-        if self.data["cans"]:
-            return "The contents of these cans looks synthetic."
-        else:
-            return "You've pillaged these shelves already."
+        return "The contents of these cans looks synthetic."
 
 
 class Tubes(Thing):
