@@ -19,13 +19,17 @@ from albow.shell import Shell
 
 from menu import MenuScreen
 from gamescreen import GameScreen
-from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER
+from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG
 from sound import no_sound, disable_sound
+import state
 
 def parse_args(args):
     parser = OptionParser()
     parser.add_option("--no-sound", action="store_false", default=True,
             dest="sound", help="disable sound")
+    if DEBUG:
+        parser.add_option("--scene", type="str", default=None,
+            dest="scene", help="initial scene")
     opts, _ = parser.parse_args(args or [])
     return opts
 
@@ -50,6 +54,9 @@ def main():
     else:
         # Ensure get_sound returns nothing, so everything else just works
         disable_sound()
+    if DEBUG and opts.scene is not None:
+        # debug the specified scene
+        state.DEBUG_SCENE = opts.scene
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     shell = MainShell(display)
     try:

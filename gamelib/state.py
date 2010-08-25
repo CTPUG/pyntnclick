@@ -12,6 +12,8 @@ import constants
 from sound import get_sound
 from cursor import HAND
 
+# override the initial scene to for debugging
+DEBUG_SCENE = None
 
 class Result(object):
     """Result of interacting with a thing"""
@@ -41,7 +43,8 @@ def initial_state(screen):
     state.load_scenes("engine")
     state.load_scenes("machine")
     state.load_scenes("map")
-    state.set_current_scene("cryo")
+    initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
+    state.set_current_scene(initial_scene)
     state.set_do_enter_leave()
     return state
 
