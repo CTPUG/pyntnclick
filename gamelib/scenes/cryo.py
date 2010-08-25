@@ -41,23 +41,61 @@ class Cryo(Scene):
         self.add_thing(CryoComputer())
         self.add_thing(GenericCryoUnit(2,
             "An empty cryo chamber.",
-            "Prisoner 81e4-c8900480e635. Embezzlement. 10 years.",
-            ((155, 430, 50, 35), (125, 450, 60, 35), (95, 470, 60, 35),
-                (55, 490, 60, 55))))
+            "Prisoner 81e4-c8900480e635. Embezzlement. 20 years.",
+            (
+                (155, 430, 50, 35),
+                (125, 450, 60, 35),
+                (95, 470, 60, 35),
+                (55, 490, 60, 55),
+                )))
         self.add_thing(GenericCryoUnit(3,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
             "Prisoner 9334-ce1eb0243bab. Murder. 40 years.",
-            ((215, 430, 50, 35), (205, 450, 50, 35), (185, 470, 50, 35),
-                (125, 505, 80, 40))))
+            (
+                (215, 430, 50, 35),
+                (205, 450, 50, 35),
+                (185, 470, 50, 35),
+                (125, 505, 80, 40),
+                )))
         self.add_thing(GenericCryoUnit(4,
             "A broken cryo chamber. The skeleton inside has been picked clean.",
             "Prisoner bfbc-8bf4c6b7492b. Importing illegal alien biomatter. 15 years.",
-            ((275, 430, 50, 70), (255, 460, 50, 70), (235, 490, 50, 60))))
+            (
+                (275, 430, 50, 70),
+                (255, 460, 50, 70),
+                (235, 490, 50, 60),
+                )))
         self.add_thing(GenericCryoUnit(5,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
             "Prisoner b520-99495b8c41ce. Copyright infringment. 60 years.",
-            ((340, 430, 50, 70), (330, 500, 60, 50))))
-
+            (
+                (340, 430, 50, 70),
+                (330, 500, 60, 50),
+                )))
+        self.add_thing(GenericCryoUnit(6,
+            "An empty cryo unit. Recently filled by you.",
+            "Prisoner 84c7-d10dcfda0878. Safe cracker. 30 years.",
+            (
+                (399, 426, 70, 56),
+                (404, 455, 69, 120),
+                )))
+        self.add_thing(GenericCryoUnit(7,
+            "An empty cryo unit.",
+            "Prisoner 83f1-ce32d3234749. Spammer. 5 years",
+            (
+                (472, 432, 58, 51),
+                (488, 455, 41, 134),
+                (517, 487, 42, 93),
+                )))
+        self.add_thing(GenericCryoUnit(8,
+            "An empty cryo unit.",
+            "Prisoner 48af-a455-9df9f43c43e5. Medical Malpractice. 10 years.",
+            (
+                (596, 419, 69, 39),
+                (616, 442, 82, 40),
+                (648, 467, 84, 37),
+                (681, 491, 97, 60),
+                )))
 
     def enter(self):
         # Setup music
@@ -66,7 +104,7 @@ class Cryo(Scene):
         change_playlist(background_playlist)
         if self.get_data('greet'):
             self.set_data('greet', False)
-            return Result("Greetings Prisoner id. You have woken early under"
+            return Result("Greetings Prisoner 84c7-d10dcfda0878. You have woken early under"
                     " the terms of the emergency conscription act to help with"
                     " repairs to the ship. Your behaviour during this time will"
                     " be added to your record and will be relayed to "
@@ -92,10 +130,11 @@ class CryoUnitAlpha(Thing):
 
     INTERACTS = {
         "unit": InteractRectUnion((
-                (530, 430, 80, 50),
-                (560, 470, 70, 50),
-                (600, 510, 70, 40),
-                ))
+            (531, 430, 64, 49),
+            (560, 460, 57, 47),
+            (583, 482, 65, 69),
+            (600, 508, 71, 48),
+            ))
     }
 
     INITIAL = "unit"
@@ -107,10 +146,14 @@ class CryoUnitAlpha(Thing):
     def interact_without(self):
         return Result(detail_view='cryo_detail')
 
+    def interact_with_titanium_leg(self, item):
+        return Result("You hit the chamber that used to hold this very leg. Nothing happens as a result.")
+
     def get_description(self):
         if self.get_data('contains_titanium_leg'):
-            return "A broken cryo chamber, with an poor unfortunate corpse inside."
+            return "A broken cryo chamber, with a poor unfortunate corpse inside."
         return "A broken cryo chamber. The corpse inside is missing a leg."
+
 
 class GenericCryoUnit(Thing):
     "Generic Cryo unit"
@@ -134,6 +177,13 @@ class GenericCryoUnit(Thing):
 
     def get_description(self):
         return self.description
+
+    def interact_with_titanium_leg(self, item):
+        return Result(random.choice([
+                "You bang on the chamber with the titanium femur. Nothing much happens",
+                "Hitting the cryo unit with the femur doesn't achieve anything",
+                "You hit the chamber with the femur. Nothing happens.",
+                ]))
 
 
 class CryoRoomDoor(Thing):
