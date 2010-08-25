@@ -2,3 +2,7 @@ General:
   * Lots of artwork.
   * Lots of game logic and plot.
   * Lots of refactoring.
+
+Cleanups:
+  * Clean-up finding and loading of speech strings.
+  * Move interacts out into their own module?
