@@ -2,8 +2,6 @@
 
 import random
 from albow.music import change_playlist, get_music, PlayList
-from pygame.colordict import THECOLORS
-from pygame.color import Color
 
 from gamelib import speech
 from gamelib.sound import get_sound
@@ -11,6 +9,7 @@ from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
+from gamelib.statehelpers import GenericDescThing
 from gamelib.constants import DEBUG
 
 
@@ -155,22 +154,12 @@ class CryoUnitAlpha(Thing):
         return "A broken cryo chamber. The corpse inside is missing a leg."
 
 
-class GenericCryoUnit(Thing):
+class GenericCryoUnit(GenericDescThing):
     "Generic Cryo unit"
 
-    INITIAL = 'unit'
-
     def __init__(self, number, description, detailed_description, areas):
-        super(GenericCryoUnit, self).__init__()
-        self.description = description
+        super(GenericCryoUnit, self).__init__('cryo.unit', number, description, areas)
         self.detailed_description = detailed_description
-        self.name = 'cryo.unit.%d' % number
-        self.interacts = {
-                'unit' : InteractRectUnion(areas)
-                }
-        if DEBUG:
-            # Individual colors to make debugging easier
-            self._interact_hilight_color = Color(THECOLORS.keys()[number])
 
     def interact_without(self):
         return Result(self.detailed_description)
