@@ -15,6 +15,7 @@ class Machine(Scene):
     def __init__(self, state):
         super(Machine, self).__init__(state)
         self.add_thing(ToMap())
+        self.add_thing(LaserWelder())
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -78,7 +79,9 @@ class LaserWelder(Thing):
             return Result("The machine has enough cans to weld for the moment.")
 
     def get_description(self):
-        msg = "This is a Smith and Wesson 'zOMG' class high-precision laser welder."
+        if self.get_data('cans_in_place') == 0:
+            return "This is a Smith and Wesson 'zOMG' class high-precision laser welder."
+        msg = "The laser welder looks hungry, somehow."
         if self.get_data('cans_in_place') == 1:
             msg += " It currently contains an empty can."
         elif self.get_data('cans_in_place') == 2:

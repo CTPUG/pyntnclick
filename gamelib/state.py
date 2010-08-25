@@ -518,7 +518,7 @@ class Thing(StatefulGizmo):
         if item is None:
             return self.interact_without()
         else:
-            handler = getattr(self, 'interact_with_' + item.name, None)
+            handler = getattr(self, 'interact_with_' + item.tool_name, None)
             if handler is not None:
                 return handler(item)
             else:
@@ -553,6 +553,7 @@ class Item(object):
 
     def __init__(self, name):
         self.name = name
+        self.tool_name = name
         self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
         # TODO: needs cursor
 
@@ -561,7 +562,7 @@ class Item(object):
 
     def interact(self, tool, state):
         handler = getattr(self, 'interact_with_' + tool.name, None)
-        inverse_handler = getattr(tool, 'interact_with_' + self.name, None)
+        inverse_handler = getattr(tool, 'interact_with_' + self.tool_name, None)
         if handler is not None:
             return handler(tool, state)
         elif inverse_handler is not None:
@@ -580,3 +581,4 @@ class CloneableItem(Item):
         my_count = CloneableItem._counter
         CloneableItem._counter += 1
         super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
+        self.tool_name = name
