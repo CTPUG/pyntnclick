@@ -17,8 +17,6 @@ class Mess(Scene):
 
     def __init__(self, state):
         super(Mess, self).__init__(state)
-        self.add_item(EmptyCan("empty_can"))
-        self.add_item(FullCan("full_can"))
         self.add_item(TubeFragments("tube_fragments"))
         self.add_item(ReplacementTubes("replacement_tubes"))
         self.add_thing(CansOnShelf())
@@ -82,23 +80,23 @@ class CansOnShelf(Thing):
     INITIAL = "cans"
 
     INITIAL_DATA = {
-        'taken_one': False,
+        'cans_vended': 0,
     }
 
     def interact_without(self):
-        can = FullCan("full_can")
-        self.state.add_item(can)
-        self.state.add_inventory_item(can.name)
-        if not self.data['taken_one']:
-            self.set_data('taken_one', True)
-            return Result("Best before along time in the past. Better not eat these.")
+        starting_cans = self.get_data('cans_vended')
+        if starting_cans < 3:
+            can = FullCan("full_can")
+            self.state.add_item(can)
+            self.state.add_inventory_item(can.name)
+            self.set_data('cans_vended', starting_cans + 1)
+            return Result({
+                    0: "Best before along time in the past. Better not eat these.",
+                    1: "Mmmm. Nutritious Bacteria Stew.",
+                    2: "Candied silkworms. Who stocked this place!?",
+                    }[starting_cans])
         else:
-            return Result(choice((
-                'Another can of imitation chicken? Great.',
-                'Mmmm. Nutritious Bacteria Stew.',
-                "The label has rusted off, I don't want to know what's inside.",
-                "I hope I don't get hungry enough to open these.",
-            )))
+            return Result("The rest of the cans are rusted beyond usefulness.")
 
     def get_description(self):
         return "The contents of these cans looks synthetic."
