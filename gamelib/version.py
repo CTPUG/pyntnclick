@@ -78,4 +78,5 @@ INSTALL_REQUIRES = [
 NON_EGG_REQUIREMENTS = [
     'setuptools',
     'pygame',
+    'albow',
 ]
