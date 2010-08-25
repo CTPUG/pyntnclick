@@ -46,7 +46,7 @@ DOCUMENTERS = [
 # SOURCEFORGE_URL = 'http://sourceforge.net/projects/XXXX/'
 # PYPI_URL = 'http://pypi.python.org/pypi/XXXX/'
 
-LICENSE = 'GPL'
+LICENSE = 'MIT'
 # LICENSE_TEXT = resource_string(__name__, 'COPYING')
 
 CLASSIFIERS = [
@@ -55,14 +55,14 @@ CLASSIFIERS = [
     'Environment :: Win32 (MS Windows)',
     'Environment :: X11 Applications',
     'Intended Audience :: End Users/Desktop',
-    'License :: OSI Approved :: GNU General Public License (GPL)',
+    'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
     'Operating System :: Microsoft :: Windows',
     'Operating System :: POSIX',
     'Operating System :: MacOS :: MacOS X',
     'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
-    'Topic :: Games/Entertainment :: Turn Based Strategy',
+    'Topic :: Games/Entertainment :: Role-Playing',
 ]
 
 PLATFORMS = [
