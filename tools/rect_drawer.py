@@ -99,7 +99,7 @@ class AppImage(Widget):
         for (num, col) in enumerate(d):
             print 'Rect %d : ' % num
             for r in d[col]:
-                print '   (%d, %d, %d, %d)' % (r.x, r.y, r.w, r.h)
+                print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
 
     def mouse_down(self, e):
