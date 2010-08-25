@@ -39,7 +39,7 @@ class InventoryView(PaletteView):
             self.unselect()
         else:
             if self.state.tool:
-                result = self.state.inventory[item_no].interact(self.state.tool)
+                result = self.state.inventory[item_no].interact(self.state.tool, self.state)
                 if result:
                     result.process(self.scene_widget)
             else:

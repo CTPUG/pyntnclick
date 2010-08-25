@@ -120,6 +120,17 @@ class State(object):
         if self.tool == self.items[name]:
             self.set_tool(None)
 
+    def replace_inventory_item(self, old_item, new_item):
+        """Try to replace an item in the inventory with a new one"""
+        try:
+            index = self.inventory.index(old_item)
+            self.inventory[index] = new_item
+            if self.tool == old_item:
+                self.set_tool(new_item)
+        except ValueError:
+            return False
+        return True
+
     def set_tool(self, item):
         self.tool = item
         if item is None:
@@ -551,16 +562,16 @@ class Item(object):
     def get_inventory_image(self):
         return self.inventory_image
 
-    def interact(self, tool):
+    def interact(self, tool, state):
         handler = getattr(self, 'interact_with_' + tool.name, None)
         inverse_handler = getattr(tool, 'interact_with_' + self.name, None)
         if handler is not None:
-            return handler(tool)
+            return handler(tool, state)
         elif inverse_handler is not None:
-            return inverse_handler(self)
+            return inverse_handler(self, state)
         else:
-            return self.interact_default(tool)
+            return self.interact_default(tool, state)
 
-    def interact_default(self, tool):
+    def interact_default(self, tool, state):
         return Result("That doesn't do anything useful")
 

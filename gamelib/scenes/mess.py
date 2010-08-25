@@ -30,12 +30,22 @@ class EmptyCan(Item):
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png', 47, 3)
 
-
 class FullCan(Item):
     "Found on the shelf."
 
     INVENTORY_IMAGE = "full_can.png"
     CURSOR = CursorSprite('full_can_cursor.png', 47, 3)
+
+    def interact_with_titanium_leg(self, tool, state):
+        state.replace_inventory_item(self, DentedCan("dented_can"))
+        return Result("You club the can with the femur. The can gets dented, but doesn't open.")
+
+
+class DentedCan(FullCan):
+    "A can banged on with the femur"
+
+    def interact_with_titanium_leg(self, tool, inventory):
+        return Result("You club the can with the femur. The dents shift around, but it still doesn't open.")
 
 
 class TubeFragments(Item):

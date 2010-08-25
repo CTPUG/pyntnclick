@@ -84,9 +84,6 @@ class TitaniumLeg(Item):
     INVENTORY_IMAGE = "titanium_femur.png"
     CURSOR = CursorSprite('titanium_femur_cursor.png', 47, 3)
 
-    def interact_with_full_can(self, tool):
-        return Result("You club the can with the femur. It doesn't help")
-
 
 class CryoUnitAlpha(Thing):
     "Cryo unit containing titanium leg."
