@@ -35,6 +35,9 @@ class CursorSprite(Sprite):
         self.rect.top = pos[1] - self.pointer_y
 
     def set_highlight(self, enable):
+        if not hasattr(self, 'plain_image'):
+            # do nothing if we're not loaded yet
+            return
         if enable != self.highlighted:
             self.highlighted = enable
             self.image = self.plain_image.copy()
