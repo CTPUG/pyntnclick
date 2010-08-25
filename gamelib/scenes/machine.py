@@ -1,6 +1,7 @@
 """Machine room where tools and machines are found."""
 
 from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.cursor import CursorSprite
 
 
 class Machine(Scene):
@@ -16,6 +17,8 @@ class Machine(Scene):
         super(Machine, self).__init__(state)
         self.add_thing(ToMap())
         self.add_thing(LaserWelder())
+        self.add_thing(Grinder())
+        self.add_item(TitaniumMachete('titanium_machete'))
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -89,6 +92,36 @@ class LaserWelder(Thing):
         elif self.get_data('cans_in_place') == 3:
             msg += " It currently contains three empty cans."
         return msg
+
+
+class Grinder(Thing):
+
+    NAME = "machine.grinder"
+
+    INTERACTS = {
+        "grind": InteractText(200, 300, "Grinder"),
+    }
+
+    INITIAL = "grind"
+
+    def interact_without(self):
+        return Result("It looks like it eats fingers. Perhaps a different approach is in order?")
+
+    def interact_with_titanium_leg(self, item):
+        self.state.replace_inventory_item(item, self.state.items['titanium_machete'])
+        return Result("After much delicate grinding and a few close calls with"
+                      " various body parts, the titanium femur now resembles"
+                      " a machete more than a bone. Nice and sharp, too.")
+
+    def get_description(self):
+        return "A pretty ordinary, albeit rather industrial, grinding machine."
+
+
+class TitaniumMachete(Item):
+    "Titanium machete, formerly a leg."
+
+    INVENTORY_IMAGE = "triangle.png"
+    CURSOR = CursorSprite('titanium_femur_cursor.png', 47, 3)
 
 
 SCENES = [Machine]
