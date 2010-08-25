@@ -10,6 +10,7 @@ from gamelib.constants import SCREEN
 
 # We need this stuff set up so we can load images and whatnot.
 pygame.display.init()
+pygame.font.init()
 pygame.display.set_mode(SCREEN, SWSURFACE)
 
 
@@ -39,8 +40,17 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_inventory_item(self, item, in_inventory=True):
         self.assertEquals(in_inventory, self.state.items[item] in self.state.inventory)
 
-    def interact_thing(self, thing, item=None):
+    def assert_scene_thing(self, thing, in_scene=True):
+        self.assertEquals(in_scene, thing in self.state.current_scene.things)
+
+    def assert_detail_thing(self, thing, in_detail=True):
+        self.assertEquals(in_detail, thing in self.state.current_detail.things)
+
+    def interact_thing(self, thing, item=None, detail=False):
         item_obj = None
         if item is not None:
             item_obj = self.state.items[item]
-        self.state.scenes[self.CURRENT_SCENE].things[thing].interact(item_obj)
+        thing_container = self.state.current_scene
+        if detail:
+            thing_container = self.state.current_detail
+        return thing_container.things[thing].interact(item_obj)
