@@ -18,6 +18,7 @@ class CursorSprite(Sprite):
         self.filename = filename
         self.pointer_x = x
         self.pointer_y = y
+        self.highlighted = False
 
     def load(self):
         if not hasattr(self, 'plain_image'):
@@ -27,7 +28,6 @@ class CursorSprite(Sprite):
             self.highlight = pygame.Surface(self.rect.size)
             color = pygame.color.Color(255, 100, 100, 0)
             self.highlight.fill(color)
-            self.highlighted = False
 
     def update(self):
         pos = pygame.mouse.get_pos()
@@ -35,10 +35,8 @@ class CursorSprite(Sprite):
         self.rect.top = pos[1] - self.pointer_y
 
     def set_highlight(self, enable):
-        if not hasattr(self, 'plain_image'):
-            # do nothing if we're not loaded yet
-            return
         if enable != self.highlighted:
+            self.load()
             self.highlighted = enable
             self.image = self.plain_image.copy()
             if enable:
