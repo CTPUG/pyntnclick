@@ -572,3 +572,11 @@ class Item(object):
     def interact_default(self, tool, state):
         return Result("That doesn't do anything useful")
 
+
+class CloneableItem(Item):
+    _counter = 0
+
+    def __init__(self, name):
+        my_count = CloneableItem._counter
+        CloneableItem._counter += 1
+        super(CloneableItem, self).__init__("%s.%s" % (name, my_count))

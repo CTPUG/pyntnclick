@@ -2,7 +2,7 @@
 
 from random import choice
 
-from gamelib.state import Scene, Item, Thing, InteractImage, InteractNoImage, Result
+from gamelib.state import Scene, Item, CloneableItem, Thing, InteractImage, InteractNoImage, Result
 from gamelib.cursor import CursorSprite
 
 
@@ -26,31 +26,33 @@ class Mess(Scene):
         self.add_thing(ToMap())
 
 
-class EmptyCan(Item):
+class EmptyCan(CloneableItem):
     "After emptying the full can."
 
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
 
-class FullCan(Item):
+
+class FullCan(CloneableItem):
     "Found on the shelf."
 
     INVENTORY_IMAGE = "full_can.png"
     CURSOR = CursorSprite('full_can_cursor.png', 20, 30)
 
-    def interact_with_titanium_leg(self, tool, state):
+    def interact_with_titanium_leg(self, item, state):
         dented = DentedCan("dented_can")
+        state.add_item(dented)
         state.replace_inventory_item(self, dented)
         return Result("You club the can with the femur. The can gets dented, but doesn't open.")
 
 
-class DentedCan(FullCan):
+class DentedCan(CloneableItem):
     "A can banged on with the femur"
 
     INVENTORY_IMAGE = "dented_can.png"
     CURSOR = CursorSprite('dented_can_cursor.png', 20, 30)
 
-    def interact_with_titanium_leg(self, tool, inventory):
+    def interact_with_titanium_leg(self, item, state):
         return Result("You club the can with the femur. The dents shift around, but it still doesn't open.")
 
 
@@ -84,7 +86,9 @@ class CansOnShelf(Thing):
     }
 
     def interact_without(self):
-        self.state.add_inventory_item('full_can')
+        can = FullCan("full_can")
+        self.state.add_item(can)
+        self.state.add_inventory_item(can.name)
         if not self.data['taken_one']:
             self.set_data('taken_one', True)
             return Result("Best before along time in the past. Better not eat these.")
