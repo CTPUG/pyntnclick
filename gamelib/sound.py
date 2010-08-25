@@ -41,6 +41,7 @@ def no_sound(e):
     print "get_sound: %s" % e
     print "get_sound: Sound not available, continuing without it"
     sound_cache = None
+    albow.music.music_enabled = False
 
 def disable_sound():
     global sound_cache
