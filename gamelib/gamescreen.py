@@ -22,9 +22,10 @@ class InventoryView(PaletteView):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, state):
+    def __init__(self, state, scene_widget):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
         self.state = state
+        self.scene_widget = scene_widget
 
     def num_items(self):
         return len(self.state.inventory)
@@ -37,7 +38,12 @@ class InventoryView(PaletteView):
         if self.item_is_selected(item_no):
             self.unselect()
         else:
-            self.state.set_tool(self.state.inventory[item_no])
+            if self.state.tool:
+                result = self.state.inventory[item_no].interact(self.state.tool)
+                if result:
+                    result.process(self.scene_widget)
+            else:
+                self.state.set_tool(self.state.inventory[item_no])
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
@@ -164,7 +170,7 @@ class GameScreen(Screen, CursorWidget):
 
         self.handbutton = HandButton(action=self.hand_pressed)
 
-        self.inventory = InventoryView(self.state)
+        self.inventory = InventoryView(self.state, self.state_widget)
 
         self.toolbar = ToolBar([
                 self.menubutton,

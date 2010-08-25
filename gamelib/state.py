@@ -551,3 +551,16 @@ class Item(object):
     def get_inventory_image(self):
         return self.inventory_image
 
+    def interact(self, tool):
+        handler = getattr(self, 'interact_with_' + tool.name, None)
+        inverse_handler = getattr(tool, 'interact_with_' + self.name, None)
+        if handler is not None:
+            return handler(tool)
+        elif inverse_handler is not None:
+            return inverse_handler(self)
+        else:
+            return self.interact_default(tool)
+
+    def interact_default(self, tool):
+        return Result("That doesn't do anything useful")
+
