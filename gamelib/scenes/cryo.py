@@ -123,7 +123,7 @@ class Cryo(Scene):
 
         self.add_thing(GenericCryoUnit(8,
             "An empty cryo unit.",
-            "Prisoner A455-9DF9F43C43E5. Medical Malpractice. 10 years.",
+            "Prisoner A455-9DF9F43C43E5. Medical malpractice. 10 years.",
             (
                 (596, 419, 69, 39),
                 (616, 442, 82, 40),
@@ -139,7 +139,7 @@ class Cryo(Scene):
         if self.get_data('greet'):
             self.set_data('greet', False)
             return Result(
-                    "You hear a voice: 'Greetings Prisoner %s. "
+                    "You hear a voice: 'Greetings, Prisoner %s. "
                     "This is the Judicial Incarceration Monitor. "
                     "You have been woken early under the terms of the "
                     "emergency conscription act to help with repairs to "

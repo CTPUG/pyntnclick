@@ -35,15 +35,15 @@ class Map(Scene):
         if self.get_data('implant'):
             self.set_data('implant', False)
             return (Result(
-                "JIM say 'Under the terms of the emergency conscription "
-                "act, I have downloaded the ship schematics to your "
+                "JIM says: 'Under the terms of the emergency conscription "
+                "act, I have downloaded the ship's schematics to your "
                 "neural implant to help you navigate around the ship. "
                 "Please report to the bridge.'", style="JIM"),
                 Result(
-                "JIM continues 'Prisoner %s. You are classed "
-                "as a class 1 felon. Obtaining access to the ship shematics "
-                "consitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on you sentence.'" % PLAYER_ID,
+                "JIM continues: 'Prisoner %s. You are classed "
+                "as a class 1 felon. Obtaining access to the ship's schematics "
+                "constitutes a level 2 offence and carries a minimal penalty "
+                "of an additional 3 years on your sentence.'" % PLAYER_ID,
                 style="JIM"))
 
 

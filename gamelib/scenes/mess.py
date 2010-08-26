@@ -28,7 +28,7 @@ class BaseCan(CloneableItem):
     """Base class for the cans"""
 
     def interact_with_full_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return Result("You bang the cans together. It sounds like two cans being banged together.", soundfile="can_hit.ogg")
 
     def interact_with_dented_can(self, item, state):
         return self.interact_with_full_can(item, state)
@@ -37,7 +37,7 @@ class BaseCan(CloneableItem):
         return self.interact_with_full_can(item, state)
 
     def interact_with_machete(self, item, state):
-        return Result("You'd managle it beyond usefulness")
+        return Result("You'd mangle it beyond usefulness.")
 
 
 class EmptyCan(BaseCan):
@@ -114,15 +114,15 @@ class CansOnShelf(Thing):
             self.set_data('cans_available', starting_cans - 1)
             self.set_interact('%icans' % (starting_cans - 1))
             return Result({
-                    3: "Best before along time in the past. Better not eat these.",
-                    2: "Mmmm. Nutritious Bacteria Stew.",
-                    1: "Candied silkworms. Who stocked this place!?",
+                    3: "Best before a long time in the past. Better not eat these.",
+                    2: "Mmmm. Nutritious bacteria stew.",
+                    1: "Candied silkworms. Who stocked this place?!",
                     }[starting_cans])
         else:
             return Result("The rest of the cans are rusted beyond usefulness.")
 
     def get_description(self):
-        return "The contents of these cans looks synthetic."
+        return "The contents of these cans look synthetic."
 
 
 class Tubes(Thing):
