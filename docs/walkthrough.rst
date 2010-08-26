@@ -42,7 +42,7 @@ Fixing the broken pipes
    cut out cryo-pipe sections.
 #. Attach the tin pipe and the two cryo-pipes to the broken pipes, and
    seal the joints with duct tape.
-#. The environmental system is now now working.
+#. The environmental system is now working.
 
 Repairing the superconductor
 ----------------------------
@@ -50,7 +50,7 @@ Repairing the superconductor
 #. There is a broken superconductor in the Engine Room.
 #. Get the manual from the corpse in the Machine Room.
 #. The wiring diagram suggests you can steal the massage chair's
-   conductor.
+   superconductor.
 #. Pry it out with the machete.
 #. Pry the broken superconductor out of its socket, and insert the good
    one.
@@ -59,5 +59,7 @@ Cooling the superconductor
 --------------------------
 
 #. Collect the cryo-fluid canister from the Engine Room.
-#. Fill it from a cryo-puddle in the Cryo Chamber.
+#. Fill it from an empty cryo-chamber in the Cryo Chamber.
 #. Place it in the cryo-fluid receptacle in the Engine Room.
+#. The engine is now working.
+
