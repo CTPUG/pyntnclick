@@ -93,27 +93,30 @@ class CansOnShelf(Thing):
     NAME = "mess.cans"
 
     INTERACTS = {
-        "cans": InteractImage(165, 209, "cans_on_shelf.png"),
-        "nocans": InteractNoImage(165, 209, 50, 50),
+        '3cans': InteractImage(165, 209, 'shelf_3_cans.png'),
+        '2cans': InteractImage(165, 209, 'shelf_2_cans.png'),
+        '1cans': InteractImage(165, 209, 'shelf_1_can.png'),
+        '0cans': InteractNoImage(165, 209, 50, 50),
     }
 
-    INITIAL = "cans"
+    INITIAL = '3cans'
 
     INITIAL_DATA = {
-        'cans_vended': 0,
+        'cans_available': 3,
     }
 
     def interact_without(self):
-        starting_cans = self.get_data('cans_vended')
-        if starting_cans < 3:
+        starting_cans = self.get_data('cans_available')
+        if starting_cans > 0:
             can = FullCan("full_can")
             self.state.add_item(can)
             self.state.add_inventory_item(can.name)
-            self.set_data('cans_vended', starting_cans + 1)
+            self.set_data('cans_available', starting_cans - 1)
+            self.set_interact('%icans' % (starting_cans - 1))
             return Result({
-                    0: "Best before along time in the past. Better not eat these.",
-                    1: "Mmmm. Nutritious Bacteria Stew.",
-                    2: "Candied silkworms. Who stocked this place!?",
+                    3: "Best before along time in the past. Better not eat these.",
+                    2: "Mmmm. Nutritious Bacteria Stew.",
+                    1: "Candied silkworms. Who stocked this place!?",
                     }[starting_cans])
         else:
             return Result("The rest of the cans are rusted beyond usefulness.")
