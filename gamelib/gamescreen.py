@@ -64,6 +64,9 @@ class StateWidget(Widget):
         self.state.draw(surface, self.screen)
 
     def mouse_down(self, event):
+        if event.button != 1: # We have a right/middle click
+            self.state.set_tool(None)
+            return
         if self.subwidgets:
             self.remove(self.detail)
             self.state.set_current_detail(None)
@@ -127,6 +130,9 @@ class DetailWindow(Widget):
         self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
 
     def mouse_down(self, event):
+        if event.button != 1: # We have a right/middle click
+            self.state.set_tool(None)
+            return
         result = self.state.interact_detail(self.global_to_local(event.pos))
         if result:
             result.process(self)
