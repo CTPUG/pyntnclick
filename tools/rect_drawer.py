@@ -108,6 +108,7 @@ class AppImage(Widget):
     def _make_dict(self):
         d = {}
         for col, rect in self.rects:
+            col = (col.r, col.g, col.b)
             d.setdefault(col, [])
             d[col].append(rect)
         return d

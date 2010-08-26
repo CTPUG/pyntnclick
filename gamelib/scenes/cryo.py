@@ -40,20 +40,22 @@ class Cryo(Scene):
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
+
         # Flavour items
         # pipes
         self.add_thing(GenericDescThing('cryo.pipes', 1,
             "These pipes carry cooling fluid to the cryo units.",
             (
                 (552, 145, 129, 66),
-                (621, 191, 69, 227),
+                # (643, 199, 38, 233),
                 (636, 82, 165, 60),
                 (756, 127, 52, 393),
                 (140, 135, 112, 73),
-                (125, 192, 27, 258),
+                # (125, 192, 27, 258),
                 (11, 63, 140, 67),
                 (2, 130, 44, 394),
                 )))
+
         # leaks
         self.add_thing(GenericDescThing('cryo.leaks', 2,
             "Fluid leaks disturbingly from the bulkheads",
@@ -61,6 +63,7 @@ class Cryo(Scene):
                 (444, 216, 125, 67),
                 (44, 133, 74, 107),
                 )))
+
         # cryo units
         self.add_thing(GenericCryoUnit(2,
             "An empty cryo chamber.",
@@ -71,6 +74,7 @@ class Cryo(Scene):
                 (95, 470, 60, 35),
                 (55, 490, 60, 55),
                 )))
+
         self.add_thing(GenericCryoUnit(3,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
             "Prisoner 9334-CE1EB0243BAB. Murder. 40 years.",
@@ -80,6 +84,7 @@ class Cryo(Scene):
                 (185, 470, 50, 35),
                 (125, 505, 80, 40),
                 )))
+
         self.add_thing(GenericCryoUnit(4,
             "A broken cryo chamber. The skeleton inside has been picked clean.",
             "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter. 15 years.",
@@ -88,6 +93,7 @@ class Cryo(Scene):
                 (255, 460, 50, 70),
                 (235, 490, 50, 60),
                 )))
+
         self.add_thing(GenericCryoUnit(5,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
             "Prisoner B520-99495B8C41CE. Copyright infringment. 60 years.",
@@ -95,6 +101,7 @@ class Cryo(Scene):
                 (340, 430, 50, 70),
                 (330, 500, 60, 50),
                 )))
+
         self.add_thing(GenericCryoUnit(6,
             "An empty cryo unit. Recently filled by you.",
             "Prisoner %s. Safe cracker. 30 years." % PLAYER_ID,
@@ -102,6 +109,7 @@ class Cryo(Scene):
                 (399, 426, 70, 56),
                 (404, 455, 69, 120),
                 )))
+
         self.add_thing(GenericCryoUnit(7,
             "An empty cryo unit.",
             "Prisoner 83F1-CE32D3234749. Spammer. 5 years",
@@ -110,6 +118,7 @@ class Cryo(Scene):
                 (488, 455, 41, 134),
                 (517, 487, 42, 93),
                 )))
+
         self.add_thing(GenericCryoUnit(8,
             "An empty cryo unit.",
             "Prisoner A455-9DF9F43C43E5. Medical Malpractice. 10 years.",

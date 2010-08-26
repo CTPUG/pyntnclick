@@ -53,9 +53,9 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
         if style == "JIM":
-            self.bg_color = Color(127, 0, 0, 191)
+            self.bg_color = Color(255, 127, 127, 207)
             self.fg_color = (0, 0, 0)
-            self.border_color = (255, 0, 0)
+            self.border_color = (127, 0, 0)
 
     def draw_all(self, surface):
         BoomLabel.draw_all(self, surface)
