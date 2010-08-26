@@ -97,13 +97,21 @@ class AppImage(Widget):
             d[col].append(rect)
         return d
 
-    def print_rects(self):
+    def print_objs(self):
         d = self._make_dict()
         for (num, col) in enumerate(d):
             print 'Rect %d : ' % num
             for r in d[col]:
                 print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
+
+    def image_load(sef):
+        pass
+
+    def image_mode(self):
+        self.mode = 'image'
+        self.start_pos = None
+        self.end_pos = None
 
     def mouse_down(self, e):
         if self.mode == 'del':
@@ -162,12 +170,16 @@ if __name__ == "__main__":
     app.add(image)
     draw = make_button('Draw Rect', image.draw_mode, 0)
     app.add(draw)
-    delete = make_button('Del Rect', image.del_mode, 40)
+    load_image = make_button("Load image", image.image_load, 40)
+    app.add(load_image)
+    add_image = make_button("Place image", image.image_mode, 80)
+    app.add(add_image)
+    delete = make_button('Delete Objects', image.del_mode, 120)
     app.add(delete)
     palette = AppPalette(image)
-    palette.rect.move_ip(810, 80)
+    palette.rect.move_ip(810, 160)
     app.add(palette)
-    print_rects = make_button("Print rects", image.print_rects, 240)
+    print_rects = make_button("Print objects", image.print_objs, 320)
     app.add(print_rects)
     quit_but = make_button("Quit", app.quit, 560)
     app.add(quit_but)
