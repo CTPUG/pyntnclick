@@ -1,12 +1,13 @@
 """Bridge where the final showdown with the AI occurs."""
 
 from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result, InteractText
+from gamelib.state import Scene, Item, Thing, Result, InteractText, \
+                          InteractNoImage, InteractRectUnion
 
 class Bridge(Scene):
 
     FOLDER = "bridge"
-    BACKGROUND = None # TODO
+    BACKGROUND = 'bridge.png'
 
     INITIAL_DATA = {
         'accessible': True,
@@ -31,7 +32,7 @@ class ToMap(Thing):
     DEST = "map"
 
     INTERACTS = {
-        "door": InteractText(100, 200, "To Map"),
+        "door": InteractNoImage(707, 344, 84, 245),
         }
 
     INITIAL = "door"
@@ -47,7 +48,11 @@ class MassageChair(Thing):
     NAME = 'bridge.massagechair'
 
     INTERACTS = {
-        'chair': InteractText(200, 200, 'Chair'),
+        'chair': InteractRectUnion((
+            (76, 365, 72, 216),
+            (148, 486, 160, 97),
+            (148, 418, 77, 68),
+        )),
     }
 
     INITIAL = 'chair'
@@ -78,7 +83,7 @@ class StethoscopeThing(Thing):
     NAME ='bridge.stethoscope'
 
     INTERACTS = {
-        'stethoscope': InteractText(300, 200, 'Stethoscope'),
+        'stethoscope': InteractNoImage(643, 177, 57, 87),
     }
 
     INITIAL = 'stethoscope'
