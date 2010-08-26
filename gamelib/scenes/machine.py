@@ -111,7 +111,8 @@ class Grinder(Thing):
         self.state.replace_inventory_item(item, self.state.items['titanium_machete'])
         return Result("After much delicate grinding and a few close calls with"
                       " various body parts, the titanium femur now resembles"
-                      " a machete more than a bone. Nice and sharp, too.")
+                      " a machete more than a bone. Nice and sharp, too.",
+                      soundfile="grinder.ogg")
 
     def get_description(self):
         return "A pretty ordinary, albeit rather industrial, grinding machine."

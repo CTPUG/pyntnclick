@@ -30,6 +30,15 @@ class EmptyCan(CloneableItem):
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
 
+    def interact_with_full_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_dented_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_empty_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
 
 class FullCan(CloneableItem):
     "Found on the shelf."
@@ -41,7 +50,16 @@ class FullCan(CloneableItem):
         dented = DentedCan("dented_can")
         state.add_item(dented)
         state.replace_inventory_item(self, dented)
-        return Result("You club the can with the femur. The can gets dented, but doesn't open.")
+        return Result("You club the can with the femur. The can gets dented, but doesn't open.", soundfile="can_hit.ogg")
+
+    def interact_with_full_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_dented_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_empty_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
 
 class DentedCan(CloneableItem):
@@ -51,7 +69,16 @@ class DentedCan(CloneableItem):
     CURSOR = CursorSprite('dented_can_cursor.png', 20, 30)
 
     def interact_with_titanium_leg(self, item, state):
-        return Result("You club the can with the femur. The dents shift around, but it still doesn't open.")
+        return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
+
+    def interact_with_full_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_dented_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+
+    def interact_with_empty_can(self, item, state):
+        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
 
 class TubeFragments(Item):
