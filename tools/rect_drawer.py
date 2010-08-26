@@ -81,7 +81,7 @@ class AppImage(Widget):
         self.end_pos = None
 
     def draw(self, surface):
-        self.state.draw(surface)
+        self.state.draw(surface, None)
         if self.mode == 'draw' and self.start_pos:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     pygame.display.init()
     pygame.font.init()
     display = pygame.display.set_mode((1000, 600))
-    state = initial_state(None)
+    state = initial_state()
     try:
         state.set_current_scene(sys.argv[1])
         state.do_check = None
