@@ -10,7 +10,7 @@ sys.path.append(script_path)
 from albow.root import RootWidget
 from albow.utils import frame_rect
 from albow.widget import Widget
-from albow.controls import Button
+from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from pygame.locals import SWSURFACE
@@ -57,7 +57,6 @@ class AppPalette(PaletteView):
         return self.selection == item_no
 
 
-
 class AppImage(Widget):
 
     rect_thick = 3
@@ -68,11 +67,12 @@ class AppImage(Widget):
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0, 800, 600))
         self.mode = 'draw'
         self.rects = []
+        self.images = []
         self.start_pos = None
         self.end_pos = None
         self.draw_color = pygame.color.Color('white')
         self.rect_color = pygame.color.Color('white')
-        self.curent_image = None
+        self.current_image = None
         self.place_image_menu = None
 
     def draw_mode(self):
@@ -92,6 +92,18 @@ class AppImage(Widget):
             frame_rect(surface, self.draw_color, rect, self.draw_thick)
         for (col, rect) in self.rects:
             frame_rect(surface, col, rect, self.rect_thick)
+        for image in self.images:
+            if image.rect.colliderect(surface.get_rect()):
+                cropped_rect = image.rect.clip(surface.get_rect())
+                sub = surface.subsurface(cropped_rect)
+                image.draw(sub)
+            else:
+                print 'image outside surface', image
+        if self.current_image and self.mode == 'image':
+            if self.current_image.rect.colliderect(surface.get_rect()):
+                cropped_rect = self.current_image.rect.clip(surface.get_rect())
+                sub = surface.subsurface(cropped_rect)
+                self.current_image.draw(sub)
 
     def _make_dict(self):
         d = {}
@@ -107,13 +119,21 @@ class AppImage(Widget):
             for r in d[col]:
                 print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
+        for i, image in enumerate(self.images):
+            print 'Image %d' % i
+            r = image.rect
+            print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
+            print
 
     def image_load(self):
         image_path= '%s/Resources/images/%s' % (script_path, self.state.current_scene.FOLDER)
         imagename = request_old_filename(directory=image_path)
         try:
-            self.current_image = pygame.image.load(imagename)
+            image_data = pygame.image.load(imagename)
+            self.current_image = Image(image_data)
             self.place_image_menu.enabled = True
+            # ensure we're off screen to start
+            self.current_image.rect = image_data.get_rect().move(1000, 600)
         except pygame.error, e:
             print 'Unable to load image %s' % e
 
@@ -122,10 +142,24 @@ class AppImage(Widget):
         self.start_pos = None
         self.end_pos = None
 
+    def mouse_move(self, e):
+        if self.mode == 'image' and self.current_image:
+            self.current_image.rect.topleft = e.pos
+            self.invalidate()
+
     def mouse_down(self, e):
         if self.mode == 'del':
             pos = e.pos
             cand = None
+            # Images are drawn above rectangles, so search those first
+            for image in self.images:
+                if image.rect.collidepoint(pos):
+                    cand = image
+                    break
+            if cand:
+                self.images.remove(cand)
+                self.invalidate()
+                return
             for (col, rect) in self.rects:
                 if rect.collidepoint(pos):
                     cand = (col, rect)
@@ -136,6 +170,21 @@ class AppImage(Widget):
         elif self.mode == 'draw':
             self.start_pos = e.pos
             self.end_pos = e.pos
+        elif self.mode == 'image':
+            if self.current_image:
+                self.images.append(self.current_image)
+                self.current_image = None
+                self.invalidate()
+            else:
+                cand = None
+                for image in self.images:
+                    if image.rect.collidepoint(e.pos):
+                        cand = image
+                        break
+                if cand:
+                    self.images.remove(cand)
+                    self.current_image = cand
+                    self.invalidate()
 
     def mouse_up(self, e):
         if self.mode == 'draw':
@@ -181,7 +230,7 @@ if __name__ == "__main__":
     app.add(draw)
     load_image = make_button("Load image", image.image_load, 40)
     app.add(load_image)
-    add_image = make_button("Place image", image.image_mode, 80)
+    add_image = make_button("Place/Move images", image.image_mode, 80)
     add_image.enabled = False
     app.add(add_image)
     image.place_image_menu = add_image
