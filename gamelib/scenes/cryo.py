@@ -27,6 +27,7 @@ class Cryo(Scene):
     MUSIC = [
             'drip1.ogg',
             'drip2.ogg',
+            'drip3.ogg',
             'creaking.ogg',
             'silent.ogg',
             'silent.ogg',
@@ -171,7 +172,8 @@ class CryoUnitAlpha(Thing):
         return Result(detail_view='cryo_detail')
 
     def interact_with_titanium_leg(self, item):
-        return Result("You hit the chamber that used to hold this very leg. Nothing happens as a result.")
+        return Result("You hit the chamber that used to hold this very leg. Nothing happens as a result.",
+                soundfile="clang2.ogg")
 
     def get_description(self):
         if self.get_data('contains_titanium_leg'):
@@ -197,7 +199,7 @@ class GenericCryoUnit(GenericDescThing):
                 "You bang on the chamber with the titanium femur. Nothing much happens",
                 "Hitting the cryo unit with the femur doesn't achieve anything",
                 "You hit the chamber with the femur. Nothing happens.",
-                ]))
+                ]), soundfile="clang2.ogg")
 
 
 class CryoRoomDoor(Thing):
@@ -220,7 +222,7 @@ class CryoRoomDoor(Thing):
     def interact_with_titanium_leg(self, item):
         if self.get_data('door') == "ajar":
             self.open_door()
-            return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.")
+            return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.", soundfile='break.ogg')
         elif self.get_data('door') == "shut":
             text = "You bang on the door with the titanium femur. It makes a clanging sound."
             speech.say(self.name, text)
@@ -232,7 +234,7 @@ class CryoRoomDoor(Thing):
         if self.get_data('door') == "shut":
             self.half_open_door()
         if self.get_data('door') != "open":
-            return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.")
+            return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.", soundfile='chain.ogg')
         else:
             self.state.set_current_scene('map')
             return None
