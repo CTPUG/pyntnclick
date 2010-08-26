@@ -134,6 +134,12 @@ class AppImage(Widget):
             self.end_pos = e.pos
             self.invalidate()
 
+def make_button(text, action, ypos):
+    button = Button(text, action=action)
+    button.align = 'l'
+    button.rect = pygame.rect.Rect(0, 0, 200, 40)
+    button.rect.move_ip(805, ypos)
+    return button
 
 if __name__ == "__main__":
     # FIXME: should load an actual scene with current things, not just a
@@ -154,19 +160,15 @@ if __name__ == "__main__":
     app = RootWidget(display)
     image = AppImage(state)
     app.add(image)
-    draw = Button('Draw Rect', action=image.draw_mode)
+    draw = make_button('Draw Rect', image.draw_mode, 0)
     app.add(draw)
-    draw.rect.move_ip(810, 0)
-    delete = Button('Del Rect', action=image.del_mode)
+    delete = make_button('Del Rect', image.del_mode, 40)
     app.add(delete)
-    delete.rect.move_ip(810, 50)
     palette = AppPalette(image)
-    palette.rect.move_ip(810, 100)
+    palette.rect.move_ip(810, 80)
     app.add(palette)
-    print_rects = Button("Print rects", action=image.print_rects)
+    print_rects = make_button("Print rects", image.print_rects, 240)
     app.add(print_rects)
-    print_rects.rect.move_ip(810, 300)
-    quit_but = Button("Quit", action=app.quit)
+    quit_but = make_button("Quit", app.quit, 560)
     app.add(quit_but)
-    quit_but.rect.move_ip(810, 500)
     app.run()
