@@ -63,7 +63,8 @@ class LaserWelder(Thing):
         else:
             self.set_data('cans_in_place', 0)
             self.state.add_inventory_item('tube_fragments')
-            return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.")
+            return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
+                    soundfile='laser.ogg')
 
     def interact_with_dented_can(self, item):
         return self.interact_with_empty_can(item)

@@ -56,3 +56,10 @@ Credit: Sound samples from Berklee recorded for Richard Boulanger for use in the
 break.ogg wavfile: chain_drop_3.wav
 chain.ogg wavfile: glass_break3.wav
 clang2.ogg wavfile: clang_2.wav
+
+[laser.ogg]
+URL: http://www.archive.org/download/MattLange/MattLange44.zip
+Source: http://www.archive.org/details/MattLange
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples by Matt Lange recorded for Richard Boulanger for use in the One Laptop per Child music library. See http://wiki.laptop.org/go/Sound_samples for details.
+laser.ogg wavfile: laser9.wav
