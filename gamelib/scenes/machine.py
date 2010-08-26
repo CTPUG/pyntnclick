@@ -18,7 +18,7 @@ class Machine(Scene):
         self.add_thing(ToMap())
         self.add_thing(LaserWelder())
         self.add_thing(Grinder())
-        self.add_item(TitaniumMachete('titanium_machete'))
+        self.add_item(TitaniumMachete('machete'))
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -109,7 +109,7 @@ class Grinder(Thing):
         return Result("It looks like it eats fingers. Perhaps a different approach is in order?")
 
     def interact_with_titanium_leg(self, item):
-        self.state.replace_inventory_item(item, self.state.items['titanium_machete'])
+        self.state.replace_inventory_item(item, self.state.items['machete'])
         return Result("After much delicate grinding and a few close calls with"
                       " various body parts, the titanium femur now resembles"
                       " a machete more than a bone. Nice and sharp, too.",

@@ -34,10 +34,10 @@ class EmptyCan(CloneableItem):
         return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
     def interact_with_dented_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
     def interact_with_empty_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
 
 class FullCan(CloneableItem):
@@ -56,10 +56,10 @@ class FullCan(CloneableItem):
         return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
     def interact_with_dented_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
     def interact_with_empty_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
 
 class DentedCan(CloneableItem):
@@ -75,10 +75,10 @@ class DentedCan(CloneableItem):
         return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
     def interact_with_dented_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
     def interact_with_empty_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
+        return self.interact_with_full_can(item, state)
 
 
 class TubeFragments(Item):

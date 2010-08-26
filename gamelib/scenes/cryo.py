@@ -6,7 +6,7 @@ from albow.music import change_playlist, get_music, PlayList
 from gamelib import speech
 from gamelib.sound import get_sound
 from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result, \
+from gamelib.state import Scene, Item, CloneableItem, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
 from gamelib.statehelpers import GenericDescThing
@@ -40,6 +40,8 @@ class Cryo(Scene):
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
+        self.add_thing(CryoPipeLeft())
+        self.add_thing(CryoPipeRight())
 
         # Flavour items
         # pipes
@@ -149,6 +151,53 @@ class Cryo(Scene):
     def leave(self):
         # Stop music
         change_playlist(None)
+
+
+class CryoPipeBase(Thing):
+    "Base class for cryo pipes that need to be stolen."
+
+    INITIAL = "fixed"
+
+    INITIAL_DATA = {
+        'fixed': True,
+        }
+
+    def interact_with_machete(self, item):
+        self.set_data('fixed', False)
+        pipe = CryoPipe('cryopipe')
+        self.state.add_item(pipe)
+        self.state.add_inventory_item(pipe.name)
+        self.set_interact("chopped")
+
+    def is_interactive(self):
+        return self.get_data('fixed')
+
+
+class CryoPipe(CloneableItem):
+    "After emptying the full can."
+
+    INVENTORY_IMAGE = "triangle.png"
+    CURSOR = CursorSprite('triangle.png', 20, 30)
+
+
+class CryoPipeLeft(CryoPipeBase):
+    "Left cryo pipe."
+
+    NAME = "cryo.pipe.left"
+    INTERACTS = {
+        "fixed": InteractNoImage(125, 192, 27, 258),
+        "chopped": InteractImage(125, 192, "triangle.png"),
+        }
+
+
+class CryoPipeRight(CryoPipeBase):
+    "Left cryo pipe."
+
+    NAME = "cryo.pipe.right"
+    INTERACTS = {
+        "fixed": InteractNoImage(643, 199, 38, 233),
+        "chopped": InteractImage(643, 199, "triangle.png"),
+        }
 
 
 class TitaniumLeg(Item):
