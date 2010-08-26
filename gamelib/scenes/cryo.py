@@ -363,7 +363,7 @@ class TitaniumLegThing(Thing):
     NAME = "cryo.titanium_leg"
 
     INTERACTS = {
-        "leg": InteractImage(50, 50, "triangle.png"),
+        "leg": InteractImage(180, 132, "leg.png"),
         }
 
     INITIAL = "leg"
@@ -383,7 +383,7 @@ class PlaqueThing(Thing):
     NAME = "cryo.plaque"
 
     INTERACTS = {
-        "plaque": InteractImage(150, 150, "triangle.png"),
+        "plaque": InteractNoImage(60, 40, 35, 24),
         }
 
     INITIAL = "plaque"
