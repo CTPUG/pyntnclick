@@ -172,6 +172,12 @@ class CryoPipeBase(Thing):
     def is_interactive(self):
         return self.get_data('fixed')
 
+    def get_description(self):
+        if self.get_data('fixed'):
+            return "These pipes carry cooling fluid to the cryo units."
+        else:
+            return "There used to be a pipe carrying cooling fuild here"
+
 
 class CryoPipe(CloneableItem):
     "After emptying the full can."

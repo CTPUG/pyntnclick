@@ -131,7 +131,7 @@ class TitaniumMachete(Item):
     "Titanium machete, formerly a leg."
 
     INVENTORY_IMAGE = "triangle.png"
-    CURSOR = CursorSprite('titanium_femur_cursor.png', 47, 3)
+    CURSOR = CursorSprite('titanium_femur_cursor.png', 20, 3)
 
 
 SCENES = [Machine]

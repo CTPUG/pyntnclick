@@ -3,6 +3,7 @@
 from random import choice
 
 from gamelib.state import Scene, Item, CloneableItem, Thing, InteractImage, InteractNoImage, Result
+from gamelib.statehelpers import GenericDescThing
 from gamelib.cursor import CursorSprite
 
 
@@ -20,6 +21,24 @@ class Mess(Scene):
         self.add_thing(CansOnShelf())
         self.add_thing(Tubes())
         self.add_thing(ToMap())
+        # Flavour items
+        # extra cans on shelf
+        self.add_thing(GenericDescThing('mess.cans', 1,
+            "A large collection of rusted, useless cans",
+            (
+                (154, 335, 89, 106),
+                (152, 435, 63, 66),
+                )))
+        self.add_thing(GenericDescThing('mess.broccoli', 2,
+            "An impressively overgrown broccoli.",
+            (
+                (503, 89, 245, 282),
+                (320, 324, 229, 142),
+                )))
+        self.add_thing(GenericDescThing('mess.cans', 2,
+            "Empty plastic containers. They used to hold dish washer soap",
+            ((565, 399, 62, 95),)))
+
 
 
 class BaseCan(CloneableItem):
@@ -126,6 +145,9 @@ class Tubes(Thing):
         "fixed": False,
         }
 
+    def get_description(self):
+        return "The brocolli seems to have become entangled with something"
+
     def interact_with_machete(self, item):
         if self.get_data("status") == "blocked":
             self.set_data("status", "broken")
@@ -178,6 +200,9 @@ class ToMap(Thing):
         }
 
     INITIAL = "door"
+
+    def get_description(self):
+        return "A doorway leads out to the rest of the ship"
 
     def interact_without(self):
         """Go to map."""
