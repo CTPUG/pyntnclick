@@ -24,11 +24,8 @@ class Mess(Scene):
         self.add_thing(ToMap())
 
 
-class EmptyCan(CloneableItem):
-    "After emptying the full can."
-
-    INVENTORY_IMAGE = "empty_can.png"
-    CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
+class BaseCan(CloneableItem):
+    """Base class for the cans"""
 
     def interact_with_full_can(self, item, state):
         return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
@@ -39,8 +36,22 @@ class EmptyCan(CloneableItem):
     def interact_with_empty_can(self, item, state):
         return self.interact_with_full_can(item, state)
 
+    def interact_with_machete(self, item, state):
+        return Result("You'd managle it beyond usefulness")
 
-class FullCan(CloneableItem):
+
+class EmptyCan(BaseCan):
+    "After emptying the full can."
+
+    INVENTORY_IMAGE = "empty_can.png"
+    CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
+
+
+    def interact_with_titanium_leg(self, item, state):
+        return Result("Flattening the can doesn't look like a useful thing to do")
+
+
+class FullCan(BaseCan):
     "Found on the shelf."
 
     INVENTORY_IMAGE = "full_can.png"
@@ -52,17 +63,8 @@ class FullCan(CloneableItem):
         state.replace_inventory_item(self, dented)
         return Result("You club the can with the femur. The can gets dented, but doesn't open.", soundfile="can_hit.ogg")
 
-    def interact_with_full_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
 
-    def interact_with_dented_can(self, item, state):
-        return self.interact_with_full_can(item, state)
-
-    def interact_with_empty_can(self, item, state):
-        return self.interact_with_full_can(item, state)
-
-
-class DentedCan(CloneableItem):
+class DentedCan(BaseCan):
     "A can banged on with the femur"
 
     INVENTORY_IMAGE = "dented_can.png"
@@ -70,15 +72,6 @@ class DentedCan(CloneableItem):
 
     def interact_with_titanium_leg(self, item, state):
         return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
-
-    def interact_with_full_can(self, item, state):
-        return Result("You bang the cans togther. It sounds like two cans being banged togther.", soundfile="can_hit.ogg")
-
-    def interact_with_dented_can(self, item, state):
-        return self.interact_with_full_can(item, state)
-
-    def interact_with_empty_can(self, item, state):
-        return self.interact_with_full_can(item, state)
 
 
 class TubeFragments(Item):
