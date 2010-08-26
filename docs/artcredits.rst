@@ -13,7 +13,7 @@ Cryo Chambers
 
   * Titanium Prostethic Leg:
 
-  * Hand Icon: From openclipart.org (http://www.openclipart.org/detail/7580) - drawn by johnny_automatic
+  * Hand Icon: From openclipart.org (http://www.openclipart.org/detail/58705) - drawn by voyeg3r
 
 Bridge
 ^^^^^^
@@ -32,7 +32,10 @@ Machine Room
 
 Mess Room
 ^^^^^^^^^
-* Background:
+* Background: Adrianna Pinska
+* Items:
+  * Full Cans: Drawn Adrianna Pinska
+  * Dented Cans: Modified by Neil Muller
 
 
 Map Room
