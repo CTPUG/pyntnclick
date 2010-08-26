@@ -125,12 +125,15 @@ class Cryo(Scene):
         change_playlist(background_playlist)
         if self.get_data('greet'):
             self.set_data('greet', False)
-            return Result("Greetings Prisoner 84c7-d10dcfda0878. You have woken early under"
-                    " the terms of the emergency conscription act to help with"
-                    " repairs to the ship. Your behaviour during this time will"
-                    " be added to your record and will be relayed to "
-                    " prison officials when we reach the destination."
-                    " Please report to the bridge.")
+            return Result(
+                    "You hear a voice: 'Greetings Prisoner 84c7-d10dcfda0878. "
+                    "This is the Judicial Incarceration Monitor. "
+                    "You have been woken early under the terms of the "
+                    "emergency conscription act to help with repairs to "
+                    "the ship. Your behaviour during this time will "
+                    "be added to your record and will be relayed to "
+                    "prison officials when we reach the destination. "
+                    "Please report to the bridge.'")
 
     def leave(self):
         # Stop music
