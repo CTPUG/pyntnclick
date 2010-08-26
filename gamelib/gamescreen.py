@@ -91,10 +91,10 @@ class StateWidget(Widget):
     def _mouse_move(self, pos):
         self.state.mouse_move(pos, self.screen)
 
-    def show_message(self, message):
+    def show_message(self, message, style=None):
         self.parent.cursor_highlight(False)
         # Display the message as a modal dialog
-        MessageDialog(self.screen, message, 60).present()
+        MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
         self.invalidate()
         # The cursor could have gone anywhere
@@ -153,8 +153,8 @@ class DetailWindow(Widget):
     def _mouse_move(self, pos):
         self.state.mouse_move_detail(self.global_to_local(pos), self.screen)
 
-    def show_message(self, message):
-        self.parent.show_message(message)
+    def show_message(self, message, style=None):
+        self.parent.show_message(message, style)
         self.invalidate()
 
 

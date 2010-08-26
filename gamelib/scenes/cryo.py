@@ -134,7 +134,7 @@ class Cryo(Scene):
                     "the ship. Your behaviour during this time will "
                     "be added to your record and will be relayed to "
                     "prison officials when we reach the destination. "
-                    "Please report to the bridge.'")
+                    "Please report to the bridge.'", style="JIM")
 
     def leave(self):
         # Stop music

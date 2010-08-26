@@ -18,19 +18,20 @@ DEBUG_SCENE = None
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None, soundfile=None, detail_view=None):
+    def __init__(self, message=None, soundfile=None, detail_view=None, style=None):
         self.message = message
         self.sound = None
         if soundfile:
             self.sound = get_sound(soundfile)
         self.detail_view = detail_view
+        self.style = style
 
     def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
         if self.sound:
             self.sound.play()
         if self.message:
-            scene_widget.show_message(self.message)
+            scene_widget.show_message(self.message, self.style)
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
 
@@ -258,7 +259,7 @@ class Scene(StatefulGizmo):
         label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)
-        label.bg_color = (127, 127, 127)
+        label.bg_color = Color(127, 127, 127, 255)
         label.fg_color = (0, 0, 0)
         return label
 
