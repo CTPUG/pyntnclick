@@ -6,6 +6,7 @@
 import textwrap
 
 import albow.controls
+from albow.resource import get_font
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
 
@@ -35,6 +36,23 @@ class BoomLabel(albow.controls.Label):
 
     def _draw_all_no_bg(self, surface):
         pass
+
+class BoomButton(BoomLabel):
+
+    def __init__(self, text, action, screen):
+        super(BoomLabel, self).__init__(text, font=get_font(20, 'Vera.ttf'))
+        self.bg_color = (0, 0, 0)
+        self.action = action
+        self.screen = screen
+
+    def mouse_down(self, event):
+        self.action()
+        self.screen.state_widget.mouse_move(event)
+
+    def mouse_move(self, event):
+        pos = self.parent.global_to_local(event.pos)
+        if self.rect.collidepoint(pos):
+            self.screen.cursor_highlight(True)
 
 
 class MessageDialog(BoomLabel, CursorWidget):

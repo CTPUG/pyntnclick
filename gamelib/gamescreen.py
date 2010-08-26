@@ -6,7 +6,6 @@ from albow.controls import Widget
 from albow.layout import Row
 from albow.palette_view import PaletteView
 from albow.screen import Screen
-from albow.resource import get_font
 from pygame import Rect, mouse
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
@@ -16,7 +15,7 @@ from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item, handle_result
-from widgets import MessageDialog, BoomLabel
+from widgets import MessageDialog, BoomButton
 
 
 class InventoryView(PaletteView):
@@ -122,12 +121,11 @@ class DetailWindow(Widget):
         self.state = screen.state
         self.border_width = 5
         self.border_color = (0, 0, 0)
-        self.close = BoomLabel('Close', font=get_font(20, 'Vera.ttf'))
-        self.close.bg_color = (0, 0, 0)
+        # parent only gets set when we get added to the scene
+        self.close = BoomButton('Close', self.close_but, screen)
         self.add(self.close)
-        self.close.mouse_down = self.close_but
 
-    def close_but(self, e):
+    def close_but(self):
         self.parent.clear_detail()
 
     def set_image_rect(self, rect):
