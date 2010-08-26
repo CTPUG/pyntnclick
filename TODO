@@ -9,4 +9,3 @@ Specific:
 Cleanups:
   * Clean-up finding and loading of speech strings.
   * Move interacts out into their own module?
-  * Uppsercase all the prisoner numbers?

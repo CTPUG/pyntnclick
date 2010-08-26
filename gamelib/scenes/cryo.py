@@ -11,6 +11,7 @@ from gamelib.state import Scene, Item, Thing, Result, \
                           InteractAnimated
 from gamelib.statehelpers import GenericDescThing
 from gamelib.constants import DEBUG
+from gamelib.scenes.game_constants import PLAYER_ID
 
 
 class Cryo(Scene):
@@ -63,7 +64,7 @@ class Cryo(Scene):
         # cryo units
         self.add_thing(GenericCryoUnit(2,
             "An empty cryo chamber.",
-            "Prisoner 81e4-c8900480e635. Embezzlement. 20 years.",
+            "Prisoner 81E4-C8900480E635. Embezzlement. 20 years.",
             (
                 (155, 430, 50, 35),
                 (125, 450, 60, 35),
@@ -72,7 +73,7 @@ class Cryo(Scene):
                 )))
         self.add_thing(GenericCryoUnit(3,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
-            "Prisoner 9334-ce1eb0243bab. Murder. 40 years.",
+            "Prisoner 9334-CE1EB0243BAB. Murder. 40 years.",
             (
                 (215, 430, 50, 35),
                 (205, 450, 50, 35),
@@ -81,7 +82,7 @@ class Cryo(Scene):
                 )))
         self.add_thing(GenericCryoUnit(4,
             "A broken cryo chamber. The skeleton inside has been picked clean.",
-            "Prisoner bfbc-8bf4c6b7492b. Importing illegal alien biomatter. 15 years.",
+            "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter. 15 years.",
             (
                 (275, 430, 50, 70),
                 (255, 460, 50, 70),
@@ -89,21 +90,21 @@ class Cryo(Scene):
                 )))
         self.add_thing(GenericCryoUnit(5,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
-            "Prisoner b520-99495b8c41ce. Copyright infringment. 60 years.",
+            "Prisoner B520-99495B8C41CE. Copyright infringment. 60 years.",
             (
                 (340, 430, 50, 70),
                 (330, 500, 60, 50),
                 )))
         self.add_thing(GenericCryoUnit(6,
             "An empty cryo unit. Recently filled by you.",
-            "Prisoner 84c7-d10dcfda0878. Safe cracker. 30 years.",
+            "Prisoner %s. Safe cracker. 30 years." % PLAYER_ID,
             (
                 (399, 426, 70, 56),
                 (404, 455, 69, 120),
                 )))
         self.add_thing(GenericCryoUnit(7,
             "An empty cryo unit.",
-            "Prisoner 83f1-ce32d3234749. Spammer. 5 years",
+            "Prisoner 83F1-CE32D3234749. Spammer. 5 years",
             (
                 (472, 432, 58, 51),
                 (488, 455, 41, 134),
@@ -111,7 +112,7 @@ class Cryo(Scene):
                 )))
         self.add_thing(GenericCryoUnit(8,
             "An empty cryo unit.",
-            "Prisoner 48af-a455-9df9f43c43e5. Medical Malpractice. 10 years.",
+            "Prisoner A455-9DF9F43C43E5. Medical Malpractice. 10 years.",
             (
                 (596, 419, 69, 39),
                 (616, 442, 82, 40),
@@ -127,14 +128,14 @@ class Cryo(Scene):
         if self.get_data('greet'):
             self.set_data('greet', False)
             return Result(
-                    "You hear a voice: 'Greetings Prisoner 84c7-d10dcfda0878. "
+                    "You hear a voice: 'Greetings Prisoner %s. "
                     "This is the Judicial Incarceration Monitor. "
                     "You have been woken early under the terms of the "
                     "emergency conscription act to help with repairs to "
                     "the ship. Your behaviour during this time will "
                     "be added to your record and will be relayed to "
                     "prison officials when we reach the destination. "
-                    "Please report to the bridge.'", style="JIM")
+                    "Please report to the bridge.'" % PLAYER_ID, style="JIM")
 
     def leave(self):
         # Stop music

@@ -8,6 +8,7 @@
    """
 
 from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.scenes.game_constants import PLAYER_ID
 
 
 class Map(Scene):
@@ -39,10 +40,11 @@ class Map(Scene):
                 "neural implant to help you navigate around the ship. "
                 "Please report to the bridge.'", style="JIM"),
                 Result(
-                "JIM continues 'Prisoner 84c7-d10dcfda0878. You are classed "
+                "JIM continues 'Prisoner %s. You are classed "
                 "as a class 1 felon. Obtaining access to the ship shematics "
                 "consitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on you sentence.'", style="JIM"))
+                "of an additional 3 years on you sentence.'" % PLAYER_ID,
+                style="JIM"))
 
 
 class DoorThing(Thing):
