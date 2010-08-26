@@ -85,7 +85,7 @@ class TubeFragments(Item):
     "Old tubes that need repair."
 
     INVENTORY_IMAGE = "tube_fragments.png"
-    CURSOR = CursorSprite('tube_fragments_cursor.png', 3, 60)
+    CURSOR = CursorSprite('tube_fragments_cursor.png', 36, 3)
 
 
 class ReplacementTubes(Item):
