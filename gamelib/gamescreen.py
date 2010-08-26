@@ -2,10 +2,11 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from albow.controls import Button, Widget
+from albow.controls import Widget
 from albow.layout import Row
 from albow.palette_view import PaletteView
 from albow.screen import Screen
+from albow.resource import get_font
 from pygame import Rect, mouse
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
@@ -15,7 +16,7 @@ from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
 from state import initial_state, Item, handle_result
-from widgets import MessageDialog
+from widgets import MessageDialog, BoomLabel
 
 
 class InventoryView(PaletteView):
@@ -68,8 +69,7 @@ class StateWidget(Widget):
             self.state.set_tool(None)
             return
         if self.subwidgets:
-            self.remove(self.detail)
-            self.state.set_current_detail(None)
+            self.clear_detail()
             self._mouse_move(event.pos)
         else:
             result = self.state.interact(event.pos)
@@ -109,6 +109,11 @@ class StateWidget(Widget):
         self.add_centered(self.detail)
         self.parent.cursor_highlight(False)
 
+    def clear_detail(self):
+        """Hide the detail view"""
+        self.remove(self.detail)
+        self.state.set_current_detail(None)
+
 
 class DetailWindow(Widget):
     def __init__(self, screen):
@@ -117,12 +122,20 @@ class DetailWindow(Widget):
         self.state = screen.state
         self.border_width = 5
         self.border_color = (0, 0, 0)
+        self.close = BoomLabel('Close', font=get_font(20, 'Vera.ttf'))
+        self.close.bg_color = (0, 0, 0)
+        self.add(self.close)
+        self.close.mouse_down = self.close_but
+
+    def close_but(self, e):
+        self.parent.clear_detail()
 
     def set_image_rect(self, rect):
         bw = self.border_width
         self.image_rect = rect
         self.image_rect.topleft = (bw, bw)
         self.set_rect(rect.inflate(bw*2, bw*2))
+        self.close.rect.midbottom = rect.midbottom
 
     def draw(self, surface):
         self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
