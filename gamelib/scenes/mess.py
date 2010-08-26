@@ -146,7 +146,12 @@ class Tubes(Thing):
         }
 
     def get_description(self):
-        return "The brocolli seems to have become entangled with something"
+        if self.get_data('status') == "blocked":
+            return "The brocolli seems to have become entangled with something"
+        elif self.get_data("status") == "broken":
+            return "These broken pipes look important."
+        else:
+            return "Your fix looks like it's holding up well."
 
     def interact_with_machete(self, item):
         if self.get_data("status") == "blocked":
@@ -154,7 +159,8 @@ class Tubes(Thing):
             self.set_interact("broken")
             return Result("With a flurry of disgusting mutant vegetable chunks,"
                           " you clear the overgrown broccoli away from the access"
-                          " panel and reveal some broken tubes. They look important.")
+                          " panel and reveal some broken tubes. They look important.",
+                          soundfile='chopping.ogg')
         elif self.get_data("status") == "broken":
             return Result("It looks broken enough already.")
         else:
