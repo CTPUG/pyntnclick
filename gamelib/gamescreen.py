@@ -14,8 +14,9 @@ from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE
 from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
-from state import initial_state, Item
+from state import initial_state, Item, handle_result
 from widgets import MessageDialog
+
 
 class InventoryView(PaletteView):
 
@@ -40,8 +41,7 @@ class InventoryView(PaletteView):
         else:
             if self.state.tool:
                 result = self.state.inventory[item_no].interact(self.state.tool, self.state)
-                if result:
-                    result.process(self.state_widget)
+                handle_result(result, self.state_widget)
             else:
                 self.state.set_tool(self.state.inventory[item_no])
 
@@ -73,8 +73,7 @@ class StateWidget(Widget):
             self._mouse_move(event.pos)
         else:
             result = self.state.interact(event.pos)
-            if result:
-                result.process(self)
+            handle_result(result, self)
 
     def animate(self):
         if self.state.animate():
@@ -83,8 +82,7 @@ class StateWidget(Widget):
         # We do this here so we can get enter and leave events regardless
         # of what happens
         result = self.state.check_enter_leave(self.screen)
-        if result:
-            result.process(self)
+        handle_result(result, self)
 
     def mouse_move(self, event):
         if not self.subwidgets:
@@ -134,8 +132,7 @@ class DetailWindow(Widget):
             self.state.set_tool(None)
             return
         result = self.state.interact_detail(self.global_to_local(event.pos))
-        if result:
-            result.process(self)
+        handle_result(result, self)
 
     def mouse_move(self, event):
         self._mouse_move(event.pos)

@@ -34,6 +34,16 @@ class Result(object):
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
 
+
+def handle_result(result, scene_widget):
+    """Handle dealing with result or result sequences"""
+    if result:
+        if hasattr(result, 'process'):
+            result.process(scene_widget)
+        else:
+            for res in result:
+                res.process(scene_widget)
+
 def initial_state():
     """Load the initial state."""
     state = State()
