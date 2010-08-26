@@ -176,8 +176,8 @@ class CryoPipeBase(Thing):
 class CryoPipe(CloneableItem):
     "After emptying the full can."
 
-    INVENTORY_IMAGE = "triangle.png"
-    CURSOR = CursorSprite('triangle.png', 20, 30)
+    INVENTORY_IMAGE = "cryo_pipe.png"
+    CURSOR = CursorSprite('cryo_pipe_cursor.png', 53, 44)
     TOOL_NAME = "pipe"
 
 
