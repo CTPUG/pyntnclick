@@ -17,8 +17,6 @@ class Mess(Scene):
 
     def __init__(self, state):
         super(Mess, self).__init__(state)
-        self.add_item(TubeFragments("tube_fragments"))
-        self.add_item(ReplacementTubes("replacement_tubes"))
         self.add_thing(CansOnShelf())
         self.add_thing(Tubes())
         self.add_thing(ToMap())
@@ -46,7 +44,6 @@ class EmptyCan(BaseCan):
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
 
-
     def interact_with_titanium_leg(self, item, state):
         return Result("Flattening the can doesn't look like a useful thing to do")
 
@@ -72,20 +69,6 @@ class DentedCan(BaseCan):
 
     def interact_with_titanium_leg(self, item, state):
         return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
-
-
-class TubeFragments(Item):
-    "Old tubes that need repair."
-
-    INVENTORY_IMAGE = "tube_fragments.png"
-    CURSOR = CursorSprite('tube_fragments_cursor.png', 36, 3)
-
-
-class ReplacementTubes(Item):
-    "Repaired tubes."
-
-    INVENTORY_IMAGE = "replacement_tubes.png"
-    CURSOR = CursorSprite('replacement_tubes.png', 53, 46)
 
 
 class CansOnShelf(Thing):
@@ -136,6 +119,52 @@ class Tubes(Thing):
         }
 
     INITIAL = "blocked"
+
+    INITIAL_DATA = {
+        "status": "blocked",
+        "pipes_replaced": 0,
+        "fixed": False,
+        }
+
+    def interact_with_machete(self, item):
+        if self.get_data("status") == "blocked":
+            self.set_data("status", "broken")
+            self.set_interact("broken")
+            return Result("With a flurry of disgusting mutant vegetable chunks,"
+                          " you clear the overgrown broccoli away from the access"
+                          " panel and reveal some broken tubes. They look important.")
+        elif self.get_data("status") == "broken":
+            return Result("It looks broken enough already.")
+        else:
+            return Return("After all that effort fixing it, chopping it to bits doesn't seem very smart.")
+
+    def interact_with_pipe(self, item):
+        if self.get_data("status") == "blocked":
+            return Result("It would get lost in the fronds.")
+        else:
+            self.data['pipes_replaced'] += 1
+            self.state.remove_inventory_item(item.name)
+            return Result({
+                    1: "The pipe slots neatly into place, but doesn't make an airtight seal.",
+                    2: "This pipe is a little looser than the first. It definitely needs to be taped up.",
+                    3: "The final pipe fits snugly, but won't hold under pressure.",
+                    }[self.get_data('pipes_replaced')])
+
+    def interact_with_duct_tape(self, item):
+        if self.get_data("status") == "broken":
+            return Result("It would get lost in the fronds.")
+        elif self.get_data("fixed"):
+            return Result("There's quite enough tape on the ducting already.")
+        elif self.get_data("pipes_replaced") < 3:
+            return Result("All the pipes need to be in place before they can be taped up.")
+        else:
+            self.set_data("fixed", True)
+            self.set_data("status", "fixed")
+            self.set_interact("fixed")
+            # TODO: A less anticlimactic climax?
+            return Result("It takes quite a lot of tape, but eventually everything is"
+                          " airtight and ready to hold pressure. Who'd've thought duct"
+                          " tape could actually be used to tape ducts?")
 
 
 class ToMap(Thing):

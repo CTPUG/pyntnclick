@@ -562,9 +562,13 @@ class Item(object):
     # image for inventory
     INVENTORY_IMAGE = None
 
+    TOOL_NAME = None
+
     def __init__(self, name):
         self.name = name
         self.tool_name = name
+        if self.TOOL_NAME is not None:
+            self.tool_name = self.TOOL_NAME
         self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
         # TODO: needs cursor
 
@@ -593,3 +597,5 @@ class CloneableItem(Item):
         CloneableItem._counter += 1
         super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
         self.tool_name = name
+        if self.TOOL_NAME is not None:
+            self.tool_name = self.TOOL_NAME

@@ -178,6 +178,7 @@ class CryoPipe(CloneableItem):
 
     INVENTORY_IMAGE = "triangle.png"
     CURSOR = CursorSprite('triangle.png', 20, 30)
+    TOOL_NAME = "pipe"
 
 
 class CryoPipeLeft(CryoPipeBase):

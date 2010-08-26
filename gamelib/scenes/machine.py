@@ -95,6 +95,14 @@ class LaserWelder(Thing):
         return msg
 
 
+class TinPipe(Item):
+    "A pipe made out of welded-together tins."
+
+    INVENTORY_IMAGE = "tube_fragments.png"
+    CURSOR = CursorSprite('tube_fragments_cursor.png', 36, 3)
+    TOOL_NAME = "pipe"
+
+
 class Grinder(Thing):
 
     NAME = "machine.grinder"
