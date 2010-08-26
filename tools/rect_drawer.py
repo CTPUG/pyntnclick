@@ -12,6 +12,7 @@ from albow.utils import frame_rect
 from albow.widget import Widget
 from albow.controls import Button
 from albow.palette_view import PaletteView
+from albow.file_dialogs import request_old_filename
 from pygame.locals import SWSURFACE
 import pygame
 from pygame.colordict import THECOLORS
@@ -71,6 +72,8 @@ class AppImage(Widget):
         self.end_pos = None
         self.draw_color = pygame.color.Color('white')
         self.rect_color = pygame.color.Color('white')
+        self.curent_image = None
+        self.place_image_menu = None
 
     def draw_mode(self):
         self.mode = 'draw'
@@ -105,8 +108,14 @@ class AppImage(Widget):
                 print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
 
-    def image_load(sef):
-        pass
+    def image_load(self):
+        image_path= '%s/Resources/images/%s' % (script_path, self.state.current_scene.FOLDER)
+        imagename = request_old_filename(directory=image_path)
+        try:
+            self.current_image = pygame.image.load(imagename)
+            self.place_image_menu.enabled = True
+        except pygame.error, e:
+            print 'Unable to load image %s' % e
 
     def image_mode(self):
         self.mode = 'image'
@@ -173,7 +182,9 @@ if __name__ == "__main__":
     load_image = make_button("Load image", image.image_load, 40)
     app.add(load_image)
     add_image = make_button("Place image", image.image_mode, 80)
+    add_image.enabled = False
     app.add(add_image)
+    image.place_image_menu = add_image
     delete = make_button('Delete Objects', image.del_mode, 120)
     app.add(delete)
     palette = AppPalette(image)
