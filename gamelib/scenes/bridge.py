@@ -120,8 +120,8 @@ class MassageChair(Thing):
 class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
 
-    INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png', 20, 30)
+    INVENTORY_IMAGE = 'stethoscope.png'
+    CURSOR = CursorSprite('stethoscope.png', 29, 27)
 
 
 class StethoscopeThing(Thing):
@@ -130,7 +130,7 @@ class StethoscopeThing(Thing):
     NAME ='bridge.stethoscope'
 
     INTERACTS = {
-        'stethoscope': InteractNoImage(643, 177, 57, 87),
+        'stethoscope': InteractImage(650, 178, 'hanging_stethoscope.png'),
     }
 
     INITIAL = 'stethoscope'
