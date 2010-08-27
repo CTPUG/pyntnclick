@@ -18,11 +18,12 @@ from pygame.locals import SWSURFACE
 import pygame
 from pygame.colordict import THECOLORS
 
-from gamelib.state import initial_state
 from gamelib import constants
+constants.DEBUG = True
+
+from gamelib.state import initial_state
 from gamelib.widgets import BoomLabel
 
-constants.DEBUG = True
 
 
 
