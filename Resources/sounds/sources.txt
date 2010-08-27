@@ -65,3 +65,10 @@ Source: http://www.archive.org/details/MattLange
 License: http://creativecommons.org/licenses/by/3.0/
 Credit: Sound samples by Matt Lange recorded for Richard Boulanger for use in the One Laptop per Child music library. See http://wiki.laptop.org/go/Sound_samples for details.
 laser.ogg wavfile: laser9.wav
+
+[beep330.ogg]
+[beep440.ogg]
+[beep660.ogg]
+[beep880.ogg]
+Created with the gen_sound.py script in trunk/tools (330, 440, 660, 880 Hz).
+Not copyrightable.

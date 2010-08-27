@@ -1,5 +1,7 @@
 """Bridge where the final showdown with the AI occurs."""
 
+from albow.music import change_playlist, get_music, PlayList
+
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
                           InteractNoImage, InteractRectUnion
@@ -10,6 +12,16 @@ class Bridge(Scene):
 
     FOLDER = "bridge"
     BACKGROUND = 'bridge.png'
+
+    MUSIC = [
+            'beep330.ogg',
+            'beep660.ogg',
+            'beep880.ogg',
+            'beep440.ogg',
+            'silent.ogg',
+            'creaking.ogg',
+            'silent.ogg',
+            ]
 
     INITIAL_DATA = {
         'accessible': True,
@@ -25,7 +37,13 @@ class Bridge(Scene):
         self.add_thing(BridgeComputer())
 
     def enter(self):
+        pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
+        background_playlist = PlayList(pieces, random=True, repeat=True)
+        change_playlist(background_playlist)
         return Result("The bridge is in a sorry, shabby state")
+
+    def leave(self):
+        change_playlist(None)
 
 
 class ToMap(Door):
