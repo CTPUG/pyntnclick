@@ -11,6 +11,8 @@ class CrewQuarters(Scene):
     FOLDER = "crew_quarters"
     BACKGROUND = "crew_quarters.png"
 
+    OFFSET = (0, -50)
+
     INITIAL_DATA = {
         'accessible': True,
         }
@@ -18,6 +20,8 @@ class CrewQuarters(Scene):
     def __init__(self, state):
         super(CrewQuarters, self).__init__(state)
         self.add_thing(ToMap())
+        self.add_thing(FishbowlThing())
+        self.add_item(Fishbowl('fishbowl'))
 
     def enter(self):
         return Result("The crew were a messy bunch. Or maybe that's just the intervening centuries.")
@@ -67,6 +71,42 @@ class Safe(Thing):
 
     def get_description(self):
         return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
+
+
+class FishbowlThing(Thing):
+    "A safe, for keeping things safe."
+
+    NAME = 'crew.fishbowl'
+
+    INTERACTS = {
+        'fishbowl': InteractImage(356, 495, 'fishbowl_on_table.png'),
+        'fish_no_bowl': InteractImage(372, 517, 'fish_minus_bowl.png'),
+    }
+
+    INITIAL = 'fishbowl'
+
+    INITIAL_DATA = {
+        'has_bowl': True,
+        }
+
+    def interact_without(self):
+        if not self.get_data('has_bowl'):
+            return Result("What's the point of lugging around a very dead fish "
+                          "and a kilogram or so of sand?")
+        self.set_interact('fish_no_bowl')
+        self.set_data('has_bowl', False)
+        self.state.add_inventory_item('fishbowl')
+        return Result("The fishbowl is useful, but its contents aren't.")
+
+    def get_description(self):
+        return "This fishbowl looks exactly like an old science fiction space helmet."
+
+
+class Fishbowl(Item):
+    "A bowl. Sans fish."
+
+    INVENTORY_IMAGE = 'fishbowl.png'
+    CURSOR = CursorSprite('fishbowl.png', 29, 27)
 
 
 class SafeDetail(Scene):

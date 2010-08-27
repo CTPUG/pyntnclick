@@ -1,5 +1,7 @@
 """Machine room where tools and machines are found."""
 
+import random
+
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.cursor import CursorSprite
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
