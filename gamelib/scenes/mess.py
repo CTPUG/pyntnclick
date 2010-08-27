@@ -57,6 +57,12 @@ class BaseCan(CloneableItem):
     def interact_with_machete(self, item, state):
         return Result("You'd mangle it beyond usefulness.")
 
+    def interact_with_canopener(self, item, state):
+        empty = EmptyCan('empty_can')
+        state.add_item(empty)
+        state.replace_inventory_item(self.name, empty.name)
+        return Result("You open both ends of the can, discarding the hideous contents.")
+
 
 class EmptyCan(BaseCan):
     "After emptying the full can."
@@ -66,6 +72,9 @@ class EmptyCan(BaseCan):
 
     def interact_with_titanium_leg(self, item, state):
         return Result("Flattening the can doesn't look like a useful thing to do.")
+
+    def interact_with_canopener(self, item, state):
+        return Result("There's nothing left to open on this can")
 
 
 class FullCan(BaseCan):
@@ -77,7 +86,7 @@ class FullCan(BaseCan):
     def interact_with_titanium_leg(self, item, state):
         dented = DentedCan("dented_can")
         state.add_item(dented)
-        state.replace_inventory_item(self, dented)
+        state.replace_inventory_item(self.name, dented.name)
         return Result("You club the can with the femur. The can gets dented, but doesn't open.", soundfile="can_hit.ogg")
 
 

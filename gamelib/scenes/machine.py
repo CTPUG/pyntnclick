@@ -117,9 +117,6 @@ class LaserWelder(Thing):
             return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
                     soundfile='laser.ogg')
 
-    def interact_with_dented_can(self, item):
-        return self.interact_with_empty_can(item)
-
     def interact_with_empty_can(self, item):
         starting_cans = self.get_data('cans_in_place')
         if starting_cans < 3:
@@ -184,7 +181,7 @@ class Grinder(Thing):
         return Result("It looks like it eats fingers. Perhaps a different approach is in order?")
 
     def interact_with_titanium_leg(self, item):
-        self.state.replace_inventory_item(item, self.state.items['machete'])
+        self.state.replace_inventory_item(item.name, 'machete')
         return Result("After much delicate grinding and a few close calls with"
                       " various body parts, the titanium femur now resembles"
                       " a machete more than a bone. Nice and sharp, too.",
