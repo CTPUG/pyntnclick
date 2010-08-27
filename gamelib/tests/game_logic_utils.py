@@ -46,6 +46,9 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_detail_thing(self, thing, in_detail=True):
         self.assertEquals(in_detail, thing in self.state.current_detail.things)
 
+    def assert_item_exists(self, item, exists=True):
+        self.assertEquals(exists, item in self.state.items)
+
     def interact_thing(self, thing, item=None, detail=False):
         item_obj = None
         if item is not None:

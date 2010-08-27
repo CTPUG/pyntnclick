@@ -86,3 +86,56 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
 
         self.assertEquals('cryo_detail', resp.detail_view)
 
+    def test_pipes_unchopped_hand(self):
+        "Touch the unchopped cryopipes with the hand. No change."
+
+        self.assert_game_data('fixed', True, 'cryo.pipe.left')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.left'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right'))
+
+        self.assert_game_data('fixed', True, 'cryo.pipe.left')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+
+    def test_pipes_chopped_hand(self):
+        "Touch the chopped cryopipes with the hand. No change."
+
+        self.set_game_data('fixed', False, 'cryo.pipe.left')
+        self.set_game_data('fixed', False, 'cryo.pipe.right')
+
+        self.assertEquals(None, self.interact_thing('cryo.pipe.left'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right'))
+
+        self.assert_game_data('fixed', False, 'cryo.pipe.left')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right')
+
+    def test_pipes_unchopped_machete(self):
+        "Touch the unchopped cryopipes with the machete. They chop."
+
+        self.assert_game_data('fixed', True, 'cryo.pipe.left')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+        self.assert_item_exists('cryo_pipe.0', False)
+        self.assert_item_exists('cryo_pipe.1', False)
+
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right', 'machete'))
+
+        self.assert_game_data('fixed', False, 'cryo.pipe.left')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right')
+        self.assert_item_exists('cryo_pipe.0')
+        self.assert_item_exists('cryo_pipe.1')
+        self.assert_inventory_item('cryo_pipe.0', True)
+        self.assert_inventory_item('cryo_pipe.1', True)
+
+    def test_pipes_chopped_machete(self):
+        "Touch the chopped cryopipes with the machete. No change."
+
+        self.set_game_data('fixed', False, 'cryo.pipe.left')
+        self.set_game_data('fixed', False, 'cryo.pipe.right')
+
+        self.assertEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right', 'machete'))
+
+        self.assert_game_data('fixed', False, 'cryo.pipe.left')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right')

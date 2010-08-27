@@ -164,20 +164,27 @@ class CryoPipeBase(Thing):
         }
 
     def interact_with_machete(self, item):
-        self.set_data('fixed', False)
-        pipe = CryoPipe('cryopipe')
-        self.state.add_item(pipe)
-        self.state.add_inventory_item(pipe.name)
-        self.set_interact("chopped")
+        if self.get_data('fixed'):
+            self.set_data('fixed', False)
+            pipe = CryoPipe('cryo_pipe')
+            self.state.add_item(pipe)
+            self.state.add_inventory_item(pipe.name)
+            self.set_interact("chopped")
+            return Result("It takes more effort than one would expect, but "
+                          "eventually the pipe is separated from the wall.")
 
     def is_interactive(self):
         return self.get_data('fixed')
 
+    def interact_without(self):
+        if self.get_data('fixed'):
+            return Result("These pipes aren't attached to the wall very solidly.")
+        return None
+
     def get_description(self):
         if self.get_data('fixed'):
             return "These pipes carry cooling fluid to the cryo units."
-        else:
-            return "There used to be a pipe carrying cooling fuild here"
+        return "There used to be a pipe carrying cooling fluid here"
 
 
 class CryoPipe(CloneableItem):

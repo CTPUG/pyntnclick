@@ -10,7 +10,7 @@ TARBALL_NAME="${BUILD_NAME}.tgz"
 rm -rf ${BUILD_FOLDER}
 mkdir -p ${BUILD_FOLDER} dist
 
-cp -r COPYING README.txt run_game.py setup.py gamelib Resources ${BUILD_FOLDER}/
+cp -r COPYING README.txt run_game.py setup.py docs gamelib Resources ${BUILD_FOLDER}/
 
 cd build
 
