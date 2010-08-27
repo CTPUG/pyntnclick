@@ -116,6 +116,8 @@ class CansOnShelf(Thing):
             self.state.add_inventory_item(can.name)
             self.set_data('cans_available', starting_cans - 1)
             self.set_interact('%icans' % (starting_cans - 1))
+            if starting_cans == 1:
+                self.scene.remove_thing(self)
             return Result({
                     3: "Best before a long time in the past. Better not eat these.",
                     2: "Mmmm. Nutritious bacteria stew.",
