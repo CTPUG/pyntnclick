@@ -156,8 +156,8 @@ class StethoscopeThing(Thing):
 class Superconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
-    INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png', 20, 30)
+    INVENTORY_IMAGE = 'superconductor_fixed.png'
+    CURSOR = CursorSprite('superconductor_fixed.png', 20, 20)
 
 
 class SuperconductorThing(Thing):
