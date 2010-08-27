@@ -147,9 +147,9 @@ class AppImage(Widget):
         if self.draw_toolbar:
             toolbar_rect = pygame.rect.Rect(0, 550, 800, 50)
             tb_surf = surface.subsurface(0, 550, 800, 50).convert_alpha()
-            tb_surf.fill(Color(127, 0, 0, 127))
-            surface.blit(tb_surf)
-            frame_rect(surface, (127, 0, 0), toolbar_rect, 5)
+            tb_surf.fill(pygame.color.Color(127, 0, 0, 191))
+            surface.blit(tb_surf, (0, 550))
+            # frame_rect(surface, (127, 0, 0), toolbar_rect, 2)
 
     def _make_dict(self):
         d = {}
