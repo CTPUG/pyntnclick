@@ -13,12 +13,14 @@ from albow.widget import Widget
 from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
+from albow.resource import get_font
 from pygame.locals import SWSURFACE
 import pygame
 from pygame.colordict import THECOLORS
 
 from gamelib.state import initial_state
 from gamelib import constants
+from gamelib.widgets import BoomLabel
 
 constants.DEBUG = True
 
@@ -74,6 +76,14 @@ class AppImage(Widget):
         self.rect_color = pygame.color.Color('white')
         self.current_image = None
         self.place_image_menu = None
+        self.close_button = BoomLabel('Close', font=get_font(20, 'Vera.ttf'))
+        self.close_button.fg_color = (0, 0, 0)
+        self.close_button.bg_color = (0, 0, 0)
+        if self.state.current_detail:
+            w, h = self.state.current_detail.get_detail_size()
+            rect = pygame.rect.Rect(0, 0, w, h)
+            self.close_button.rect.midbottom = rect.midbottom
+            self.add(self.close_button)
 
     def draw_mode(self):
         self.mode = 'draw'
@@ -85,7 +95,6 @@ class AppImage(Widget):
 
     def draw(self, surface):
         if self.state.current_detail:
-            w, h = self.state.current_detail.get_detail_size()
             self.state.draw_detail(surface, None)
         else:
             self.state.draw(surface, None)
