@@ -86,6 +86,20 @@ class AppImage(Widget):
             self.close_button.rect.midbottom = rect.midbottom
             self.add(self.close_button)
 
+        self.draw_rects = True
+        self.draw_things = True
+        self.draw_images = True
+
+    def toggle_things(self):
+        self.draw_things = not self.draw_things
+
+    def toggle_images(self):
+        self.draw_images = not self.draw_images
+
+    def toggle_rects(self):
+        self.draw_rects = not self.draw_rects
+
+
     def draw_mode(self):
         self.mode = 'draw'
 
@@ -96,28 +110,36 @@ class AppImage(Widget):
 
     def draw(self, surface):
         if self.state.current_detail:
-            self.state.draw_detail(surface, None)
+            if self.draw_things:
+                self.state.draw_detail(surface, None)
+            else:
+                self.state.current_detail.draw_background(surface)
         else:
-            self.state.draw(surface, None)
-        if self.mode == 'draw' and self.start_pos:
+            if self.draw_things:
+                self.state.draw(surface, None)
+            else:
+                self.state.current_scene.draw_background(surface)
+        if self.mode == 'draw' and self.start_pos and self.draw_rects:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
             frame_rect(surface, self.draw_color, rect, self.draw_thick)
-        for (col, rect) in self.rects:
-            frame_rect(surface, col, rect, self.rect_thick)
-        for image in self.images:
-            if image.rect.colliderect(surface.get_rect()):
-                cropped_rect = image.rect.clip(surface.get_rect())
-                sub = surface.subsurface(cropped_rect)
-                image.draw(sub)
-            else:
-                print 'image outside surface', image
-        if self.current_image and self.mode == 'image':
-            if self.current_image.rect.colliderect(surface.get_rect()):
-                cropped_rect = self.current_image.rect.clip(surface.get_rect())
-                sub = surface.subsurface(cropped_rect)
-                self.current_image.draw(sub)
+        if self.draw_rects:
+            for (col, rect) in self.rects:
+                frame_rect(surface, col, rect, self.rect_thick)
+        if self.draw_images:
+            for image in self.images:
+                if image.rect.colliderect(surface.get_rect()):
+                    cropped_rect = image.rect.clip(surface.get_rect())
+                    sub = surface.subsurface(cropped_rect)
+                    image.draw(sub)
+                else:
+                    print 'image outside surface', image
+            if self.current_image and self.mode == 'image':
+                if self.current_image.rect.colliderect(surface.get_rect()):
+                    cropped_rect = self.current_image.rect.clip(surface.get_rect())
+                    sub = surface.subsurface(cropped_rect)
+                    self.current_image.draw(sub)
 
     def _make_dict(self):
         d = {}
@@ -265,6 +287,12 @@ if __name__ == "__main__":
     app.add(palette)
     print_rects = make_button("Print objects", image.print_objs, 320)
     app.add(print_rects)
+    toggle_things = make_button("Toggle Things", image.toggle_things, 360)
+    app.add(toggle_things)
+    toggle_images = make_button("Toggle Images", image.toggle_images, 400)
+    app.add(toggle_images)
+    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 440)
+    app.add(toggle_rects)
     quit_but = make_button("Quit", app.quit, 560)
     app.add(quit_but)
     app.run()
