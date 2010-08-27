@@ -135,6 +135,9 @@ class GenericDescThing(Thing):
     def get_description(self):
         return self.description
 
+    def is_interactive(self):
+        return False
+
 
 class Door(Thing):
     """A door somewhere"""

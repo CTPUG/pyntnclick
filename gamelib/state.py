@@ -323,7 +323,7 @@ class Scene(StatefulGizmo):
         """
         if self._current_thing is not None:
             if self._current_thing.contains(pos):
-                screen.cursor_highlight(True)
+                screen.cursor_highlight(self._current_thing.is_interactive())
                 return
             else:
                 self._current_thing.leave()
@@ -408,7 +408,7 @@ class Thing(StatefulGizmo):
         return None
 
     def is_interactive(self):
-        return self.current_interact is not None
+        return True
 
     def enter(self, item):
         """Called when the cursor enters the Thing."""
