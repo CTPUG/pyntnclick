@@ -10,6 +10,7 @@ from gamelib.state import Scene, Item, CloneableItem, Thing, Result, \
                           InteractImage, InteractNoImage, InteractRectUnion, \
                           InteractAnimated
 from gamelib.statehelpers import GenericDescThing
+from gamelib.scenes.scene_widgets import Door
 from gamelib.constants import DEBUG
 from gamelib.scenes.game_constants import PLAYER_ID
 
@@ -268,7 +269,7 @@ class GenericCryoUnit(GenericDescThing):
                 ]), soundfile="clang2.ogg")
 
 
-class CryoRoomDoor(Thing):
+class CryoRoomDoor(Door):
     "Door to the cryo room."
 
     NAME = "cryo.door"
@@ -311,9 +312,6 @@ class CryoRoomDoor(Thing):
                     "Your valiant efforts are foiled by the Evil Game Designer.",
                     "The door resists. Try something else, perhaps?",
                     ]))
-
-    def is_interactive(self):
-        return True
 
     def half_open_door(self):
         self.set_data('door', "ajar")

@@ -1,6 +1,7 @@
 """Engine room where things need to be repaired."""
 
 from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.scenes.scene_widgets import Door
 
 
 class Engine(Scene):
@@ -20,21 +21,15 @@ class Engine(Scene):
         return Result("Somewhere in the darkness the engine waits and bides its time.")
 
 
-class ToMap(Thing):
-    "Way to map."
+class ToMap(Door):
 
     NAME = "engine.tomap"
-    DEST = "map"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),
         }
 
     INITIAL = "door"
-
-    def interact_without(self):
-        """Go to map."""
-        self.state.set_current_scene("map")
 
 
 SCENES = [Engine]

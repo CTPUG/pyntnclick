@@ -5,6 +5,7 @@ from random import choice
 from gamelib.state import Scene, Item, CloneableItem, Thing, InteractImage, InteractNoImage, Result
 from gamelib.statehelpers import GenericDescThing
 from gamelib.cursor import CursorSprite
+from gamelib.scenes.scene_widgets import Door
 
 
 class Mess(Scene):
@@ -195,24 +196,15 @@ class Tubes(Thing):
                           " tape could actually be used to tape ducts?")
 
 
-class ToMap(Thing):
-    "Way to map."
+class ToMap(Door):
 
     NAME = "mess.tomap"
-    DEST = "map"
 
     INTERACTS = {
         "door": InteractNoImage(20, 390, 85, 150),
         }
 
     INITIAL = "door"
-
-    def get_description(self):
-        return "A doorway leads out to the rest of the ship"
-
-    def interact_without(self):
-        """Go to map."""
-        self.state.set_current_scene("map")
 
 
 SCENES = [Mess]

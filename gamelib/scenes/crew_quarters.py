@@ -2,6 +2,7 @@
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText
+from gamelib.scenes.scene_widgets import Door
 
 class CrewQuarters(Scene):
 
@@ -14,26 +15,21 @@ class CrewQuarters(Scene):
 
     def __init__(self, state):
         super(CrewQuarters, self).__init__(state)
+        self.add_thing(ToMap())
 
     def enter(self):
         return Result("The crew were a messy bunch. Or maybe that's just the intervening centuries.")
 
 
-class ToMap(Thing):
-    "Way to map."
+class ToMap(Door):
 
     NAME = "crew.tomap"
-    DEST = "map"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),
         }
 
     INITIAL = "door"
-
-    def interact_without(self):
-        """Go to map."""
-        self.state.set_current_scene("map")
 
 
 class Safe(Thing):

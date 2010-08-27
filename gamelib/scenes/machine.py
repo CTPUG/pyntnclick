@@ -2,6 +2,7 @@
 
 from gamelib.state import Scene, Item, Thing, InteractText, Result
 from gamelib.cursor import CursorSprite
+from gamelib.scenes.scene_widgets import Door
 
 
 class Machine(Scene):
@@ -25,21 +26,15 @@ class Machine(Scene):
         return Result("The machine room is dark and forbidding.")
 
 
-class ToMap(Thing):
-    "Way to map."
+class ToMap(Door):
 
     NAME = "machine.tomap"
-    DEST = "map"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),
         }
 
     INITIAL = "door"
-
-    def interact_without(self):
-        """Go to map."""
-        self.state.set_current_scene("map")
 
 
 class LaserWelder(Thing):

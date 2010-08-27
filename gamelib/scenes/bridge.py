@@ -4,6 +4,7 @@ from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
                           InteractNoImage, InteractRectUnion
 from gamelib.statehelpers import GenericDescThing
+from gamelib.scenes.scene_widgets import Door
 
 class Bridge(Scene):
 
@@ -27,21 +28,15 @@ class Bridge(Scene):
         return Result("The bridge is in a sorry, shabby state")
 
 
-class ToMap(Thing):
-    "Way to map."
+class ToMap(Door):
 
     NAME = "bridge.tomap"
-    DEST = "map"
 
     INTERACTS = {
         "door": InteractNoImage(707, 344, 84, 245),
         }
 
     INITIAL = "door"
-
-    def interact_without(self):
-        """Go to map."""
-        self.state.set_current_scene("map")
 
 
 class BridgeComputer(Thing):
