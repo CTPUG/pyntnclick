@@ -7,7 +7,7 @@ from gamelib.scenes.scene_widgets import Door
 class Engine(Scene):
 
     FOLDER = "engine"
-    BACKGROUND = None # TODO
+    BACKGROUND = "engine_room.png"
 
     INITIAL_DATA = {
         'accessible': True,
