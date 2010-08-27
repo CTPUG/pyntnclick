@@ -3,6 +3,7 @@
 import random
 
 from albow.music import change_playlist, get_music, PlayList
+from albow.resource import get_image
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
@@ -207,16 +208,134 @@ class ChairDetail(Scene):
         super(ChairDetail, self).__init__(state)
         self.add_thing(SuperconductorThing())
 
+
+# classes related the computer detail
+
+
+class LogTab(Thing):
+    """Tab for log screen"""
+
+    NAME = 'bridge_comp.screen'
+
+    INTERACTS = {
+            'log tab' : InteractNoImage(100, 53, 94, 37)
+            }
+    INITIAL = 'log tab'
+    COMPUTER = 'bridge_comp_detail'
+
+    def is_interactive(self):
+        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'alert'
+
+    def interact_without(self):
+        if not self.is_interactive():
+            return
+        self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
+
+
+class AlertTab(Thing):
+    """Tab for alert screen"""
+
+    NAME = 'bridge_comp.alert_tab'
+
+    INTERACTS = {
+            'alert tab' : InteractNoImage(12, 53, 88, 37)
+            }
+    INITIAL = 'alert tab'
+    COMPUTER = 'bridge_comp_detail'
+
+    def is_interactive(self):
+        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'log'
+
+    def interact_without(self):
+        if not self.is_interactive():
+            return
+        self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
+
+
+class CompUpButton(Thing):
+    """Up button on log screen"""
+
+    NAME = 'bridge_comp.up_button'
+
+    INTERACTS = {
+            'up' : InteractNoImage(594, 82, 30, 58)
+            }
+    INITIAL = 'up'
+    COMPUTER = 'bridge_comp_detail'
+
+    def is_interactive(self):
+        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
+        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        return tab == 'log' and page > 0
+
+    def interact_without(self):
+        if not self.is_interactive():
+            return
+        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        self.state.detail_views[self.COMPUTER].set_data('log page', page-1)
+
+
+class CompDownButton(Thing):
+    """Down button on log screen"""
+
+    NAME = 'bridge_comp.down_button'
+
+    INTERACTS = {
+            'down' : InteractNoImage(594, 293, 30, 58)
+            }
+    INITIAL = 'down'
+    COMPUTER = 'bridge_comp_detail'
+
+    def is_interactive(self):
+        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
+        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        max_page = self.state.detail_views[self.COMPUTER].get_data('max page')
+        return tab == 'log' and (page + 1) < max_page
+
+    def interact_without(self):
+        if not self.is_interactive():
+            return
+        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        self.state.detail_views[self.COMPUTER].set_data('log page', page+1)
+
+
 class BridgeCompDetail(Scene):
 
     FOLDER = 'bridge'
-    BACKGROUND = 'comp_detail_1.png'
     NAME = 'bridge_comp_detail'
 
-    SIZE = (300, 300)
+    SIZE = (640, 400)
+
+    ALERT = 'comp_detail_1.png'
+
+    LOGS = ['comp_log_1.png', 'comp_log_2.png',
+            'comp_log_end.png']
+
+    BACKGROUND = ALERT
+
+
+    INITIAL_DATA = {
+            'tab' : 'alert',
+            'log page' : 0,
+            'max page' : len(LOGS),
+    }
 
     def __init__(self, state):
         super(BridgeCompDetail, self).__init__(state)
+
+        self.add_thing(LogTab())
+        self.add_thing(AlertTab())
+        self.add_thing(CompUpButton())
+        self.add_thing(CompDownButton())
+        self._alert = get_image(self.FOLDER, self.ALERT)
+        self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
+
+    def draw_background(self, surface):
+        if self.get_data('tab') == 'alert':
+            self._background = self._alert
+        else:
+            self._background = self._logs[self.get_data('log page')]
+        super(BridgeCompDetail, self).draw_background(surface)
 
 
 SCENES = [Bridge]
