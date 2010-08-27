@@ -17,10 +17,11 @@ class Bridge(Scene):
     BACKGROUND = 'bridge.png'
 
     MUSIC = [
-            'beep330.ogg',
-            'beep660.ogg',
+            'beep1.ogg',
+            'beep2.ogg',
             'beep880.ogg',
-            'beep440.ogg',
+            'beep660.ogg',
+            'beep3.ogg',
             'silent.ogg',
             'creaking.ogg',
             'silent.ogg',

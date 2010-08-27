@@ -72,3 +72,10 @@ laser.ogg wavfile: laser9.wav
 [beep880.ogg]
 Created with the gen_sound.py script in trunk/tools (330, 440, 660, 880 Hz).
 Not copyrightable.
+
+[beep1.ogg]
+./gen_sound.py 770 0.25 ; ./gen_sound.py 440 0.25 ; cat beep440.pcm beep770.pcm beep440.pcm > beep1.pcm
+[beep2.ogg]
+/gen_sound.py 660 0.25 ; /gen_sound.py 550 0.25 ; cat beep770.pcm beep660.pcm beep550.pcm beep440.pcm > beep2.pcm
+[beep3.ogg]
+cat beep440.pcm beep550.pcm beep660.pcm beep550.pcm > beep3.pcm
