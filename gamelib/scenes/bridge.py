@@ -7,7 +7,8 @@ from albow.resource import get_image
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
-                          InteractNoImage, InteractRectUnion, InteractAnimated
+                          InteractNoImage, InteractRectUnion, InteractImage, \
+                          InteractAnimated
 from gamelib.statehelpers import GenericDescThing
 from gamelib.scenes.scene_widgets import Door
 
@@ -153,7 +154,7 @@ class SuperconductorThing(Thing):
     NAME ='bridge.superconductor'
 
     INTERACTS = {
-        'superconductor': InteractText(100, 200, 'Superconductor'),
+        'superconductor': InteractImage(158, 138, 'superconductor.png'),
     }
 
     INITIAL = 'superconductor'
@@ -163,8 +164,7 @@ class SuperconductorThing(Thing):
         self.state.current_scene.things['bridge.massagechair'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
-        return Result("You pick up the stethoscope and verify that the doctor's "
-                      "heart has stoped. Probably a while ago.")
+        return Result("The superconductor module unclips easily.")
 
 class BlinkingLights(Thing):
 
