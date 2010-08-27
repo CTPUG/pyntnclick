@@ -21,7 +21,8 @@ from pygame.colordict import THECOLORS
 from gamelib import constants
 constants.DEBUG = True
 
-from gamelib.state import initial_state
+from gamelib import state
+state.DEBUG_RECTS = True
 from gamelib.widgets import BoomLabel
 
 
@@ -104,7 +105,6 @@ class AppImage(Widget):
 
     def toggle_toolbar(self):
         self.draw_toolbar = not self.draw_toolbar
-
 
     def draw_mode(self):
         self.mode = 'draw'
@@ -254,7 +254,7 @@ class AppImage(Widget):
 def make_button(text, action, ypos):
     button = Button(text, action=action)
     button.align = 'l'
-    button.rect = pygame.rect.Rect(0, 0, 200, 40)
+    button.rect = pygame.rect.Rect(0, 0, 200, 35)
     button.rect.move_ip(805, ypos)
     return button
 
@@ -267,7 +267,7 @@ if __name__ == "__main__":
     pygame.display.init()
     pygame.font.init()
     display = pygame.display.set_mode((1000, 600))
-    state = initial_state()
+    state = state.initial_state()
     if len(sys.argv) < 3:
         try:
             state.set_current_scene(sys.argv[1])
@@ -288,27 +288,27 @@ if __name__ == "__main__":
     app.add(image)
     draw = make_button('Draw Rect', image.draw_mode, 0)
     app.add(draw)
-    load_image = make_button("Load image", image.image_load, 40)
+    load_image = make_button("Load image", image.image_load, 35)
     app.add(load_image)
-    add_image = make_button("Place/Move images", image.image_mode, 80)
+    add_image = make_button("Place/Move images", image.image_mode, 70)
     add_image.enabled = False
     app.add(add_image)
     image.place_image_menu = add_image
-    delete = make_button('Delete Objects', image.del_mode, 120)
+    delete = make_button('Delete Objects', image.del_mode, 105)
     app.add(delete)
     palette = AppPalette(image)
-    palette.rect.move_ip(810, 160)
+    palette.rect.move_ip(810, 140)
     app.add(palette)
-    print_rects = make_button("Print objects", image.print_objs, 320)
+    print_rects = make_button("Print objects", image.print_objs, 300)
     app.add(print_rects)
-    toggle_things = make_button("Toggle Things", image.toggle_things, 360)
+    toggle_things = make_button("Toggle Things", image.toggle_things, 335)
     app.add(toggle_things)
-    toggle_images = make_button("Toggle Images", image.toggle_images, 400)
+    toggle_images = make_button("Toggle Images", image.toggle_images, 370)
     app.add(toggle_images)
-    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 440)
+    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 405)
     app.add(toggle_rects)
-    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 480)
+    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 440)
     app.add(toggle_toolbar)
-    quit_but = make_button("Quit", app.quit, 560)
+    quit_but = make_button("Quit", app.quit, 565)
     app.add(quit_but)
     app.run()
