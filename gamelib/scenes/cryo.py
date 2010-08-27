@@ -199,8 +199,8 @@ class CryoPipeLeft(CryoPipeBase):
 
     NAME = "cryo.pipe.left"
     INTERACTS = {
-        "fixed": InteractNoImage(125, 192, 27, 258),
-        "chopped": InteractImage(125, 192, "triangle.png"),
+        "fixed": InteractImage(117, 226, "intact_cryo_pipe_left.png"),
+        "chopped": InteractNoImage(125, 192, 27, 258),
         }
 
 
@@ -209,8 +209,8 @@ class CryoPipeRight(CryoPipeBase):
 
     NAME = "cryo.pipe.right"
     INTERACTS = {
-        "fixed": InteractNoImage(643, 199, 38, 233),
-        "chopped": InteractImage(643, 199, "triangle.png"),
+        "fixed": InteractImage(645, 211, "intact_cryo_pipe_right.png"),
+        "chopped": InteractNoImage(643, 199, 38, 233),
         }
 
 
