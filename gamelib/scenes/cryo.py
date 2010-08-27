@@ -279,7 +279,7 @@ class GenericCryoUnit(GenericDescThing):
 class CryoRoomDoor(Door):
     "Door to the cryo room."
 
-    NAME = "cryo.door"
+    SCENE = "cryo"
 
     INTERACTS = {
         "shut": InteractNoImage(290, 260, 99, 152),

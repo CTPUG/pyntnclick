@@ -1,10 +1,9 @@
 import unittest
 
 import pygame
+from pygame.locals import SWSURFACE
 
 from gamelib import state
-
-from pygame.locals import SWSURFACE
 from gamelib.constants import SCREEN
 
 
@@ -21,18 +20,16 @@ class GameLogicTestCase(unittest.TestCase):
         self.state = state.initial_state()
         self.state.set_current_scene(self.CURRENT_SCENE)
 
-    def set_game_data(self, key, value, thing=None, scene=None):
-        if scene is None:
-            scene = self.CURRENT_SCENE
-        gizmo = self.state.scenes[scene]
+    def set_game_data(self, key, value, thing=None):
+        gizmo = self.state.current_scene
         if thing is not None:
             gizmo = gizmo.things[thing]
         gizmo.set_data(key, value)
 
     def assert_game_data(self, key, value, thing=None, scene=None):
-        if scene is None:
-            scene = self.CURRENT_SCENE
-        gizmo = self.state.scenes[scene]
+        gizmo = self.state.current_scene
+        if scene is not None:
+            gizmo = self.state.scenes[scene]
         if thing is not None:
             gizmo = gizmo.things[thing]
         self.assertEquals(value, gizmo.get_data(key))
@@ -49,11 +46,16 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_item_exists(self, item, exists=True):
         self.assertEquals(exists, item in self.state.items)
 
-    def interact_thing(self, thing, item=None, detail=False):
+    def assert_current_scene(self, scene):
+        self.assertEquals(scene, self.state.current_scene.name)
+
+    def interact_thing(self, thing, item=None):
         item_obj = None
         if item is not None:
             item_obj = self.state.items[item]
-        thing_container = self.state.current_scene
-        if detail:
-            thing_container = self.state.current_detail
-        return thing_container.things[thing].interact(item_obj)
+        thing_container = self.state.current_detail or self.state.current_scene
+        result = thing_container.things[thing].interact(item_obj)
+        if result and result.detail_view:
+            self.state.set_current_detail(result.detail_view)
+        return result
+

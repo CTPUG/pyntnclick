@@ -23,7 +23,7 @@ class Engine(Scene):
 
 class ToMap(Door):
 
-    NAME = "engine.tomap"
+    SCENE = "engine"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),

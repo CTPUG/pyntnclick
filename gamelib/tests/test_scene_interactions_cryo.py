@@ -52,8 +52,8 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
 
         self.interact_thing('cryo.door')
 
-        self.assert_game_data('door', 'open', 'cryo.door')
-        self.assertEquals('map', self.state.current_scene.name)
+        self.assert_game_data('door', 'open', 'cryo.door', scene='cryo')
+        self.assert_current_scene('map')
 
     def test_cryo_door_open_titanium_leg(self):
         "The door is open and we touch it with the titanium leg. No change."
@@ -63,7 +63,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.interact_thing('cryo.door', 'titanium_leg')
 
         self.assert_game_data('door', 'open', 'cryo.door')
-        self.assertEquals('cryo', self.state.current_scene.name)
+        self.assert_current_scene('cryo')
 
     def test_cryo_unit_alpha_full_hand(self):
         "The cryo unit has the leg in it and we touch it. We get the leg."
@@ -73,7 +73,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.assert_inventory_item('titanium_leg', False)
         self.assert_detail_thing('cryo.titanium_leg', True)
 
-        self.interact_thing('cryo.titanium_leg', detail='cryo_detail')
+        self.interact_thing('cryo.titanium_leg')
 
         self.assert_game_data('contains_titanium_leg', False, 'cryo.unit.1')
         self.assert_inventory_item('titanium_leg', True)

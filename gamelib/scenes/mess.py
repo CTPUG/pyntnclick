@@ -198,7 +198,7 @@ class Tubes(Thing):
 
 class ToMap(Door):
 
-    NAME = "mess.tomap"
+    SCENE = "mess"
 
     INTERACTS = {
         "door": InteractNoImage(20, 390, 85, 150),

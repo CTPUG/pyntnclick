@@ -52,7 +52,7 @@ class Bridge(Scene):
 
 class ToMap(Door):
 
-    NAME = "bridge.tomap"
+    SCENE = "bridge"
 
     INTERACTS = {
         "door": InteractNoImage(707, 344, 84, 245),

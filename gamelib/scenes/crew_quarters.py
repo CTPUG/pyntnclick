@@ -23,7 +23,7 @@ class CrewQuarters(Scene):
 
 class ToMap(Door):
 
-    NAME = "crew.tomap"
+    SCENE = "crew"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),

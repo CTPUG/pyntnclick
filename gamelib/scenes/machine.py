@@ -28,7 +28,7 @@ class Machine(Scene):
 
 class ToMap(Door):
 
-    NAME = "machine.tomap"
+    SCENE = "machine"
 
     INTERACTS = {
         "door": InteractText(100, 200, "To Map"),

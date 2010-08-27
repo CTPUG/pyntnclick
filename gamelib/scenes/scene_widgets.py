@@ -9,6 +9,11 @@ class Door(Thing):
     """A door somewhere"""
 
     DEST = "map"
+    SCENE = None
+
+    def __init__(self):
+        self.NAME = self.SCENE + '.door'
+        Thing.__init__(self)
 
     def is_interactive(self):
         return True

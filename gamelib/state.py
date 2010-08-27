@@ -593,9 +593,13 @@ class Item(object):
 class CloneableItem(Item):
     _counter = 0
 
+    @classmethod
+    def _get_new_id(cls):
+        cls._counter += 1
+        return cls._counter - 1
+
     def __init__(self, name):
-        my_count = CloneableItem._counter
-        CloneableItem._counter += 1
+        my_count = self._get_new_id()
         super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
         self.tool_name = name
         if self.TOOL_NAME is not None:
