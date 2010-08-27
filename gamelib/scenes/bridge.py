@@ -231,6 +231,7 @@ class LogTab(Thing):
         if not self.is_interactive():
             return
         self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
+        return Result(soundfile='beep550.ogg')
 
 
 class AlertTab(Thing):
@@ -251,6 +252,7 @@ class AlertTab(Thing):
         if not self.is_interactive():
             return
         self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
+        return Result(soundfile='beep550.ogg')
 
 
 class CompUpButton(Thing):
@@ -274,6 +276,7 @@ class CompUpButton(Thing):
             return
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page-1)
+        return Result(soundfile='beep550.ogg')
 
 
 class CompDownButton(Thing):
@@ -298,6 +301,7 @@ class CompDownButton(Thing):
             return
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page+1)
+        return Result(soundfile='beep550.ogg')
 
 
 class BridgeCompDetail(Scene):
