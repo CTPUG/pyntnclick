@@ -20,8 +20,15 @@ class CrewQuarters(Scene):
     def __init__(self, state):
         super(CrewQuarters, self).__init__(state)
         self.add_thing(ToMap())
+        self.add_thing(Safe())
         self.add_thing(FishbowlThing())
         self.add_item(Fishbowl('fishbowl'))
+        self.add_thing(GenericDescThing('crew.plant', 1,
+            "The plant is doing surprisingly well for centuries of neglect",
+            ((624, 215, 61, 108),)))
+        self.add_thing(GenericDescThing('crew.cat', 2,
+            "A picture of a cat labelled 'Clementine'",
+            ((722, 382, 66, 72),)))
 
     def enter(self):
         return Result("The crew were a messy bunch. Or maybe that's just the intervening centuries.")
@@ -32,7 +39,7 @@ class ToMap(Door):
     SCENE = "crew"
 
     INTERACTS = {
-        "door": InteractText(100, 200, "To Map"),
+        "door": InteractNoImage(233, 252, 125, 181),
         }
 
     INITIAL = "door"
@@ -44,7 +51,7 @@ class Safe(Thing):
     NAME = 'crew.safe'
 
     INTERACTS = {
-        'safe': InteractText(200, 200, 'Safe'),
+        'safe': InteractNoImage(447, 238, 72, 73),
     }
 
     INITIAL = 'safe'
