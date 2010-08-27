@@ -1,10 +1,12 @@
 """Bridge where the final showdown with the AI occurs."""
 
+import random
+
 from albow.music import change_playlist, get_music, PlayList
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
-                          InteractNoImage, InteractRectUnion
+                          InteractNoImage, InteractRectUnion, InteractAnimated
 from gamelib.statehelpers import GenericDescThing
 from gamelib.scenes.scene_widgets import Door
 
@@ -35,6 +37,8 @@ class Bridge(Scene):
         self.add_thing(MassageChair())
         self.add_thing(StethoscopeThing())
         self.add_thing(BridgeComputer())
+        self.add_thing(LeftLights())
+        self.add_thing(RightLights())
 
     def enter(self):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
@@ -159,6 +163,37 @@ class SuperconductorThing(Thing):
         self.scene.remove_thing(self)
         return Result("You pick up the stethoscope and verify that the doctor's "
                       "heart has stoped. Probably a while ago.")
+
+class BlinkingLights(Thing):
+
+    def get_description(self):
+        return random.choice([
+            "The lights flash in interesting patterns.",
+            "The flashing lights don't mean anything to you",
+            "The console lights flash and flicker",
+            ])
+
+class LeftLights(BlinkingLights):
+
+    NAME ='bridge.lights.1'
+
+    INTERACTS = {
+        "lights": InteractAnimated(176, 337, ["bridge_lights_1_1.png", "bridge_lights_1_2.png", "bridge_lights_1_3.png", "bridge_lights_1_2.png"], 5)
+    }
+
+    INITIAL = 'lights'
+
+class RightLights(BlinkingLights):
+
+    NAME ='bridge.lights.2'
+
+    INTERACTS = {
+        "lights": InteractAnimated(559, 332, ["bridge_lights_2_1.png", "bridge_lights_2_2.png", "bridge_lights_2_3.png", "bridge_lights_2_2.png"], 5)
+    }
+
+    INITIAL = 'lights'
+
+
 
 class ChairDetail(Scene):
 
