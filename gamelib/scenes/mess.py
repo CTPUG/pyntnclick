@@ -26,7 +26,7 @@ class Mess(Scene):
         # Flavour items
         # extra cans on shelf
         self.add_thing(GenericDescThing('mess.cans', 1,
-            "A large collection of rusted, useless cans",
+            "A large collection of rusted, useless cans.",
             (
                 (154, 335, 89, 106),
                 (152, 435, 63, 66),
@@ -66,7 +66,7 @@ class EmptyCan(BaseCan):
     CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
 
     def interact_with_titanium_leg(self, item, state):
-        return Result("Flattening the can doesn't look like a useful thing to do")
+        return Result("Flattening the can doesn't look like a useful thing to do.")
 
 
 class FullCan(BaseCan):
@@ -149,7 +149,7 @@ class Tubes(Thing):
 
     def get_description(self):
         if self.get_data('status') == "blocked":
-            return "The broccoli seems to have become entangled with something"
+            return "The broccoli seems to have become entangled with something."
         elif self.get_data("status") == "broken":
             return "These broken pipes look important."
         else:
