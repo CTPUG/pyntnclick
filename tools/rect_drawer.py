@@ -84,7 +84,11 @@ class AppImage(Widget):
         self.end_pos = None
 
     def draw(self, surface):
-        self.state.draw(surface, None)
+        if self.state.current_detail:
+            w, h = self.state.current_detail.get_detail_size()
+            self.state.draw_detail(surface, None)
+        else:
+            self.state.draw(surface, None)
         if self.mode == 'draw' and self.start_pos:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -218,12 +222,21 @@ if __name__ == "__main__":
     pygame.font.init()
     display = pygame.display.set_mode((1000, 600))
     state = initial_state()
-    try:
-        state.set_current_scene(sys.argv[1])
-        state.do_check = None
-    except KeyError:
-        print 'Invalid scene name'
-        sys.exit(1)
+    if len(sys.argv) < 3:
+        try:
+            state.set_current_scene(sys.argv[1])
+            state.do_check = None
+        except KeyError:
+            print 'Invalid scene name'
+            sys.exit(1)
+    else:
+        try:
+            state.set_current_scene(sys.argv[1])
+            state.set_current_detail(sys.argv[2])
+            state.do_check = None
+        except KeyError:
+            print 'Invalid scene name'
+            sys.exit(1)
     app = RootWidget(display)
     image = AppImage(state)
     app.add(image)
