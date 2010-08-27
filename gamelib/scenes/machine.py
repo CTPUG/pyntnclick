@@ -1,6 +1,6 @@
 """Machine room where tools and machines are found."""
 
-from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.state import Scene, Item, Thing, InteractNoImage, InteractText, Result
 from gamelib.cursor import CursorSprite
 from gamelib.scenes.scene_widgets import Door
 
@@ -31,7 +31,7 @@ class ToMap(Door):
     SCENE = "machine"
 
     INTERACTS = {
-        "door": InteractText(100, 200, "To Map"),
+        "door": InteractNoImage(695, 350, 97, 212),
         }
 
     INITIAL = "door"

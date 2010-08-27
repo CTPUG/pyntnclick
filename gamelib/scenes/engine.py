@@ -1,6 +1,6 @@
 """Engine room where things need to be repaired."""
 
-from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.state import Scene, Item, Thing, InteractNoImage, Result
 from gamelib.scenes.scene_widgets import Door
 
 
@@ -26,7 +26,7 @@ class ToMap(Door):
     SCENE = "engine"
 
     INTERACTS = {
-        "door": InteractText(100, 200, "To Map"),
+        "door": InteractNoImage(663, 360, 108, 193),
         }
 
     INITIAL = "door"
