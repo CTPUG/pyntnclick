@@ -165,7 +165,7 @@ class StethoscopeThing(Thing):
         # Fill in the doctor's rect
         self.scene.doctor.rect.append(self.rect)
         return Result("You pick up the stethoscope and verify that the doctor's "
-                      "heart has stoped. Probably a while ago.")
+                      "heart has stopped. Probably a while ago.")
 
 
 class Superconductor(Item):
@@ -201,8 +201,8 @@ class BlinkingLights(Thing):
     def get_description(self):
         return random.choice([
             "The lights flash in interesting patterns.",
-            "The flashing lights don't mean anything to you",
-            "The console lights flash and flicker",
+            "The flashing lights don't mean anything to you.",
+            "The console lights flash and flicker.",
             ])
 
 class LeftLights(BlinkingLights):
