@@ -229,8 +229,6 @@ class LogTab(Thing):
         return self.state.detail_views[self.COMPUTER].get_data('tab') == 'alert'
 
     def interact_without(self):
-        if not self.is_interactive():
-            return
         self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
         return Result(soundfile='beep550.ogg')
 
@@ -250,8 +248,6 @@ class AlertTab(Thing):
         return self.state.detail_views[self.COMPUTER].get_data('tab') == 'log'
 
     def interact_without(self):
-        if not self.is_interactive():
-            return
         self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
         return Result(soundfile='beep550.ogg')
 
@@ -273,8 +269,6 @@ class CompUpButton(Thing):
         return tab == 'log' and page > 0
 
     def interact_without(self):
-        if not self.is_interactive():
-            return
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page-1)
         return Result(soundfile='beep550.ogg')
@@ -298,8 +292,6 @@ class CompDownButton(Thing):
         return tab == 'log' and (page + 1) < max_page
 
     def interact_without(self):
-        if not self.is_interactive():
-            return
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page+1)
         return Result(soundfile='beep550.ogg')
