@@ -85,7 +85,9 @@ class AppImage(Widget):
             rect = pygame.rect.Rect(0, 0, w, h)
             self.close_button.rect.midbottom = rect.midbottom
             self.add(self.close_button)
-
+            self.offset = (0, 0)
+        else:
+            self.offset = (-self.state.current_scene.OFFSET[0], - self.state.current_scene.OFFSET[1])
         self.draw_rects = True
         self.draw_things = True
         self.draw_images = True
@@ -163,12 +165,14 @@ class AppImage(Widget):
         d = self._make_dict()
         for (num, col) in enumerate(d):
             print 'Rect %d : ' % num
-            for r in d[col]:
+            for rect in d[col]:
+                r = rect.move(self.offset)
                 print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
         for i, image in enumerate(self.images):
             print 'Image %d' % i
-            r = image.rect
+            rect = image.rect
+            r = rect.move(self.offset)
             print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
 
