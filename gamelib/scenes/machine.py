@@ -20,6 +20,7 @@ class Machine(Scene):
         super(Machine, self).__init__(state)
         self.add_thing(ToMap())
         self.add_thing(LaserWelder())
+        self.add_thing(LaserWelderPowerLights())
         self.add_thing(Grinder())
         self.add_item(TitaniumMachete('machete'))
         self.add_item(TinPipe('tin_pipe'))
@@ -38,6 +39,27 @@ class ToMap(Door):
 
     INITIAL = "door"
 
+# welder.slot: 249, 324, 167, 51
+# welder.button: 406, 389, 28, 31
+# welder.power lights: 201, 278, 16, 170
+# manual: 434, 496, 66, 34
+
+# broken power socket: 160, 28, 68, 51
+# working power socket: 587, 23, 82, 50
+# poster: 706, 157, 76, 158
+
+# drill press block: 461, 446, 38, 27
+# drill press:
+#Rect 0 : 
+#   (519, 338, 36, 63),
+#   (545, 348, 93, 46),
+#   (599, 309, 41, 150),
+#   (588, 445, 66, 42),
+#   (616, 479, 41, 14),
+#   (527, 393, 15, 17),
+#   (510, 360, 13, 11),
+#   (532, 331, 14, 11),
+#   (605, 304, 26, 8),
 
 class LaserWelder(Thing):
 
@@ -93,6 +115,22 @@ class LaserWelder(Thing):
         return msg
 
 
+class LaserWelderPowerLights(Thing):
+
+    NAME = "machine.welder.lights"
+
+    INTERACTS = {
+        "lights": InteractAnimated(199, 273, ["power_lights_%d.png" % i for i in range(8) + range(6,0,-1)], 10)
+    }
+
+    INITIAL = 'lights'
+
+    def get_description(self):
+        return random.choice([
+            "The power lights pulse expectantly.",
+            ])
+
+
 class TinPipe(Item):
     "A pipe made out of welded-together tins."
 
@@ -106,7 +144,7 @@ class Grinder(Thing):
     NAME = "machine.grinder"
 
     INTERACTS = {
-        "grind": InteractText(200, 300, "Grinder"),
+        "grind": InteractNoImage(86, 402, 94, 63),
     }
 
     INITIAL = "grind"
