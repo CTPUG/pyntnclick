@@ -14,7 +14,7 @@ from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE
 from cursor import CursorWidget
 from hand import HandButton
 from popupmenu import PopupMenu, PopupMenuButton
-from state import initial_state, Item, handle_result
+from state import initial_state, handle_result
 from widgets import MessageDialog, BoomButton
 
 

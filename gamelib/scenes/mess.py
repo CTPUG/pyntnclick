@@ -159,14 +159,16 @@ class Tubes(Thing):
         if self.get_data("status") == "blocked":
             self.set_data("status", "broken")
             self.set_interact("broken")
-            return Result("With a flurry of disgusting mutant vegetable chunks,"
-                          " you clear the overgrown broccoli away from the access"
-                          " panel and reveal some broken tubes. They look important.",
+            return Result("With a flurry of disgusting mutant vegetable "
+                          "chunks, you clear the overgrown broccoli away from "
+                          "the access panel and reveal some broken tubes. "
+                          "They look important.",
                           soundfile='chopping.ogg')
         elif self.get_data("status") == "broken":
             return Result("It looks broken enough already.")
         else:
-            return Return("After all that effort fixing it, chopping it to bits doesn't seem very smart.")
+            return Result("After all that effort fixing it, chopping it to "
+                          "bits doesn't seem very smart.")
 
     def interact_with_pipe(self, item):
         if self.get_data("status") == "blocked":

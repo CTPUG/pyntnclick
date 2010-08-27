@@ -3,13 +3,11 @@
 from albow.resource import get_image
 from albow.utils import frame_rect
 from widgets import BoomLabel
-from pygame.locals import BLEND_ADD
 from pygame.rect import Rect
 from pygame.color import Color
 
 import constants
 from sound import get_sound
-from cursor import HAND
 
 # override the initial scene to for debugging
 DEBUG_SCENE = None

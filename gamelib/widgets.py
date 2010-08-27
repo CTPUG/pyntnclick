@@ -8,7 +8,6 @@ import textwrap
 import albow.controls
 from albow.resource import get_font
 from pygame.color import Color
-from pygame.locals import BLEND_ADD
 
 from cursor import CursorWidget
 

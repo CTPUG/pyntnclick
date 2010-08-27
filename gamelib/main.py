@@ -14,7 +14,6 @@ from optparse import OptionParser
 
 import pygame
 from pygame.locals import SWSURFACE
-from albow.dialogs import alert
 from albow.shell import Shell
 
 from menu import MenuScreen
