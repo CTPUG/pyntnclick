@@ -380,15 +380,18 @@ class Thing(StatefulGizmo):
         self.state = None
         self.current_interact = None
         self.rect = None
+        self.orig_rect = None
         # TODO: add masks
 
     def _fix_rect(self):
         """Fix rects to compensate for scene offset"""
+        # Offset logic is to always work with copies, to avoid
+        # flying effects from multiple calls to _fix_rect
+        # See footwork in draw
         if hasattr(self.rect, 'collidepoint'):
-            self.rect.move_ip(self.scene.OFFSET)
+            self.rect = self.rect.move(self.scene.OFFSET)
         else:
-            for rect in list(self.rect):
-                rect.move_ip(self.scene.OFFSET)
+            self.rect = [x.move(self.scene.OFFSET) for x in self.rect]
 
     def set_scene(self, scene):
         assert self.scene is None
@@ -453,7 +456,11 @@ class Thing(StatefulGizmo):
         return Result("It doesn't work.")
 
     def draw(self, surface):
+        old_rect = self.current_interact.rect
+        if old_rect:
+            self.current_interact.rect = old_rect.move(self.scene.OFFSET)
         self.current_interact.draw(surface)
+        self.current_interact.rect = old_rect
         if self._interact_hilight_color is not None:
             if hasattr(self.rect, 'collidepoint'):
                 frame_rect(surface, self._interact_hilight_color,
