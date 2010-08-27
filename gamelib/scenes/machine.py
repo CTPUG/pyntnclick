@@ -26,6 +26,35 @@ class Machine(Scene):
         self.add_thing(Grinder())
         self.add_item(TitaniumMachete('machete'))
         self.add_item(TinPipe('tin_pipe'))
+        self.add_thing(GenericDescThing('machine.wires', 2,
+            "Wires run to all the machines in the room",
+            (
+                (250, 172, 252, 12),
+                (388, 183, 114, 13),
+                (496, 112, 36, 64),
+                (533, 85, 19, 45),
+                (647, 114, 10, 308),
+                (111, 96, 13, 285),
+                (152, 106, 34, 30),
+                (189, 136, 27, 28),
+                (222, 157, 24, 25),
+                (120, 86, 34, 29),
+                (110, 80, 21, 15),
+                (383, 196, 12, 56),
+                (553, 61, 26, 50),
+                (574, 39, 16, 48),
+                (648, 85, 22, 26),
+                (674, 54, 23, 36),
+                )))
+        self.add_thing(GenericDescThing('machine.diagram', 3,
+            "A wiring diagram of some sort",
+            ((694, 140, 94, 185),)))
+        self.add_thing(GenericDescThing('machine.powerpoint', 4,
+            "The cables to this power point have been cut",
+            ((155, 22, 92, 74),)))
+        self.add_thing(GenericDescThing("machine.powerpoint", 5,
+            "All the machines run off this powerpoint",
+            ((593, 19, 74, 57),)))
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -52,7 +81,7 @@ class ToMap(Door):
 
 # drill press block: 461, 446, 38, 27
 # drill press:
-#Rect 0 : 
+#Rect 0 :
 #   (519, 338, 36, 63),
 #   (545, 348, 93, 46),
 #   (599, 309, 41, 150),
@@ -68,7 +97,7 @@ class LaserWelder(Thing):
     NAME = "machine.laser_welder"
 
     INTERACTS = {
-        "weld": InteractText(200, 200, "Laser welder"),
+        "weld": InteractNoImage(241, 310, 178, 66),
     }
 
     INITIAL = "weld"
