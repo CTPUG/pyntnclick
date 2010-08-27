@@ -96,8 +96,8 @@ class Engine(Scene):
                       "it would be errily quiet.")
 
 class CanOpener(Item):
-    INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png')
+    INVENTORY_IMAGE = 'can_opener.png'
+    CURSOR = CursorSprite('can_opener_cursor.png')
 
 
 class CanOpenerThing(Thing):

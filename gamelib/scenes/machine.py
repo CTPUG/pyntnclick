@@ -194,8 +194,8 @@ class Grinder(Thing):
 class TitaniumMachete(Item):
     "Titanium machete, formerly a leg."
 
-    INVENTORY_IMAGE = "triangle.png"
-    CURSOR = CursorSprite('titanium_femur_cursor.png', 20, 3)
+    INVENTORY_IMAGE = "machete.png"
+    CURSOR = CursorSprite('machete_cursor.png', 23, 1)
 
 
 SCENES = [Machine]
