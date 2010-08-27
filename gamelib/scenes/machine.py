@@ -8,7 +8,7 @@ from gamelib.scenes.scene_widgets import Door
 class Machine(Scene):
 
     FOLDER = "machine"
-    BACKGROUND = None # TODO
+    BACKGROUND = "machine_room.png"
 
     INITIAL_DATA = {
         'accessible': True,
