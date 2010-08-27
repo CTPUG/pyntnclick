@@ -97,7 +97,7 @@ class Engine(Scene):
 
 class CanOpener(Item):
     INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png', 25, 23)
+    CURSOR = CursorSprite('triangle.png')
 
 
 class CanOpenerThing(Thing):
@@ -121,7 +121,7 @@ class CanOpenerThing(Thing):
 
 class BrokenSuperconductor(Item):
     INVENTORY_IMAGE = 'superconductor_broken.png'
-    CURSOR = CursorSprite('superconductor_broken_cursor.png', 13, 19)
+    CURSOR = CursorSprite('superconductor_broken_cursor.png')
 
 
 class SuperconductorSocket(Thing):

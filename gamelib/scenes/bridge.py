@@ -142,7 +142,7 @@ class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
 
     INVENTORY_IMAGE = 'stethoscope.png'
-    CURSOR = CursorSprite('stethoscope.png', 29, 27)
+    CURSOR = CursorSprite('stethoscope.png')
 
 
 class StethoscopeThing(Thing):
@@ -172,7 +172,7 @@ class Superconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
     INVENTORY_IMAGE = 'superconductor_fixed.png'
-    CURSOR = CursorSprite('superconductor_fixed.png', 20, 20)
+    CURSOR = CursorSprite('superconductor_fixed.png')
 
 
 class SuperconductorThing(Thing):

@@ -62,7 +62,7 @@ class EmptyCan(BaseCan):
     "After emptying the full can."
 
     INVENTORY_IMAGE = "empty_can.png"
-    CURSOR = CursorSprite('empty_can_cursor.png', 20, 30)
+    CURSOR = CursorSprite('empty_can_cursor.png')
 
     def interact_with_titanium_leg(self, item, state):
         return Result("Flattening the can doesn't look like a useful thing to do.")
@@ -72,7 +72,7 @@ class FullCan(BaseCan):
     "Found on the shelf."
 
     INVENTORY_IMAGE = "full_can.png"
-    CURSOR = CursorSprite('full_can_cursor.png', 20, 30)
+    CURSOR = CursorSprite('full_can_cursor.png')
 
     def interact_with_titanium_leg(self, item, state):
         dented = DentedCan("dented_can")
@@ -85,7 +85,7 @@ class DentedCan(BaseCan):
     "A can banged on with the femur"
 
     INVENTORY_IMAGE = "dented_can.png"
-    CURSOR = CursorSprite('dented_can_cursor.png', 20, 30)
+    CURSOR = CursorSprite('dented_can_cursor.png')
 
     def interact_with_titanium_leg(self, item, state):
         return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
@@ -227,7 +227,7 @@ class DetergentThing(Thing):
 
 class DetergentBottle(Item):
     INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png', 25, 23)
+    CURSOR = CursorSprite('triangle.png')
 
 
 class ToMap(Door):

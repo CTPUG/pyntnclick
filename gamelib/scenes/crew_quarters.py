@@ -127,14 +127,14 @@ class Fishbowl(Item):
     "A bowl. Sans fish."
 
     INVENTORY_IMAGE = 'fishbowl.png'
-    CURSOR = CursorSprite('fishbowl.png', 29, 27)
+    CURSOR = CursorSprite('fishbowl.png')
 
 
 class DuctTape(Item):
     "A bowl. Sans fish."
 
     INVENTORY_IMAGE = 'duct_tape.png'
-    CURSOR = CursorSprite('duct_tape.png', 29, 27)
+    CURSOR = CursorSprite('duct_tape.png')
 
 
 class SafeDetail(Scene):

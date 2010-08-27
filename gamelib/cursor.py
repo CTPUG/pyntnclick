@@ -13,7 +13,7 @@ import pygame.mouse
 class CursorSprite(Sprite):
     "A Sprite that follows the Cursor"
 
-    def __init__(self, filename, x, y):
+    def __init__(self, filename, x=None, y=None):
         Sprite.__init__(self)
         self.filename = filename
         self.pointer_x = x
@@ -25,6 +25,12 @@ class CursorSprite(Sprite):
             self.plain_image = get_image('items', self.filename)
             self.image = self.plain_image
             self.rect = self.image.get_rect()
+
+            if self.pointer_x is None:
+                self.pointer_x = self.rect.size[0] // 2
+            if self.pointer_y is None:
+                self.pointer_y = self.rect.size[1] // 2
+
             self.highlight = pygame.Surface(self.rect.size)
             color = pygame.color.Color(255, 100, 100, 0)
             self.highlight.fill(color)

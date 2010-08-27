@@ -166,7 +166,7 @@ class TinPipe(Item):
     "A pipe made out of welded-together tins."
 
     INVENTORY_IMAGE = "tube_fragments.png"
-    CURSOR = CursorSprite('tube_fragments_cursor.png', 36, 3)
+    CURSOR = CursorSprite('tube_fragments_cursor.png')
     TOOL_NAME = "pipe"
 
 
