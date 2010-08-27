@@ -29,6 +29,8 @@ def parse_args(args):
     if DEBUG:
         parser.add_option("--scene", type="str", default=None,
             dest="scene", help="initial scene")
+        parser.add_option("--no-rects", action="store_false", default=True,
+            dest="rects", help="disable debugging rects")
     opts, _ = parser.parse_args(args or [])
     return opts
 
@@ -53,9 +55,11 @@ def main():
     else:
         # Ensure get_sound returns nothing, so everything else just works
         disable_sound()
-    if DEBUG and opts.scene is not None:
-        # debug the specified scene
-        state.DEBUG_SCENE = opts.scene
+    if DEBUG:
+        if opts.scene is not None:
+            # debug the specified scene
+            state.DEBUG_SCENE = opts.scene
+        state.DEBUG_RECTS = opts.rects
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     shell = MainShell(display)
     try:

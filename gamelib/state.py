@@ -12,6 +12,9 @@ from sound import get_sound
 # override the initial scene to for debugging
 DEBUG_SCENE = None
 
+# whether to show debugging rects
+DEBUG_RECTS = False
+
 class Result(object):
     """Result of interacting with a thing"""
 
@@ -362,10 +365,7 @@ class Thing(StatefulGizmo):
 
     # Interact rectangle hi-light color (for debugging)
     # (set to None to turn off)
-    if constants.DEBUG:
-        _interact_hilight_color = Color('red')
-    else:
-        _interact_hilight_color = None
+    _interact_hilight_color = Color('red')
 
     def __init__(self):
         StatefulGizmo.__init__(self)
@@ -461,7 +461,7 @@ class Thing(StatefulGizmo):
             self.current_interact.rect = old_rect.move(self.scene.OFFSET)
         self.current_interact.draw(surface)
         self.current_interact.rect = old_rect
-        if self._interact_hilight_color is not None:
+        if DEBUG_RECTS:
             if hasattr(self.rect, 'collidepoint'):
                 frame_rect(surface, self._interact_hilight_color,
                         self.rect.inflate(1, 1), 1)
