@@ -169,6 +169,9 @@ class SuperconductorThing(Thing):
 
 class BlinkingLights(Thing):
 
+    def is_interactive(self):
+        return False
+
     def get_description(self):
         return random.choice([
             "The lights flash in interesting patterns.",

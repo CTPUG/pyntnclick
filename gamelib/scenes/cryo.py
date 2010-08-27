@@ -261,6 +261,9 @@ class GenericCryoUnit(GenericDescThing):
         super(GenericCryoUnit, self).__init__('cryo.unit', number, description, areas)
         self.detailed_description = detailed_description
 
+    def is_interactive(self):
+        return True
+
     def interact_without(self):
         return Result(self.detailed_description)
 
