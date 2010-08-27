@@ -38,7 +38,7 @@ class Mess(Scene):
                 (320, 324, 229, 142),
                 )))
         self.add_thing(GenericDescThing('mess.cans', 2,
-            "Empty plastic containers. They used to hold dish washer soap",
+            "Empty plastic containers. They used to hold dishwasher soap.",
             ((565, 399, 62, 95),)))
 
 

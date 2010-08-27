@@ -46,10 +46,10 @@ class Bridge(Scene):
         self.add_thing(LeftLights())
         self.add_thing(RightLights())
         self.add_thing(GenericDescThing('bridge.wires', 1,
-            "The brightly coloured wires contrast with the drab walls",
+            "The brightly coloured wires contrast with the drab walls.",
             ((46, 4, 711, 143),)))
         self.add_thing(GenericDescThing('bridge.note', 2,
-            "\"Dammit JIM, I'm a doctor, not an engineer\"",
+            "\"Dammit JIM, I'm a doctor, not an engineer!\"",
             (
                 (491, 494, 194, 105),
                 (422, 533, 71, 66),
@@ -69,7 +69,7 @@ class Bridge(Scene):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
         background_playlist = PlayList(pieces, random=True, repeat=True)
         change_playlist(background_playlist)
-        return Result("The bridge is in a sorry, shabby state")
+        return Result("The bridge is in a sorry, shabby state.")
 
     def leave(self):
         change_playlist(None)
@@ -157,7 +157,7 @@ class StethoscopeThing(Thing):
     INITIAL = 'stethoscope'
 
     def get_description(self):
-        return "A stethoscope hangs from the neck of the skeleton"
+        return "A stethoscope hangs from the neck of the skeleton."
 
     def interact_without(self):
         self.state.add_inventory_item('stethoscope')
