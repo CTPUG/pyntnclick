@@ -18,6 +18,8 @@ class Bridge(Scene):
     FOLDER = "bridge"
     BACKGROUND = 'bridge.png'
 
+    OFFSET = (0, -50)
+
     MUSIC = [
             'beep1.ogg',
             'beep2.ogg',

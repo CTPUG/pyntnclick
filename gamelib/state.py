@@ -222,6 +222,9 @@ class Scene(StatefulGizmo):
     # name of scene (optional, defaults to folder)
     NAME = None
 
+    # Offset of the background image
+    OFFSET = (0, 0)
+
     # size (for detail views)
     SIZE = constants.SCENE_SIZE
 
@@ -269,7 +272,7 @@ class Scene(StatefulGizmo):
 
     def draw_background(self, surface):
         if self._background is not None:
-            surface.blit(self._background, (0, 0), None)
+            surface.blit(self._background, self.OFFSET, None)
         else:
             surface.fill((200, 200, 200))
 
@@ -379,6 +382,14 @@ class Thing(StatefulGizmo):
         self.rect = None
         # TODO: add masks
 
+    def _fix_rect(self):
+        """Fix rects to compensate for scene offset"""
+        if hasattr(self.rect, 'collidepoint'):
+            self.rect.move_ip(self.scene.OFFSET)
+        else:
+            for rect in list(self.rect):
+                rect.move_ip(self.scene.OFFSET)
+
     def set_scene(self, scene):
         assert self.scene is None
         self.scene = scene
@@ -392,6 +403,8 @@ class Thing(StatefulGizmo):
     def set_interact(self, name):
         self.current_interact = self.interacts[name]
         self.rect = self.current_interact.interact_rect
+        if self.scene:
+            self._fix_rect()
         assert self.rect is not None, name
 
     def contains(self, pos):
