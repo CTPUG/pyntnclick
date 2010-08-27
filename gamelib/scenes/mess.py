@@ -149,7 +149,7 @@ class Tubes(Thing):
 
     def get_description(self):
         if self.get_data('status') == "blocked":
-            return "The brocolli seems to have become entangled with something"
+            return "The broccoli seems to have become entangled with something"
         elif self.get_data("status") == "broken":
             return "These broken pipes look important."
         else:
