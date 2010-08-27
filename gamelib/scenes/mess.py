@@ -6,7 +6,8 @@ from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.cursor import CursorSprite
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+                                          InteractImageRect, InteractAnimated,
+                                          GenericDescThing)
 
 
 class Mess(Scene):
@@ -23,6 +24,8 @@ class Mess(Scene):
         self.add_thing(CansOnShelf())
         self.add_thing(Tubes())
         self.add_thing(ToMap())
+        self.add_thing(DetergentThing())
+        self.add_item(DetergentBottle('detergent_bottle'))
         # Flavour items
         # extra cans on shelf
         self.add_thing(GenericDescThing('mess.cans', 1,
@@ -37,10 +40,6 @@ class Mess(Scene):
                 (503, 89, 245, 282),
                 (320, 324, 229, 142),
                 )))
-        self.add_thing(GenericDescThing('mess.cans', 2,
-            "Empty plastic containers. They used to hold dishwasher soap.",
-            ((565, 399, 62, 95),)))
-
 
 
 class BaseCan(CloneableItem):
@@ -197,6 +196,36 @@ class Tubes(Thing):
             return Result("It takes quite a lot of tape, but eventually everything is"
                           " airtight and ready to hold pressure. Who'd've thought duct"
                           " tape could actually be used to tape ducts?")
+
+class DetergentThing(Thing):
+
+    NAME = "mess.detergent"
+
+    INTERACTS = {
+        'present': InteractImageRect(581, 424, 'detergent_lid.png', 565, 399, 62, 95),
+        'taken': InteractNoImage(565, 399, 62, 95),
+    }
+
+    INITIAL = 'present'
+
+    INITIAL_DATA = {
+        'taken': False,
+    }
+
+    def interact_without(self):
+        if self.get_data('taken'):
+            return Result("I think one dishwashing liquid bottle is enough for now")
+        self.set_data('taken', True)
+        self.set_interact('taken')
+        self.state.add_inventory_item('detergent_bottle')
+        return Result("You pick up an empty dishwashing liquid bottle. You can't find any sponges")
+
+    def get_description(self):
+        return "Empty plastic containers. They used to hold dish washer soap."
+
+class DetergentBottle(Item):
+    INVENTORY_IMAGE = 'triangle.png'
+    CURSOR = CursorSprite('triangle.png', 25, 23)
 
 
 class ToMap(Door):

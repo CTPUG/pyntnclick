@@ -81,6 +81,17 @@ class InteractImage(Interact):
         self.interact_rect = self.rect
 
 
+class InteractImageRect(InteractImage):
+    def __init__(self, x, y, image_name, r_x, r_y, r_w, r_h):
+        super(InteractImageRect, self).__init__(x, y, image_name)
+        self._r_pos = (r_x, r_y)
+        self._r_size = (r_w, r_h)
+
+    def set_thing(self, thing):
+        super(InteractImageRect, self).set_thing(thing)
+        self.interact_rect = Rect(self._r_pos, self._r_size)
+
+
 class InteractAnimated(Interact):
     """Interactive with an animation rather than an image"""
 

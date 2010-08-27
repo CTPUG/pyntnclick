@@ -58,7 +58,7 @@ Repairing the superconductor
 Cooling the superconductor
 --------------------------
 
-#. Collect the cryo-fluid canister from the Engine Room.
+#. Collect an empty dishwashing liquid bottle from the Mess.
 #. Fill it from an empty cryo-chamber in the Cryo Chamber.
 #. Place it in the cryo-fluid receptacle in the Engine Room.
 #. The engine is now working.
