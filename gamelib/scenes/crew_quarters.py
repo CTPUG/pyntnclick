@@ -9,7 +9,7 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
 class CrewQuarters(Scene):
 
     FOLDER = "crew_quarters"
-    BACKGROUND = None # TODO
+    BACKGROUND = "crew_quarters.png"
 
     INITIAL_DATA = {
         'accessible': True,

@@ -89,6 +89,7 @@ class AppImage(Widget):
         self.draw_rects = True
         self.draw_things = True
         self.draw_images = True
+        self.draw_toolbar = True
 
     def toggle_things(self):
         self.draw_things = not self.draw_things
@@ -98,6 +99,9 @@ class AppImage(Widget):
 
     def toggle_rects(self):
         self.draw_rects = not self.draw_rects
+
+    def toggle_toolbar(self):
+        self.draw_toolbar = not self.draw_toolbar
 
 
     def draw_mode(self):
@@ -140,6 +144,12 @@ class AppImage(Widget):
                     cropped_rect = self.current_image.rect.clip(surface.get_rect())
                     sub = surface.subsurface(cropped_rect)
                     self.current_image.draw(sub)
+        if self.draw_toolbar:
+            toolbar_rect = pygame.rect.Rect(0, 550, 800, 50)
+            tb_surf = surface.subsurface(0, 550, 800, 50).convert_alpha()
+            tb_surf.fill(Color(127, 0, 0, 127))
+            surface.blit(tb_surf)
+            frame_rect(surface, (127, 0, 0), toolbar_rect, 5)
 
     def _make_dict(self):
         d = {}
@@ -293,6 +303,8 @@ if __name__ == "__main__":
     app.add(toggle_images)
     toggle_rects = make_button("Toggle Rects", image.toggle_rects, 440)
     app.add(toggle_rects)
+    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 480)
+    app.add(toggle_toolbar)
     quit_but = make_button("Quit", app.quit, 560)
     app.add(quit_but)
     app.run()
