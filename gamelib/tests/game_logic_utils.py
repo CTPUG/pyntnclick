@@ -20,6 +20,11 @@ class GameLogicTestCase(unittest.TestCase):
         self.state = state.initial_state()
         self.state.set_current_scene(self.CURRENT_SCENE)
 
+    def tearDown(self):
+        for item in self.state.items.values():
+            if isinstance(item, state.CloneableItem):
+                type(item)._counter = 0
+
     def set_game_data(self, key, value, thing=None):
         gizmo = self.state.current_scene
         if thing is not None:
@@ -52,9 +57,19 @@ class GameLogicTestCase(unittest.TestCase):
     def interact_thing(self, thing, item=None):
         item_obj = None
         if item is not None:
+            self.assert_inventory_item(item)
             item_obj = self.state.items[item]
         thing_container = self.state.current_detail or self.state.current_scene
         result = thing_container.things[thing].interact(item_obj)
+        if result and result.detail_view:
+            self.state.set_current_detail(result.detail_view)
+        return result
+
+    def interact_item(self, target_item, item):
+        self.assert_inventory_item(target_item)
+        item_obj = self.state.items[item]
+        target_obj = self.state.items[target_item]
+        result = target_obj.interact(item_obj, self.state)
         if result and result.detail_view:
             self.state.set_current_detail(result.detail_view)
         return result

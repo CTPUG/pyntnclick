@@ -58,6 +58,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
     def test_cryo_door_open_titanium_leg(self):
         "The door is open and we touch it with the titanium leg. No change."
 
+        self.state.add_inventory_item('titanium_leg')
         self.set_game_data('door', 'open', 'cryo.door')
 
         self.interact_thing('cryo.door', 'titanium_leg')
@@ -113,6 +114,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
     def test_pipes_unchopped_machete(self):
         "Touch the unchopped cryopipes with the machete. They chop."
 
+        self.state.add_inventory_item('machete')
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
         self.assert_game_data('fixed', True, 'cryo.pipe.right')
         self.assert_item_exists('cryo_pipe.0', False)
@@ -131,6 +133,7 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
     def test_pipes_chopped_machete(self):
         "Touch the chopped cryopipes with the machete. No change."
 
+        self.state.add_inventory_item('machete')
         self.set_game_data('fixed', False, 'cryo.pipe.left')
         self.set_game_data('fixed', False, 'cryo.pipe.right')
 
