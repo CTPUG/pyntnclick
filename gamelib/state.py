@@ -53,6 +53,7 @@ def initial_state():
     state.load_scenes("mess")
     state.load_scenes("engine")
     state.load_scenes("machine")
+    state.load_scenes("crew_quarters")
     state.load_scenes("map")
     initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
     state.set_current_scene(initial_scene)

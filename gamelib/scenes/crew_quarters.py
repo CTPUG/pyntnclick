@@ -74,7 +74,7 @@ class Safe(Thing):
 class SafeDetail(Scene):
 
     FOLDER = 'crew_quarters'
-    BACKGROUND = 'triangle.png'
+    BACKGROUND = None # TODO
     NAME = 'safe_detail'
 
     SIZE = (300, 300)
@@ -83,5 +83,5 @@ class SafeDetail(Scene):
         super(SafeDetail, self).__init__(state)
 
 
-SCENES = [Bridge]
-DETAIL_VIEWS = [ChairDetail]
+SCENES = [CrewQuarters]
+DETAIL_VIEWS = [SafeDetail]

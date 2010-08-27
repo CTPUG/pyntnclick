@@ -28,6 +28,7 @@ class Map(Scene):
         self.add_thing(ToMess())
         self.add_thing(ToEngine())
         self.add_thing(ToMachine())
+        self.add_thing(ToCrew())
 
     def enter(self):
         for door_thing in self.things.values():
@@ -136,6 +137,20 @@ class ToMachine(DoorThing):
     INTERACTS = {
         "inaccessible": InteractText(100, 400, "To Machine"),
         "accessible": InteractText(100, 400, "To Machine", (0, 127, 0)),
+        }
+
+    INITIAL = "inaccessible"
+
+
+class ToCrew(DoorThing):
+    "Way to crew quarters."
+
+    NAME = "map.tocrew"
+    DEST = "crew_quarters"
+
+    INTERACTS = {
+        "inaccessible": InteractText(300, 400, "To Crew Quarters"),
+        "accessible": InteractText(300, 400, "To Crew Quarters", (0, 127, 0)),
         }
 
     INITIAL = "inaccessible"
