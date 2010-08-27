@@ -133,13 +133,13 @@ class State(object):
         if self.tool == self.items[name]:
             self.set_tool(None)
 
-    def replace_inventory_item(self, old_item, new_item):
+    def replace_inventory_item(self, old_item_name, new_item_name):
         """Try to replace an item in the inventory with a new one"""
         try:
-            index = self.inventory.index(old_item)
-            self.inventory[index] = new_item
-            if self.tool == old_item:
-                self.set_tool(new_item)
+            index = self.inventory.index(self.items[old_item_name])
+            self.inventory[index] = self.items[new_item_name]
+            if self.tool == self.items[old_item_name]:
+                self.set_tool(self.items[new_item_name])
         except ValueError:
             return False
         return True
