@@ -54,6 +54,16 @@ class Bridge(Scene):
                 (491, 494, 194, 105),
                 (422, 533, 71, 66),
                 )))
+        self.doctor = GenericDescThing('bridge.skel', 3,
+                "A skeleton hangs improbably from the wires.",
+                (
+                    (632, 148, 40, 29),
+                    (683, 176, 30, 101),
+                    (652, 274, 45, 96),
+                    (639, 180, 11, 95),
+                    ))
+        self.add_thing(self.doctor)
+
 
     def enter(self):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
@@ -146,9 +156,14 @@ class StethoscopeThing(Thing):
 
     INITIAL = 'stethoscope'
 
+    def get_description(self):
+        return "A stethoscope hangs from the neck of the skeleton"
+
     def interact_without(self):
         self.state.add_inventory_item('stethoscope')
         self.scene.remove_thing(self)
+        # Fill in the doctor's rect
+        self.scene.doctor.rect.append(self.rect)
         return Result("You pick up the stethoscope and verify that the doctor's "
                       "heart has stoped. Probably a while ago.")
 
