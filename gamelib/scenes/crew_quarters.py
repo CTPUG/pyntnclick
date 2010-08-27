@@ -22,7 +22,9 @@ class CrewQuarters(Scene):
         self.add_thing(ToMap())
         self.add_thing(Safe())
         self.add_thing(FishbowlThing())
+        self.add_thing(Safe())
         self.add_item(Fishbowl('fishbowl'))
+        self.add_item(DuctTape('duct_tape'))
         self.add_thing(GenericDescThing('crew.plant', 1,
             "The plant is doing surprisingly well for centuries of neglect",
             ((624, 215, 61, 108),)))
@@ -52,25 +54,37 @@ class Safe(Thing):
 
     INTERACTS = {
         'safe': InteractNoImage(447, 238, 72, 73),
+        'full_safe': InteractImage(445, 227, 'open_safe_full.png'),
+        'empty_safe': InteractImage(445, 227, 'open_safe_empty.png'),
     }
 
     INITIAL = 'safe'
 
     INITIAL_DATA = {
         'is_cracked': False,
+        'has_tape': True,
         }
 
     def interact_without(self):
         if self.get_data('is_cracked'):
-            return Result(detail_view='safe_detail')
-        return Result("The safe is locked. This might be an interesting"
-                      " challenge, if suitable equipment can be found.")
+            if self.get_data('has_tape'):
+                self.set_data('has_tape', False)
+                self.state.add_inventory_item('duct_tape')
+                self.set_interact('empty_safe')
+                return Result("Duct tape. It'll stick to everything except "
+                              "ducts, apparently.")
+            return Result("The perfactly balanced door swings frictionlessly "
+                          "to and fro. What craftsmanship!")
+        return Result("The safe is locked. This might be an interesting "
+                      "challenge, if suitable equipment can be found.")
 
     def interact_with_stethoscope(self, item):
         if self.get_data('is_cracked'):
             return Result("It's already unlocked. There's no more challenge.")
         # TODO: Add years to the sentence for safecracking.
         # TODO: Wax lyrical some more about safecracking.
+        self.set_data('is_cracked', True)
+        self.set_interact('full_safe')
         return Result("Even after centuries of neglect, the tumblers slide"
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
@@ -114,6 +128,13 @@ class Fishbowl(Item):
 
     INVENTORY_IMAGE = 'fishbowl.png'
     CURSOR = CursorSprite('fishbowl.png', 29, 27)
+
+
+class DuctTape(Item):
+    "A bowl. Sans fish."
+
+    INVENTORY_IMAGE = 'duct_tape.png'
+    CURSOR = CursorSprite('duct_tape.png', 29, 27)
 
 
 class SafeDetail(Scene):
