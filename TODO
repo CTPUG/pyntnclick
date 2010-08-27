@@ -5,6 +5,7 @@ General:
 
 Specific:
   * Create icon for windows executable.
+  * Make animations and description-only Things not clickable.
 
 Cleanups:
   * Clean-up finding and loading of speech strings.
