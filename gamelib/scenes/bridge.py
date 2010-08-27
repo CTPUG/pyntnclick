@@ -43,6 +43,15 @@ class Bridge(Scene):
         self.add_thing(BridgeComputer())
         self.add_thing(LeftLights())
         self.add_thing(RightLights())
+        self.add_thing(GenericDescThing('bridge.wires', 1,
+            "The brightly coloured wires contrast with the drab walls",
+            ((46, 4, 711, 143),)))
+        self.add_thing(GenericDescThing('bridge.note', 2,
+            "\"Dammit JIM, I'm a doctor, not an engineer\"",
+            (
+                (491, 494, 194, 105),
+                (422, 533, 71, 66),
+                )))
 
     def enter(self):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
