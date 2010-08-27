@@ -6,11 +6,12 @@ from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
 from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result, InteractText, \
-                          InteractNoImage, InteractRectUnion, InteractImage, \
-                          InteractAnimated
-from gamelib.statehelpers import GenericDescThing
-from gamelib.scenes.scene_widgets import Door
+from gamelib.state import Scene, Item, Thing, Result
+
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
+
 
 class Bridge(Scene):
 

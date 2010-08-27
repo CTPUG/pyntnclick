@@ -7,8 +7,11 @@
    Many parts of the ship are derelict and inaccessible.
    """
 
-from gamelib.state import Scene, Item, Thing, InteractText, Result
+from gamelib.state import Scene, Item, Thing, Result
 from gamelib.scenes.game_constants import PLAYER_ID
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 
 class Map(Scene):

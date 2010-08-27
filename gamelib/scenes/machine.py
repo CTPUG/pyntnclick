@@ -1,8 +1,10 @@
 """Machine room where tools and machines are found."""
 
-from gamelib.state import Scene, Item, Thing, InteractNoImage, InteractText, Result
+from gamelib.state import Scene, Item, Thing, Result
 from gamelib.cursor import CursorSprite
-from gamelib.scenes.scene_widgets import Door
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 
 class Machine(Scene):

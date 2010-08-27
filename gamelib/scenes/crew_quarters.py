@@ -1,8 +1,10 @@
 """Crew quarters."""
 
 from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result, InteractText
-from gamelib.scenes.scene_widgets import Door
+from gamelib.state import Scene, Item, Thing, Result
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 class CrewQuarters(Scene):
 

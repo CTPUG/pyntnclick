@@ -6,13 +6,12 @@ from albow.music import change_playlist, get_music, PlayList
 from gamelib import speech
 from gamelib.sound import get_sound
 from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, CloneableItem, Thing, Result, \
-                          InteractImage, InteractNoImage, InteractRectUnion, \
-                          InteractAnimated
-from gamelib.statehelpers import GenericDescThing
-from gamelib.scenes.scene_widgets import Door
+from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.constants import DEBUG
 from gamelib.scenes.game_constants import PLAYER_ID
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 
 class Cryo(Scene):

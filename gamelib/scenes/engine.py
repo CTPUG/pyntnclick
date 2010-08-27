@@ -1,7 +1,9 @@
 """Engine room where things need to be repaired."""
 
-from gamelib.state import Scene, Item, Thing, InteractNoImage, Result
-from gamelib.scenes.scene_widgets import Door
+from gamelib.state import Scene, Item, Thing, Result
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 
 class Engine(Scene):

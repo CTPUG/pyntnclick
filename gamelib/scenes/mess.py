@@ -2,10 +2,11 @@
 
 from random import choice
 
-from gamelib.state import Scene, Item, CloneableItem, Thing, InteractImage, InteractNoImage, Result
-from gamelib.statehelpers import GenericDescThing
+from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.cursor import CursorSprite
-from gamelib.scenes.scene_widgets import Door
+from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
+                                          InteractRectUnion, InteractImage,
+                                          InteractAnimated, GenericDescThing)
 
 
 class Mess(Scene):
