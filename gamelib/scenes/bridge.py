@@ -3,6 +3,7 @@
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result, InteractText, \
                           InteractNoImage, InteractRectUnion
+from gamelib.statehelpers import GenericDescThing
 
 class Bridge(Scene):
 
@@ -20,6 +21,7 @@ class Bridge(Scene):
         self.add_thing(ToMap())
         self.add_thing(MassageChair())
         self.add_thing(StethoscopeThing())
+        self.add_thing(BridgeComputer())
 
     def enter(self):
         return Result("The bridge is in a sorry, shabby state")
@@ -40,6 +42,30 @@ class ToMap(Thing):
     def interact_without(self):
         """Go to map."""
         self.state.set_current_scene("map")
+
+
+class BridgeComputer(Thing):
+    """The bridge computer. Gives status updates"""
+
+    NAME = "bridge.comp"
+
+    INTERACTS = {
+        'screen' : InteractNoImage(338, 296, 123, 74),
+    }
+
+    INITIAL = 'screen'
+
+    def interact_without(self):
+        return Result(detail_view='bridge_comp_detail')
+
+    def interact_with_titanium_leg(self):
+        return Result("You can't break the duraplastic screen.")
+
+    def interact_with_machete(self):
+        return Result("Scratching the screen won't help you.")
+
+    def get_description(self):
+        return "The main bridge computer screen."
 
 
 class MassageChair(Thing):
@@ -133,6 +159,17 @@ class ChairDetail(Scene):
         super(ChairDetail, self).__init__(state)
         self.add_thing(SuperconductorThing())
 
+class BridgeCompDetail(Scene):
+
+    FOLDER = 'bridge'
+    BACKGROUND = 'comp_detail_1.png'
+    NAME = 'bridge_comp_detail'
+
+    SIZE = (300, 300)
+
+    def __init__(self, state):
+        super(BridgeCompDetail, self).__init__(state)
+
 
 SCENES = [Bridge]
-DETAIL_VIEWS = [ChairDetail]
+DETAIL_VIEWS = [ChairDetail, BridgeCompDetail]
