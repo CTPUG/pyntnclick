@@ -19,6 +19,7 @@ class Machine(Scene):
         self.add_thing(LaserWelder())
         self.add_thing(Grinder())
         self.add_item(TitaniumMachete('machete'))
+        self.add_item(TinPipe('tin_pipe'))
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -62,7 +63,7 @@ class LaserWelder(Thing):
             return Result("You'll need more cans than that.")
         else:
             self.set_data('cans_in_place', 0)
-            self.state.add_inventory_item('tube_fragments')
+            self.state.add_inventory_item('tin_pipe')
             return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
                     soundfile='laser.ogg')
 
