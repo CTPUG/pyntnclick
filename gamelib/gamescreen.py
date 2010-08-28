@@ -35,14 +35,14 @@ class InventoryView(PaletteView):
         surface.blit(item_image, rect, None, BLEND_ADD)
 
     def click_item(self, item_no, event):
+        item = self.state.inventory[item_no]
         if self.item_is_selected(item_no):
             self.unselect()
+        elif self.state.tool or hasattr(item, 'interact_without'):
+            result = item.interact(self.state.tool, self.state)
+            handle_result(result, self.state_widget)
         else:
-            if self.state.tool:
-                result = self.state.inventory[item_no].interact(self.state.tool, self.state)
-                handle_result(result, self.state_widget)
-            else:
-                self.state.set_tool(self.state.inventory[item_no])
+            self.state.set_tool(self.state.inventory[item_no])
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
@@ -104,6 +104,7 @@ class StateWidget(Widget):
             self._mouse_move(mouse.get_pos())
 
     def show_detail(self, detail):
+        self.clear_detail()
         w, h = self.state.set_current_detail(detail)
         self.detail.set_image_rect(Rect(0, 0, w, h))
         self.add_centered(self.detail)
@@ -111,9 +112,10 @@ class StateWidget(Widget):
 
     def clear_detail(self):
         """Hide the detail view"""
-        self.remove(self.detail)
-        self.state.do_leave_detail()
-        self.state.set_current_detail(None)
+        if self.state.current_detail is not None:
+            self.remove(self.detail)
+            self.state.do_leave_detail()
+            self.state.set_current_detail(None)
 
 
 class DetailWindow(Widget):

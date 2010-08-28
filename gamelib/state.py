@@ -58,6 +58,7 @@ def initial_state():
     state.load_scenes("machine")
     state.load_scenes("crew_quarters")
     state.load_scenes("map")
+    state.load_scenes("manual")
     initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
     state.set_current_scene(initial_scene)
     state.set_do_enter_leave()
@@ -504,6 +505,8 @@ class Item(object):
         return self.inventory_image
 
     def interact(self, tool, state):
+        if tool is None:
+            return self.interact_without(state)
         handler = getattr(self, 'interact_with_' + tool.name, None)
         inverse_handler = getattr(tool, 'interact_with_' + self.tool_name, None)
         if handler is not None:

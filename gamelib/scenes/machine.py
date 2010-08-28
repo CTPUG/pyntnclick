@@ -285,7 +285,10 @@ class Manual(Item):
     "A ship instruction manual."
 
     INVENTORY_IMAGE = "manual.png"
-    CURSOR = CursorSprite('traingle.png', 23, 1) # TODO: replace with manual_cursor.png
+    CURSOR = None
+
+    def interact_without(self, state):
+        return Result(detail_view='manual_detail')
 
 
 SCENES = [Machine]
