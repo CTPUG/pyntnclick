@@ -201,7 +201,7 @@ class SuperconductorSocket(Thing):
 
     def get_description(self):
         if self.get_data('present') and not self.get_data('working'):
-            return "That superconductor looks burned out. It's wedged in there pretty firmly"
+            return "That superconductor looks burned out. It's wedged in there pretty firmly."
         elif not self.get_data('present'):
             return "An empty superconductor socket"
         else:
@@ -224,7 +224,7 @@ class SuperconductorSocket(Thing):
         if self.get_data('present'):
             return Result("It might help to remove the broken superconductor first")
         else:
-            return Result("You plug in the superconductor, and feel a humm "
+            return Result("You plug in the superconductor, and feel a hum "
                           "as things kick into life. "
                           "Unfortunately, it's the wrong size for the socket "
                           "and just falls out again when you let go.")
@@ -236,11 +236,11 @@ class SuperconductorSocket(Thing):
             self.set_data('working', True)
             self.state.remove_inventory_item(item.name)
             results = [Result("The chair's superconductor looks over-specced "
-                              "for this job, but it should work")]
+                              "for this job, but it should work.")]
             results.append(self.scene.engine_online_check())
             return results
         else:
-            return Result("It might help to remove the broken superconductor first")
+            return Result("It might help to remove the broken superconductor first.")
 
 
 class CryoContainers(Thing):
@@ -284,7 +284,7 @@ class CryoContainerReceptacle(Thing):
 
     def interact_without(self):
         return Result("You stick your finger in the receptacle. "
-                      "It almost gets stuck")
+                      "It almost gets stuck.")
 
     def interact_with_full_detergent_bottle(self, item):
         if not self.scene.things['engine.cracked_pipe'].get_data('fixed'):
@@ -486,7 +486,7 @@ class CrackedPipe(Thing):
         else:
             self.set_data('fixed', True)
             self.set_interact('taped')
-            return Result("You apply your trust duct tape to the "
+            return Result("You apply your trusty duct tape to the "
                           "creak, sealing it.")
 
 
