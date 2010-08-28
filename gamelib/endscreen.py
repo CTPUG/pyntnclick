@@ -7,21 +7,26 @@ from albow.controls import Button
 from albow.resource import get_image
 from albow.layout import Column
 
+from gamelib.widgets import BoomImageButton
+
+class EndImageButton(BoomImageButton):
+
+    FOLDER = 'won'
+
 
 class EndScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
         self.background = get_image('won', 'won.png')
-        StartButton = Button('Main Menu', action = self.main_menu)
-        QuitButton = Button('Quit', action = shell.quit)
-        self.add(StartButton)
-        StartButton.rect.bottomleft = (50, 550)
-        self.add(QuitButton)
-        QuitButton.rect.bottomleft = (250, 550)
+        self._menu_button = EndImageButton('menu.png', 26, 500, action=self.main_menu)
+        self._quit_button = EndImageButton('quit.png', 250, 500, action=shell.quit)
+        self.add(self._menu_button)
+        self.add(self._quit_button)
 
     def draw(self, surface):
         surface.blit(self.background, (0,0))
-        super(EndScreen, self).draw(surface)
+        self._menu_button.draw(surface)
+        self._quit_button.draw(surface)
 
     def main_menu(self):
         self.shell.show_screen(self.shell.menu_screen)

@@ -176,3 +176,28 @@ class PopupMenu(albow.menu.Menu, CursorWidget):
             # A menu item needs to be invoked
             self.invoke_item(item)
 
+class BoomImageButton(albow.controls.Image):
+    """The fancy image button for the screens"""
+
+    FOLDER = None
+
+    def __init__(self, filename, x, y, action, enable=None):
+        this_image = get_image(self.FOLDER, filename)
+        albow.controls.Image.__init__(self, image=this_image)
+        self.action = action
+        self.set_rect(Rect((x, y), this_image.get_size()))
+        self.enable = enable
+
+    def draw(self, surface):
+        if self.is_enabled():
+            surface.blit(self.get_image(), self.get_rect())
+
+    def mouse_down(self, event):
+        if self.is_enabled():
+            self.action()
+
+    def is_enabled(self):
+        if self.enable:
+            return self.enable()
+        return True
+

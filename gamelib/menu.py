@@ -8,28 +8,12 @@ from albow.layout import Column
 from albow.resource import get_image
 from pygame import Rect
 
-class SplashButton(Image):
-    """The fancy hand button for the widget"""
+from gamelib.widgets import BoomImageButton
 
-    def __init__(self, filename, x, y, action, enable=None):
-        this_image = get_image('splash', filename)
-        Image.__init__(self, image=this_image)
-        self.action = action
-        self.set_rect(Rect((x, y), this_image.get_size()))
-        self.enable = enable
 
-    def draw(self, surface):
-        if self.is_enabled():
-            surface.blit(self.get_image(), self.get_rect())
+class SplashButton(BoomImageButton):
 
-    def mouse_down(self, event):
-        if self.is_enabled():
-            self.action()
-
-    def is_enabled(self):
-        if self.enable:
-            return self.enable()
-        return True
+    FOLDER = 'splash'
 
 
 class MenuScreen(Screen):
