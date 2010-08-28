@@ -497,7 +497,7 @@ class BridgeCompDetail(Scene):
             if self.state.scenes['bridge'].get_data('ai status') == 'looping':
                 surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
                 ypos += self._alert_messages['ai looping'].get_size()[1] + self.ALERT_SPACING
-            if self.state.scenes['bridge'].get_data('ai status') == 'broken':
+            if self.state.scenes['bridge'].get_data('ai status') == 'dead':
                 surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
                 ypos += self._alert_messages['ai offline'].get_size()[1] + self.ALERT_SPACING
             if not self.state.scenes['engine'].get_data('engine online'):
