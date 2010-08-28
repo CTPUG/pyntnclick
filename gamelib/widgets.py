@@ -104,11 +104,15 @@ class MessageDialog(BoomLabel, CursorWidget):
         if style == "JIM":
             self.set(font=get_font(20, "Monospace.ttf"))
             self.trim_line_top = 10
-            self.bg_color = Color(255, 175, 127, 207)
+            self.bg_color = Color(255, 175, 127, 191)
             self.fg_color = (0, 0, 0)
             self.border_color = (127, 15, 0)
 
     def draw_all(self, surface):
+        root_surface = self.get_root().surface
+        overlay = root_surface.convert_alpha()
+        overlay.fill(Color(0, 0, 0, 191))
+        root_surface.blit(overlay, (0, 0))
         BoomLabel.draw_all(self, surface)
 
     def _draw_all_no_bg(self, surface):

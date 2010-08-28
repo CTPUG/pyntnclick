@@ -140,6 +140,10 @@ class DetailWindow(Widget):
         self.close.rect.midbottom = rect.midbottom
 
     def draw(self, surface):
+        scene_surface = self.get_root().surface.subsurface(self.parent.rect)
+        overlay = scene_surface.convert_alpha()
+        overlay.fill(Color(0, 0, 0, 191))
+        scene_surface.blit(overlay, (0, 0))
         self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
 
     def mouse_down(self, event):
