@@ -31,6 +31,13 @@ class PageBase(Thing):
     def set_page(self, page):
         self.get_page_thing().set_page(page)
 
+    def set_display(self, display):
+        self.set_data('display', display)
+        self.set_interact(display)
+
+    def is_interactive(self):
+        return self.get_data('display') == 'on'
+
 
 class PagePrior(PageBase):
     """Prior page in the manual"""
@@ -38,12 +45,14 @@ class PagePrior(PageBase):
     NAME = 'manual.page_prior'
 
     INTERACTS = {
-            'up' : InteractNoImage(0, 350, 80, 25)
+            'on': InteractImage(36, 351, 'arrow_left.png'),
+            'off': InteractNoImage(31, 351, 34, 23),
             }
-    INITIAL = 'up'
+    INITIAL = 'off'
 
-    def is_interactive(self):
-        return self.get_page() > 0
+    INITIAL_DATA = {
+        'display': 'off',
+        }
 
     def interact_without(self):
         self.set_page(self.get_page() - 1)
@@ -55,12 +64,14 @@ class PageNext(PageBase):
     NAME = 'manual.page_next'
 
     INTERACTS = {
-            'down' : InteractNoImage(170, 350, 80, 25)
+            'on': InteractImage(185, 351, 'arrow_right.png'),
+            'off': InteractNoImage(185, 351, 34, 23),
             }
-    INITIAL = 'down'
+    INITIAL = 'on'
 
-    def is_interactive(self):
-        return self.get_page() < len(self.get_page_thing().INTERACTS) - 1
+    INITIAL_DATA = {
+        'display': 'on',
+        }
 
     def interact_without(self):
         self.set_page(self.get_page() + 1)
@@ -89,6 +100,12 @@ class ManualPage(Thing):
     def set_page(self, page):
         self.set_data('page', page)
         self.set_interact(page)
+        self.scene.things['manual.page_prior'].set_display('on')
+        self.scene.things['manual.page_next'].set_display('on')
+        if page == 0:
+            self.scene.things['manual.page_prior'].set_display('off')
+        if page == len(self.INTERACTS) - 1:
+            self.scene.things['manual.page_next'].set_display('off')
 
 
 class ManualDetail(Scene):
