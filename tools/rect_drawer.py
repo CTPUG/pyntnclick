@@ -91,9 +91,39 @@ class AppImage(Widget):
         self.draw_thing_rects = True
         self.draw_images = True
         self.draw_toolbar = True
+        self.find_existing_intersects()
 
-    def find_intersecting_things(self):
+    def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
+        if self.state.current_detail:
+            scene = self.state.current_detail
+        else:
+            scene = self.state.current_scene
+        # Pylint hates this function
+        for thing in scene.things.itervalues():
+            for interact_name in thing.interacts:
+                thing.set_interact(interact_name)
+                if hasattr(thing.rect, 'collidepoint'):
+                    thing_rects = [thing.rect]
+                else:
+                    thing_rects = thing.rect
+                for thing2 in scene.things.itervalues():
+                    if thing is thing2:
+                        continue
+                    for interact2_name in thing2.interacts:
+                        thing2.set_interact(interact2_name)
+                        if hasattr(thing2.rect, 'collidepoint'):
+                            thing2_rects = [thing2.rect]
+                        else:
+                            thing2_rects = thing2.rect
+                        for my_rect in thing_rects:
+                            for other_rect in thing2_rects:
+                                if my_rect.colliderect(other_rect):
+                                    print 'Existing Intersecting rects'
+                                    print "  Thing1 %s Interact %s" % (thing.name, interact_name)
+                                    print "  Thing2 %s Interact %s" % (thing2.name, interact2_name)
+                                    print "     Rects", my_rect, other_rect
+        print
 
     def find_intersecting_rects(self, d):
         """Find if any rect collections intersect"""
