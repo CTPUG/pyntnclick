@@ -14,6 +14,7 @@ class Engine(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
+        'engine online': False,
         }
 
     def __init__(self, state):

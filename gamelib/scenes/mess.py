@@ -17,6 +17,7 @@ class Mess(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
+        'life support online': False,
         }
 
     def __init__(self, state):

@@ -430,12 +430,28 @@ class BridgeCompDetail(Scene):
 
     SIZE = (640, 400)
 
-    ALERT = 'comp_detail_1.png'
+    ALERT_BASE = 'comp_alert_base.png'
+    ALERTS = {
+            'ai looping' : 'comp_alert_ai_looping.png',
+            'ai offline' : 'comp_alert_ai_offline.png',
+            'engine offline' : 'comp_alert_engine_offline.png',
+            'life support' : 'comp_alert_life_support.png',
+            }
 
-    LOGS = ['comp_log_1.png', 'comp_log_2.png',
+    # Point to start drawing changeable alerts
+    ALERT_OFFSET = (16, 140)
+    ALERT_SPACING = 4
+
+    LOGS = ['comp_log_start.png', 'comp_log_1.png',
             'comp_log_end.png']
 
-    BACKGROUND = ALERT
+    NAVIGATION = {
+            'engine offline' : 'bridge_nav_engine.png',
+            'life support' : 'bridge_nav_life_support.png',
+            'final' : 'bridge_nav_dest.png'
+            }
+
+    BACKGROUND = ALERT_BASE
 
 
     INITIAL_DATA = {
@@ -452,7 +468,13 @@ class BridgeCompDetail(Scene):
         self.add_thing(CompUpButton())
         self.add_thing(CompDownButton())
         self._scene_playlist = None
-        self._alert = get_image(self.FOLDER, self.ALERT)
+        self._alert = get_image(self.FOLDER, self.ALERT_BASE)
+        self._alert_messages = {}
+        self._nav_message = {}
+        for key, name in self.ALERTS.iteritems():
+            self._alert_messages[key] = get_image(self.FOLDER, name)
+        for key, name in self.NAVIGATION.iteritems():
+            self._nav_message[key] = get_image(self.FOLDER, name)
         self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
 
     def enter(self):
@@ -468,6 +490,23 @@ class BridgeCompDetail(Scene):
         else:
             self._background = self._logs[self.get_data('log page')]
         super(BridgeCompDetail, self).draw_background(surface)
+
+    def draw_things(self, surface):
+        if self.get_data('tab') == 'alert':
+            xpos, ypos = self.ALERT_OFFSET
+            if self.state.scenes['bridge'].get_data('ai status') == 'looping':
+                surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
+                ypos += self._alert_messages['ai looping'].get_size()[1] + self.ALERT_SPACING
+            if self.state.scenes['bridge'].get_data('ai status') == 'broken':
+                surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
+                ypos += self._alert_messages['ai offline'].get_size()[1] + self.ALERT_SPACING
+            if not self.state.scenes['engine'].get_data('engine online'):
+                surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
+                ypos += self._alert_messages['engine offline'].get_size()[1] + self.ALERT_SPACING
+            if not self.state.scenes['mess'].get_data('life support online'):
+                surface.blit(self._alert_messages['life support'], (xpos, ypos))
+                ypos += self._alert_messages['life support'].get_size()[1] + self.ALERT_SPACING
+        super(BridgeCompDetail, self).draw_things(surface)
 
 
 SCENES = [Bridge]
