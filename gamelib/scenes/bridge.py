@@ -227,15 +227,24 @@ class SuperconductorThing(Thing):
 
 class BlinkingLights(Thing):
 
+    def __init__(self):
+        super(BlinkingLights, self).__init__()
+        self.description = None
+
     def is_interactive(self):
         return False
 
-    def get_description(self):
-        return random.choice([
+    def leave(self):
+        self.description = random.choice([
             "The lights flash in interesting patterns.",
             "The flashing lights don't mean anything to you.",
             "The console lights flash and flicker.",
             ])
+
+    def get_description(self):
+        if not self.description:
+            self.leave()
+        return self.description
 
 class LeftLights(BlinkingLights):
 
