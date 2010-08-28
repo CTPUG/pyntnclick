@@ -147,7 +147,7 @@ class Tubes(Thing):
     INTERACTS = {
         "blocked": InteractImage(250, 130, "blocking_broccoli.png"),
         "broken": InteractImage(250, 183, "broken_tubes.png"),
-        "replaced": InteractImage(250, 183, "fixed_tubes.png"),
+        "replaced": InteractImage(250, 183, "replaced_tubes.png"),
         "fixed": InteractImage(252, 183, "fixed_tubes.png"),
         }
 
@@ -193,7 +193,8 @@ class Tubes(Thing):
             self.set_interact("replaced")
             self.scene.set_data('life support status', 'replaced')
             return Result(
-                "The pipes slot neatly into place, but don't make an airtight seal."
+                "The pipes slot neatly into place, but don't make an airtight seal. "
+                "You think one of the pipes has cracked slightly as well."
             )
 
     def interact_with_duct_tape(self, item):
