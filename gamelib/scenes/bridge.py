@@ -9,6 +9,7 @@ from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.sound import get_current_playlist
 
+from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
                                           InteractAnimated, GenericDescThing,
@@ -35,6 +36,7 @@ class Bridge(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
+        'ai online' : True,
         }
 
     def __init__(self, state):
@@ -74,6 +76,11 @@ class Bridge(Scene):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
         self.background_playlist = PlayList(pieces, random=True, repeat=True)
         change_playlist(self.background_playlist)
+        if self.get_data('ai online'):
+            return Result("JIM says: 'Prisone %s. The bridge is a restricted area. "
+                    "Entering this area is a class 3 offence and each infraction carries a minimal "
+                    "penalty of an additional 6 months on your sentence;" % PLAYER_ID,
+                    style="JIM")
 
     def leave(self):
         change_playlist(None)

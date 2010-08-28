@@ -186,6 +186,6 @@ class BaseCamera(Thing):
        return "A security camera watches over the room"
 
    def interact_with_escher_poster(self, item):
-       # TODO
-       return Result("A very bad idea")
+       self.state.scenes['bridge'].set_data('ai online', False)
+       return Result("JIM says '3D scene reconstruction failed. Critical error. Entering emergency shutdown.", style="JIM")
 
