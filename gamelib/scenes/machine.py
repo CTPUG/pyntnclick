@@ -21,11 +21,14 @@ class Machine(Scene):
     def __init__(self, state):
         super(Machine, self).__init__(state)
         self.add_thing(ToMap())
-        self.add_thing(LaserWelder())
+        self.add_thing(LaserWelderSlot())
+        self.add_thing(LaserWelderButton())
         self.add_thing(LaserWelderPowerLights())
         self.add_thing(Grinder())
+        self.add_thing(ManualThing())
         self.add_item(TitaniumMachete('machete'))
         self.add_item(TinPipe('tin_pipe'))
+        self.add_item(Manual('manual'))
         self.add_thing(GenericDescThing('machine.wires', 2,
             "Wires run to all the machines in the room",
             (
@@ -55,6 +58,22 @@ class Machine(Scene):
         self.add_thing(GenericDescThing("machine.powerpoint", 5,
             "All the machines run off this powerpoint",
             ((593, 19, 74, 57),)))
+        self.add_thing(GenericDescThing("machine.drill_press", 6,
+            "An impressive looking laser drill press",
+            (
+                (519, 338, 36, 63),
+                (545, 348, 93, 46),
+                (599, 309, 41, 150),
+                (588, 445, 66, 42),
+                (616, 479, 41, 14),
+                (527, 393, 15, 17),
+                (510, 360, 13, 11),
+                (532, 331, 14, 11),
+                (605, 304, 26, 8),
+            )))
+        self.add_thing(GenericDescThing("machine.drill_press_block", 7,
+            "The block for the laser drill press", # TODO: fix description
+            ((461, 446, 38, 27),)))
 
     def enter(self):
         return Result("The machine room is dark and forbidding.")
@@ -70,31 +89,10 @@ class ToMap(Door):
 
     INITIAL = "door"
 
-# welder.slot: 249, 324, 167, 51
-# welder.button: 406, 389, 28, 31
-# welder.power lights: 201, 278, 16, 170
-# manual: 434, 496, 66, 34
 
-# broken power socket: 160, 28, 68, 51
-# working power socket: 587, 23, 82, 50
-# poster: 706, 157, 76, 158
+class LaserWelderSlot(Thing):
 
-# drill press block: 461, 446, 38, 27
-# drill press:
-#Rect 0 :
-#   (519, 338, 36, 63),
-#   (545, 348, 93, 46),
-#   (599, 309, 41, 150),
-#   (588, 445, 66, 42),
-#   (616, 479, 41, 14),
-#   (527, 393, 15, 17),
-#   (510, 360, 13, 11),
-#   (532, 331, 14, 11),
-#   (605, 304, 26, 8),
-
-class LaserWelder(Thing):
-
-    NAME = "machine.laser_welder"
+    NAME = "machine.welder.slot"
 
     INTERACTS = {
         "weld": InteractNoImage(241, 310, 178, 66),
@@ -107,15 +105,7 @@ class LaserWelder(Thing):
     }
 
     def interact_without(self):
-        if self.get_data('cans_in_place') < 1:
-            return Result("The laser welder doesn't currently contain anything weldable.")
-        elif self.get_data('cans_in_place') < 3:
-            return Result("You'll need more cans than that.")
-        else:
-            self.set_data('cans_in_place', 0)
-            self.state.add_inventory_item('tin_pipe')
-            return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
-                    soundfile='laser.ogg')
+        return Result("You really don't want to but your hand in there.")
 
     def interact_with_empty_can(self, item):
         starting_cans = self.get_data('cans_in_place')
@@ -141,6 +131,29 @@ class LaserWelder(Thing):
         elif self.get_data('cans_in_place') == 3:
             msg += " It currently contains three empty cans."
         return msg
+
+
+class LaserWelderButton(Thing):
+
+    NAME = "machine.welder.button"
+
+    INTERACTS = {
+        "button": InteractNoImage(406, 389, 28, 31),
+    }
+
+    INITIAL = "button"
+
+    def interact_without(self):
+        cans_in_place = self.scene.things["machine.welder.slot"].get_data("cans_in_place")
+        if cans_in_place < 1:
+            return Result("The laser welder doesn't currently contain anything weldable.")
+        elif cans_in_place < 3:
+            return Result("You'll need more cans than that.")
+        else:
+            self.scene.things["machine.welder.slot"].set_data("cans_in_place", 0)
+            self.state.add_inventory_item('tin_pipe')
+            return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
+                    soundfile='laser.ogg')
 
 
 class LaserWelderPowerLights(Thing):
@@ -196,6 +209,33 @@ class TitaniumMachete(Item):
 
     INVENTORY_IMAGE = "machete.png"
     CURSOR = CursorSprite('machete_cursor.png', 23, 1)
+
+
+class ManualThing(Thing):
+
+    NAME = "machine.manual"
+
+    INTERACTS = {
+        "manual": InteractNoImage(434, 496, 66, 34), # TODO: replace with manual
+        "empty": InteractNoImage(434, 496, 66, 34),
+    }
+
+    INITIAL = "manual"
+
+    def interact_without(self):
+        if self.current_interact is self.interacts["manual"]:
+            self.state.add_inventory_item("manual")
+            self.set_interact("empty")
+            return Result("Ah! The ship's instruction manual. You'd feel better"
+                          " if the previous owner wasn't lying next to it with a"
+                          " gaping hole in his rib cage.")
+
+
+class Manual(Item):
+    "A ship instruction manual."
+
+    INVENTORY_IMAGE = "manual.png"
+    CURSOR = CursorSprite('traingle.png', 23, 1) # TODO: replace with manual_cursor.png
 
 
 SCENES = [Machine]
