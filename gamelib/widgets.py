@@ -10,6 +10,7 @@ import albow.menu
 from albow.resource import get_font, get_image
 from pygame.color import Color
 from pygame.rect import Rect
+from pygame import mouse
 
 from constants import BUTTON_SIZE
 from cursor import CursorWidget
@@ -120,6 +121,9 @@ class MessageDialog(BoomLabel, CursorWidget):
 
     def mouse_down(self, event):
         self.dismiss()
+        self.screen.state_widget._mouse_move(mouse.get_pos())
+        for widget in self.screen.state_widget.subwidgets:
+            widget._mouse_move(mouse.get_pos())
 
     def cursor_highlight(self):
         return False

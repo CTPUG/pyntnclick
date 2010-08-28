@@ -24,6 +24,7 @@ class InventoryView(PaletteView):
 
     def __init__(self, screen):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
+        self.screen = screen
         self.state = screen.state
         self.state_widget = screen.state_widget
 
@@ -43,6 +44,12 @@ class InventoryView(PaletteView):
             handle_result(result, self.state_widget)
         else:
             self.state.set_tool(self.state.inventory[item_no])
+
+    def mouse_down(self, event):
+        if event.button != 1:
+            self.state.cancel_doodah(self.screen)
+        else:
+            PaletteView.handle_mouse(self, event)
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
