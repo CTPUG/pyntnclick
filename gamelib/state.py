@@ -461,7 +461,7 @@ class Thing(StatefulGizmo):
             self.current_interact.rect = old_rect.move(self.scene.OFFSET)
         self.current_interact.draw(surface)
         self.current_interact.rect = old_rect
-        if DEBUG_RECTS:
+        if DEBUG_RECTS and self._interact_hilight_color:
             if hasattr(self.rect, 'collidepoint'):
                 frame_rect(surface, self._interact_hilight_color,
                         self.rect.inflate(1, 1), 1)
