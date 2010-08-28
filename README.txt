@@ -17,12 +17,12 @@ A second PyWeek entry by the hackers of the Cape Town Python Users Group
 RUNNING THE GAME
 ================
 
-It is likely that you have obtain the game in one of four possible ways:
+It is likely that you have obtained the game in one of four possible ways:
 
 Windows:
 
 If you have the Windows .zip file, unzip it, find suspended.exe and
-doube-click it to launch the game.
+double-click it to launch the game.
 
 Unix:
 
@@ -44,7 +44,8 @@ dependencies listed further down. Then run "python run_game.py".
 HOW TO PLAY THE GAME
 ====================
 
-???
+Point at stuff. Click on things, possibly with other things.  You can
+right-click to deselect the current tool.
 
 DEPENDENCIES
 ============
