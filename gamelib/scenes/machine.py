@@ -27,7 +27,9 @@ class Machine(Scene):
         self.add_thing(Grinder())
         self.add_thing(ManualThing())
         self.add_item(TitaniumMachete('machete'))
-        self.add_item(TinPipe('tin_pipe'))
+        self.add_item(CryoPipesOne('cryo_pipes_one'))
+        self.add_item(CryoPipesTwo('cryo_pipes_two'))
+        self.add_item(CryoPipesThree('cryo_pipes_three'))
         self.add_item(Manual('manual'))
         self.add_thing(GenericDescThing('machine.wires', 2,
             "Wires run to all the machines in the room",
@@ -95,41 +97,66 @@ class LaserWelderSlot(Thing):
     NAME = "machine.welder.slot"
 
     INTERACTS = {
-        "weld": InteractNoImage(241, 310, 178, 66),
+        "empty": InteractImage(241, 310, "welder_empty.png"),
+        "can": InteractImage(241, 310, "welder_can.png"),
+        "tube": InteractImage(241, 310, "welder_pipe.png"),
+        "can_and_tube": InteractImage(241, 310, "welder_can_pipe.png"),
     }
 
-    INITIAL = "weld"
+    INITIAL = "empty"
 
     INITIAL_DATA = {
-        'cans_in_place': 0,
+        'contents': set(),
     }
+
+    def update_contents(self):
+        """Update the interact after a contents change."""
+        contents = self.get_data('contents')
+        if not contents:
+            self.set_interact("empty")
+        elif len(contents) == 1:
+            if "can" in contents:
+                self.set_interact("can")
+            elif "tube" in contents:
+                self.set_interact("tube")
+        else:
+            self.set_interact("can_and_tube")
 
     def interact_without(self):
         return Result("You really don't want to but your hand in there.")
 
     def interact_with_empty_can(self, item):
-        starting_cans = self.get_data('cans_in_place')
-        if starting_cans < 3:
-            self.state.remove_inventory_item(item.name)
-            self.set_data('cans_in_place', starting_cans + 1)
-            return Result({
-                    0: "You carefully place the empty can in the area marked 'to weld'.",
-                    1: "You carefully place the empty can next to the other.",
-                    2: "You carefully place the empty can next to its mates.",
-                    }[starting_cans])
-        else:
-            return Result("The machine has enough cans to weld for the moment.")
+        contents = self.get_data('contents')
+        if "can" in contents:
+            return Result("There is already a can in the welder.")
+        self.state.remove_inventory_item(item.name)
+        contents.add("can")
+        self.update_contents()
+        return Result("You carefully place the can in the laser welder.")
+
+    def interact_with_tube_fragment(self, item):
+        contents = self.get_data('contents')
+        if "tube" in contents:
+            return Result("There is already a tube fragment in the welder.")
+        self.state.remove_inventory_item(item.name)
+        contents.add("tube")
+        self.update_contents()
+        return Result("You carefully place the tube fragments in the laser welder.")
 
     def get_description(self):
-        if self.get_data('cans_in_place') == 0:
+        contents = self.get_data('contents')
+        if not contents:
             return "This is a Smith and Wesson 'zOMG' class high-precision laser welder."
-        msg = "The laser welder looks hungry, somehow."
-        if self.get_data('cans_in_place') == 1:
-            msg += " It currently contains an empty can."
-        elif self.get_data('cans_in_place') == 2:
-            msg += " It currently contains two empty cans."
-        elif self.get_data('cans_in_place') == 3:
-            msg += " It currently contains three empty cans."
+        if len(contents) == 1:
+            msg = "The laser welder looks hungry, somehow."
+            if "can" in contents:
+                msg += " It currently contains an empty can."
+            elif  "tube" in contents:
+                msg += " It currently contains a tube fragment."
+        elif len(contents) == 2:
+            msg = "The laser welder looks expectant. "
+            if "can" in contents and "tube" in contents:
+                msg += " It currently contains an empty can and a tube fragment."
         return msg
 
 
@@ -144,16 +171,29 @@ class LaserWelderButton(Thing):
     INITIAL = "button"
 
     def interact_without(self):
-        cans_in_place = self.scene.things["machine.welder.slot"].get_data("cans_in_place")
-        if cans_in_place < 1:
+        contents = self.scene.things["machine.welder.slot"].get_data("contents")
+        if not contents:
             return Result("The laser welder doesn't currently contain anything weldable.")
-        elif cans_in_place < 3:
-            return Result("You'll need more cans than that.")
+        elif len(contents) == 1:
+            if "can" in contents:
+                return Result("The laser welder needs something to weld the can to.")
+            elif "tube" in contents:
+                return Result("The laser welder needs something to weld the tube fragments to.")
         else:
-            self.scene.things["machine.welder.slot"].set_data("cans_in_place", 0)
-            self.state.add_inventory_item('tin_pipe')
-            return Result("With high-precision spitzensparken, the cans are welded into a replacement tube.",
-                    soundfile='laser.ogg')
+            self.scene.things["machine.welder.slot"].set_data("contents", set())
+            self.scene.things["machine.welder.slot"].update_contents()
+            if self.state.items["cryo_pipes_one"] in self.state.inventory:
+                self.state.replace_inventory_item("cryo_pipes_one", "cryo_pipes_two")
+            elif self.state.items["cryo_pipes_two"] in self.state.inventory:
+                self.state.replace_inventory_item("cryo_pipes_two", "cryo_pipes_three")
+            elif self.state.items["cryo_pipes_three"] in self.state.inventory:
+                # just for safety
+                pass
+            else:
+                self.state.add_inventory_item("cryo_pipes_one")
+            return Result("With high-precision spitzensparken, the can and tube a welded"
+                        " into a whole greater than the parts.",
+                        soundfile='laser.ogg')
 
 
 class LaserWelderPowerLights(Thing):
@@ -172,12 +212,28 @@ class LaserWelderPowerLights(Thing):
             ])
 
 
-class TinPipe(Item):
-    "A pipe made out of welded-together tins."
+class CryoPipesOne(Item):
+    "A single cryo pipe (made from a tube fragment and can)."
 
-    INVENTORY_IMAGE = "tube_fragments.png"
-    CURSOR = CursorSprite('tube_fragments_cursor.png')
-    TOOL_NAME = "pipe"
+    INVENTORY_IMAGE = "cryo_pipes_one.png"
+    CURSOR = CursorSprite('cryo_pipes_one_cursor.png')
+    TOOL_NAME = "cryo_pipes_one"
+
+
+class CryoPipesTwo(Item):
+    "Two cryo pipes (each made from a tube fragment and can)."
+
+    INVENTORY_IMAGE = "cryo_pipes_two.png"
+    CURSOR = CursorSprite('cryo_pipes_two_cursor.png')
+    TOOL_NAME = "cryo_pipes_two"
+
+
+class CryoPipesThree(Item):
+    "Three cryo pipes (each made from a tube fragment and can)."
+
+    INVENTORY_IMAGE = "cryo_pipes_three.png"
+    CURSOR = CursorSprite('cryo_pipes_three_cursor.png')
+    TOOL_NAME = "cryo_pipes_three"
 
 
 class Grinder(Thing):

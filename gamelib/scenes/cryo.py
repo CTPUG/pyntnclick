@@ -166,7 +166,7 @@ class CryoPipeBase(Thing):
     def interact_with_machete(self, item):
         if self.get_data('fixed'):
             self.set_data('fixed', False)
-            pipe = CryoPipe('cryo_pipe')
+            pipe = TubeFragment('tube_fragment')
             self.state.add_item(pipe)
             self.state.add_inventory_item(pipe.name)
             self.set_interact("chopped")
@@ -214,12 +214,12 @@ class UncuttableCryoPipes(Thing):
         return "These pipes carry cooling fluid to the working cryo units."
 
 
-class CryoPipe(CloneableItem):
-    "After emptying the full can."
+class TubeFragment(CloneableItem):
+    "Obtained after cutting down a cryo room pipe."
 
-    INVENTORY_IMAGE = "cryo_pipe.png"
-    CURSOR = CursorSprite('cryo_pipe_cursor.png')
-    TOOL_NAME = "pipe"
+    INVENTORY_IMAGE = "tube_fragment.png"
+    CURSOR = CursorSprite('tube_fragment_cursor.png')
+    TOOL_NAME = "tube_fragment"
 
 
 class CryoPipeLeft(CryoPipeBase):
