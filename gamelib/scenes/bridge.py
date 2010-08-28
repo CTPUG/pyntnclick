@@ -13,7 +13,7 @@ from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
                                           InteractAnimated, GenericDescThing,
-                                          BaseCamera)
+                                          BaseCamera, make_jim_dialog)
 
 
 class Bridge(Scene):
@@ -302,8 +302,8 @@ class JimPanel(Thing):
     def interact_default(self):
         if self.scene.get_data('ai status') == 'online':
             return (Result('You feel a shock from the panel'),
-                    Result("JIM says: 'Prisoner %s. Please step away from the panel. "
-                        "You are not an authorized techinican.'" % PLAYER_ID, style="JIM"))
+                    make_jim_dialog("Prisoner %s. Please step away from the panel. "
+                        "You are not an authorized techinican." % PLAYER_ID, self.state))
 
 class ChairDetail(Scene):
 

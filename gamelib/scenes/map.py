@@ -11,7 +11,8 @@ from gamelib.state import Scene, Item, Thing, Result
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+                                          InteractAnimated, GenericDescThing,
+                                          make_jim_dialog)
 
 
 class Map(Scene):
@@ -38,17 +39,16 @@ class Map(Scene):
             door_thing.check_dest()
         if self.get_data('implant'):
             self.set_data('implant', False)
-            return (Result(
-                "JIM says: 'Under the terms of the emergency conscription "
+            ai1 = make_jim_dialog(
+                "Under the terms of the emergency conscription "
                 "act, I have downloaded the ship's schematics to your "
                 "neural implant to help you navigate around the ship. "
-                "Please report to the bridge.'", style="JIM"),
-                Result(
-                "JIM continues: 'Prisoner %s. You are classed "
+                "Please report to the bridge.", self.state)
+            if ai1:
+                return ai1, make_jim_dialog("Prisoner %s. You are classed "
                 "as a class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on your sentence.'" % PLAYER_ID,
-                style="JIM"))
+                "of an additional 3 years on your sentence.'" % PLAYER_ID, self.state)
 
 
 class DoorThing(Thing):

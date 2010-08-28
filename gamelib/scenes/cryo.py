@@ -11,7 +11,8 @@ from gamelib.constants import DEBUG
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+                                          InteractAnimated, GenericDescThing,
+                                          make_jim_dialog)
 
 
 class Cryo(Scene):
@@ -133,15 +134,15 @@ class Cryo(Scene):
         change_playlist(background_playlist)
         if self.get_data('greet'):
             self.set_data('greet', False)
-            return Result(
-                    "You hear a voice: 'Greetings, Prisoner %s. "
-                    "This is the Judicial Incarceration Monitor. "
+            return make_jim_dialog(
+                    "Greetings, Prisoner %s.  This is the Judicial "
+                    "Incarceration Monitor. "
                     "You have been woken early under the terms of the "
                     "emergency conscription act to help with repairs to "
                     "the ship. Your behaviour during this time will "
                     "be added to your record and will be relayed to "
                     "prison officials when we reach the destination. "
-                    "Please report to the bridge.'" % PLAYER_ID, style="JIM")
+                    "Please report to the bridge.'" % PLAYER_ID, self.state)
 
     def leave(self):
         # Stop music

@@ -7,7 +7,7 @@ from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
                                           InteractAnimated, GenericDescThing,
-                                          BaseCamera)
+                                          BaseCamera, make_jim_dialog)
 
 class CrewQuarters(Scene):
 
@@ -91,12 +91,12 @@ class Safe(Thing):
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
                       " here.")
-        if self.state.scenes['bridge'].get_data('ai status') == 'online':
-            return open_result, Result("JIM says: 'Prisoner %s, you have been observed commiting a felony violation. "
+        ai_result = make_jim_dialog("Prisoner %s, you have been observed commiting a felony violation. "
                     "This will go onto your permenant record, and your sentence may be extended by up to twenty years."
-                    % PLAYER_ID, style="JIM")
-        else:
-            return open_result
+                    % PLAYER_ID, self.state)
+        if ai_result:
+            return open_result, ai_result
+        return open_result
 
     def get_description(self):
         return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
