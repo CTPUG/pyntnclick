@@ -64,6 +64,7 @@ class StateWidget(Widget):
         self.state.draw(surface, self.screen)
 
     def mouse_down(self, event):
+        self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
             self.state.set_tool(None)
             return
@@ -141,6 +142,7 @@ class DetailWindow(Widget):
         self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
 
     def mouse_down(self, event):
+        self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
             self.state.set_tool(None)
             return

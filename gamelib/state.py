@@ -121,7 +121,6 @@ class State(object):
             self.current_detail = None
         else:
             self.current_detail = self.detail_views[name]
-            self.current_scene._current_description = None
             self.current_scene._current_thing = None
             return self.current_detail.get_detail_size()
 
@@ -253,7 +252,6 @@ class Scene(StatefulGizmo):
         else:
             self._background = None
         self._current_thing = None
-        self._current_description = None
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -266,7 +264,8 @@ class Scene(StatefulGizmo):
         del self.things[thing.name]
         self.leave()
 
-    def _make_description(self, text):
+    def _get_description(self):
+        text = self._current_thing and self._current_thing.get_description()
         if text is None:
             return None
         label = BoomLabel(text)
@@ -278,10 +277,11 @@ class Scene(StatefulGizmo):
         return label
 
     def draw_description(self, surface, screen):
-        if self._current_description is not None:
+        description = self._get_description()
+        if description is not None:
             sub = screen.get_root().surface.subsurface(
-                Rect(5, 5, *self._current_description.size))
-            self._current_description.draw_all(sub)
+                Rect(5, 5, *description.size))
+            description.draw_all(sub)
 
     def draw_background(self, surface):
         if self._background is not None:
@@ -305,15 +305,8 @@ class Scene(StatefulGizmo):
 
         Returns a Result object to provide feedback to the player.
         """
-        for thing in self.things.itervalues():
-            if thing.contains(pos):
-                result = thing.interact(item)
-                if result:
-                    if self._current_thing:
-                        # Also update descriptions if needed
-                        self._current_description = self._make_description(
-                                self._current_thing.get_description())
-                    return result
+        if self._current_thing is not None:
+            return self._current_thing.interact(item)
 
     def animate(self):
         """Animate all the things in the scene.
@@ -329,7 +322,6 @@ class Scene(StatefulGizmo):
         return None
 
     def leave(self):
-        self._current_description = None
         return None
 
     def mouse_move(self, item, pos, screen):
@@ -344,13 +336,10 @@ class Scene(StatefulGizmo):
             else:
                 self._current_thing.leave()
                 self._current_thing = None
-                self._current_description = None
         for thing in self.things.itervalues():
             if thing.contains(pos):
                 thing.enter(item)
                 self._current_thing = thing
-                self._current_description = self._make_description(
-                    thing.get_description())
                 break
         screen.cursor_highlight(self._current_thing is not None)
 
