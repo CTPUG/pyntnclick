@@ -113,10 +113,10 @@ class BridgeComputer(Thing):
         return "The main bridge computer screen."
 
 
-class MassageChair(Thing):
+class MassageChairBase(Thing):
     "The captain's massage chair, contains superconductor"
 
-    NAME = 'bridge.massagechair'
+    NAME = 'bridge.massagechair_base'
 
     INTERACTS = {
         'chair': InteractNoImage(127, 518, 69, 64),
@@ -137,14 +137,11 @@ class MassageChair(Thing):
                    "It's massaging a skeleton."
         return "The chair won't work any more, it has no power."
 
-    def is_interactive(self):
-        return False
 
-
-class MassageChairBase(Thing):
+class MassageChair(Thing):
     "The captain's massage chair, contains superconductor"
 
-    NAME = 'bridge.massagechair_base'
+    NAME = 'bridge.massagechair'
 
     INTERACTS = {
         'chair': InteractRectUnion((
@@ -161,8 +158,12 @@ class MassageChairBase(Thing):
     INITIAL = 'chair'
 
     def get_description(self):
-        return self.state.current_scene.things['bridge.massagechair'] \
+        return self.state.current_scene.things['bridge.massagechair_base'] \
                    .get_description()
+
+    def is_interactive(self):
+        return False
+
 
 class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
@@ -214,7 +215,7 @@ class SuperconductorThing(Thing):
 
     def interact_without(self):
         self.state.add_inventory_item('superconductor')
-        self.state.current_scene.things['bridge.massagechair'] \
+        self.state.current_scene.things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
         return Result("The superconductor module unclips easily.")
