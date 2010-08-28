@@ -503,6 +503,7 @@ class BridgeCompDetail(Scene):
             'ai offline' : 'comp_alert_ai_offline.png',
             'engine offline' : 'comp_alert_engine_offline.png',
             'life support' : 'comp_alert_life_support.png',
+            'life support partial' : 'comp_alert_life_support_partial.png',
             }
 
     # Point to start drawing changeable alerts
@@ -580,7 +581,7 @@ class BridgeCompDetail(Scene):
     def _get_nav_page(self):
         if not self.state.scenes['engine'].get_data('engine online'):
             return self._nav_messages['engine offline']
-        elif not self.state.scenes['mess'].get_data('life support online'):
+        elif not self.state.scenes['mess'].get_data('life support status') == 'fixed':
             return self._nav_messages['life support']
         else:
             for thing in self._nav_lines:
@@ -599,10 +600,12 @@ class BridgeCompDetail(Scene):
         if not self.state.scenes['engine'].get_data('engine online'):
             surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
             ypos += self._alert_messages['engine offline'].get_size()[1] + self.ALERT_SPACING
-        if not self.state.scenes['mess'].get_data('life support online'):
+        if self.state.scenes['mess'].get_data('life support status') == 'broken':
             surface.blit(self._alert_messages['life support'], (xpos, ypos))
             ypos += self._alert_messages['life support'].get_size()[1] + self.ALERT_SPACING
-
+        if self.state.scenes['mess'].get_data('life support status') == 'replaced':
+            surface.blit(self._alert_messages['life support partial'], (xpos, ypos))
+            ypos += self._alert_messages['life support partial'].get_size()[1] + self.ALERT_SPACING
 
     def draw_things(self, surface):
         if self.get_data('tab') == 'alert':

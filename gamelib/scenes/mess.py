@@ -17,7 +17,7 @@ class Mess(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
-        'life support online': False,
+        'life support status': 'broken', # broken, replaced, fixed
         }
 
     def __init__(self, state):
@@ -147,6 +147,7 @@ class Tubes(Thing):
     INTERACTS = {
         "blocked": InteractImage(250, 130, "blocking_broccoli.png"),
         "broken": InteractImage(250, 183, "broken_tubes.png"),
+        "replaced": InteractImage(250, 183, "fixed_tubes.png"),
         "fixed": InteractImage(252, 183, "fixed_tubes.png"),
         }
 
@@ -189,7 +190,8 @@ class Tubes(Thing):
         else:
             self.state.remove_inventory_item(item.name)
             self.set_data('status', 'replaced')
-            # TODO: An interact image for fixed but untaped pipes
+            self.set_interact("replaced")
+            self.scene.set_data('life support status', 'replaced')
             return Result(
                 "The pipes slot neatly into place, but don't make an airtight seal."
             )
@@ -203,7 +205,7 @@ class Tubes(Thing):
             self.set_data("fixed", True)
             self.set_data("status", "fixed")
             self.set_interact("fixed")
-            self.scene.set_data('life support online', True)
+            self.scene.set_data('life support status', 'fixed')
             # TODO: A less anticlimactic climax?
             return Result("It takes quite a lot of tape, but eventually everything is"
                           " airtight and ready to hold pressure. Who'd've thought duct"
