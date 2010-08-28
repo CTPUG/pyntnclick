@@ -186,7 +186,6 @@ class SuperconductorSocket(Thing):
             return Result("It's wedged in there pretty firmly, it won't come out.")
         elif self.get_data('working'):
             return Result("You decide that working engines are more important than having a shiny superconductor.")
-        Thing.interact_without()
 
     def interact_with_machete(self, item):
         if self.get_data('present') and not self.get_data('working'):
@@ -194,7 +193,6 @@ class SuperconductorSocket(Thing):
             self.set_data('present', False)
             self.state.add_inventory_item('superconductor_broken')
             return Result("With leverage, the burned-out superconductor snaps out.")
-        Thing.interact_without()
 
     def interact_with_superconductor(self, item):
         if not self.get_data('present'):
