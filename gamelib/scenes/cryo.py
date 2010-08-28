@@ -1,7 +1,9 @@
 """Cryo room where the prisoner starts out."""
 
 import random
+
 from albow.music import change_playlist, get_music, PlayList
+from albow.resource import get_image
 
 from gamelib import speech
 from gamelib.sound import get_sound
@@ -482,12 +484,20 @@ class CryoCompDetail(Scene):
 
     FOLDER = "cryo"
     BACKGROUND = "comp_info_detail.png"
+    BACKGROUND_FIXED = "comp_info_detail_fixed.png"
     NAME = "cryo_comp_detail"
 
     SIZE = (640, 400)
 
     def __init__(self, state):
         super(CryoCompDetail, self).__init__(state)
+        self._background_fixed = get_image(self.FOLDER, self.BACKGROUND_FIXED)
+
+    def draw_background(self, surface):
+        if self.state.scenes['engine'].get_data('engine online'):
+            surface.blit(self._background_fixed, self.OFFSET, None)
+        else:
+            surface.blit(self._background, self.OFFSET, None)
 
 
 class CryoUnitWithCorpse(Scene):
