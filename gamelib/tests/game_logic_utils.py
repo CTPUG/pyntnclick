@@ -40,7 +40,7 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(value, gizmo.get_data(key))
 
     def assert_inventory_item(self, item, in_inventory=True):
-        self.assertEquals(in_inventory, self.state.items[item] in self.state.inventory)
+        self.assertEquals(in_inventory, self.state.is_in_inventory(item))
 
     def assert_scene_thing(self, thing, in_scene=True):
         self.assertEquals(in_scene, thing in self.state.current_scene.things)

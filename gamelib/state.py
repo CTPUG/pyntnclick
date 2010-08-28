@@ -131,6 +131,9 @@ class State(object):
     def add_inventory_item(self, name):
         self.inventory.append(self.items[name])
 
+    def is_in_inventory(self, name):
+        return self.items[name] in self.inventory
+
     def remove_inventory_item(self, name):
         self.inventory.remove(self.items[name])
         # Unselect tool if it's removed
