@@ -18,7 +18,7 @@ DEBUG_RECTS = False
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None, soundfile=None, detail_view=None, style=None, close_detail=False):
+    def __init__(self, message=None, soundfile=None, detail_view=None, style=None, close_detail=False, end_game=False):
         self.message = message
         self.sound = None
         if soundfile:
@@ -26,6 +26,7 @@ class Result(object):
         self.detail_view = detail_view
         self.style = style
         self.close_detail = close_detail
+        self.end_game = end_game
 
     def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
@@ -37,6 +38,8 @@ class Result(object):
             scene_widget.show_detail(self.detail_view)
         if self.close_detail and hasattr(scene_widget, 'parent') and hasattr(scene_widget.parent, 'clear_detail'):
             scene_widget.parent.clear_detail()
+        if self.end_game:
+            scene_widget.end_game()
 
 
 def handle_result(result, scene_widget):

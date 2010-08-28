@@ -124,6 +124,9 @@ class StateWidget(Widget):
             self.state.set_current_detail(None)
             self._mouse_move(mouse.get_pos())
 
+    def end_game(self):
+        self.screen.shell.show_screen(self.screen.shell.end_screen)
+
 
 class DetailWindow(Widget):
     def __init__(self, screen):
@@ -138,6 +141,9 @@ class DetailWindow(Widget):
 
     def close_but(self):
         self.parent.clear_detail()
+
+    def end_game(self):
+        self.parent.end_game()
 
     def set_image_rect(self, rect):
         bw = self.border_width

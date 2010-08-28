@@ -18,6 +18,7 @@ from albow.shell import Shell
 
 from menu import MenuScreen
 from gamescreen import GameScreen
+from endscreen import EndScreen
 from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG
 from sound import no_sound, disable_sound
 import state
@@ -40,6 +41,7 @@ class MainShell(Shell):
         Shell.__init__(self, display)
         self.menu_screen = MenuScreen(self)
         self.game_screen = GameScreen(self)
+        self.end_screen = EndScreen(self)
         self.set_timer(FRAME_RATE)
         self.show_screen(self.menu_screen)
 
