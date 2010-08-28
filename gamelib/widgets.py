@@ -58,10 +58,10 @@ class MessageDialog(BoomLabel, CursorWidget):
 
     def __init__(self, screen, text, wrap_width, style=None, **kwds):
         CursorWidget.__init__(self, screen)
+        self.set_style(style)
         paras = text.split("\n\n")
         text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
         albow.controls.Label.__init__(self, text, **kwds)
-        self.set_style(style)
 
     def set_style(self, style):
         self.set_margin(5)
@@ -70,6 +70,7 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
         if style == "JIM":
+            self.set(font=get_font(20, "chintzy.ttf"))
             self.bg_color = Color(255, 127, 127, 207)
             self.fg_color = (0, 0, 0)
             self.border_color = (127, 0, 0)

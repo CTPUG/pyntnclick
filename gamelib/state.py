@@ -45,6 +45,7 @@ def handle_result(result, scene_widget):
             for res in result:
                 res.process(scene_widget)
 
+
 def initial_state():
     """Load the initial state."""
     state = State()
@@ -255,6 +256,7 @@ class Scene(StatefulGizmo):
 
     def remove_thing(self, thing):
         del self.things[thing.name]
+        self.leave()
 
     def _make_description(self, text):
         if text is None:
