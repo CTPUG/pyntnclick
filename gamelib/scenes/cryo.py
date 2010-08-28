@@ -109,7 +109,7 @@ class Cryo(Scene):
 
         self.add_thing(GenericCryoUnit(7,
             "An empty cryo unit.",
-            "Prisoner 83F1-CE32D3234749. Spamming. 5 years",
+            "Prisoner 83F1-CE32D3234749. Spamming. 5 years.",
             (
                 (472, 432, 58, 51),
                 (488, 455, 41, 134),
