@@ -33,7 +33,7 @@ class InventoryView(PaletteView):
 
     def draw_item(self, surface, item_no, rect):
         item_image = self.state.inventory[item_no].get_inventory_image()
-        surface.blit(item_image, rect, None, BLEND_ADD)
+        surface.blit(item_image, rect, None)
 
     def click_item(self, item_no, event):
         item = self.state.inventory[item_no]
@@ -49,7 +49,7 @@ class InventoryView(PaletteView):
         if event.button != 1:
             self.state.cancel_doodah(self.screen)
         else:
-            PaletteView.handle_mouse(self, event)
+            PaletteView.mouse_down(self, event)
 
     def item_is_selected(self, item_no):
         return self.state.tool is self.state.inventory[item_no]
@@ -178,7 +178,11 @@ class ToolBar(Row):
         for item in items:
             item.height = BUTTON_SIZE
         Row.__init__(self, items, spacing=0, width=SCREEN[0])
-        self.bg_color = (127, 127, 127)
+        self.bg_color = (31, 31, 31)
+
+    def draw(self, surface):
+        surface.fill(self.bg_color)
+        Row.draw(self, surface)
 
 
 class GameScreen(Screen, CursorWidget):
