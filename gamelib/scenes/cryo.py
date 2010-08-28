@@ -165,15 +165,11 @@ class CryoPipeBase(Thing):
             self.state.add_item(pipe)
             self.state.add_inventory_item(pipe.name)
             self.set_interact("chopped")
-            result = Result("It takes more effort than one would expect, but "
-                          "eventually the pipe is separated from the wall.")
-            ai_result = make_jim_dialog("Prisoner %s. Vandalism is an offence "
-                    "punishable by a minimum of an additional 6 months "
-                    "to your sentence" % PLAYER_ID, self.state)
-            if ai_result:
-                return result, ai_result
-            return result
-
+            return (Result("It takes more effort than one would expect, but "
+                          "eventually the pipe is separated from the wall."),
+                          make_jim_dialog("Prisoner %s. Vandalism is an offence "
+                              "punishable by a minimum of an additional 6 months "
+                              "to your sentence" % PLAYER_ID, self.state))
 
     def is_interactive(self):
         return self.get_data('fixed')

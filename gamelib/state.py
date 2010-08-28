@@ -43,7 +43,9 @@ def handle_result(result, scene_widget):
             result.process(scene_widget)
         else:
             for res in result:
-                res.process(scene_widget)
+                if res:
+                    # List may contain None's
+                    res.process(scene_widget)
 
 
 def initial_state():

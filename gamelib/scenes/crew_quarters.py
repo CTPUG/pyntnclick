@@ -87,16 +87,13 @@ class Safe(Thing):
         # TODO: Wax lyrical some more about safecracking.
         self.set_data('is_cracked', True)
         self.set_interact('full_safe')
-        open_result = Result("Even after centuries of neglect, the tumblers slide"
+        return (Result("Even after centuries of neglect, the tumblers slide"
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
-                      " here.")
-        ai_result = make_jim_dialog("Prisoner %s, you have been observed commiting a felony violation. "
-                    "This will go onto your permenant record, and your sentence may be extended by up to twenty years."
-                    % PLAYER_ID, self.state)
-        if ai_result:
-            return open_result, ai_result
-        return open_result
+                      " here."),
+                      make_jim_dialog("Prisoner %s, you have been observed commiting a felony violation. "
+                          "This will go onto your permenant record, and your sentence may be extended by up to twenty years."
+                          % PLAYER_ID, self.state))
 
     def get_description(self):
         return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
