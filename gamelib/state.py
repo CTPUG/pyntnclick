@@ -132,7 +132,9 @@ class State(object):
         self.inventory.append(self.items[name])
 
     def is_in_inventory(self, name):
-        return self.items[name] in self.inventory
+        if name in self.items:
+            return self.items[name] in self.inventory
+        return False
 
     def remove_inventory_item(self, name):
         self.inventory.remove(self.items[name])
