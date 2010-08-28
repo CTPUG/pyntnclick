@@ -26,6 +26,9 @@ class Engine(Scene):
         self.add_thing(CryoContainers())
         self.add_thing(CryoContainerReceptacle())
         self.add_thing(CoolingPipes())
+        self.add_thing(ArrowsTopLeft())
+        self.add_thing(ArrowsBottomLeft())
+        self.add_thing(ArrowsRight())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
             "Dead. I think those cans were passed their sell-by date.",
@@ -340,6 +343,48 @@ class PowerLines(Thing):
 
     def is_interactive(self):
         return False
+
+
+class ArrowsTopLeft(Thing):
+    NAME = 'engine.arrows_top_left'
+
+    INTERACTS = {
+        'arrows': InteractAnimated(25, 324, (
+            'arrow_top_left_1.png', 'arrow_top_left_2.png',
+            'arrow_top_left_3.png', 'arrow_top_left_4.png',
+            ), 15,
+        )
+    }
+
+    INITIAL = 'arrows'
+
+
+class ArrowsBottomLeft(Thing):
+    NAME = 'engine.arrows_bottom_left'
+
+    INTERACTS = {
+        'arrows': InteractAnimated(32, 425, (
+            'arrow_bottom_left_1.png', 'arrow_bottom_left_2.png',
+            'arrow_bottom_left_3.png', 'arrow_bottom_left_4.png',
+            ), 16,
+        )
+    }
+
+    INITIAL = 'arrows'
+
+
+class ArrowsRight(Thing):
+    NAME = 'engine.arrows_right'
+
+    INTERACTS = {
+        'arrows': InteractAnimated(708, 172, (
+            'arrow_right_1.png', 'arrow_right_2.png',
+            'arrow_right_3.png', 'arrow_right_4.png',
+            ), 17,
+        )
+    }
+
+    INITIAL = 'arrows'
 
 
 class ToMap(Door):
