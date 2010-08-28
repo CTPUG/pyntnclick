@@ -455,7 +455,6 @@ class DestNavPageLine(Thing):
         if self.state.scenes['bridge'].get_data('ai status') == 'looping':
             return Result("You could change the destination, but when JIM recovers, it'll just get reset.")
         if self.state.scenes['bridge'].get_data('ai status') == 'dead':
-            self.state.set_current_scene('won')
             return Result("You change the destination.", soundfile="beep550.ogg", end_game=True)
 
 class CompUpButton(Thing):
