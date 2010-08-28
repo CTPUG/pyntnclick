@@ -385,6 +385,7 @@ class LogTab(Thing):
 
     def interact_without(self):
         self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
+        self.state.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -404,6 +405,7 @@ class AlertTab(Thing):
 
     def interact_without(self):
         self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
+        self.state.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 class NavTab(Thing):
@@ -422,6 +424,7 @@ class NavTab(Thing):
 
     def interact_without(self):
         self.state.detail_views[self.COMPUTER].set_data('tab', 'nav')
+        self.state.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 class DestNavPageLine(Thing):
@@ -454,7 +457,7 @@ class DestNavPageLine(Thing):
             return Result("You could change the destination, but when JIM recovers, it'll just get reset.")
         if self.state.scenes['bridge'].get_data('ai status') == 'dead':
             self.state.set_current_scene('won')
-            return Result("You change the destination.", soundfile="beep550.ogg", close_detail=True)
+            return Result("You change the destination.", soundfile="beep550.ogg", end_game=True)
 
 class CompUpButton(Thing):
     """Up button on log screen"""
@@ -475,6 +478,7 @@ class CompUpButton(Thing):
     def interact_without(self):
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page-1)
+        self.state.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -498,6 +502,7 @@ class CompDownButton(Thing):
     def interact_without(self):
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page+1)
+        self.state.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -576,11 +581,12 @@ class BridgeCompDetail(Scene):
     def enter(self):
         self._scene_playlist = get_current_playlist()
         change_playlist(None)
+        self.set_background()
 
     def leave(self):
         change_playlist(self._scene_playlist)
 
-    def draw_background(self, surface):
+    def set_background(self):
         if self.get_data('tab') == 'alert':
             self._clear_navigation()
             self._background = self._alert
@@ -589,7 +595,6 @@ class BridgeCompDetail(Scene):
             self._background = self._logs[self.get_data('log page')]
         elif self.get_data('tab') == 'nav':
             self._background = self._get_nav_page()
-        super(BridgeCompDetail, self).draw_background(surface)
 
     def _clear_navigation(self):
         "Remove navigation things if necessary"
