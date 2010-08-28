@@ -1,6 +1,6 @@
 """Utilities and base classes for dealing with scenes."""
 
-from albow.resource import get_image
+from albow.resource import get_image, get_font
 from albow.utils import frame_rect
 from widgets import BoomLabel
 from pygame.rect import Rect
@@ -273,18 +273,20 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = BoomLabel(text)
+        font = get_font(15, 'VeraBd.ttf')
         label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)
-        label.bg_color = Color(127, 127, 127, 255)
+        label.bg_color = Color(210, 210, 210, 255)
         label.fg_color = (0, 0, 0)
         return label
 
     def draw_description(self, surface, screen):
         description = self._get_description()
         if description is not None:
+            w, h = description.size
             sub = screen.get_root().surface.subsurface(
-                Rect(5, 5, *description.size))
+                Rect(400-w/2, 5, w, h))
             description.draw_all(sub)
 
     def draw_background(self, surface):
