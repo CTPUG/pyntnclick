@@ -3,6 +3,7 @@
 from albow.resource import get_image
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
+from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
                                           InteractAnimated, GenericDescThing,
@@ -130,8 +131,8 @@ class Engine(Scene):
                 and  self.things['engine.superconductor'].get_data('working'):
             self.set_data('engine online', True)
             self.add_thing(Engines())
-            return make_jim_dialog("The engines are now operational. "
-                                   "You have done a satisfactory job.",
+            return make_jim_dialog("The engines are now operational. You have"
+                                   "done a satisfactory job, Prisoner %s." % PLAYER_ID,
                                    self.state)
 
     def enter(self):

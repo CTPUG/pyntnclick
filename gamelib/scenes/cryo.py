@@ -165,7 +165,8 @@ class CryoPipeBase(Thing):
             self.state.add_inventory_item(pipe.name)
             self.set_interact("chopped")
             responses = [Result("It takes more effort than one would expect, but "
-                                "eventually the pipe is separated from the wall.")]
+                                "eventually the pipe is separated from the wall.",
+                                soundfile="chop-chop.ogg")]
             if self.state.current_scene.get_data('vandalism_warn'):
                 self.state.current_scene.set_data('vandalism_warn', False)
                 responses.append(make_jim_dialog(

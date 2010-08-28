@@ -76,7 +76,7 @@ setup   (   # Metadata
             },
             'py2app': {
                 'argv_emulation': 1,
-                # 'iconfile': 'Resources/icons/suspended.icns',
+                'iconfile': 'Resources/icons/suspended_sentence.icns',
 #                 'dist_dir': 'dist/suspended-sentence-%s' % version.VERSION_STR,
 #                 'bdist_base': 'build/bdist',
                 'packages': [
