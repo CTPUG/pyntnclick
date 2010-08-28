@@ -134,8 +134,8 @@ class ToEngine(DoorThing):
     def interact_without(self):
         if not self.state.is_in_inventory('helmet'):
             return Result('The airlock refuses to open. The automated'
-                    ' voice says "Hull breach beyond this door. Personnel'
-                    ' must be equipped for vacuum before entry"')
+                    ' voice says: "Hull breach beyond this door. Personnel'
+                    ' must be equipped for vacuum before entry."')
         else:
             return super(ToEngine, self).interact_without()
 
@@ -188,7 +188,7 @@ class InaccessibleArea(Thing):
     INITIAL = 'areas'
 
     def interact_without(self):
-        return Result("You look in the door, but just see empty space, "
+        return Result("You look in the door, but just see empty space: "
                       "that room appears to be missing.")
 
 
@@ -205,9 +205,9 @@ class HydroponicsArea(Thing):
     INITIAL = 'areas'
 
     def interact_without(self):
-        return Result("The find the door, but it's lying on the floor in the passage. "
-                      "It's been pushed out by a massive wild broccoli. "
-                      "You won't be going in there, this centuary.")
+        return Result("Peering in through the window, you see that the entire "
+                      "chamber is overgrown with giant broccoli. It would "
+                      "take you years to cut a path through that.")
 
 
 SCENES = [Map]
