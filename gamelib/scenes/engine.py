@@ -200,6 +200,7 @@ class SuperconductorSocket(Thing):
             self.set_interact('fixed')
             self.set_data('present', True)
             self.set_data('working', True)
+            self.scene.set_data('engine online', True)
             self.state.remove_inventory_item(item.name)
             return Result("The chair's superconductor looks over-specced for this job, but it should work")
         else:
