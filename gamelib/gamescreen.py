@@ -65,9 +65,8 @@ class StateWidget(Widget):
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
-            self.state.set_tool(None)
-            return
-        if self.subwidgets:
+            self.state.cancel_doodah(self.screen)
+        elif self.subwidgets:
             self.clear_detail()
             self._mouse_move(event.pos)
         else:
@@ -116,6 +115,7 @@ class StateWidget(Widget):
             self.remove(self.detail)
             self.state.do_leave_detail()
             self.state.set_current_detail(None)
+            self._mouse_move(mouse.get_pos())
 
 
 class DetailWindow(Widget):
@@ -145,13 +145,10 @@ class DetailWindow(Widget):
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
-            if self.state.tool is not None:
-                self.state.set_tool(None)
-                return
-            self.parent.clear_detail()
-            return
-        result = self.state.interact_detail(self.global_to_local(event.pos))
-        handle_result(result, self)
+            self.state.cancel_doodah(self.screen)
+        else:
+            result = self.state.interact_detail(self.global_to_local(event.pos))
+            handle_result(result, self)
 
     def mouse_move(self, event):
         self._mouse_move(event.pos)

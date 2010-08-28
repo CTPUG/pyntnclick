@@ -175,6 +175,12 @@ class State(object):
     def interact_detail(self, pos):
         return self.current_detail.interact(self.tool, pos)
 
+    def cancel_doodah(self, screen):
+        if self.tool:
+            self.set_tool(None)
+        elif self.current_detail:
+            screen.state_widget.clear_detail()
+
     def do_enter_detail(self):
         if self.current_detail:
             self.current_detail.enter()
