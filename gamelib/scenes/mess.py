@@ -1,6 +1,6 @@
 """Mess where crew eat. Fun stuff."""
 
-from random import choice
+from random import choice, randint
 
 from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.cursor import CursorSprite
@@ -8,6 +8,9 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
                                           InteractImageRect, InteractAnimated,
                                           GenericDescThing)
+
+from gamelib.sound import get_sound
+from gamelib import constants
 
 
 class Mess(Scene):
@@ -26,6 +29,7 @@ class Mess(Scene):
         self.add_thing(Tubes())
         self.add_thing(ToMap())
         self.add_thing(DetergentThing())
+        self.add_thing(Boomslang())
         self.add_item(DetergentBottle('detergent_bottle'))
         # Flavour items
         # extra cans on shelf
@@ -211,6 +215,45 @@ class Tubes(Thing):
             return Result("It takes quite a lot of tape, but eventually everything is"
                           " airtight and ready to hold pressure. Who'd've thought duct"
                           " tape could actually be used to tape ducts?")
+
+
+class Boomslang(Thing):
+    NAME = 'mess.boomslang'
+
+    INTERACTS = {
+        'snake': InteractAnimated(455, 241, (
+            'boomslang_no_tongue.png', 'boomslang_with_tongue.png',
+            'boomslang_no_tongue.png', 'boomslang_with_tongue.png',
+            'boomslang_no_tongue.png',
+            ), 5),
+        'no_snake': InteractNoImage(0, 0, 0, 0),
+    }
+
+    INITIAL = 'no_snake'
+
+    INITIAL_DATA = {
+        'anim_pos': -1,
+        }
+
+    HISS = get_sound('boomslang.ogg')
+
+    def is_interactive(self):
+        return False
+
+    def animate(self):
+        if self.get_data('anim_pos') > -1:
+            self.current_interact.animate()
+            if self.get_data('anim_pos') > self.current_interact._anim_pos:
+                self.set_interact('no_snake')
+                self.set_data('anim_pos', -1)
+            else:
+                self.set_data('anim_pos', self.current_interact._anim_pos)
+            return True
+        if randint(0, 30 * constants.FRAME_RATE) == 0:
+            self.set_interact('snake')
+            self.set_data('anim_pos', 0)
+            self.HISS.play()
+        return False
 
 
 class DetergentThing(Thing):
