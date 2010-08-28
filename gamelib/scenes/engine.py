@@ -211,18 +211,11 @@ class CryoContainers(Thing):
     NAME = 'engine.cryo_containers'
 
     INTERACTS = {
-        'containers': InteractRectUnion((
-            (140, 378, 40, 25),
-            (129, 278, 55, 100),
-            (130, 365, 17, 25),
-            (168, 288, 31, 104),
-            (192, 288, 27, 95),
-            (216, 291, 16, 87),
-            (226, 291, 38, 79),
-        ))
-    }
+        'empty': InteractImage(118, 211, 'cryo_empty.png'),
+        'full': InteractImage(118, 211, 'cryo_full.png'),
+        }
 
-    INITIAL = 'containers'
+    INITIAL = 'empty'
 
     INITIAL_DATA = {
         'filled': False,
@@ -258,10 +251,11 @@ class CryoContainerReceptacle(Thing):
                       "It almost gets stuck")
 
     def interact_with_full_detergent_bottle(self, item):
-        # TODO: Show full tank interact
         self.state.remove_inventory_item(item.name)
         self.state.current_scene.things['engine.cryo_containers'] \
                   .set_data('filled', True)
+        self.state.current_scene.things['engine.cryo_containers'] \
+                  .set_interact('full')
         return Result("You fill the reservoirs. "
                       "It seems the detergent bottle was just big enough.")
 
