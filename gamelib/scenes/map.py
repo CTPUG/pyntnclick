@@ -130,6 +130,14 @@ class ToEngine(DoorThing):
 
     INITIAL = "inaccessible"
 
+    def interact_without(self):
+        if not self.state.is_in_inventory('helmet'):
+            return Result("JIM says 'The engine room is in vacumn. I cannot"
+                    " open the airlock unless you have some suitable"
+                    " protective gear", style="JIM")
+        else:
+            return super(ToEngine, self).interact_without()
+
 
 class ToMachine(DoorThing):
     "Way to machine room."
