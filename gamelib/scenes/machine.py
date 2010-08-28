@@ -75,9 +75,6 @@ class Machine(Scene):
             "The block for the laser drill press", # TODO: fix description
             ((461, 446, 38, 27),)))
 
-    def enter(self):
-        return Result("The machine room is dark and forbidding.")
-
 
 class ToMap(Door):
 

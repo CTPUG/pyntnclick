@@ -17,6 +17,7 @@ class Engine(Scene):
     INITIAL_DATA = {
         'accessible': True,
         'engine online': False,
+        'greet' : True,
         }
 
     def __init__(self, state):
@@ -134,8 +135,11 @@ class Engine(Scene):
                                    self.state)
 
     def enter(self):
-        return Result("You enter the engine room. Even if there wasn't a vacuum "
-                      "it would be eerily quiet.")
+        if self.get_data('greet'):
+            self.set_data('greet', False)
+            return Result(
+                    "With your improvised helmet, the automatic airlock allows you into the engine room. Even if there wasn't a vacuum "
+                    "it would be eerily quiet.")
 
 class Engines(Thing):
     NAME = 'engine.engines'
