@@ -11,9 +11,6 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.interact_thing('map.to' + target)
         self.assert_current_scene(target)
 
-    # def test_walkthrough_complete(self):
-    #     self.fail("Walkthrough incomplete.")
-
     def test_walkthrough(self):
         """A complete game walkthrough.
 
