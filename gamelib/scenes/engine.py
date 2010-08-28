@@ -29,6 +29,7 @@ class Engine(Scene):
         self.add_thing(ArrowsTopLeft())
         self.add_thing(ArrowsBottomLeft())
         self.add_thing(ArrowsRight())
+        self.add_thing(DangerSign())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
             "Dead. I think those cans were past their sell-by date.",
@@ -385,6 +386,19 @@ class ArrowsRight(Thing):
     }
 
     INITIAL = 'arrows'
+
+
+class DangerSign(Thing):
+    NAME = 'engine.danger_sign'
+
+    INTERACTS = {
+        'sign': InteractAnimated(299, 341, (
+            'danger_dim.png', 'danger_bright.png',
+            ), 10,
+        )
+    }
+
+    INITIAL = 'sign'
 
 
 class ToMap(Door):
