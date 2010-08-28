@@ -31,6 +31,7 @@ class Engine(Scene):
         self.add_thing(ArrowsBottomLeft())
         self.add_thing(ArrowsRight())
         self.add_thing(DangerSign())
+        self.add_thing(Stars())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
             "Dead. I think those cans were past their sell-by date.",
@@ -411,6 +412,25 @@ class DangerSign(Thing):
     }
 
     INITIAL = 'sign'
+
+    def is_interactive(self):
+        return False
+
+
+class Stars(Thing):
+    NAME = 'engine.stars'
+
+    INTERACTS = {
+        'stars': InteractAnimated(287, 455,
+            ['stars_%d.png' % (i+1) for i in range(5) + range(3,0,-1)],
+            30,
+        )
+    }
+
+    INITIAL = 'stars'
+
+    def is_interactive(self):
+        return False
 
 
 class ToMap(Door):
