@@ -72,7 +72,6 @@ class Bridge(Scene):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
         self.background_playlist = PlayList(pieces, random=True, repeat=True)
         change_playlist(self.background_playlist)
-        return Result("The bridge is in a sorry, shabby state.")
 
     def leave(self):
         change_playlist(None)
