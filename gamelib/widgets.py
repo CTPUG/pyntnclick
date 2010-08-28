@@ -160,7 +160,6 @@ class PopupMenu(albow.menu.Menu, CursorWidget):
         self.screen = screen
         self.shell = screen.shell
         items = [
-                ('Resume Game', 'hide'),
                 ('Quit Game', 'quit'),
                 ('Exit to Main Menu', 'main_menu'),
                 ]
