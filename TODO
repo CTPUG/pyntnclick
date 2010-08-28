@@ -6,8 +6,10 @@ General:
 Specific:
   * Create icon for windows executable.
   * Make animations and description-only Things not clickable.
+  * Make arrow keys work in rect_drawer
 
 Cleanups:
   * Clean-up finding and loading of speech strings.
   * Move interacts out into their own module?
   * Fix thing.enter being called multiple times without leaving
+
