@@ -144,7 +144,10 @@ class DetailWindow(Widget):
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
-            self.state.set_tool(None)
+            if self.state.tool is not None:
+                self.state.set_tool(None)
+                return
+            self.parent.clear_detail()
             return
         result = self.state.interact_detail(self.global_to_local(event.pos))
         handle_result(result, self)
