@@ -534,8 +534,8 @@ class BridgeCompDetail(Scene):
         self.add_thing(LogTab())
         self.add_thing(AlertTab())
         self.add_thing(NavTab())
-        self.add_thing(CompUpButton())
-        self.add_thing(CompDownButton())
+        #self.add_thing(CompUpButton())
+        #self.add_thing(CompDownButton())
         self._scene_playlist = None
         self._alert = get_image(self.FOLDER, self.ALERT_BASE)
         self._alert_messages = {}
