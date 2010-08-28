@@ -121,7 +121,7 @@ class LaserWelderSlot(Thing):
             self.set_interact("can_and_tube")
 
     def interact_without(self):
-        return Result("You really don't want to but your hand in there.")
+        return Result("You really don't want to put your hand in there.")
 
     def interact_with_empty_can(self, item):
         contents = self.get_data('contents')
@@ -189,7 +189,7 @@ class LaserWelderButton(Thing):
                 pass
             else:
                 self.state.add_inventory_item("cryo_pipes_one")
-            return Result("With high-precision spitzensparken, the can and tube a welded"
+            return Result("With high-precision spitzensparken, the can and tube are welded"
                         " into a whole greater than the parts.",
                         soundfile='laser.ogg')
 
