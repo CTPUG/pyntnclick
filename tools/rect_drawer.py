@@ -91,11 +91,26 @@ class AppImage(Widget):
             self.offset = (-self.state.current_scene.OFFSET[0], - self.state.current_scene.OFFSET[1])
         self.draw_rects = True
         self.draw_things = True
+        self.draw_thing_rects = True
         self.draw_images = True
         self.draw_toolbar = True
 
     def toggle_things(self):
         self.draw_things = not self.draw_things
+
+    def toggle_thing_rects(self):
+        self.draw_thing_rects = not self.draw_thing_rects
+        if self.state.current_detail:
+            scene = self.state.current_detail
+        else:
+            scene = self.state.current_scene
+        for thing in scene.things.itervalues():
+            if not self.draw_thing_rects:
+                if not hasattr(thing, 'old_colour'):
+                    thing.old_colour = thing._interact_hilight_color
+                thing._interact_hilight_color = None
+            else:
+                thing._interact_hilight_color = thing.old_colour
 
     def toggle_images(self):
         self.draw_images = not self.draw_images
@@ -303,11 +318,13 @@ if __name__ == "__main__":
     app.add(print_rects)
     toggle_things = make_button("Toggle Things", image.toggle_things, 335)
     app.add(toggle_things)
-    toggle_images = make_button("Toggle Images", image.toggle_images, 370)
+    toggle_thing_rects = make_button("Toggle Thing Rects", image.toggle_thing_rects, 370)
+    app.add(toggle_thing_rects)
+    toggle_images = make_button("Toggle Images", image.toggle_images, 405)
     app.add(toggle_images)
-    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 405)
+    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 440)
     app.add(toggle_rects)
-    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 440)
+    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 475)
     app.add(toggle_toolbar)
     quit_but = make_button("Quit", app.quit, 565)
     app.add(quit_but)
