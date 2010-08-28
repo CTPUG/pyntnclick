@@ -91,7 +91,7 @@ class Safe(Thing):
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
                       " here."),
-                      make_jim_dialog("Prisoner %s, you have been observed commiting a felony violation. "
+                      make_jim_dialog("Prisoner %s, you have been observed committing a felony violation. "
                           "This will go onto your permanent record, and your sentence may be extended by up to twenty years."
                           % PLAYER_ID, self.state))
 
