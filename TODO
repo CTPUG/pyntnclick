@@ -11,7 +11,3 @@ Cleanups:
   * Clean-up finding and loading of speech strings.
   * Move interacts out into their own module?
   * Fix thing.enter being called multiple times without leaving
-
-Artwork:
-  * Can Pipe
-  * 0/1 Fixed can + 0/1/2 fixed pipes + ductape overlay images

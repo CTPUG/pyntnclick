@@ -22,7 +22,8 @@ class Cryo(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
-        'greet' : True
+        'greet' : True,
+        'vandalism_warn': True,
         }
 
     # sounds that will be played randomly as background noise
@@ -156,7 +157,7 @@ class CryoPipeBase(Thing):
 
     INITIAL_DATA = {
         'fixed': True,
-        }
+    }
 
     def interact_with_machete(self, item):
         if self.get_data('fixed'):
@@ -165,11 +166,15 @@ class CryoPipeBase(Thing):
             self.state.add_item(pipe)
             self.state.add_inventory_item(pipe.name)
             self.set_interact("chopped")
-            return (Result("It takes more effort than one would expect, but "
-                          "eventually the pipe is separated from the wall."),
-                          make_jim_dialog("Prisoner %s. Vandalism is an offence "
-                              "punishable by a minimum of an additional 6 months "
-                              "to your sentence" % PLAYER_ID, self.state))
+            responses = [Result("It takes more effort than one would expect, but "
+                                "eventually the pipe is separated from the wall.")]
+            if self.state.current_scene.get_data('vandalism_warn'):
+                self.state.current_scene.set_data('vandalism_warn', False)
+                responses.append(make_jim_dialog(
+                    ("Prisoner %s. Vandalism is an offence punishable by a "
+                     "minimum of an additional 6 months to your sentence"
+                    ) % PLAYER_ID, self.state))
+            return responses
 
     def is_interactive(self):
         return self.get_data('fixed')
