@@ -1,7 +1,5 @@
 """Machine room where tools and machines are found."""
 
-import random
-
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.cursor import CursorSprite
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
@@ -207,9 +205,7 @@ class LaserWelderPowerLights(Thing):
     INITIAL = 'lights'
 
     def get_description(self):
-        return random.choice([
-            "The power lights pulse expectantly.",
-            ])
+        return "The power lights pulse expectantly."
 
 
 class CryoPipesOne(Item):
