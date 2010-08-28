@@ -132,9 +132,9 @@ class ToEngine(DoorThing):
 
     def interact_without(self):
         if not self.state.is_in_inventory('helmet'):
-            return Result("JIM says 'The engine room is in vacumn. I cannot"
-                    " open the airlock unless you have some suitable"
-                    " protective gear", style="JIM")
+            return Result('The airlock refuses to open. The automated'
+                    ' voice says "Hull breach beyond this door. Personnel'
+                    ' must be equipped for vacuum before entry"')
         else:
             return super(ToEngine, self).interact_without()
 
