@@ -10,6 +10,7 @@ import albow.menu
 from albow.resource import get_font, get_image
 from pygame.color import Color
 from pygame.rect import Rect
+from pygame.draw import lines
 from pygame import mouse
 
 from constants import BUTTON_SIZE
@@ -74,8 +75,9 @@ class BoomLabel(albow.controls.Label):
 class BoomButton(BoomLabel):
 
     def __init__(self, text, action, screen):
-        super(BoomLabel, self).__init__(text, font=get_font(20, 'Vera.ttf'))
+        super(BoomLabel, self).__init__(text, font=get_font(20, 'Vera.ttf'), margin=4)
         self.bg_color = (0, 0, 0)
+        self._frame_color = Color(50, 50, 50)
         self.action = action
         self.screen = screen
 
@@ -85,6 +87,15 @@ class BoomButton(BoomLabel):
 
     def mouse_move(self, event):
         self.screen.state.highlight_override = True
+
+    def draw(self, surface):
+        super(BoomButton, self).draw(surface)
+        r = surface.get_rect()
+        w = 2
+        top, bottom, left, right = r.top, r.bottom, r.left, r.right
+        lines(surface, self._frame_color, False, [
+            (left, bottom), (left, top), (right-w, top), (right-w, bottom)
+            ], w)
 
 
 class MessageDialog(BoomLabel, CursorWidget):
