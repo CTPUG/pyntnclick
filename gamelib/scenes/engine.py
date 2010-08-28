@@ -129,6 +129,7 @@ class Engine(Scene):
         if self.things['engine.cryo_containers'].get_data('filled') \
                 and  self.things['engine.superconductor'].get_data('working'):
             self.set_data('engine online', True)
+            self.remove_thing(self.things['engine.engines.8'])
             self.add_thing(Engines())
             return make_jim_dialog("The engines are now operational. You have"
                                    "done a satisfactory job, Prisoner %s." % PLAYER_ID,
@@ -152,6 +153,9 @@ class Engines(Thing):
 
     def is_interactive(self):
         return False
+
+    def get_description(self):
+        return "All systems are go! Or at least the engines are."
 
 
 class CanOpener(Item):
