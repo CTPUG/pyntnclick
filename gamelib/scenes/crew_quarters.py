@@ -39,7 +39,7 @@ class CrewQuarters(Scene):
 
 class ToMap(Door):
 
-    SCENE = "crew"
+    SCENE = "crew_quarters"
 
     INTERACTS = {
         "door": InteractNoImage(233, 252, 125, 181),

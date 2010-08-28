@@ -31,7 +31,7 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Get the titanium leg.
         self.interact_thing('cryo.unit.1')
-        self.assertEquals('cryo_detail', self.state.current_detail.name)
+        self.assert_current_detail('cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg')
         self.interact_thing('cryo.titanium_leg')
         self.assert_detail_thing('cryo.titanium_leg', False)
@@ -50,11 +50,13 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('cans_available', 3, 'mess.cans')
         self.interact_thing('mess.cans')
         self.assert_inventory_item('full_can.0')
+        self.assert_game_data('cans_available', 2, 'mess.cans')
         self.interact_thing('mess.cans')
         self.assert_inventory_item('full_can.1')
+        self.assert_game_data('cans_available', 1, 'mess.cans')
         self.interact_thing('mess.cans')
         self.assert_inventory_item('full_can.2')
-        self.assert_game_data('cans_available', 0, 'mess.cans')
+        self.assert_scene_thing('mess.cans', False)
 
         # Bash one of the cans.
         self.assert_item_exists('dented_can.0', False)
@@ -77,12 +79,17 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
         self.interact_thing('cryo.pipe.left', 'machete')
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
-        self.assert_inventory_item('cryo_pipe.0')
+        self.assert_inventory_item('tube_fragment.0')
 
-        self.assert_game_data('fixed', True, 'cryo.pipe.right')
-        self.interact_thing('cryo.pipe.right', 'machete')
-        self.assert_game_data('fixed', False, 'cryo.pipe.right')
-        self.assert_inventory_item('cryo_pipe.1')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.top')
+        self.interact_thing('cryo.pipe.right.top', 'machete')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.assert_inventory_item('tube_fragment.1')
+
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.bottom')
+        self.interact_thing('cryo.pipe.right.bottom', 'machete')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.bottom')
+        self.assert_inventory_item('tube_fragment.2')
 
         # Go to the mess.
         self.move_to('mess')
@@ -91,4 +98,117 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('status', 'blocked', 'mess.tubes')
         self.interact_thing('mess.tubes', 'machete')
         self.assert_game_data('status', 'broken', 'mess.tubes')
+
+        # Go to the bridge.
+        self.move_to('bridge')
+
+        # Get the stethoscope.
+        self.interact_thing('bridge.stethoscope')
+        self.assert_inventory_item('stethoscope')
+        self.assert_scene_thing('bridge.stethoscope', False)
+
+        # Get the superconductor.
+        self.interact_thing('bridge.massagechair_base')
+        self.assert_current_detail('chair_detail')
+        self.interact_thing('bridge.superconductor')
+        self.assert_inventory_item('superconductor')
+        self.assert_detail_thing('bridge.superconductor', False)
+        self.close_detail()
+
+        # Go to the crew quarters.
+        self.move_to('crew_quarters')
+
+        # Get the fishbowl.
+        self.assert_game_data('has_bowl', True, 'crew.fishbowl')
+        self.interact_thing('crew.fishbowl')
+        self.assert_game_data('has_bowl', False, 'crew.fishbowl')
+        self.assert_inventory_item('fishbowl')
+
+        # Crack the safe.
+        self.assert_game_data('is_cracked', False, 'crew.safe')
+        self.interact_thing('crew.safe', 'stethoscope')
+        self.assert_game_data('is_cracked', True, 'crew.safe')
+
+        # Get the duct tape.
+        self.assert_game_data('has_tape', True, 'crew.safe')
+        self.interact_thing('crew.safe')
+        self.assert_game_data('has_tape', False, 'crew.safe')
+        self.assert_inventory_item('duct_tape')
+
+        # Make the helmet.
+        self.interact_item('fishbowl', 'duct_tape')
+        self.assert_inventory_item('helmet')
+        self.assert_inventory_item('fishbowl', False)
+
+        # Go to the engine room.
+        self.move_to('engine')
+
+        # Get the can opener.
+        self.interact_thing('engine.canopener')
+        self.assert_inventory_item('canopener')
+        self.assert_scene_thing('engine.canopener', False)
+
+        # Open the cans.
+        self.interact_item('full_can.2', 'canopener')
+        self.assert_inventory_item('full_can.2', False)
+        self.assert_inventory_item('empty_can.0')
+
+        self.interact_item('full_can.0', 'canopener')
+        self.assert_inventory_item('full_can.0', False)
+        self.assert_inventory_item('empty_can.1')
+
+        self.interact_item('dented_can.0', 'canopener')
+        self.assert_inventory_item('dented_can.0', False)
+        self.assert_inventory_item('empty_can.2')
+
+        # Go to the machine room.
+        self.move_to('machine')
+
+        # Weld pipes and cans.
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'tube_fragment.0')
+        self.assert_inventory_item('tube_fragment.0', False)
+        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'empty_can.1')
+        self.assert_inventory_item('empty_can.1', False)
+        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.button')
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_inventory_item('cryo_pipes_one')
+
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'tube_fragment.2')
+        self.assert_inventory_item('tube_fragment.2', False)
+        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'empty_can.2')
+        self.assert_inventory_item('empty_can.2', False)
+        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.button')
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_inventory_item('cryo_pipes_one', False)
+        self.assert_inventory_item('cryo_pipes_two')
+
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'tube_fragment.1')
+        self.assert_inventory_item('tube_fragment.1', False)
+        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.slot', 'empty_can.0')
+        self.assert_inventory_item('empty_can.0', False)
+        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.interact_thing('machine.welder.button')
+        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_inventory_item('cryo_pipes_two', False)
+        self.assert_inventory_item('cryo_pipes_three')
+
+        # Go to the mess.
+        self.move_to('mess')
+
+        # Replace the tubes.
+        self.interact_thing('mess.tubes', 'cryo_pipes_three')
+        self.assert_inventory_item('cryo_pipes_three', False)
+        self.assert_game_data('status', 'replaced', 'mess.tubes')
+
+        # Tape up the tubes.
+        self.interact_thing('mess.tubes', 'duct_tape')
+        self.assert_game_data('status', 'fixed', 'mess.tubes')
 

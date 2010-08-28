@@ -54,6 +54,9 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_current_scene(self, scene):
         self.assertEquals(scene, self.state.current_scene.name)
 
+    def assert_current_detail(self, scene):
+        self.assertEquals(scene, self.state.current_detail.name)
+
     def interact_thing(self, thing, item=None):
         item_obj = None
         if item is not None:

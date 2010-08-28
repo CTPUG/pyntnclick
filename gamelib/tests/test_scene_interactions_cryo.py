@@ -91,54 +91,69 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         "Touch the unchopped cryopipes with the hand. No change."
 
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
-        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.bottom')
 
         self.assertNotEquals(None, self.interact_thing('cryo.pipe.left'))
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.top'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.bottom'))
 
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
-        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.bottom')
 
     def test_pipes_chopped_hand(self):
         "Touch the chopped cryopipes with the hand. No change."
 
         self.set_game_data('fixed', False, 'cryo.pipe.left')
-        self.set_game_data('fixed', False, 'cryo.pipe.right')
+        self.set_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.set_game_data('fixed', False, 'cryo.pipe.right.bottom')
 
         self.assertEquals(None, self.interact_thing('cryo.pipe.left'))
-        self.assertEquals(None, self.interact_thing('cryo.pipe.right'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right.top'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right.bottom'))
 
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
-        self.assert_game_data('fixed', False, 'cryo.pipe.right')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.bottom')
 
     def test_pipes_unchopped_machete(self):
         "Touch the unchopped cryopipes with the machete. They chop."
 
         self.state.add_inventory_item('machete')
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
-        self.assert_game_data('fixed', True, 'cryo.pipe.right')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', True, 'cryo.pipe.right.bottom')
         self.assert_item_exists('cryo_pipe.0', False)
         self.assert_item_exists('cryo_pipe.1', False)
+        self.assert_item_exists('cryo_pipe.2', False)
 
         self.assertNotEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right', 'machete'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.top', 'machete'))
+        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
 
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
-        self.assert_game_data('fixed', False, 'cryo.pipe.right')
-        self.assert_item_exists('cryo_pipe.0')
-        self.assert_item_exists('cryo_pipe.1')
-        self.assert_inventory_item('cryo_pipe.0', True)
-        self.assert_inventory_item('cryo_pipe.1', True)
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.bottom')
+        self.assert_item_exists('tube_fragment.0')
+        self.assert_item_exists('tube_fragment.1')
+        self.assert_item_exists('tube_fragment.2')
+        self.assert_inventory_item('tube_fragment.0', True)
+        self.assert_inventory_item('tube_fragment.1', True)
+        self.assert_inventory_item('tube_fragment.2', True)
 
     def test_pipes_chopped_machete(self):
         "Touch the chopped cryopipes with the machete. No change."
 
         self.state.add_inventory_item('machete')
         self.set_game_data('fixed', False, 'cryo.pipe.left')
-        self.set_game_data('fixed', False, 'cryo.pipe.right')
+        self.set_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.set_game_data('fixed', False, 'cryo.pipe.right.bottom')
 
         self.assertEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
-        self.assertEquals(None, self.interact_thing('cryo.pipe.right', 'machete'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right.top', 'machete'))
+        self.assertEquals(None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
 
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
-        self.assert_game_data('fixed', False, 'cryo.pipe.right')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.top')
+        self.assert_game_data('fixed', False, 'cryo.pipe.right.bottom')

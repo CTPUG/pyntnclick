@@ -156,7 +156,7 @@ class ToMachine(DoorThing):
 class ToCrew(DoorThing):
     "Way to crew quarters."
 
-    NAME = "map.tocrew"
+    NAME = "map.tocrew_quarters"
     DEST = "crew_quarters"
 
     INTERACTS = {
