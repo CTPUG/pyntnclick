@@ -137,6 +137,9 @@ class MassageChair(Thing):
                    "It's massaging a skeleton."
         return "The chair won't work any more, it has no power."
 
+    def is_interactive(self):
+        return False
+
 
 class MassageChairBase(Thing):
     "The captain's massage chair, contains superconductor"
