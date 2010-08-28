@@ -272,7 +272,7 @@ class JimPanel(Thing):
 
     def get_description(self):
         if self.scene.get_data('ai panel') == 'closed':
-            return "The sign reads 'Warning. Authorized Techinicians Only'"
+            return "The sign reads 'Warning: Authorized Techinicians Only'"
 
     def interact_without(self):
         if self.scene.get_data('ai status') == 'online':

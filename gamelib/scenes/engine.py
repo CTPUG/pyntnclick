@@ -31,7 +31,7 @@ class Engine(Scene):
         self.add_thing(ArrowsRight())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
-            "Dead. I think those cans were passed their sell-by date.",
+            "Dead. I think those cans were past their sell-by date.",
             (
                 (594, 387, 45, 109),
                 (549, 479, 60, 55),
@@ -44,7 +44,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.computer_console', 3,
-            "A computer console. It seems dead",
+            "A computer console. It seems dead.",
             (
                 (293, 287, 39, 36),
             )
@@ -67,7 +67,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.empty_cans', 7,
-            "Empty Chocolate-Covered-Bacon Cans? Poor guy, he must have found them irresistible.",
+            "Empty chocolate-covered bacon cans? Poor guy, he must have found them irresistible.",
             (
                 (562, 422, 30, 31),
             )
@@ -79,7 +79,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.laser_cutter', 9,
-            "A burned out laser cutter. It may be responsible for the hole in the floor.",
+            "A burned-out laser cutter. It may be responsible for the hole in the floor.",
             (
                 (120, 466, 115, 67),
             )
@@ -117,7 +117,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.exit_sign', 13,
-            "It's one of those glow-in-the-dark exit signs that you see everywhere",
+            "It's one of those glow-in-the-dark exit signs that you see everywhere.",
             (
                 (681, 322, 80, 33),
             )
@@ -125,7 +125,7 @@ class Engine(Scene):
 
     def enter(self):
         return Result("You enter the engine room. Even if there wasn't a vacuum "
-                      "it would be errily quiet.")
+                      "it would be eerily quiet.")
 
 class CanOpener(Item):
     INVENTORY_IMAGE = 'can_opener.png'
@@ -147,7 +147,7 @@ class CanOpenerThing(Thing):
     def interact_without(self):
         self.state.add_inventory_item('canopener')
         self.scene.remove_thing(self)
-        return Result("You pick up the can opener. It looks brand new, "
+        return Result("You pick up the can opener. It looks brand new; "
                       "the vacuum has kept it in perfect condition.")
 
 
@@ -184,7 +184,7 @@ class SuperconductorSocket(Thing):
         if self.get_data('present') and not self.get_data('working'):
             return Result("It's wedged in there pretty firmly, it won't come out.")
         elif self.get_data('working'):
-            return Result("You decide that working engines are more important than having a shiny superconductor")
+            return Result("You decide that working engines are more important than having a shiny superconductor.")
         Thing.interact_without()
 
     def interact_with_machete(self, item):
@@ -262,7 +262,7 @@ class CryoContainerReceptacle(Thing):
         self.state.current_scene.things['engine.cryo_containers'] \
                   .set_data('filled', True)
         return Result("You fill the reservoirs. "
-                      "It seems the detergent bottle was just big enough")
+                      "It seems the detergent bottle was just big enough.")
 
 
 class CoolingPipes(Thing):
@@ -338,8 +338,8 @@ class PowerLines(Thing):
     def get_description(self):
         if self.state.current_scene.things['engine.superconductor'] \
                .get_data('fixed'):
-            return "Power lines. They are delivering power to the engines"
-        return "Power lines. It looks like they aren't working correctly"
+            return "Power lines. They are delivering power to the engines."
+        return "Power lines. It looks like they aren't working correctly."
 
     def is_interactive(self):
         return False
