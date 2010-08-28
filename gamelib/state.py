@@ -91,6 +91,9 @@ class State(object):
         # scene transion helpers
         self.do_check = None
         self.old_pos = None
+        # current thing
+        self.current_thing = None
+        self.highlight_override = False
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
@@ -112,16 +115,17 @@ class State(object):
     def set_current_scene(self, name):
         old_scene = self.current_scene
         self.current_scene = self.scenes[name]
+        self.current_thing = None
         if old_scene and old_scene != self.current_scene:
             self.previous_scene = old_scene
             self.set_do_enter_leave()
 
     def set_current_detail(self, name):
+        self.current_thing = None
         if name is None:
             self.current_detail = None
         else:
             self.current_detail = self.detail_views[name]
-            self.current_scene._current_thing = None
             return self.current_detail.get_detail_size()
 
     def add_inventory_item(self, name):
@@ -187,12 +191,12 @@ class State(object):
             self.do_check = None
             # Fix descriptions, etc.
             if self.old_pos:
-                self.current_scene.mouse_move(self.tool, self.old_pos, screen)
+                self.current_scene.update_current_thing(self.old_pos)
             return self.current_scene.enter()
         raise RuntimeError('invalid do_check value %s' % self.do_check)
 
-    def mouse_move(self, pos, screen):
-        self.current_scene.mouse_move(self.tool, pos, screen)
+    def mouse_move(self, pos):
+        self.current_scene.mouse_move(pos)
         # So we can do sensible things on enter and leave
         self.old_pos = pos
 
@@ -200,8 +204,8 @@ class State(object):
         """Flag that we need to run the enter loop"""
         self.do_check = constants.LEAVE
 
-    def mouse_move_detail(self, pos, screen):
-        self.current_detail.mouse_move(self.tool, pos, screen)
+    def mouse_move_detail(self, pos):
+        self.current_detail.mouse_move(pos)
 
 
 class StatefulGizmo(object):
@@ -251,7 +255,6 @@ class Scene(StatefulGizmo):
             self._background = get_image(self.FOLDER, self.BACKGROUND)
         else:
             self._background = None
-        self._current_thing = None
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -265,7 +268,8 @@ class Scene(StatefulGizmo):
         self.leave()
 
     def _get_description(self):
-        text = self._current_thing and self._current_thing.get_description()
+        text = (self.state.current_thing and
+                self.state.current_thing.get_description())
         if text is None:
             return None
         label = BoomLabel(text)
@@ -305,8 +309,8 @@ class Scene(StatefulGizmo):
 
         Returns a Result object to provide feedback to the player.
         """
-        if self._current_thing is not None:
-            return self._current_thing.interact(item)
+        if self.state.current_thing is not None:
+            return self.state.current_thing.interact(item)
 
     def animate(self):
         """Animate all the things in the scene.
@@ -324,24 +328,23 @@ class Scene(StatefulGizmo):
     def leave(self):
         return None
 
-    def mouse_move(self, item, pos, screen):
+    def update_current_thing(self, pos):
+        if self.state.current_thing is not None:
+            if not self.state.current_thing.contains(pos):
+                self.state.current_thing.leave()
+                self.state.current_thing = None
+        for thing in self.things.itervalues():
+            if thing.contains(pos):
+                thing.enter(self.state.tool)
+                self.state.current_thing = thing
+                break
+
+    def mouse_move(self, pos):
         """Call to check whether the cursor has entered / exited a thing.
 
         Item may be an item in the list of items or None for the hand.
         """
-        if self._current_thing is not None:
-            if self._current_thing.contains(pos):
-                screen.cursor_highlight(self._current_thing.is_interactive())
-                return
-            else:
-                self._current_thing.leave()
-                self._current_thing = None
-        for thing in self.things.itervalues():
-            if thing.contains(pos):
-                thing.enter(item)
-                self._current_thing = thing
-                break
-        screen.cursor_highlight(self._current_thing is not None)
+        self.update_current_thing(pos)
 
     def get_detail_size(self):
         return self._background.get_size()

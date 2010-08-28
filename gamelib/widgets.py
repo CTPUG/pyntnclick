@@ -49,9 +49,7 @@ class BoomButton(BoomLabel):
         self.screen.state_widget.mouse_move(event)
 
     def mouse_move(self, event):
-        pos = self.parent.global_to_local(event.pos)
-        if self.rect.collidepoint(pos):
-            self.screen.cursor_highlight(True)
+        self.screen.state.highlight_override = True
 
 
 class MessageDialog(BoomLabel, CursorWidget):
@@ -83,3 +81,6 @@ class MessageDialog(BoomLabel, CursorWidget):
 
     def mouse_down(self, event):
         self.dismiss()
+
+    def cursor_highlight(self):
+        return False

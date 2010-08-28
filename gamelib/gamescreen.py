@@ -85,14 +85,15 @@ class StateWidget(Widget):
         handle_result(result, self)
 
     def mouse_move(self, event):
+        self.state.highlight_override = False
         if not self.subwidgets:
             self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.mouse_move(pos, self.screen)
+        self.state.highlight_override = False
+        self.state.mouse_move(pos)
 
     def show_message(self, message, style=None):
-        self.parent.cursor_highlight(False)
         # Display the message as a modal dialog
         MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
@@ -108,7 +109,6 @@ class StateWidget(Widget):
         self.detail.set_image_rect(Rect(0, 0, w, h))
         self.add_centered(self.detail)
         self.state.do_enter_detail()
-        self.parent.cursor_highlight(False)
 
     def clear_detail(self):
         """Hide the detail view"""
@@ -153,7 +153,8 @@ class DetailWindow(Widget):
         self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.mouse_move_detail(self.global_to_local(pos), self.screen)
+        self.state.highlight_override = False
+        self.state.mouse_move_detail(self.global_to_local(pos))
 
     def show_message(self, message, style=None):
         self.parent.show_message(message, style)
@@ -227,8 +228,3 @@ class GameScreen(Screen, CursorWidget):
     def begin_frame(self):
         if self.running:
             self.state_widget.animate()
-
-    def mouse_delta(self, event):
-        CursorWidget.mouse_delta(self, event)
-        if not self.state_widget.rect.collidepoint(event.pos):
-            self.cursor_highlight(False)

@@ -57,11 +57,11 @@ class CursorWidget(Widget):
     """Mix-in widget to ensure that mouse_move is propogated to parents"""
 
     cursor = HAND
+    _cursor_group = RenderUpdates()
+    _loaded_cursor = None
 
     def __init__(self, screen, *args, **kwargs):
         Widget.__init__(self, *args, **kwargs)
-        self._cursor_group = RenderUpdates()
-        self._loaded_cursor = None
         self.screen = screen
 
     def enter_screen(self):
@@ -70,24 +70,13 @@ class CursorWidget(Widget):
     def leave_screen(self):
         pygame.mouse.set_visible(1)
 
-    def draw_all(self, _surface):
-        Widget.draw_all(self, _surface)
-        item = self.screen.state.tool
-        if item is None:
-            self.set_cursor(HAND)
-        else:
-            self.set_cursor(item.CURSOR)
-        surface = self.get_root().surface
-        if self.cursor != self._loaded_cursor:
-            self._loaded_cursor = self.cursor
-            if self.cursor is None:
-                pygame.mouse.set_visible(1)
-                self._cursor_group.empty()
-            else:
-                pygame.mouse.set_visible(0)
-                self.cursor.load()
-                self._cursor_group.empty()
-                self._cursor_group.add(self.cursor)
+    def draw_all(self, surface):
+        Widget.draw_all(self, surface)
+        self.draw_cursor(self.get_root().surface)
+
+    def draw_cursor(self, surface):
+        self.set_cursor(self.screen.state.tool)
+        self.cursor.set_highlight(self.cursor_highlight())
         if self.cursor is not None:
             self._cursor_group.update()
             self._cursor_group.draw(surface)
@@ -95,8 +84,27 @@ class CursorWidget(Widget):
     def mouse_delta(self, event):
         self.invalidate()
 
-    def set_cursor(self, cursor):
-        CursorWidget.cursor = cursor
+    @classmethod
+    def set_cursor(cls, item):
+        if item is None:
+            cls.cursor = HAND
+        else:
+            cls.cursor = item.CURSOR
+        if cls.cursor != cls._loaded_cursor:
+            cls._loaded_cursor = cls.cursor
+            if cls.cursor is None:
+                pygame.mouse.set_visible(1)
+                cls._cursor_group.empty()
+            else:
+                pygame.mouse.set_visible(0)
+                cls.cursor.load()
+                cls._cursor_group.empty()
+                cls._cursor_group.add(cls.cursor)
 
-    def cursor_highlight(self, enable):
-        self.cursor.set_highlight(enable)
+    def cursor_highlight(self):
+        if self.screen.state.highlight_override:
+            return True
+        current_thing = self.screen.state.current_thing
+        if current_thing:
+            return current_thing.is_interactive()
+        return False
