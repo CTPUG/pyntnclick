@@ -153,8 +153,6 @@ class Tubes(Thing):
 
     INITIAL_DATA = {
         "status": "blocked",
-        "pipes_replaced": 0,
-        "fixed": False,
         }
 
     def get_description(self):
@@ -162,6 +160,8 @@ class Tubes(Thing):
             return "The broccoli seems to have become entangled with something."
         elif self.get_data("status") == "broken":
             return "These broken pipes look important."
+        elif self.get_data("status") == "replaced":
+            return "The pipes have been repaired but are the repairs aren't airtight, yet"
         else:
             return "Your fix looks like it's holding up well."
 
@@ -176,29 +176,28 @@ class Tubes(Thing):
                           soundfile='chopping.ogg')
         elif self.get_data("status") == "broken":
             return Result("It looks broken enough already.")
+        elif self.get_data("status") == "replaced":
+            return Result("Cutting holes won't repair the leaks.")
         else:
             return Result("After all that effort fixing it, chopping it to "
                           "bits doesn't seem very smart.")
 
-    def interact_with_pipe(self, item):
+    def interact_with_cryo_pipes_three(self, item):
         if self.get_data("status") == "blocked":
             return Result("It would get lost in the fronds.")
         else:
-            self.data['pipes_replaced'] += 1
             self.state.remove_inventory_item(item.name)
-            return Result({
-                    1: "The pipe slots neatly into place, but doesn't make an airtight seal.",
-                    2: "This pipe is a little looser than the first. It definitely needs to be taped up.",
-                    3: "The final pipe fits snugly, but won't hold under pressure.",
-                    }[self.get_data('pipes_replaced')])
+            self.set_data('status', 'replaced')
+            # TODO: An interact image for fixed but untaped pipes
+            return Result(
+                "The pipes slot neatly into place, but don't make an airtight seal."
+            )
 
     def interact_with_duct_tape(self, item):
         if self.get_data("status") == "broken":
             return Result("It would get lost in the fronds.")
-        elif self.get_data("fixed"):
+        elif self.get_data("status") == 'fixed':
             return Result("There's quite enough tape on the ducting already.")
-        elif self.get_data("pipes_replaced") < 3:
-            return Result("All the pipes need to be in place before they can be taped up.")
         else:
             self.set_data("fixed", True)
             self.set_data("status", "fixed")
@@ -207,6 +206,7 @@ class Tubes(Thing):
             return Result("It takes quite a lot of tape, but eventually everything is"
                           " airtight and ready to hold pressure. Who'd've thought duct"
                           " tape could actually be used to tape ducts?")
+
 
 class DetergentThing(Thing):
 

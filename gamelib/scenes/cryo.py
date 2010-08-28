@@ -41,7 +41,8 @@ class Cryo(Scene):
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
         self.add_thing(CryoPipeLeft())
-        self.add_thing(CryoPipeRight())
+        self.add_thing(CryoPipeRightTop())
+        self.add_thing(CryoPipeRightBottom())
 
         # Flavour items
         # pipes
@@ -232,13 +233,23 @@ class CryoPipeLeft(CryoPipeBase):
         }
 
 
-class CryoPipeRight(CryoPipeBase):
-    "Left cryo pipe."
+class CryoPipeRightTop(CryoPipeBase):
+    "Right cryo pipe, top."
 
-    NAME = "cryo.pipe.right"
+    NAME = "cryo.pipe.right.top"
     INTERACTS = {
-        "fixed": InteractImage(645, 211, "intact_cryo_pipe_right.png"),
-        "chopped": InteractNoImage(643, 199, 38, 233),
+        "fixed": InteractImage(645, 212, "intact_cryo_pipe_right_top.png"),
+        "chopped": InteractNoImage(643, 199, 31, 111),
+        }
+
+
+class CryoPipeRightBottom(CryoPipeBase):
+    "Right cryo pipe, bottom."
+
+    NAME = "cryo.pipe.right.bottom"
+    INTERACTS = {
+        "fixed": InteractImage(644, 333, "intact_cryo_pipe_right_bottom.png"),
+        "chopped": InteractNoImage(644, 333, 31, 107),
         }
 
 
