@@ -43,6 +43,7 @@ class Cryo(Scene):
         self.add_thing(CryoPipeLeft())
         self.add_thing(CryoPipeRightTop())
         self.add_thing(CryoPipeRightBottom())
+        self.add_thing(CryoPools())
 
         # Flavour items
         # pipes
@@ -59,14 +60,6 @@ class Cryo(Scene):
                 #(756, 127, 52, 393),
                 )))
         self.add_thing(UncuttableCryoPipes())
-
-        # leaks
-        self.add_thing(GenericDescThing('cryo.leaks', 2,
-            "Fluid leaks disturbingly from the bulkheads",
-            (
-                (444, 216, 125, 67),
-                (44, 133, 74, 107),
-                )))
 
         # cryo units
         self.add_thing(GenericCryoUnit(2,
@@ -423,6 +416,7 @@ class TitaniumLegThing(Thing):
     def get_description(self):
         return "This femur looks synthetic."
 
+
 class PlaqueThing(Thing):
     "Plaque on the detailed cryo chamber"
 
@@ -439,6 +433,40 @@ class PlaqueThing(Thing):
 
     def get_description(self):
         return "'Prisoner 98cc-764e646391ee. War crimes. 45 years."
+
+
+class FullBottle(Item):
+    INVENTORY_IMAGE = 'triangle.png'
+    CURSOR = CursorSprite('triangle.png')
+
+
+class CryoPools(Thing):
+    "Handy for cooling engines"
+
+    NAME = 'cryo.pool'
+
+    INTERACTS = {
+        'pools': InteractRectUnion((
+                (444, 216, 125, 67),
+                (44, 133, 74, 107),
+                (485, 396, 97, 34),
+        )),
+    }
+
+    INITIAL = 'pools'
+
+    def get_description(self):
+        return "Coolant leaks disturbingly from the bulkheads"
+
+    def interact_without(self):
+        return Result("It's gooey")
+
+    def interact_with_detergent_bottle(self, item):
+        full = FullBottle('full_detergent_bottle')
+        self.state.add_item(full)
+        self.state.replace_inventory_item(item.name, full.name)
+        return Result("You scoop up some coolant and fill the bottle")
+
 
 class CryoCompDetail(Scene):
 

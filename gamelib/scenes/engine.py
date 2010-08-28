@@ -249,6 +249,18 @@ class CryoContainerReceptacle(Thing):
     def get_description(self):
         return "The receptacles for the coolant reservoirs."
 
+    def interact_without(self):
+        return Result("You stick your finger in the receptacle. "
+                      "It almost gets stuck")
+
+    def interact_with_full_detergent_bottle(self, item):
+        # TODO: Show full tank interact
+        self.state.remove_inventory_item(item.name)
+        self.state.current_scene.things['engine.cryo_containers'] \
+                  .set_data('filled', True)
+        return Result("You fill the reservoirs. "
+                      "It seems the detergent bottle was just big enough")
+
 
 class CoolingPipes(Thing):
     NAME = 'engine.coolingpipes'
