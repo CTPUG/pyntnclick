@@ -161,9 +161,9 @@ class SuperconductorSocket(Thing):
     NAME = 'engine.superconductor'
 
     INTERACTS = {
-        'broken': InteractImage(565, 263, 'superconductor_broken.png'),
-        'removed': InteractNoImage(565, 263, 26, 39),
-        'fixed': InteractImage(565, 263, 'superconductor_fixed.png'),
+        'broken': InteractImage(553, 260, 'superconductor_broken.png'),
+        'removed': InteractImage(553, 260, 'superconductor_socket.png'),
+        'fixed': InteractImage(553, 260, 'superconductor_fixed.png'),
     }
 
     INITIAL = 'broken'
