@@ -177,3 +177,15 @@ class Door(Thing):
             "Waving that in the doorway does nothing. Try something else, perhaps?",
             ]))
 
+class BaseCamera(Thing):
+   "Base class for the camera puzzles"
+
+   INITIAL = 'camera'
+
+   def get_description(self):
+       return "A security camera watches over the room"
+
+   def interact_with_escher_poster(self, item):
+       # TODO
+       return Result("A very bad idea")
+

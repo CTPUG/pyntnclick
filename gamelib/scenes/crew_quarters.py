@@ -4,7 +4,8 @@ from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+                                          InteractAnimated, GenericDescThing,
+                                          BaseCamera)
 
 class CrewQuarters(Scene):
 
@@ -25,6 +26,9 @@ class CrewQuarters(Scene):
         self.add_thing(Safe())
         self.add_item(Fishbowl('fishbowl'))
         self.add_item(DuctTape('duct_tape'))
+        self.add_item(EscherPoster('escher_poster'))
+        self.add_thing(PosterThing())
+        self.add_thing(MonitorCamera())
         self.add_thing(GenericDescThing('crew.plant', 1,
             "The plant is doing surprisingly well for centuries of neglect",
             ((624, 215, 61, 108),)))
@@ -149,17 +153,42 @@ class DuctTape(Item):
     CURSOR = CursorSprite('duct_tape.png')
 
 
-class SafeDetail(Scene):
+class MonitorCamera(BaseCamera):
+    "A Camera pointing to JIM"
 
-    FOLDER = 'crew_quarters'
-    BACKGROUND = None # TODO
-    NAME = 'safe_detail'
+    NAME = 'crew.camera'
 
-    SIZE = (300, 300)
+    INTERACTS = {
+            'camera' : InteractImage(85, 97, 'camera_medium.png')
+            }
 
-    def __init__(self, state):
-        super(SafeDetail, self).__init__(state)
+
+class PosterThing(Thing):
+    "A innocent poster on the wall"
+
+    NAME = 'crew.poster'
+
+    INTERACTS = {
+        'poster': InteractImage(29, 166, 'triangle_poster.png'),
+    }
+
+    INITIAL = 'poster'
+
+    def interact_without(self):
+        self.state.add_inventory_item('escher_poster')
+        self.scene.remove_thing(self)
+        return Result("This poster will go nicely on your bedroom wall.")
+
+    def get_description(self):
+        return "A paradoxial poster hanges below the security camera"
+
+
+class EscherPoster(Item):
+    "A confusing poster to disable JIM"
+
+    INVENTORY_IMAGE = "triangle_poster.png"
+    CURSOR = CursorSprite('triangle_poster.png')
+    NAME = "escher_poster"
 
 
 SCENES = [CrewQuarters]
-DETAIL_VIEWS = [SafeDetail]

@@ -11,7 +11,8 @@ from gamelib.sound import get_current_playlist
 
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+                                          InteractAnimated, GenericDescThing,
+                                          BaseCamera)
 
 
 class Bridge(Scene):
@@ -42,6 +43,7 @@ class Bridge(Scene):
         self.add_item(Superconductor('superconductor'))
         self.add_item(Stethoscope('stethoscope'))
         self.add_thing(ToMap())
+        self.add_thing(MonitorCamera())
         self.add_thing(MassageChair())
         self.add_thing(MassageChairBase())
         self.add_thing(StethoscopeThing())
@@ -350,6 +352,16 @@ class CompDownButton(Thing):
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         self.state.detail_views[self.COMPUTER].set_data('log page', page+1)
         return Result(soundfile='beep550.ogg')
+
+
+class MonitorCamera(BaseCamera):
+    "A camera on the bridge"
+
+    NAME = "bridge.camera"
+
+    INTERACTS = {
+            'camera' : InteractImage(33, 192, 'camera_small.png')
+            }
 
 
 class BridgeCompDetail(Scene):
