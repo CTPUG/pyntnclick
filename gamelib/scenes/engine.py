@@ -196,6 +196,15 @@ class SuperconductorSocket(Thing):
             return Result("With leverage, the burned-out superconductor snaps out.")
 
     def interact_with_superconductor(self, item):
+        if self.get_data('present'):
+            return Result("It might help to remove the broken superconductor first")
+        else:
+            return Result("You plug in the superconductor, and feel a humm "
+                          "as things kick into life. "
+                          "Unfortunately, it's the wrong size for the socket "
+                          "and just falls out again when you let go.")
+
+    def interact_with_taped_superconductor(self, item):
         if not self.get_data('present'):
             self.set_interact('fixed')
             self.set_data('present', True)

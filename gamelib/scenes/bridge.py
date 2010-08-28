@@ -200,11 +200,25 @@ class StethoscopeThing(Thing):
                       "heart has stopped. Probably a while ago.")
 
 
+class TapedSuperconductor(Item):
+    "Used for connecting high-powered parts of the ship up"
+
+    INVENTORY_IMAGE = 'superconductor_taped.png'
+    CURSOR = CursorSprite('superconductor_taped_cursor.png')
+
+
 class Superconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
     INVENTORY_IMAGE = 'superconductor_fixed.png'
     CURSOR = CursorSprite('superconductor_fixed.png')
+
+    def interact_with_duct_tape(self, item, state):
+        taped_superconductor = TapedSuperconductor('taped_superconductor')
+        state.add_item(taped_superconductor)
+        state.replace_inventory_item(self.name, taped_superconductor.name)
+        return Result("You rip off a piece of duct tape and stick it on the superconductor. "
+                      "It almost sticks to itself, but you successfully avoid disaster.")
 
 
 class SuperconductorThing(Thing):
