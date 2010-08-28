@@ -1,45 +1,38 @@
 Art Credits
 ===========
 
-Anything without a credit is up for grabs. Chat to the Boomslang team
-before starting work on anything.
+Rooms
+-----
 
+Adrianna Pińska
+^^^^^^^^^^^^^^^
 
-Cryo Chambers
-^^^^^^^^^^^^^
+ * Cryo Chamber
+ * Bridge
+ * Mess
+ * Crew Quarters
+ * Map
+ * Splash Screen
+ * Ending Screen
 
-* Background: Adrianna Pinska
-* Items:
-
-  * Titanium Prostethic Leg:
-
-  * Hand Icon: From openclipart.org (http://www.openclipart.org/detail/58705) - drawn by voyeg3r
-
-Bridge
-^^^^^^
-* Background:
-
-
-Engine Room
+Simon Cross
 ^^^^^^^^^^^
-* Background:
 
+* Machine Room
+* Engine Room
 
-Machine Room
-^^^^^^^^^^^^
-* Background:
+Items
+-----
 
+* Open Clip Art.org:
 
-Mess Room
-^^^^^^^^^
-* Background: Adrianna Pinska
-* Items:
-  * Full Cans: Drawn Adrianna Pinska
-  * Dented Cans: Modified by Neil Muller
+  * `Hand Icon <http://www.openclipart.org/detail/58705>`_
+    - drawn by voyeg3r
+  * `Arrows <http://www.openclipart.org/detail/15193>`_
+    - drawn by mystica
 
+* All other art by Adrianna Pińska, with additions by:
 
-Map Room
-^^^^^^^^
-* Background:
-
-
+  * Simon Cross
+  * Neil Muller
+  * Stefano Rivera

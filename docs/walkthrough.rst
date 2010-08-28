@@ -28,6 +28,7 @@ Getting into the Engine Room
 #. There's a locked safe in the Crew Quarters, using the stethoscope,
    you can open it.
 #. Pick up the duct tape.
+#. Pick up the fish bowl.
 #. Attach some duct tape to the fish bowl, to turn it into a helmet.
 #. With the helmet in your inventory, you can gain access to the Engine
    Room.
@@ -37,29 +38,47 @@ Fixing the broken pipes
 
 #. Collect the can opener from the corpse in the Engine Room.
 #. Collect all 3 cans from the Mess, and open them.
-#. Use the welder in the Machine Room to turn them into a tin pipe.
 #. Use the machete on the two middle cryo-pipes in the Cryo Chamber to
-   cut out cryo-pipe sections.
-#. Attach the tin pipe and the two cryo-pipes to the broken pipes, and
-   seal the joints with duct tape.
+   cut out 3 cryo-pipe sections (the right hand pipe will yield two
+   sections.
+#. Place an open can and a pipe segment into the laser welder in the
+   Machine Room, and hit the power button. It will combine them into a
+   fixed pipes item in your inventory. Repeat twice.
+#. Attach the fixed pipe section to the broken pipes in the mess.
+#. Duct tape to seal the joins.
 #. The environmental system is now working.
 
 Repairing the superconductor
 ----------------------------
 
-#. There is a broken superconductor in the Engine Room.
-#. Get the manual from the corpse in the Machine Room.
-#. The wiring diagram suggests you can steal the massage chair's
-   superconductor.
-#. Pry it out with the machete.
-#. Pry the broken superconductor out of its socket, and insert the good
-   one.
+#. Pry the burned out superconductor in the Engine Room out, with the
+   machete.
+#. There is a working superconductor in the base of the massage chair,
+   in the Bridge. Pick it up.
+#. Put a piece of duct tape on the working superconductor it so it'll
+   stay in the socket.
+#. Plug it into the socket.
 
 Cooling the superconductor
 --------------------------
 
-#. Collect an empty dishwashing liquid bottle from the Mess.
-#. Fill it from an empty cryo-chamber in the Cryo Chamber.
-#. Place it in the cryo-fluid receptacle in the Engine Room.
-#. The engine is now working.
+#. Collect an empty dish washing liquid bottle from the cupboard in the
+   Mess.
+#. Fill it from a puddle of coolant in the Cryo Chamber.
+#. Patch the cracked pipe in the engine room with duct tape.
+#. Place the coolant in the reservoir's receptacle in the Engine Room.
+#. The engines are now running.
 
+Disabling JIM
+-------------
+
+#. Collect the Penrose Triangle poster from the Crew Quarters wall.
+#. Hold it up to a security camera. This will cause JIM to reboot.
+#. While he is disabled, unscrew the access panel in the Bridge with the
+   machete's tip, and destroy JIM's hardware.
+
+Sailing Away into the Sunset
+----------------------------
+
+#. You can now access the Navigation panel on the Bridge computer.
+#. Pick a destination, and enjoy the ride.
