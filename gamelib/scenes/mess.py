@@ -232,7 +232,7 @@ class DetergentThing(Thing):
         return Result("You pick up an empty dishwashing liquid bottle. You can't find any sponges")
 
     def get_description(self):
-        return "Empty plastic containers. They used to hold dish washer soap."
+        return "Empty plastic containers. They used to hold dishwasher soap."
 
 class DetergentBottle(Item):
     INVENTORY_IMAGE = 'triangle.png'
