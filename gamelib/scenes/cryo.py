@@ -172,7 +172,7 @@ class CryoPipeBase(Thing):
                 self.state.current_scene.set_data('vandalism_warn', False)
                 responses.append(make_jim_dialog(
                     ("Prisoner %s. Vandalism is an offence punishable by a "
-                     "minimum of an additional 6 months to your sentence"
+                     "minimum of an additional 6 months to your sentence."
                     ) % PLAYER_ID, self.state))
             return responses
 
@@ -187,7 +187,7 @@ class CryoPipeBase(Thing):
     def get_description(self):
         if self.get_data('fixed'):
             return "These pipes carry cooling fluid to empty cryo units."
-        return "There used to be a pipe carrying cooling fluid here"
+        return "There used to be a pipe carrying cooling fluid here."
 
 
 class UncuttableCryoPipes(Thing):
@@ -313,8 +313,8 @@ class GenericCryoUnit(GenericDescThing):
 
     def interact_with_titanium_leg(self, item):
         return Result(random.choice([
-                "You bang on the chamber with the titanium femur. Nothing much happens",
-                "Hitting the cryo unit with the femur doesn't achieve anything",
+                "You bang on the chamber with the titanium femur. Nothing much happens.",
+                "Hitting the cryo unit with the femur doesn't achieve anything.",
                 "You hit the chamber with the femur. Nothing happens.",
                 ]), soundfile="clang2.ogg")
 
@@ -439,7 +439,7 @@ class PlaqueThing(Thing):
     INITIAL = "plaque"
 
     def interact_without(self):
-        return Result("The plaque is welded to the unit. You can't shift it")
+        return Result("The plaque is welded to the unit. You can't shift it.")
 
     def get_description(self):
         return "'Prisoner 98CC-764E646391EE. War crimes. 45 years."
@@ -466,7 +466,7 @@ class CryoPools(Thing):
     INITIAL = 'pools'
 
     def get_description(self):
-        return "Coolant leaks disturbingly from the bulkheads"
+        return "Coolant leaks disturbingly from the bulkheads."
 
     def interact_without(self):
         return Result("It's gooey")
@@ -475,7 +475,7 @@ class CryoPools(Thing):
         full = FullBottle('full_detergent_bottle')
         self.state.add_item(full)
         self.state.replace_inventory_item(item.name, full.name)
-        return Result("You scoop up some coolant and fill the bottle")
+        return Result("You scoop up some coolant and fill the bottle.")
 
 
 class CryoCompDetail(Scene):
