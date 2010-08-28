@@ -10,6 +10,7 @@ Specific:
 Cleanups:
   * Clean-up finding and loading of speech strings.
   * Move interacts out into their own module?
+  * Fix thing.enter being called multiple times without leaving
 
 Artwork:
   * Can Pipe
