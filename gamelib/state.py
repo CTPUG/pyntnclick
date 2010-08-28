@@ -164,6 +164,14 @@ class State(object):
     def interact_detail(self, pos):
         return self.current_detail.interact(self.tool, pos)
 
+    def do_enter_detail(self):
+        if self.current_detail:
+            self.current_detail.enter()
+
+    def do_leave_detail(self):
+        if self.current_detail:
+            self.current_detail.leave()
+
     def animate(self):
         if not self.do_check:
             return self.current_scene.animate()

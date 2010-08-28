@@ -106,11 +106,13 @@ class StateWidget(Widget):
         w, h = self.state.set_current_detail(detail)
         self.detail.set_image_rect(Rect(0, 0, w, h))
         self.add_centered(self.detail)
+        self.state.do_enter_detail()
         self.parent.cursor_highlight(False)
 
     def clear_detail(self):
         """Hide the detail view"""
         self.remove(self.detail)
+        self.state.do_leave_detail()
         self.state.set_current_detail(None)
 
 
