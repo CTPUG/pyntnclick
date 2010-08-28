@@ -33,6 +33,8 @@ class Map(Scene):
         self.add_thing(ToEngine())
         self.add_thing(ToMachine())
         self.add_thing(ToCrew())
+        self.add_thing(InaccessibleArea())
+        self.add_thing(HydroponicsArea())
 
     def enter(self):
         if self.get_data('implant'):
@@ -168,6 +170,44 @@ class ToCrew(DoorThing):
     }
 
     INITIAL = 'door'
+
+
+class InaccessibleArea(Thing):
+    NAME = 'map.inaccessible'
+
+    INTERACTS = {
+        'areas': InteractRectUnion((
+            (207, 227, 39, 63),
+            (256, 225, 35, 64),
+            (259, 322, 34, 64),
+            (514, 380, 58, 66),
+            (607, 377, 60, 70),
+        ))
+    }
+
+    INITIAL = 'areas'
+
+    def interact_without(self):
+        return Result("You look in the door, but just see empty space, "
+                      "that room appears to be missing.")
+
+
+class HydroponicsArea(Thing):
+    NAME = 'map.hydroponics'
+
+    INTERACTS = {
+        'areas': InteractRectUnion((
+            (314, 263, 73, 81),
+            (313, 138, 125, 22),
+        ))
+    }
+
+    INITIAL = 'areas'
+
+    def interact_without(self):
+        return Result("The find the door, but it's lying on the floor in the passage. "
+                      "It's been pushed out by a massive wild broccoli. "
+                      "You won't be going in there, this centuary.")
 
 
 SCENES = [Map]
