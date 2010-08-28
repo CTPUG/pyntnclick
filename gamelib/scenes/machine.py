@@ -272,19 +272,17 @@ class ManualThing(Thing):
     NAME = "machine.manual"
 
     INTERACTS = {
-        "manual": InteractNoImage(434, 496, 66, 34), # TODO: replace with manual
-        "empty": InteractNoImage(434, 496, 66, 34),
+        "manual": InteractImage(432, 493, "manual_on_floor.png"),
     }
 
     INITIAL = "manual"
 
     def interact_without(self):
-        if self.current_interact is self.interacts["manual"]:
-            self.state.add_inventory_item("manual")
-            self.set_interact("empty")
-            return Result("Ah! The ship's instruction manual. You'd feel better"
-                          " if the previous owner wasn't lying next to it with a"
-                          " gaping hole in his rib cage.")
+        self.scene.remove_thing(self)
+        self.state.add_inventory_item("manual")
+        return Result("Ah! The ship's instruction manual. You'd feel better"
+                      " if the previous owner wasn't lying next to it with a"
+                      " gaping hole in his rib cage.")
 
 
 class Manual(Item):
