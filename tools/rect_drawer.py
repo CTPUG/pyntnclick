@@ -26,8 +26,6 @@ state.DEBUG_RECTS = True
 from gamelib.widgets import BoomLabel
 
 
-
-
 class AppPalette(PaletteView):
 
     sel_width = 5
@@ -74,7 +72,6 @@ class AppImage(Widget):
         self.images = []
         self.start_pos = None
         self.end_pos = None
-        self.draw_color = pygame.color.Color('white')
         self.rect_color = pygame.color.Color('white')
         self.current_image = None
         self.place_image_menu = None
@@ -94,6 +91,49 @@ class AppImage(Widget):
         self.draw_thing_rects = True
         self.draw_images = True
         self.draw_toolbar = True
+
+    def find_intersecting_things(self):
+        """Parse the things in the scene for overlaps"""
+
+
+    def find_intersecting_rects(self, d):
+        """Find if any rect collections intersect"""
+        # I loath N^X brute search algorithm's, but whatever, hey
+        if self.state.current_detail:
+            scene = self.state.current_detail
+        else:
+            scene = self.state.current_scene
+        for (num, col) in enumerate(d):
+            rect_list = d[col]
+            for thing in scene.things.itervalues():
+                for interact_name in thing.interacts:
+                    thing.set_interact(interact_name)
+                    if hasattr(thing.rect, 'collidepoint'):
+                        thing_rects = [thing.rect]
+                    else:
+                        thing_rects = thing.rect
+                    for other_rect in thing_rects:
+                        for my_rect in rect_list:
+                            if my_rect.colliderect(other_rect):
+                                print 'Intersecting rects'
+                                print "  Object %s" % num
+                                print "  Thing %s Interact %s" % (thing.name, interact_name)
+                                print "     Rects", my_rect, other_rect
+                if thing.INITIAL:
+                    thing.set_interact(thing.INITIAL)
+            print
+            for (num2, col2) in enumerate(d):
+                if num2 == num:
+                    continue
+                other_list = d[col2]
+                for my_rect in rect_list:
+                    for other_rect in other_list:
+                        if my_rect.colliderect(other_rect):
+                            print 'Intersecting rects',
+                            print '  Object %s and %s' % (num, num2)
+                            print "     Rects", my_rect, other_rect
+            print
+            print
 
     def toggle_things(self):
         self.draw_things = not self.draw_things
@@ -144,7 +184,7 @@ class AppImage(Widget):
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
-            frame_rect(surface, self.draw_color, rect, self.draw_thick)
+            frame_rect(surface, self.rect_color, rect, self.draw_thick)
         if self.draw_rects:
             for (col, rect) in self.rects:
                 frame_rect(surface, col, rect, self.rect_thick)
@@ -178,6 +218,7 @@ class AppImage(Widget):
 
     def print_objs(self):
         d = self._make_dict()
+        self.find_intersecting_rects(d)
         for (num, col) in enumerate(d):
             print 'Rect %d : ' % num
             for rect in d[col]:
@@ -190,6 +231,7 @@ class AppImage(Widget):
             r = rect.move(self.offset)
             print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
+        print
 
     def image_load(self):
         image_path= '%s/Resources/images/%s' % (script_path, self.state.current_scene.FOLDER)
