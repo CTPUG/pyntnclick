@@ -125,7 +125,7 @@ class StateWidget(Widget):
             self._mouse_move(mouse.get_pos())
 
     def end_game(self):
-        self.running = False
+        self.screen.running = False
         self.screen.shell.show_screen(self.screen.shell.end_screen)
 
 
