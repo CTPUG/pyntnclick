@@ -58,6 +58,7 @@ class Bridge(Scene):
         self.add_thing(LeftLights())
         self.add_thing(RightLights())
         self.add_thing(JimPanel())
+        self.add_thing(StarField())
         self.add_thing(GenericDescThing('bridge.wires', 1,
             "The brightly coloured wires contrast with the drab walls.",
             ((46, 4, 711, 143),)))
@@ -242,6 +243,21 @@ class SuperconductorThing(Thing):
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
         return Result("The superconductor module unclips easily.")
+
+class StarField(Thing):
+
+    NAME = 'bridge.stars'
+
+    INTERACTS = {
+            'stars' : InteractAnimated(185, 145,
+                ['stars_%d.png' % (i+1) for i in range(3) + range(1,0,-1)], 30)
+            }
+
+    INITIAL = 'stars'
+
+    def is_interactive(self):
+        return False
+
 
 class BlinkingLights(Thing):
 
