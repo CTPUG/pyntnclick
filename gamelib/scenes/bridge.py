@@ -7,6 +7,7 @@ from albow.resource import get_image
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
+from gamelib.sound import get_current_playlist
 
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractRectUnion, InteractImage,
@@ -37,6 +38,7 @@ class Bridge(Scene):
 
     def __init__(self, state):
         super(Bridge, self).__init__(state)
+        self.background_playlist = None
         self.add_item(Superconductor('superconductor'))
         self.add_item(Stethoscope('stethoscope'))
         self.add_thing(ToMap())
@@ -67,8 +69,8 @@ class Bridge(Scene):
 
     def enter(self):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
-        background_playlist = PlayList(pieces, random=True, repeat=True)
-        change_playlist(background_playlist)
+        self.background_playlist = PlayList(pieces, random=True, repeat=True)
+        change_playlist(self.background_playlist)
         return Result("The bridge is in a sorry, shabby state.")
 
     def leave(self):
@@ -354,8 +356,16 @@ class BridgeCompDetail(Scene):
         self.add_thing(AlertTab())
         self.add_thing(CompUpButton())
         self.add_thing(CompDownButton())
+        self._scene_playlist = None
         self._alert = get_image(self.FOLDER, self.ALERT)
         self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
+
+    def enter(self):
+        self._scene_playlist = get_current_playlist()
+        change_playlist(None)
+
+    def leave(self):
+        change_playlist(self._scene_playlist)
 
     def draw_background(self, surface):
         if self.get_data('tab') == 'alert':
