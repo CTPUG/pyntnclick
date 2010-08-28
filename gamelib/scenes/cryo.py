@@ -51,12 +51,13 @@ class Cryo(Scene):
                 (552, 145, 129, 66),
                 # (643, 199, 38, 233),
                 (636, 82, 165, 60),
-                (756, 127, 52, 393),
                 (140, 135, 112, 73),
                 # (125, 192, 27, 258),
                 (11, 63, 140, 67),
-                (2, 130, 44, 394),
+                #(2, 130, 44, 394),
+                #(756, 127, 52, 393),
                 )))
+        self.add_thing(UncuttableCryoPipes())
 
         # leaks
         self.add_thing(GenericDescThing('cryo.leaks', 2,
@@ -182,8 +183,35 @@ class CryoPipeBase(Thing):
 
     def get_description(self):
         if self.get_data('fixed'):
-            return "These pipes carry cooling fluid to the cryo units."
+            return "These pipes carry cooling fluid to empty cryo units."
         return "There used to be a pipe carrying cooling fluid here"
+
+
+class UncuttableCryoPipes(Thing):
+    "Base class for cryo pipes that can't be cut down."
+
+    NAME = "cryo.pipes.2"
+
+    INTERACTS = {
+        "fixed" : InteractRectUnion((
+                (2, 130, 44, 394),
+                (756, 127, 52, 393),))
+        }
+
+    INITIAL = "fixed"
+
+    def interact_with_machete(self, item):
+        return Result("These pipes carry fuild to the working cryo units."
+                " Chopping them down doesn't seem sensible.")
+
+    def is_interactive(self):
+        return True
+
+    def interact_without(self):
+        return Result("These pipes aren't attached to the wall very solidly.")
+
+    def get_description(self):
+        return "These pipes carry cooling fluid to the working cryo units."
 
 
 class CryoPipe(CloneableItem):
