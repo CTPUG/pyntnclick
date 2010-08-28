@@ -351,7 +351,7 @@ class JimPanel(Thing):
         if self.scene.get_data('ai status') == 'online':
             return (Result('You feel a shock from the panel.'),
                     make_jim_dialog("Prisoner %s. Please step away from the panel. "
-                        "You are not an authorized techinican." % PLAYER_ID, self.state))
+                        "You are not an authorized technician." % PLAYER_ID, self.state))
 
 class ChairDetail(Scene):
 
