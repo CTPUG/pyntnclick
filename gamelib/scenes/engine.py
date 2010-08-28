@@ -32,6 +32,7 @@ class Engine(Scene):
         self.add_thing(ArrowsRight())
         self.add_thing(DangerSign())
         self.add_thing(Stars())
+        self.add_thing(CrackedPipe())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
             "Dead. I think those cans were past their sell-by date.",
@@ -261,6 +262,9 @@ class CryoContainerReceptacle(Thing):
                       "It almost gets stuck")
 
     def interact_with_full_detergent_bottle(self, item):
+        if not self.scene.things['engine.cracked_pipe'].get_data('fixed'):
+            return Result("You think pouring the precious cryo fluid into a"
+                    " container connected to a cracked pipe would be a waste.")
         self.state.remove_inventory_item(item.name)
         self.state.current_scene.things['engine.cryo_containers'] \
                   .set_data('filled', True)
@@ -292,8 +296,6 @@ class CoolingPipes(Thing):
              (200, 172, 27, 55),
              (105, 159, 15, 289),
              (0, 309, 128, 16),
-             (0, 411, 44, 27),
-             (41, 401, 39, 24),
              (79, 390, 28, 22),
              (257, 209, 27, 10),
              (249, 225, 26, 20),
@@ -433,6 +435,38 @@ class Stars(Thing):
         return False
 
 
+class CrackedPipe(Thing):
+    NAME = "engine.cracked_pipe"
+
+    INTERACTS = {
+        'cracked': InteractImage(13, 402, 'cracked_pipe.png'),
+        'taped': InteractImage(13, 402, 'duct_taped_pipe.png'),
+    }
+
+    INITIAL = 'cracked'
+
+    INITIAL_DATA = {
+        'fixed': False,
+    }
+
+    def get_description(self):
+        if self.get_data('fixed'):
+            return "The duct tape appears to be holding."
+        else:
+            return "The pipe looks cracked and won't hold" \
+                   " fluid until it's fixed."
+
+    def interact_with_duct_tape(self, item):
+        if set.get_data('fixed'):
+            return Result("The duct tape already there appears to be"
+                    " sufficient.")
+        else:
+            self.set_data('fixed', True)
+            self.set_interact('taped')
+            return Result("You apply your trust duct tape to the"
+                    " creak, sealing it.")
+
+
 class ToMap(Door):
 
     SCENE = "engine"
@@ -445,5 +479,6 @@ class ToMap(Door):
 
     def get_description(self):
         return "The airlock leads back to the rest of the ship."
+
 
 SCENES = [Engine]
