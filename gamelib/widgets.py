@@ -6,9 +6,12 @@
 import textwrap
 
 import albow.controls
-from albow.resource import get_font
+import albow.menu
+from albow.resource import get_font, get_image
 from pygame.color import Color
+from pygame.rect import Rect
 
+from constants import BUTTON_SIZE
 from cursor import CursorWidget
 
 
@@ -35,6 +38,7 @@ class BoomLabel(albow.controls.Label):
 
     def _draw_all_no_bg(self, surface):
         pass
+
 
 class BoomButton(BoomLabel):
 
@@ -84,3 +88,53 @@ class MessageDialog(BoomLabel, CursorWidget):
 
     def cursor_highlight(self):
         return False
+
+
+class HandButton(albow.controls.Image):
+    """The fancy hand button for the widget"""
+
+    def __init__(self, action):
+        # FIXME: Yes, please.
+        this_image = get_image('items', 'hand.png')
+        albow.controls.Image.__init__(self, image=this_image)
+        self.action = action
+        self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
+
+    def mouse_down(self, event):
+        self.action()
+
+
+class PopupMenuButton(albow.controls.Button):
+
+    def __init__(self, text, action):
+        albow.controls.Button.__init__(self, text, action)
+
+        self.font = get_font(16, 'Vera.ttf')
+        self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
+        self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
+
+
+class PopupMenu(albow.menu.Menu, CursorWidget):
+
+    def __init__(self, screen):
+        CursorWidget.__init__(self, screen)
+        self.screen = screen
+        self.shell = screen.shell
+        items = [
+                ('Resume Game', 'hide'),
+                ('Quit Game', 'quit'),
+                ('Exit to Main Menu', 'main_menu'),
+                ]
+        # albow.menu.Menu ignores title string
+        albow.menu.Menu.__init__(self, None, items)
+        self.font = get_font(16, 'Vera.ttf')
+
+    def show_menu(self):
+        """Call present, with the correct position"""
+        item_height = self.font.get_linesize()
+        menu_top = 600 - (len(self.items) * item_height + BUTTON_SIZE)
+        item = self.present(self.shell, (0, menu_top))
+        if item > -1:
+            # A menu item needs to be invoked
+            self.invoke_item(item)
+
