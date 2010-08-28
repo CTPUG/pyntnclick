@@ -20,9 +20,5 @@ class Won(Scene):
     def __init__(self, state):
         super(Won, self).__init__(state)
 
-    def enter(self):
-        return Result("Congratulations, Prisoner %s. You head off to your chosen "
-                "destination, safe in the knowledge that nothing can stop you. "
-                "Now you just need to find something to do during the intervening months." % PLAYER_ID)
 
 SCENES = [Won]
