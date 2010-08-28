@@ -42,10 +42,10 @@ class Map(Scene):
             ai1 = make_jim_dialog(
                 "Under the terms of the emergency conscription "
                 "act, I have downloaded the ship's schematics to your "
-                "neural implant to help you navigate around the ship. "
-                "Please report to the bridge.", self.state)
+                "neural implant to help you navigate around the ship.",
+                self.state)
             if ai1:
-                return ai1, make_jim_dialog("Prisoner %s. You are classed "
+                return ai1, make_jim_dialog("Prisoner %s, you are classed "
                 "as a class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
                 "of an additional 3 years on your sentence.'" % PLAYER_ID, self.state)

@@ -136,14 +136,14 @@ class Cryo(Scene):
         if self.get_data('greet'):
             self.set_data('greet', False)
             return make_jim_dialog(
-                    "Greetings, Prisoner %s.  This is the Judicial "
+                    "Greetings, Prisoner %s. I am the Judicial "
                     "Incarceration Monitor. "
                     "You have been woken early under the terms of the "
-                    "emergency conscription act to help with repairs to "
+                    "emergency conscription act to assist with repairs to "
                     "the ship. Your behaviour during this time will "
-                    "be added to your record and will be relayed to "
+                    "be noted on your record and will be relayed to "
                     "prison officials when we reach the destination. "
-                    "Please report to the bridge.'" % PLAYER_ID, self.state)
+                    "Please report to the bridge." % PLAYER_ID, self.state)
 
     def leave(self):
         # Stop music
@@ -377,7 +377,8 @@ class CryoRoomDoor(Door):
         if self.get_data('door') == "open":
             return 'An open doorway leads to the rest of the ship.'
         elif self.get_data('door') == "ajar":
-            return "A rusty door.  It can't open all the way because of a chain on the other side."
+            return ("A rusty door. It can't open all the way because of a "
+                    "chain on the other side.")
         return 'A rusty door. It is currently closed.'
 
 
@@ -441,7 +442,7 @@ class PlaqueThing(Thing):
         return Result("The plaque is welded to the unit. You can't shift it")
 
     def get_description(self):
-        return "'Prisoner 98cc-764e646391ee. War crimes. 45 years."
+        return "'Prisoner 98CC-764E646391EE. War crimes. 45 years."
 
 
 class FullBottle(Item):
