@@ -171,6 +171,7 @@ class ToolBar(Row):
         for item in items:
             item.height = BUTTON_SIZE
         Row.__init__(self, items, spacing=0, width=SCREEN[0])
+        self.bg_color = (127, 127, 127)
 
 
 class GameScreen(Screen, CursorWidget):

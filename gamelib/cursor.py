@@ -5,10 +5,14 @@
 from albow.resource import get_image
 from albow.widget import Widget
 from pygame.sprite import Sprite, RenderUpdates
+from pygame.rect import Rect
 import pygame
 import pygame.color
 import pygame.cursors
 import pygame.mouse
+
+from gamelib.constants import SCENE_SIZE
+
 
 class CursorSprite(Sprite):
     "A Sprite that follows the Cursor"
@@ -102,6 +106,8 @@ class CursorWidget(Widget):
                 cls._cursor_group.add(cls.cursor)
 
     def cursor_highlight(self):
+        if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
+            return False
         if self.screen.state.highlight_override:
             return True
         current_thing = self.screen.state.current_thing
