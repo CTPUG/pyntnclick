@@ -5,17 +5,14 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
     CURRENT_SCENE = 'cryo'
 
-    def close_detail(self):
-        self.state.set_current_detail(None)
-
     def move_to(self, target):
         self.interact_thing(self.state.current_scene.name + '.door')
         self.assert_current_scene('map')
         self.interact_thing('map.to' + target)
         self.assert_current_scene(target)
 
-    def test_walkthrough_complete(self):
-        self.fail("Walkthrough incomplete.")
+    # def test_walkthrough_complete(self):
+    #     self.fail("Walkthrough incomplete.")
 
     def test_walkthrough(self):
         """A complete game walkthrough.
@@ -45,6 +42,9 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Go to the mess.
         self.move_to('mess')
+
+        # Check that life support is broken
+        self.assert_game_data('life support status', 'broken')
 
         # Get the cans.
         self.assert_game_data('cans_available', 3, 'mess.cans')
@@ -102,6 +102,9 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         # Go to the bridge.
         self.move_to('bridge')
 
+        # Check that the AI is online.
+        self.assert_game_data('ai status', 'online')
+
         # Get the stethoscope.
         self.interact_thing('bridge.stethoscope')
         self.assert_inventory_item('stethoscope')
@@ -117,6 +120,11 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Go to the crew quarters.
         self.move_to('crew_quarters')
+
+        # Get the poster.
+        self.interact_thing('crew.poster')
+        self.assert_inventory_item('escher_poster')
+        self.assert_scene_thing('crew.poster', False)
 
         # Get the fishbowl.
         self.assert_game_data('has_bowl', True, 'crew.fishbowl')
@@ -142,6 +150,9 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Go to the engine room.
         self.move_to('engine')
+
+        # Check that the engines are broken.
+        self.assert_game_data('engine online', False)
 
         # Get the can opener.
         self.interact_thing('engine.canopener')
@@ -208,7 +219,88 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_inventory_item('cryo_pipes_three', False)
         self.assert_game_data('status', 'replaced', 'mess.tubes')
 
+        # Check that life support is replaced
+        self.assert_game_data('life support status', 'replaced')
+
         # Tape up the tubes.
         self.interact_thing('mess.tubes', 'duct_tape')
         self.assert_game_data('status', 'fixed', 'mess.tubes')
+
+        # Check that life support is fixed
+        self.assert_game_data('life support status', 'fixed')
+
+        # Get the detergent bottle.
+        self.interact_thing('mess.detergent')
+        self.assert_inventory_item('detergent_bottle')
+
+        # Go to the cryo room.
+        self.move_to('cryo')
+
+        # Fill the detergent bottle.
+        self.interact_thing('cryo.pool', 'detergent_bottle')
+        self.assert_inventory_item('detergent_bottle', False)
+        self.assert_inventory_item('full_detergent_bottle')
+
+        # Go to the engine room.
+        self.move_to('engine')
+
+        # Patch the cracked pipe.
+        self.assert_game_data('fixed', False, 'engine.cracked_pipe')
+        self.interact_thing('engine.cracked_pipe', 'duct_tape')
+        self.assert_game_data('fixed', True, 'engine.cracked_pipe')
+
+        # Fill the cryofluid receptacles.
+        self.assert_game_data('filled', False, 'engine.cryo_containers')
+        self.interact_thing('engine.cryo_container_receptacle', 'full_detergent_bottle')
+        self.assert_game_data('filled', True, 'engine.cryo_containers')
+        self.assert_inventory_item('full_detergent_bottle', False)
+
+        # Remove the burned-out superconductor.
+        self.assert_game_data('present', True, 'engine.superconductor')
+        self.assert_game_data('working', False, 'engine.superconductor')
+        self.interact_thing('engine.superconductor', 'machete')
+        self.assert_game_data('present', False, 'engine.superconductor')
+        self.assert_game_data('working', False, 'engine.superconductor')
+
+        # Tape up new superconductor.
+        self.interact_item('superconductor', 'duct_tape')
+        self.assert_inventory_item('superconductor', False)
+        self.assert_inventory_item('taped_superconductor')
+
+        # Install superconductor.
+        self.interact_thing('engine.superconductor', 'taped_superconductor')
+        self.assert_inventory_item('taped_superconductor', False)
+        self.assert_game_data('present', True, 'engine.superconductor')
+        self.assert_game_data('working', True, 'engine.superconductor')
+
+        # Check that we've fixed the engines.
+        self.assert_game_data('engine online', True)
+
+        # Go to the bridge.
+        self.move_to('bridge')
+
+        # Show JIM the poster.
+        self.interact_thing('bridge.camera', 'escher_poster')
+        self.assert_game_data('ai status', 'looping')
+
+        # Get at JIM.
+        self.assert_game_data('ai panel', 'closed')
+        self.interact_thing('jim_panel', 'machete')
+        self.assert_game_data('ai panel', 'open')
+
+        # Break JIM.
+        self.interact_thing('jim_panel', 'machete')
+        self.assert_game_data('ai panel', 'broken')
+
+        # Check that we've turned off JIM.
+        self.assert_game_data('ai status', 'dead')
+
+        # Bring up nav console.
+        self.interact_thing('bridge.comp')
+        self.assert_current_detail('bridge_comp_detail')
+        self.interact_thing('bridge_comp.nav_tab')
+        self.assert_game_data('tab', 'nav')
+
+        # Go somewhere interesting.
+        self.interact_thing('bridge_comp.nav_line2')
 

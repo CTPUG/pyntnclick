@@ -294,7 +294,8 @@ class CryoContainerReceptacle(Thing):
         self.scene.things['engine.cryo_containers'].set_data('filled', True)
         self.scene.things['engine.cryo_containers'].set_interact('full')
         results = [Result("You fill the reservoirs. "
-                          "It seems the detergent bottle was just big enough.")]
+                          "The detergent bottle was just big enough, which "
+                          "is handy, because it's sprung a leak.")]
         results.append(self.scene.engine_online_check())
         return results
 

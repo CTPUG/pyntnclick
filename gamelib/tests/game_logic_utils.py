@@ -33,6 +33,8 @@ class GameLogicTestCase(unittest.TestCase):
 
     def assert_game_data(self, key, value, thing=None, scene=None):
         gizmo = self.state.current_scene
+        if self.state.current_detail is not None:
+            gizmo = self.state.current_detail
         if scene is not None:
             gizmo = self.state.scenes[scene]
         if thing is not None:
@@ -81,4 +83,7 @@ class GameLogicTestCase(unittest.TestCase):
         target_obj = self.state.items[target_item]
         result = target_obj.interact(item_obj, self.state)
         return self.handle_result(result)
+
+    def close_detail(self):
+        self.state.set_current_detail(None)
 

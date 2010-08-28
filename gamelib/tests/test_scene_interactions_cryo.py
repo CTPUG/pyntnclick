@@ -69,16 +69,17 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
     def test_cryo_unit_alpha_full_hand(self):
         "The cryo unit has the leg in it and we touch it. We get the leg."
 
-        self.state.set_current_detail('cryo_detail')
         self.assert_game_data('contains_titanium_leg', True, 'cryo.unit.1')
+        self.state.set_current_detail('cryo_detail')
         self.assert_inventory_item('titanium_leg', False)
         self.assert_detail_thing('cryo.titanium_leg', True)
 
         self.interact_thing('cryo.titanium_leg')
 
-        self.assert_game_data('contains_titanium_leg', False, 'cryo.unit.1')
         self.assert_inventory_item('titanium_leg', True)
         self.assert_detail_thing('cryo.titanium_leg', False)
+        self.close_detail()
+        self.assert_game_data('contains_titanium_leg', False, 'cryo.unit.1')
 
     def test_cryo_unit_detail(self):
         "The cryo unit thing opens a detail window."
