@@ -32,9 +32,6 @@ class CrewQuarters(Scene):
             "A picture of a cat labelled 'Clementine'",
             ((722, 382, 66, 72),)))
 
-    def enter(self):
-        return Result("The crew were a messy bunch. Or maybe that's just the intervening centuries.")
-
 
 class ToMap(Door):
 
@@ -122,12 +119,27 @@ class FishbowlThing(Thing):
     def get_description(self):
         return "This fishbowl looks exactly like an old science fiction space helmet."
 
-
 class Fishbowl(Item):
     "A bowl. Sans fish."
 
     INVENTORY_IMAGE = 'fishbowl.png'
     CURSOR = CursorSprite('fishbowl.png')
+    NAME = "fishbowl"
+
+    def interact_with_duct_tape(self, item, state):
+        helmet = FishbowlHelmet('helmet')
+        state.add_item(helmet)
+        state.replace_inventory_item(self.name, helmet.name)
+        return Result("You duct tape the edges of the helmet. The seal is"
+                " crude, but it will serve as a workable helmet if needed")
+
+
+class FishbowlHelmet(Item):
+    "A bowl with duct-tape"
+
+    INVENTORY_IMAGE  = "fishbowl_helmet.png"
+    CURSOR = CursorSprite('fishbowl_helmet.png')
+    NAME = "helmet"
 
 
 class DuctTape(Item):
