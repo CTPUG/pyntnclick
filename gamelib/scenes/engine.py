@@ -1,5 +1,6 @@
 """Engine room where things need to be repaired."""
 
+from albow.resource import get_image
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
@@ -34,6 +35,7 @@ class Engine(Scene):
         self.add_thing(DangerSign())
         self.add_thing(Stars())
         self.add_thing(CrackedPipe())
+        self.add_thing(ComputerConsole())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
             "Dead. Those cans must have been past their sell-by date.",
@@ -48,12 +50,6 @@ class Engine(Scene):
                 (513, 330, 58, 50),
             )
         ))
-        self.add_thing(GenericDescThing('engine.computer_console', 3,
-            "A computer console. It seems dead.",
-            (
-                (293, 287, 39, 36),
-            )
-        ))
         self.add_thing(GenericDescThing('engine.superconductors', 4,
             "Superconductors. The engines must be power hogs.",
             (
@@ -63,7 +59,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.floor_hole', 5,
-            "A gaping hole in the floor of the room. I'm guessing that's why there's a vacuum in here.",
+            "A gaping hole in the floor of the room. You're guessing that's why there's a vacuum in here.",
             (
                 (257, 493, 141, 55),
                 (301, 450, 95, 45),
@@ -457,6 +453,10 @@ class Stars(Thing):
     def is_interactive(self):
         return False
 
+    def get_description(self):
+        return "A gaping hole in the floor of the room. You're guessing" \
+            " that's why there's a vacuum in here."
+
 
 class CrackedPipe(Thing):
     NAME = "engine.cracked_pipe"
@@ -490,6 +490,67 @@ class CrackedPipe(Thing):
                           "creak, sealing it.")
 
 
+class ComputerConsole(Thing):
+    NAME = "engine.computer_console"
+
+    INTERACTS = {
+        'console': InteractNoImage(293, 287, 39, 36),
+    }
+
+    INITIAL = 'console'
+
+    def interact_without(self):
+        return Result(detail_view='engine_comp_detail')
+
+    def get_description(self):
+        return "A computer console. It's alarmingly close to the engine."
+
+
+class EngineCompDetail(Scene):
+
+    FOLDER = "engine"
+    BACKGROUND = "engine_comp_detail.png"
+    NAME = "engine_comp_detail"
+
+    SIZE = (640, 400)
+
+    ALERTS = {
+            'cryo leaking' : 'ec_cryo_leaking.png',
+            'cryo empty' : 'ec_cryo_reservoir_empty.png',
+            'super malfunction' : 'ec_cryo_super_malfunction.png',
+            }
+
+    # Point to start drawing changeable alerts
+    ALERT_OFFSET = (16, 100)
+    ALERT_SPACING = 4
+
+    def __init__(self, state):
+        super(EngineCompDetail, self).__init__(state)
+
+        self._alert_messages = {}
+        for key, name in self.ALERTS.iteritems():
+            self._alert_messages[key] = get_image(self.FOLDER, name)
+
+    def _draw_alerts(self, surface):
+        xpos, ypos = self.ALERT_OFFSET
+        if not self.state.scenes['engine'].things['engine.cracked_pipe'].get_data('fixed'):
+            image = self._alert_messages['cryo leaking']
+            surface.blit(image, (xpos, ypos))
+            ypos += image.get_size()[1] + self.ALERT_SPACING
+        if not self.state.scenes['engine'].things['engine.cryo_containers'].get_data('filled'):
+            image = self._alert_messages['cryo empty']
+            surface.blit(image, (xpos, ypos))
+            ypos += image.get_size()[1] + self.ALERT_SPACING
+        if not self.state.scenes['engine'].things['engine.superconductor'].get_data('working'):
+            image = self._alert_messages['super malfunction']
+            surface.blit(image, (xpos, ypos))
+            ypos += image.get_size()[1] + self.ALERT_SPACING
+
+    def draw_things(self, surface):
+        self._draw_alerts(surface)
+        super(EngineCompDetail, self).draw_things(surface)
+
+
 class ToMap(Door):
 
     SCENE = "engine"
@@ -505,3 +566,4 @@ class ToMap(Door):
 
 
 SCENES = [Engine]
+DETAIL_VIEWS = [EngineCompDetail]
