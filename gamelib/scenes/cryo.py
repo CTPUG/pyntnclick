@@ -94,7 +94,7 @@ class Cryo(Scene):
 
         self.add_thing(GenericCryoUnit(5,
             "A working cryo chamber. The frosted glass obscures the details of the occupant.",
-            "Prisoner B520-99495B8C41CE. Copyright infringment. 60 years.",
+            "Prisoner B520-99495B8C41CE. Copyright infringement. 60 years.",
             (
                 (340, 430, 50, 70),
                 (330, 500, 60, 50),
@@ -199,7 +199,7 @@ class UncuttableCryoPipes(Thing):
     INITIAL = "fixed"
 
     def interact_with_machete(self, item):
-        return Result("These pipes carry fuild to the working cryo units."
+        return Result("These pipes carry fluid to the working cryo units."
                 " Chopping them down doesn't seem sensible.")
 
     def is_interactive(self):

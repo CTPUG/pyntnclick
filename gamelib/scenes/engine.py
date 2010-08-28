@@ -67,7 +67,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.empty_cans', 7,
-            "Empty Chocolate-Covered-Bacon Cans? Poor guy, he must have found them unresistable.",
+            "Empty Chocolate-Covered-Bacon Cans? Poor guy, he must have found them irresistible.",
             (
                 (562, 422, 30, 31),
             )

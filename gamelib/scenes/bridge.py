@@ -278,12 +278,12 @@ class JimPanel(Thing):
         if self.scene.get_data('ai status') == 'online':
             return self.interact_default()
         elif self.scene.get_data('ai panel') == 'closed':
-            return Result("You are unable to open the panel with you bare hands")
+            return Result("You are unable to open the panel with your bare hands.")
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
             self.scene.set_data('ai status', 'dead')
             self.set_interact('broken')
-            return Result("You unplug various important looking wires.")
+            return Result("You unplug various important-looking wires.")
 
 
     def interact_with_machete(self, item):
@@ -301,7 +301,7 @@ class JimPanel(Thing):
 
     def interact_default(self):
         if self.scene.get_data('ai status') == 'online':
-            return (Result('You feel a shock from the panel'),
+            return (Result('You feel a shock from the panel.'),
                     make_jim_dialog("Prisoner %s. Please step away from the panel. "
                         "You are not an authorized techinican." % PLAYER_ID, self.state))
 

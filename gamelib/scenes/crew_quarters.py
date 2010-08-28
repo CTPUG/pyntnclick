@@ -75,7 +75,7 @@ class Safe(Thing):
                 self.set_interact('empty_safe')
                 return Result("Duct tape. It'll stick to everything except "
                               "ducts, apparently.")
-            return Result("The perfactly balanced door swings frictionlessly "
+            return Result("The perfectly balanced door swings frictionlessly "
                           "to and fro. What craftsmanship!")
         return Result("The safe is locked. This might be an interesting "
                       "challenge, if suitable equipment can be found.")
@@ -92,7 +92,7 @@ class Safe(Thing):
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
                       " here."),
                       make_jim_dialog("Prisoner %s, you have been observed commiting a felony violation. "
-                          "This will go onto your permenant record, and your sentence may be extended by up to twenty years."
+                          "This will go onto your permanent record, and your sentence may be extended by up to twenty years."
                           % PLAYER_ID, self.state))
 
     def get_description(self):
@@ -139,7 +139,7 @@ class Fishbowl(Item):
         state.add_item(helmet)
         state.replace_inventory_item(self.name, helmet.name)
         return Result("You duct tape the edges of the helmet. The seal is"
-                " crude, but it will serve as a workable helmet if needed")
+                " crude, but it will serve as a workable helmet if needed.")
 
 
 class FishbowlHelmet(Item):
@@ -184,7 +184,7 @@ class PosterThing(Thing):
         return Result("This poster will go nicely on your bedroom wall.")
 
     def get_description(self):
-        return "A paradoxial poster hanges below the security camera"
+        return "A paradoxical poster hangs below the security camera."
 
 
 class EscherPoster(Item):
