@@ -95,7 +95,6 @@ class AppImage(Widget):
     def find_intersecting_things(self):
         """Parse the things in the scene for overlaps"""
 
-
     def find_intersecting_rects(self, d):
         """Find if any rect collections intersect"""
         # I loath N^X brute search algorithm's, but whatever, hey
@@ -184,6 +183,7 @@ class AppImage(Widget):
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
+            rect.normalize()
             frame_rect(surface, self.rect_color, rect, self.draw_thick)
         if self.draw_rects:
             for (col, rect) in self.rects:
