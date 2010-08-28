@@ -43,7 +43,7 @@ setup   (   # Metadata
             console = ['scripts/testconsole.py'],
             windows = [{
                 'script': 'scripts/suspended.py',
-            #     'icon_resources': [(0, "Resources/icons/suspended.ico")],
+                'icon_resources': [(0, "Resources/icons/suspended_sentence.ico")],
             }],
             app = ['run_game.py'],
             options = {
