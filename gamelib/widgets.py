@@ -68,7 +68,7 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.bg_color = (127, 127, 127)
         self.fg_color = (0, 0, 0)
         if style == "JIM":
-            self.set(font=get_font(20, "DejaVuSansMono.ttf"))
+            self.set(font=get_font(20, "Monospace.ttf"))
             self.bg_color = Color(255, 127, 127, 207)
             self.fg_color = (0, 0, 0)
             self.border_color = (127, 0, 0)
