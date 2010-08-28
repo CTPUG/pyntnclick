@@ -17,6 +17,14 @@ from cursor import CursorWidget
 
 class BoomLabel(albow.controls.Label):
 
+    trim_line_top = 0
+
+    def __init__(self, text, width=None, **kwds):
+        albow.controls.Label.__init__(self, text, width, **kwds)
+        w, h = self.size
+        h -= self.trim_line_top * len(self.text.split('\n'))
+        self.size = (w, h)
+
     def set_margin(self, margin):
         """Add a set_margin method that recalculates the label size"""
         old_margin = self.margin
@@ -38,6 +46,28 @@ class BoomLabel(albow.controls.Label):
 
     def _draw_all_no_bg(self, surface):
         pass
+
+    def draw_with(self, surface, fg, _bg=None):
+        m = self.margin
+        align = self.align
+        width = surface.get_width()
+        y = m
+        lines = self.text.split("\n")
+        font = self.font
+        dy = font.get_linesize() - self.trim_line_top
+        for line in lines:
+            image = font.render(line, True, fg)
+            r = image.get_rect()
+            image = image.subsurface(r.clip(r.move(0, self.trim_line_top)))
+            r.top = y
+            if align == 'l':
+                r.left = m
+            elif align == 'r':
+                r.right = width - m
+            else:
+                r.centerx = width // 2
+            surface.blit(image, r)
+            y += dy
 
 
 class BoomButton(BoomLabel):
@@ -63,7 +93,7 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.set_style(style)
         paras = text.split("\n\n")
         text = "\n".join([textwrap.fill(para, wrap_width) for para in paras])
-        albow.controls.Label.__init__(self, text, **kwds)
+        BoomLabel.__init__(self, text, **kwds)
 
     def set_style(self, style):
         self.set_margin(5)
@@ -73,6 +103,7 @@ class MessageDialog(BoomLabel, CursorWidget):
         self.fg_color = (0, 0, 0)
         if style == "JIM":
             self.set(font=get_font(20, "Monospace.ttf"))
+            self.trim_line_top = 10
             self.bg_color = Color(255, 127, 127, 207)
             self.fg_color = (0, 0, 0)
             self.border_color = (127, 0, 0)
