@@ -43,6 +43,7 @@ class Bridge(Scene):
         self.add_item(Stethoscope('stethoscope'))
         self.add_thing(ToMap())
         self.add_thing(MassageChair())
+        self.add_thing(MassageChairBase())
         self.add_thing(StethoscopeThing())
         self.add_thing(BridgeComputer())
         self.add_thing(LeftLights())
@@ -118,11 +119,7 @@ class MassageChair(Thing):
     NAME = 'bridge.massagechair'
 
     INTERACTS = {
-        'chair': InteractRectUnion((
-            (76, 365, 72, 216),
-            (148, 486, 160, 97),
-            (148, 418, 77, 68),
-        )),
+        'chair': InteractNoImage(127, 518, 69, 64),
     }
 
     INITIAL = 'chair'
@@ -136,9 +133,33 @@ class MassageChair(Thing):
 
     def get_description(self):
         if self.get_data('contains_superconductor'):
-            return "A top of the line Massage-o-Matic Captain's Executive Command Chair."
+            return "A top of the line Massage-o-Matic Captain's Executive Command Chair. " \
+                   "It's massaging a skeleton."
         return "The chair won't work any more, it has no power."
 
+
+class MassageChairBase(Thing):
+    "The captain's massage chair, contains superconductor"
+
+    NAME = 'bridge.massagechair_base'
+
+    INTERACTS = {
+        'chair': InteractRectUnion((
+            (148, 418, 77, 68),
+            (69, 363, 80, 156),
+            (104, 514, 18, 40),
+            (147, 487, 106, 32),
+            (220, 518, 83, 49),
+            (196, 502, 75, 34),
+            (207, 534, 69, 51),
+        )),
+    }
+
+    INITIAL = 'chair'
+
+    def get_description(self):
+        return self.state.current_scene.things['bridge.massagechair'] \
+                   .get_description()
 
 class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
