@@ -22,6 +22,7 @@ from endscreen import EndScreen
 from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG
 from sound import no_sound, disable_sound
 import state
+import data
 
 def parse_args(args):
     parser = OptionParser()
@@ -63,6 +64,9 @@ def main():
             state.DEBUG_SCENE = opts.scene
         state.DEBUG_RECTS = opts.rects
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
+    pygame.display.set_icon(pygame.image.load(
+        data.filepath('icons/suspended_sentence24x24.png')))
+    pygame.display.set_caption("Suspended Sentence")
     shell = MainShell(display)
     try:
         shell.run()
