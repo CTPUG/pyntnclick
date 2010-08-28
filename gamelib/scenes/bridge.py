@@ -36,7 +36,8 @@ class Bridge(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
-        'ai online' : True,
+        'ai status' : 'online',
+        'ai panel'  : 'closed',
         }
 
     def __init__(self, state):
@@ -52,6 +53,7 @@ class Bridge(Scene):
         self.add_thing(BridgeComputer())
         self.add_thing(LeftLights())
         self.add_thing(RightLights())
+        self.add_thing(JimPanel())
         self.add_thing(GenericDescThing('bridge.wires', 1,
             "The brightly coloured wires contrast with the drab walls.",
             ((46, 4, 711, 143),)))
@@ -76,11 +78,6 @@ class Bridge(Scene):
         pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
         self.background_playlist = PlayList(pieces, random=True, repeat=True)
         change_playlist(self.background_playlist)
-        if self.get_data('ai online'):
-            return Result("JIM says: 'Prisone %s. The bridge is a restricted area. "
-                    "Entering this area is a class 3 offence and each infraction carries a minimal "
-                    "penalty of an additional 6 months on your sentence;" % PLAYER_ID,
-                    style="JIM")
 
     def leave(self):
         change_playlist(None)
@@ -260,7 +257,53 @@ class RightLights(BlinkingLights):
 
     INITIAL = 'lights'
 
+class JimPanel(Thing):
+    "The panel to JIM's internals'"
 
+    NAME = "jim_panel"
+
+    INTERACTS = {
+            'closed' : InteractNoImage(506, 430, 137, 47),
+            'open'   : InteractImage(500, 427, 'jim_panel_open.png'),
+            'broken' : InteractImage(488, 412, 'jim_panel_destroyed.png'),
+            }
+
+    INITIAL = 'closed'
+
+    def get_description(self):
+        if self.scene.get_data('ai panel') == 'closed':
+            return "The sign reads 'Warning. Authorized Techinicians Only'"
+
+    def interact_without(self):
+        if self.scene.get_data('ai status') == 'online':
+            return self.interact_default()
+        elif self.scene.get_data('ai panel') == 'closed':
+            return Result("You are unable to open the panel with you bare hands")
+        elif self.scene.get_data('ai panel') == 'open':
+            self.scene.set_data('ai panel', 'broken')
+            self.scene.set_data('ai status', 'dead')
+            self.set_interact('broken')
+            return Result("You unplug various important looking wires.")
+
+
+    def interact_with_machete(self, item):
+        if self.scene.get_data('ai status') == 'online':
+            return self.interact_default()
+        elif self.scene.get_data('ai panel') == 'closed':
+            self.scene.set_data('ai panel', 'open')
+            self.set_interact('open')
+            return Result("Using the machete, you lever the panel off.")
+        elif self.scene.get_data('ai panel') == 'open':
+            self.scene.set_data('ai panel', 'broken')
+            self.scene.set_data('ai status', 'dead')
+            self.set_interact('broken')
+            return Result("You smash various delicate components with the machete.")
+
+    def interact_default(self):
+        if self.scene.get_data('ai status') == 'online':
+            return (Result('You feel a shock from the panel'),
+                    Result("JIM says: 'Prisoner %s. Please step away from the panel. "
+                        "You are not an authorized techinican.'" % PLAYER_ID, style="JIM"))
 
 class ChairDetail(Scene):
 
