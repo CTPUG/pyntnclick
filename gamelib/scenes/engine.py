@@ -36,7 +36,7 @@ class Engine(Scene):
         self.add_thing(CrackedPipe())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
-            "Dead. I think those cans were past their sell-by date.",
+            "Dead. Those cans must have been past their sell-by date.",
             (
                 (594, 387, 45, 109),
                 (549, 479, 60, 55),
@@ -288,7 +288,7 @@ class CryoContainerReceptacle(Thing):
 
     def interact_with_full_detergent_bottle(self, item):
         if not self.scene.things['engine.cracked_pipe'].get_data('fixed'):
-            return Result("You think pouring the precious cryo fluid into a"
+            return Result("Pouring the precious cryo fluid into a"
                     " container connected to a cracked pipe would be a waste.")
         self.state.remove_inventory_item(item.name)
         self.scene.things['engine.cryo_containers'].set_data('filled', True)

@@ -474,7 +474,7 @@ class Thing(StatefulGizmo):
         return self.interact_default(None)
 
     def interact_default(self, item):
-        return Result("It doesn't work.")
+        return None
 
     def draw(self, surface):
         old_rect = self.current_interact.rect

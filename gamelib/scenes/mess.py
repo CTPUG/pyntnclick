@@ -11,6 +11,7 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
 
 from gamelib.sound import get_sound
 from gamelib import constants
+from gamelib.scenes.game_constants import PLAYER_ID
 
 
 class Mess(Scene):
@@ -198,7 +199,7 @@ class Tubes(Thing):
             self.scene.set_data('life support status', 'replaced')
             return Result(
                 "The pipes slot neatly into place, but don't make an airtight seal. "
-                "You think one of the pipes has cracked slightly as well."
+                "One of the pipes has cracked slightly as well."
             )
 
     def interact_with_duct_tape(self, item):
@@ -215,6 +216,17 @@ class Tubes(Thing):
             return Result("It takes quite a lot of tape, but eventually everything is"
                           " airtight and ready to hold pressure. Who'd've thought duct"
                           " tape could actually be used to tape ducts?")
+
+    def interact_without(self):
+        if self.get_data("status") == "blocked":
+            return Result("The mutant broccoli resists your best efforts.")
+        elif self.get_data("status") == "broken":
+            return Result("Shoving the broken pipes around doesn't help much.")
+        elif self.get_data("status") == "replaced":
+            return Result("Do you really want to hold it together for the "
+                          "rest of the voyage?")
+        else:
+            return Result("You don't find any leaks. Good job, Prisoner %s." % PLAYER_ID)
 
 
 class Boomslang(Thing):
@@ -273,11 +285,11 @@ class DetergentThing(Thing):
 
     def interact_without(self):
         if self.get_data('taken'):
-            return Result("I think one dishwashing liquid bottle is enough for now")
+            return Result("The remaining bottles leak.")
         self.set_data('taken', True)
         self.set_interact('taken')
         self.state.add_inventory_item('detergent_bottle')
-        return Result("You pick up an empty dishwashing liquid bottle. You can't find any sponges")
+        return Result("You pick up an empty dishwashing liquid bottle. You can't find any sponges.")
 
     def get_description(self):
         return "Empty plastic containers. They used to hold dishwasher soap."

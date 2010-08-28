@@ -320,7 +320,7 @@ class JimPanel(Thing):
 
     def get_description(self):
         if self.scene.get_data('ai panel') == 'closed':
-            return "The sign reads 'Warning: Authorized Techinicians Only'"
+            return "The sign reads 'Warning: Authorized Techinicians Only'."
 
     def interact_without(self):
         if self.scene.get_data('ai status') == 'online':
@@ -454,7 +454,7 @@ class DestNavPageLine(Thing):
             return Result("You could change the destination, but when JIM recovers, it'll just get reset.")
         if self.state.scenes['bridge'].get_data('ai status') == 'dead':
             self.state.set_current_scene('won')
-            return Result("You change the destination.", soundfile="beep550.png", close_detail=True)
+            return Result("You change the destination.", soundfile="beep550.ogg", close_detail=True)
 
 class CompUpButton(Thing):
     """Up button on log screen"""
@@ -592,7 +592,7 @@ class BridgeCompDetail(Scene):
         super(BridgeCompDetail, self).draw_background(surface)
 
     def _clear_navigation(self):
-        "Remove navigation things inf nessecary"
+        "Remove navigation things if necessary"
         for thing in self._nav_lines:
             if thing.name in self.things.keys():
                 # Much fiddling to do the right thing when we reinsert it

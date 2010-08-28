@@ -190,7 +190,7 @@ class LaserWelderButton(Thing):
             else:
                 self.state.add_inventory_item("cryo_pipes_one")
             return Result("With high-precision spitzensparken, the can and tube are welded"
-                        " into a whole greater than the parts.",
+                        " into a whole greater than the sum of the parts.",
                         soundfile='laser.ogg')
 
 

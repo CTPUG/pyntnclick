@@ -55,13 +55,9 @@ class Cryo(Scene):
             "These pipes carry cooling fluid to the cryo units.",
             (
                 (552, 145, 129, 66),
-                # (643, 199, 38, 233),
                 (636, 82, 165, 60),
                 (140, 135, 112, 73),
-                # (125, 192, 27, 258),
                 (11, 63, 140, 67),
-                #(2, 130, 44, 394),
-                #(756, 127, 52, 393),
                 )))
         self.add_thing(UncuttableCryoPipes())
 
@@ -105,7 +101,7 @@ class Cryo(Scene):
 
         self.add_thing(GenericCryoUnit(6,
             "An empty cryo unit. Recently filled by you.",
-            "Prisoner %s. Safe cracker. 30 years." % PLAYER_ID,
+            "Prisoner %s. Safecracking, grand larceny. 30 years." % PLAYER_ID,
             (
                 (399, 426, 70, 56),
                 (404, 455, 69, 120),
@@ -113,7 +109,7 @@ class Cryo(Scene):
 
         self.add_thing(GenericCryoUnit(7,
             "An empty cryo unit.",
-            "Prisoner 83F1-CE32D3234749. Spammer. 5 years",
+            "Prisoner 83F1-CE32D3234749. Spamming. 5 years",
             (
                 (472, 432, 58, 51),
                 (488, 455, 41, 134),
@@ -344,7 +340,6 @@ class CryoRoomDoor(Door):
             return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.", soundfile='break.ogg')
         elif self.get_data('door') == "shut":
             text = "You bang on the door with the titanium femur. It makes a clanging sound."
-            speech.say(self.name, text)
             return Result(text, soundfile='clang.ogg')
         else:
             return Result("You wave the femur in the doorway. Nothing happens.")
@@ -359,11 +354,7 @@ class CryoRoomDoor(Door):
             return None
 
     def interact_default(self, item):
-        return Result(random.choice([
-                    "Sadly, this isn't that sort of game.",
-                    "Your valiant efforts are foiled by the Evil Game Designer.",
-                    "The door resists. Try something else, perhaps?",
-                    ]))
+        return self.interact_without()
 
     def half_open_door(self):
         self.set_data('door', "ajar")
