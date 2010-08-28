@@ -388,7 +388,6 @@ class Thing(StatefulGizmo):
         self.current_interact = None
         self.rect = None
         self.orig_rect = None
-        # TODO: add masks
 
     def _fix_rect(self):
         """Fix rects to compensate for scene offset"""
@@ -484,7 +483,11 @@ class Item(object):
     # image for inventory
     INVENTORY_IMAGE = None
 
+    # name for interactions (i.e. def interact_with_<TOOL_NAME>)
     TOOL_NAME = None
+
+    # set to instance of CursorSprite
+    CURSOR = None
 
     def __init__(self, name):
         self.name = name
@@ -492,7 +495,6 @@ class Item(object):
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
         self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
-        # TODO: needs cursor
 
     def get_inventory_image(self):
         return self.inventory_image
