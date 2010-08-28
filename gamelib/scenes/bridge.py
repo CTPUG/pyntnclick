@@ -242,7 +242,11 @@ class SuperconductorThing(Thing):
         self.state.current_scene.things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
-        return Result("The superconductor module unclips easily.")
+        return (Result("The superconductor module unclips easily."),
+                make_jim_dialog(("Prisoner %s. That chair you've destroyed was "
+                                 "property of the ship's captain. "
+                                 "You will surely be punished."
+                                ) % PLAYER_ID, self.state))
 
 class StarField(Thing):
 
