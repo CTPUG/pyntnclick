@@ -18,13 +18,14 @@ DEBUG_RECTS = False
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None, soundfile=None, detail_view=None, style=None):
+    def __init__(self, message=None, soundfile=None, detail_view=None, style=None, close_detail=False):
         self.message = message
         self.sound = None
         if soundfile:
             self.sound = get_sound(soundfile)
         self.detail_view = detail_view
         self.style = style
+        self.close_detail = close_detail
 
     def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
@@ -34,6 +35,8 @@ class Result(object):
             scene_widget.show_message(self.message, self.style)
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
+        if self.close_detail and hasattr(scene_widget, 'parent') and hasattr(scene_widget.parent, 'clear_detail'):
+            scene_widget.parent.clear_detail()
 
 
 def handle_result(result, scene_widget):
@@ -59,6 +62,7 @@ def initial_state():
     state.load_scenes("crew_quarters")
     state.load_scenes("map")
     state.load_scenes("manual")
+    state.load_scenes("won")
     initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
     state.set_current_scene(initial_scene)
     state.set_do_enter_leave()

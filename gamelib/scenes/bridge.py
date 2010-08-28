@@ -2,12 +2,16 @@
 
 import random
 
+from pygame.colordict import THECOLORS
+from pygame.color import Color
+from pygame.rect import Rect
 from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.sound import get_current_playlist
+from gamelib.constants import DEBUG
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
@@ -36,8 +40,8 @@ class Bridge(Scene):
 
     INITIAL_DATA = {
         'accessible': True,
-        'ai status' : 'online',
-        'ai panel'  : 'closed',
+        'ai status' : 'online', # online, looping, dead
+        'ai panel'  : 'closed', # closed, open, broken
         }
 
     def __init__(self, state):
@@ -356,7 +360,7 @@ class LogTab(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'alert'
+        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'log'
 
     def interact_without(self):
         self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
@@ -375,12 +379,61 @@ class AlertTab(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'log'
+        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'alert'
 
     def interact_without(self):
         self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
         return Result(soundfile='beep550.ogg')
 
+class NavTab(Thing):
+    """Tab for the Navigation screen"""
+
+    NAME = 'bridge_comp.nav_tab'
+
+    INTERACTS = {
+            'nav tab' : InteractNoImage(197, 53, 126, 37),
+            }
+    INITIAL = 'nav tab'
+    COMPUTER = 'bridge_comp_detail'
+
+    def is_interactive(self):
+        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'nav'
+
+    def interact_without(self):
+        self.state.detail_views[self.COMPUTER].set_data('tab', 'nav')
+        return Result(soundfile='beep550.ogg')
+
+class DestNavPageLine(Thing):
+    """The destination navigation lines."""
+
+    INITIAL = 'line'
+    COMPUTER = 'bridge_comp_detail'
+
+    def __init__(self, number, rect, ai_blocked):
+        super(DestNavPageLine, self).__init__()
+        self.name = 'bridge_comp.nav_line%s' % number
+        if DEBUG:
+            self._interact_hilight_color = Color(THECOLORS.keys()[number])
+        r = Rect(rect)
+        self.interacts = {}
+        self.interacts['line'] = InteractNoImage(r.x, r.y, r.w, r.h)
+        # Whether JIM blocks this
+        self.ai_blocked = ai_blocked
+        self.set_interact('line')
+
+    def is_interactive(self):
+        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'nav'
+
+    def interact_without(self):
+        if self.state.scenes['bridge'].get_data('ai status') == 'online':
+            return make_jim_dialog("You are not authorized to change the destination", self.state)
+        if not self.ai_blocked:
+            return Result("There's no good reason to choose to go to the penal colony")
+        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
+            return Result("You could change the destination, but when JIM recovers, it'll just get reset")
+        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
+            self.state.set_current_scene('won')
+            return Result("You change the destination", soundfile="beep550.png", close_detail=True)
 
 class CompUpButton(Thing):
     """Up button on log screen"""
@@ -479,16 +532,23 @@ class BridgeCompDetail(Scene):
 
         self.add_thing(LogTab())
         self.add_thing(AlertTab())
+        self.add_thing(NavTab())
         self.add_thing(CompUpButton())
         self.add_thing(CompDownButton())
         self._scene_playlist = None
         self._alert = get_image(self.FOLDER, self.ALERT_BASE)
         self._alert_messages = {}
-        self._nav_message = {}
+        self._nav_messages = {}
         for key, name in self.ALERTS.iteritems():
             self._alert_messages[key] = get_image(self.FOLDER, name)
         for key, name in self.NAVIGATION.iteritems():
-            self._nav_message[key] = get_image(self.FOLDER, name)
+            self._nav_messages[key] = get_image(self.FOLDER, name)
+        self._nav_lines = []
+        self._nav_lines.append(DestNavPageLine(1, (14, 99, 595, 30), False))
+        self._nav_lines.append(DestNavPageLine(2, (14, 135, 595, 30), True))
+        self._nav_lines.append(DestNavPageLine(3, (14, 167, 595, 30), True))
+        self._nav_lines.append(DestNavPageLine(4, (14, 203, 595, 30), True))
+        self._nav_lines.append(DestNavPageLine(5, (14, 239, 595, 30), True))
         self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
 
     def enter(self):
@@ -500,26 +560,53 @@ class BridgeCompDetail(Scene):
 
     def draw_background(self, surface):
         if self.get_data('tab') == 'alert':
+            self._clear_navigation()
             self._background = self._alert
-        else:
+        elif self.get_data('tab') == 'log':
+            self._clear_navigation()
             self._background = self._logs[self.get_data('log page')]
+        elif self.get_data('tab') == 'nav':
+            self._background = self._get_nav_page()
         super(BridgeCompDetail, self).draw_background(surface)
+
+    def _clear_navigation(self):
+        "Remove navigation things inf nessecary"
+        for thing in self._nav_lines:
+            if thing.name in self.things.keys():
+                # Much fiddling to do the right thing when we reinsert it
+                del self.things[thing.name]
+                thing.scene = None
+
+    def _get_nav_page(self):
+        if not self.state.scenes['engine'].get_data('engine online'):
+            return self._nav_messages['engine offline']
+        elif not self.state.scenes['mess'].get_data('life support online'):
+            return self._nav_messages['life support']
+        else:
+            for thing in self._nav_lines:
+                if thing.name not in self.things:
+                    self.add_thing(thing)
+            return self._nav_messages['final']
+
+    def _draw_alerts(self, surface):
+        xpos, ypos = self.ALERT_OFFSET
+        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
+            surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
+            ypos += self._alert_messages['ai looping'].get_size()[1] + self.ALERT_SPACING
+        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
+            surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
+            ypos += self._alert_messages['ai offline'].get_size()[1] + self.ALERT_SPACING
+        if not self.state.scenes['engine'].get_data('engine online'):
+            surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
+            ypos += self._alert_messages['engine offline'].get_size()[1] + self.ALERT_SPACING
+        if not self.state.scenes['mess'].get_data('life support online'):
+            surface.blit(self._alert_messages['life support'], (xpos, ypos))
+            ypos += self._alert_messages['life support'].get_size()[1] + self.ALERT_SPACING
+
 
     def draw_things(self, surface):
         if self.get_data('tab') == 'alert':
-            xpos, ypos = self.ALERT_OFFSET
-            if self.state.scenes['bridge'].get_data('ai status') == 'looping':
-                surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
-                ypos += self._alert_messages['ai looping'].get_size()[1] + self.ALERT_SPACING
-            if self.state.scenes['bridge'].get_data('ai status') == 'dead':
-                surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
-                ypos += self._alert_messages['ai offline'].get_size()[1] + self.ALERT_SPACING
-            if not self.state.scenes['engine'].get_data('engine online'):
-                surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
-                ypos += self._alert_messages['engine offline'].get_size()[1] + self.ALERT_SPACING
-            if not self.state.scenes['mess'].get_data('life support online'):
-                surface.blit(self._alert_messages['life support'], (xpos, ypos))
-                ypos += self._alert_messages['life support'].get_size()[1] + self.ALERT_SPACING
+            self._draw_alerts(surface)
         super(BridgeCompDetail, self).draw_things(surface)
 
 
