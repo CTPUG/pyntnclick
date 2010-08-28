@@ -65,7 +65,6 @@ def initial_state():
     state.load_scenes("crew_quarters")
     state.load_scenes("map")
     state.load_scenes("manual")
-    state.load_scenes("won")
     initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
     state.set_current_scene(initial_scene)
     state.set_do_enter_leave()

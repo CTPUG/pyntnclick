@@ -16,10 +16,6 @@ class CrewQuarters(Scene):
 
     OFFSET = (0, -50)
 
-    INITIAL_DATA = {
-        'accessible': True,
-        }
-
     def __init__(self, state):
         super(CrewQuarters, self).__init__(state)
         self.add_thing(ToMap())

@@ -39,7 +39,6 @@ class Bridge(Scene):
             ]
 
     INITIAL_DATA = {
-        'accessible': True,
         'ai status' : 'online', # online, looping, dead
         'ai panel'  : 'closed', # closed, open, broken
         }

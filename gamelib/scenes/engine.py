@@ -16,7 +16,6 @@ class Engine(Scene):
     BACKGROUND = "engine_room.png"
 
     INITIAL_DATA = {
-        'accessible': True,
         'engine online': False,
         'greet' : True,
         }

@@ -20,7 +20,6 @@ class Mess(Scene):
     BACKGROUND = "mess_hall.png"
 
     INITIAL_DATA = {
-        'accessible': True,
         'life support status': 'broken', # broken, replaced, fixed
         }
 

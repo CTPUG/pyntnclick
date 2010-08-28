@@ -23,7 +23,6 @@ class Cryo(Scene):
     BACKGROUND = "cryo_room.png"
 
     INITIAL_DATA = {
-        'accessible': True,
         'greet' : True,
         'vandalism_warn': True,
         }
@@ -364,8 +363,6 @@ class CryoRoomDoor(Door):
     def open_door(self):
         self.set_data('door', "open")
         self.set_interact("open")
-        self.state.scenes['bridge'].set_data('accessible', True)
-        self.state.scenes['mess'].set_data('accessible', True)
 
     def get_description(self):
         if self.get_data('door') == "open":

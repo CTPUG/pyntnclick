@@ -21,7 +21,6 @@ class Map(Scene):
     BACKGROUND = 'map.png'
 
     INITIAL_DATA = {
-        'accessible': True,
         'implant': True,
     }
 
@@ -56,16 +55,10 @@ class DoorThing(Thing):
     # name of destination
     DEST = None
 
-    def interact_without(self):
+    def interact(self, _item):
         """Go to destination."""
         if self.DEST in self.state.scenes:
-            if self.state.scenes[self.DEST].get_data('accessible'):
-                self.state.set_current_scene(self.DEST)
-                return Result()
-            else:
-                return Result("You can't go there right now.")
-        else:
-            return Result("You *could* go there, but it doesn't actually exist.")
+            self.state.set_current_scene(self.DEST)
 
 
 class ToCryo(DoorThing):
@@ -131,13 +124,13 @@ class ToEngine(DoorThing):
 
     INITIAL = 'door'
 
-    def interact_without(self):
+    def interact(self, item):
         if not self.state.is_in_inventory('helmet'):
             return Result('The airlock refuses to open. The automated'
                     ' voice says: "Hull breach beyond this door. Personnel'
                     ' must be equipped for vacuum before entry."')
         else:
-            return super(ToEngine, self).interact_without()
+            return super(ToEngine, self).interact(item)
 
 
 class ToMachine(DoorThing):
@@ -187,7 +180,7 @@ class InaccessibleArea(Thing):
 
     INITIAL = 'areas'
 
-    def interact_without(self):
+    def interact(self, _item):
         return Result("You look in the door, but just see empty space: "
                       "that room appears to have been obliterated by meteors.")
 
@@ -204,7 +197,7 @@ class HydroponicsArea(Thing):
 
     INITIAL = 'areas'
 
-    def interact_without(self):
+    def interact(self, _item):
         return Result("Peering in through the window, you see that the entire "
                       "chamber is overgrown with giant broccoli. It would "
                       "take you years to cut a path through that.")

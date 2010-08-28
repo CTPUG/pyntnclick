@@ -12,10 +12,6 @@ class Machine(Scene):
     FOLDER = "machine"
     BACKGROUND = "machine_room.png"
 
-    INITIAL_DATA = {
-        'accessible': True,
-        }
-
     def __init__(self, state):
         super(Machine, self).__init__(state)
         self.add_thing(ToMap())
