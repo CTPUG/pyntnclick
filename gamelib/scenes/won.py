@@ -23,6 +23,6 @@ class Won(Scene):
     def enter(self):
         return Result("Congratulations, Prisoner %s. You head off to your chosen "
                 "destination, safe in the knowledge that nothing can stop you. "
-                "Now you just need to do something during the intervening months" % PLAYER_ID)
+                "Now you just need to find something to do during the intervening months." % PLAYER_ID)
 
 SCENES = [Won]

@@ -447,14 +447,14 @@ class DestNavPageLine(Thing):
 
     def interact_without(self):
         if self.state.scenes['bridge'].get_data('ai status') == 'online':
-            return make_jim_dialog("You are not authorized to change the destination", self.state)
+            return make_jim_dialog("You are not authorized to change the destination.", self.state)
         if not self.ai_blocked:
-            return Result("There's no good reason to choose to go to the penal colony")
+            return Result("There's no good reason to choose to go to the penal colony.")
         if self.state.scenes['bridge'].get_data('ai status') == 'looping':
-            return Result("You could change the destination, but when JIM recovers, it'll just get reset")
+            return Result("You could change the destination, but when JIM recovers, it'll just get reset.")
         if self.state.scenes['bridge'].get_data('ai status') == 'dead':
             self.state.set_current_scene('won')
-            return Result("You change the destination", soundfile="beep550.png", close_detail=True)
+            return Result("You change the destination.", soundfile="beep550.png", close_detail=True)
 
 class CompUpButton(Thing):
     """Up button on log screen"""
