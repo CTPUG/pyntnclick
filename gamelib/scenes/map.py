@@ -18,12 +18,12 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
 class Map(Scene):
 
     FOLDER = "map"
-    BACKGROUND = None # TODO
+    BACKGROUND = 'map.png'
 
     INITIAL_DATA = {
         'accessible': True,
         'implant': True,
-        }
+    }
 
     def __init__(self, state):
         super(Map, self).__init__(state)
@@ -35,8 +35,6 @@ class Map(Scene):
         self.add_thing(ToCrew())
 
     def enter(self):
-        for door_thing in self.things.values():
-            door_thing.check_dest()
         if self.get_data('implant'):
             self.set_data('implant', False)
             ai1 = make_jim_dialog(
@@ -67,13 +65,6 @@ class DoorThing(Thing):
         else:
             return Result("You *could* go there, but it doesn't actually exist.")
 
-    def check_dest(self):
-        if self.DEST in self.state.scenes:
-            if self.state.scenes[self.DEST].get_data('accessible'):
-                self.set_interact('accessible')
-            else:
-                self.set_interact('inaccessible')
-
 
 class ToCryo(DoorThing):
     "Way to cryo room."
@@ -82,11 +73,13 @@ class ToCryo(DoorThing):
     DEST = "cryo"
 
     INTERACTS = {
-        "inaccessible": InteractText(100, 200, "To Cryo"),
-        "accessible": InteractText(100, 200, "To Cryo", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (515, 158, 56, 68),
+            (361, 519, 245, 29),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
 
 class ToBridge(DoorThing):
@@ -96,11 +89,13 @@ class ToBridge(DoorThing):
     DEST = "bridge"
 
     INTERACTS = {
-        "inaccessible": InteractText(300, 200, "To Bridge"),
-        "accessible": InteractText(300, 200, "To Bridge", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (36, 260, 60, 83),
+            (26, 177, 71, 21),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
 
 class ToMess(DoorThing):
@@ -110,11 +105,13 @@ class ToMess(DoorThing):
     DEST = "mess"
 
     INTERACTS = {
-        "inaccessible": InteractText(100, 300, "To Mess"),
-        "accessible": InteractText(100, 300, "To Mess", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (395, 262, 64, 80),
+            (341, 434, 110, 27),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
 
 class ToEngine(DoorThing):
@@ -124,11 +121,13 @@ class ToEngine(DoorThing):
     DEST = "engine"
 
     INTERACTS = {
-        "inaccessible": InteractText(300, 300, "To Engine"),
-        "accessible": InteractText(300, 300, "To Engine", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (691, 279, 76, 54),
+            (662, 500, 128, 23),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
     def interact_without(self):
         if not self.state.is_in_inventory('helmet'):
@@ -146,11 +145,13 @@ class ToMachine(DoorThing):
     DEST = "machine"
 
     INTERACTS = {
-        "inaccessible": InteractText(100, 400, "To Machine"),
-        "accessible": InteractText(100, 400, "To Machine", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (608, 156, 57, 72),
+            (578, 91, 140, 23),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
 
 class ToCrew(DoorThing):
@@ -160,11 +161,13 @@ class ToCrew(DoorThing):
     DEST = "crew_quarters"
 
     INTERACTS = {
-        "inaccessible": InteractText(300, 400, "To Crew Quarters"),
-        "accessible": InteractText(300, 400, "To Crew Quarters", (0, 127, 0)),
-        }
+        'door': InteractRectUnion((
+            (210, 321, 37, 64),
+            (69, 469, 148, 26),
+        ))
+    }
 
-    INITIAL = "inaccessible"
+    INITIAL = 'door'
 
 
 SCENES = [Map]
