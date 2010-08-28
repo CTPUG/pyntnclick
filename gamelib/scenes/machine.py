@@ -179,14 +179,20 @@ class LaserWelderButton(Thing):
             self.scene.things["machine.welder.slot"].update_contents()
             if self.state.items["cryo_pipes_one"] in self.state.inventory:
                 self.state.replace_inventory_item("cryo_pipes_one", "cryo_pipes_two")
+                return Result("With high-precision spitzensparken, you weld"
+                        " together a second pipe. You bundle the two pipes together.",
+                        soundfile='laser.ogg')
             elif self.state.items["cryo_pipes_two"] in self.state.inventory:
                 self.state.replace_inventory_item("cryo_pipes_two", "cryo_pipes_three")
+                return Result("With high-precision spitzensparken, you create yet"
+                        " another pipe. You store it with the other two.",
+                        soundfile='laser.ogg')
             elif self.state.items["cryo_pipes_three"] in self.state.inventory:
                 # just for safety
-                pass
+                return None
             else:
                 self.state.add_inventory_item("cryo_pipes_one")
-            return Result("With high-precision spitzensparken, the can and tube are welded"
+                return Result("With high-precision spitzensparken, the can and tube are welded"
                         " into a whole greater than the sum of the parts.",
                         soundfile='laser.ogg')
 
