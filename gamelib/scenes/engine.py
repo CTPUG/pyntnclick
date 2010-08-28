@@ -359,6 +359,9 @@ class ArrowsTopLeft(Thing):
 
     INITIAL = 'arrows'
 
+    def is_interactive(self):
+        return False
+
 
 class ArrowsBottomLeft(Thing):
     NAME = 'engine.arrows_bottom_left'
@@ -373,6 +376,9 @@ class ArrowsBottomLeft(Thing):
 
     INITIAL = 'arrows'
 
+    def is_interactive(self):
+        return False
+
 
 class ArrowsRight(Thing):
     NAME = 'engine.arrows_right'
@@ -386,6 +392,9 @@ class ArrowsRight(Thing):
     }
 
     INITIAL = 'arrows'
+
+    def is_interactive(self):
+        return False
 
 
 class DangerSign(Thing):
