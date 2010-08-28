@@ -35,6 +35,7 @@ Not copyrightable.
 
 [can_hit.ogg]
 [chopping.ogg]
+[chop-chop.ogg]
 URL: http://www.archive.org/download/Berklee44v12/Berklee44v12.zip
 Source: http://www.archive.org/details/Berklee44v12
 License: http://creativecommons.org/licenses/by/3.0/
