@@ -253,7 +253,8 @@ class StarField(Thing):
     NAME = 'bridge.stars'
 
     INTERACTS = {
-            'stars' : InteractAnimated(185, 145,
+            #'stars' : InteractImage(190, 145, 'stars_3.png'),
+            'stars' : InteractAnimated(190, 145,
                 ['stars_%d.png' % (i+1) for i in range(3) + range(1,0,-1)], 30)
             }
 
