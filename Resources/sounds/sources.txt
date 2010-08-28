@@ -42,6 +42,13 @@ Credit: Sound samples from Berklee recorded for Richard Boulanger for use in the
 can_hit.ogg wavfile: Trashcan_hit2.wav
 chopping.ogg wavfile: chopping4.wav
 
+[boomslang.ogg]
+URL: http://www.archive.org/download/Berklee44v6/Berklee44v6.zip
+Source: http://www.archive.org/details/Berklee44v6
+License: http://creativecommons.org/licenses/by/3.0/
+Credit: Sound samples from Berklee recorded for Richard Boulanger for use in the One Laptop per Child music library. See http://wiki.laptop.org/go/Sound_samples for details.
+boomslang.ogg wavfile: crazy_breathing_2.wav
+
 [grinder.ogg]
 URL: http://www.archive.org/download/Berklee44v7/Berklee44v7.zip
 Source: http://www.archive.org/details/Berklee44v7
