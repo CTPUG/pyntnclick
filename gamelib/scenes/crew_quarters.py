@@ -163,8 +163,12 @@ class MonitorCamera(BaseCamera):
     NAME = 'crew.camera'
 
     INTERACTS = {
-            'camera' : InteractImage(85, 97, 'camera_medium.png')
-            }
+        'online' : InteractImage(85, 97, 'camera_medium.png'),
+        'dead': InteractImage(85, 97, 'camera_medium_gray.png'),
+        'looping': InteractAnimated(85, 97, ('camera_medium.png',
+                                             'camera_medium_gray.png'),
+                                    15),
+    }
 
 
 class PosterThing(Thing):

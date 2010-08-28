@@ -512,8 +512,12 @@ class MonitorCamera(BaseCamera):
     NAME = "bridge.camera"
 
     INTERACTS = {
-            'camera' : InteractImage(33, 192, 'camera_small.png')
-            }
+        'online': InteractImage(33, 192, 'camera_small.png'),
+        'dead': InteractImage(33, 192, 'camera_small_gray.png'),
+        'looping': InteractAnimated(33, 192, ('camera_small.png',
+                                              'camera_small_gray.png'),
+                                    15),
+    }
 
 
 class BridgeCompDetail(Scene):
