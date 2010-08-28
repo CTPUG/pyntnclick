@@ -57,6 +57,15 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_current_detail(self, scene):
         self.assertEquals(scene, self.state.current_detail.name)
 
+    def handle_result(self, result):
+        if result is None:
+            return None
+        if hasattr(result, 'process'):
+            if result.detail_view:
+                self.state.set_current_detail(result.detail_view)
+            return result
+        return [self.handle_result(r) for r in result]
+
     def interact_thing(self, thing, item=None):
         item_obj = None
         if item is not None:
@@ -64,16 +73,12 @@ class GameLogicTestCase(unittest.TestCase):
             item_obj = self.state.items[item]
         thing_container = self.state.current_detail or self.state.current_scene
         result = thing_container.things[thing].interact(item_obj)
-        if result and result.detail_view:
-            self.state.set_current_detail(result.detail_view)
-        return result
+        return self.handle_result(result)
 
     def interact_item(self, target_item, item):
         self.assert_inventory_item(target_item)
         item_obj = self.state.items[item]
         target_obj = self.state.items[target_item]
         result = target_obj.interact(item_obj, self.state)
-        if result and result.detail_view:
-            self.state.set_current_detail(result.detail_view)
-        return result
+        return self.handle_result(result)
 
