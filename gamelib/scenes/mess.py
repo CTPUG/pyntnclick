@@ -234,9 +234,10 @@ class DetergentThing(Thing):
     def get_description(self):
         return "Empty plastic containers. They used to hold dishwasher soap."
 
+
 class DetergentBottle(Item):
-    INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png')
+    INVENTORY_IMAGE = 'bottle_empty.png'
+    CURSOR = CursorSprite('bottle_empty_cursor.png', 27, 7)
 
 
 class ToMap(Door):

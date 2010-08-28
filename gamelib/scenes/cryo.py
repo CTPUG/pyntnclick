@@ -440,8 +440,8 @@ class PlaqueThing(Thing):
 
 
 class FullBottle(Item):
-    INVENTORY_IMAGE = 'triangle.png'
-    CURSOR = CursorSprite('triangle.png')
+    INVENTORY_IMAGE = 'bottle_full.png'
+    CURSOR = CursorSprite('bottle_full_cursor.png', 27, 7)
 
 
 class CryoPools(Thing):
