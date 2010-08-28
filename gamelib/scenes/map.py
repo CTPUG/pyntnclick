@@ -189,7 +189,7 @@ class InaccessibleArea(Thing):
 
     def interact_without(self):
         return Result("You look in the door, but just see empty space: "
-                      "that room appears to be missing.")
+                      "that room appears to have been obliterated by meteors.")
 
 
 class HydroponicsArea(Thing):
