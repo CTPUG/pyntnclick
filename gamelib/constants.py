@@ -13,6 +13,6 @@ SCENE_SIZE = (SCREEN[0], SCREEN[1] - BUTTON_SIZE)
 # Animation frame rate
 FRAME_RATE = 25
 
-DEBUG = True
+DEBUG = False
 
 ENTER, LEAVE = 1, 2
