@@ -2,6 +2,8 @@ Specific:
   * Make arrow keys work in rect_drawer
   * Make number keys work in game
   * Full screen mode
+  * Brighter text background in overlayed messages.
+  * Add support for descriptions for items.
 
 Cleanups:
   * Clean-up finding and loading of speech strings.
@@ -12,3 +14,15 @@ Hints:
   * Interacts with laser cutter & tins
   * Interacts with cameras
   * Interacts with cryo-resevoirs & empty bottle
+
+Game:
+  * Keep track of total sentence.
+  * Add descriptions for items.
+  * Add sound to more rooms.
+
+Bugs:
+  * Sounds top if you enter a detail scene and don't start again
+    when you return.
+  * Fish bowl contents still say there's a fish bowl even when
+    the bowl is gone.
+  * Individualized cans.
