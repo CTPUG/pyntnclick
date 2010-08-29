@@ -53,7 +53,8 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.floor_hole', 5,
-            "A gaping hole in the floor of the room. You're guessing that's why there's a vacuum in here.",
+            "A gaping hole in the floor of the room. "
+            "It is clearly irreparable.",
             (
                 (257, 493, 141, 55),
                 (301, 450, 95, 45),
