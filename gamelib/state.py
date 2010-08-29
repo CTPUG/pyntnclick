@@ -374,7 +374,31 @@ class Scene(StatefulGizmo):
         return self._background.get_size()
 
 
-class Thing(StatefulGizmo):
+class InteractiveMixin(object):
+    def is_interactive(self):
+        return True
+
+    def interact(self, item):
+        if not self.is_interactive():
+            return
+        if item is None:
+            return self.interact_without()
+        else:
+            handler = getattr(self, 'interact_with_' + item.tool_name, None)
+            if handler is not None:
+                return handler(item)
+            else:
+                return self.interact_default(item)
+
+    def interact_without(self):
+        return self.interact_default(None)
+
+    def interact_default(self, item=None):
+        return None
+
+
+
+class Thing(StatefulGizmo, InteractiveMixin):
     """Base class for things in a scene that you can interact with."""
 
     # name of thing
@@ -448,9 +472,6 @@ class Thing(StatefulGizmo):
     def get_description(self):
         return None
 
-    def is_interactive(self):
-        return True
-
     def enter(self, item):
         """Called when the cursor enters the Thing."""
         pass
@@ -459,26 +480,8 @@ class Thing(StatefulGizmo):
         """Called when the cursr leaves the Thing."""
         pass
 
-    def interact(self, item):
-        if not self.is_interactive():
-            return
-        if item is None:
-            return self.interact_without()
-        else:
-            handler = getattr(self, 'interact_with_' + item.tool_name, None)
-            if handler is not None:
-                return handler(item)
-            else:
-                return self.interact_default(item)
-
     def animate(self):
         return self.current_interact.animate()
-
-    def interact_without(self):
-        return self.interact_default(None)
-
-    def interact_default(self, item):
-        return None
 
     def draw(self, surface):
         old_rect = self.current_interact.rect
