@@ -9,11 +9,16 @@ Cleanups:
   * Fix thing.enter being called multiple times without leaving
 
 Hints:
-  * More help with the starting puzzle
-  * Interacts with broken pipes & cryo/pipe / tins
+  * More help with the starting puzzle (another interactable cryo-chamber?)
+  * Interacts with broken pipes & cryo/pipe / tins / < 3 fixed pipe
   * Interacts with laser cutter & tins
   * Interacts with cameras
   * Interacts with cryo-resevoirs & empty bottle
+  * Interacts with cryo-puddles & cans.
+  * Interacts with fish bowl & engine room
+  * Make JIM messages more clearly from JIM.
+  * Make it clearer who JIM is (That he is separate from the ship computers)
+  * JIM Speaks after fixing engines & repairing environment?
 
 Game:
   * Keep track of total sentence.
