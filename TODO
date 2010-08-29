@@ -1,5 +1,4 @@
 Specific:
-  * Make arrow keys work in rect_drawer
   * Make number keys work in game
   * Full screen mode
   * Brighter text background in overlayed messages.
@@ -10,6 +9,7 @@ Cleanups:
   * Fix thing.enter being called multiple times without leaving
 
 Hints:
+  * More help with the starting puzzle
   * Interacts with broken pipes & cryo/pipe / tins
   * Interacts with laser cutter & tins
   * Interacts with cameras
@@ -21,8 +21,4 @@ Game:
   * Add sound to more rooms.
 
 Bugs:
-  * Sounds top if you enter a detail scene and don't start again
-    when you return.
-  * Fish bowl contents still say there's a fish bowl even when
-    the bowl is gone.
   * Individualized cans.
