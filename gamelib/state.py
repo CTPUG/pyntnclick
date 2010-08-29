@@ -112,6 +112,7 @@ class State(object):
 
     def add_item(self, item):
         self.items[item.name] = item
+        item.set_state(self)
 
     def load_scenes(self, modname):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
@@ -505,16 +506,17 @@ class Item(InteractiveMixin):
     # image for inventory
     INVENTORY_IMAGE = None
 
-    # name for interactions (i.e. def interact_with_<TOOL_NAME>)
-    TOOL_NAME = None
+    # name of item
+    NAME = None
 
     # name for interactions (i.e. def interact_with_<TOOL_NAME>)
-    NAME = None
+    TOOL_NAME = None
 
     # set to instance of CursorSprite
     CURSOR = None
 
     def __init__(self, name=None):
+        self.state = None
         self.name = self.NAME
         if name is not None:
             self.name = name
@@ -522,6 +524,10 @@ class Item(InteractiveMixin):
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
         self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
+
+    def set_state(self, state):
+        assert self.state is None
+        self.state = state
 
     def get_inventory_image(self):
         return self.inventory_image
@@ -551,8 +557,6 @@ class CloneableItem(Item):
         return cls._counter - 1
 
     def __init__(self, name=None):
+        super(CloneableItem, self).__init__(name)
         my_count = self._get_new_id()
-        super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
-        self.tool_name = name
-        if self.TOOL_NAME is not None:
-            self.tool_name = self.TOOL_NAME
+        self.name = "%s.%s" % (self.name, my_count)
