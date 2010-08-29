@@ -505,11 +505,16 @@ class Item(object):
     # name for interactions (i.e. def interact_with_<TOOL_NAME>)
     TOOL_NAME = None
 
+    # name for interactions (i.e. def interact_with_<TOOL_NAME>)
+    NAME = None
+
     # set to instance of CursorSprite
     CURSOR = None
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name=None):
+        self.name = self.NAME
+        if name is not None:
+            self.name = name
         self.tool_name = name
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
@@ -542,7 +547,7 @@ class CloneableItem(Item):
         cls._counter += 1
         return cls._counter - 1
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         my_count = self._get_new_id()
         super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
         self.tool_name = name
