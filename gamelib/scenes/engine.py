@@ -45,12 +45,6 @@ class Engine(Scene):
                 (549, 479, 60, 55),
             )
         ))
-        self.add_thing(GenericDescThing('engine.controlpanel', 2,
-            "A control panel. It seems dead.",
-            (
-                (513, 330, 58, 50),
-            )
-        ))
         self.add_thing(GenericDescThing('engine.superconductors', 4,
             "Superconductors. The engines must be power hogs.",
             (
@@ -119,7 +113,8 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.exit_sign', 13,
-            "It's one of those glow-in-the-dark exit signs that you see everywhere.",
+            "It's one of those glow-in-the-dark signs needed to satisfy the "
+            "health and safety inspectors.",
             (
                 (681, 322, 80, 33),
             )
@@ -503,7 +498,10 @@ class ComputerConsole(Thing):
     NAME = "engine.computer_console"
 
     INTERACTS = {
-        'console': InteractNoImage(293, 287, 39, 36),
+        'console': InteractRectUnion((
+            (293, 287, 39, 36),
+            (513, 330, 58, 50),
+        )),
     }
 
     INITIAL = 'console'
