@@ -121,7 +121,10 @@ class FishbowlThing(Thing):
         return Result("The fishbowl is useful, but its contents aren't.")
 
     def get_description(self):
-        return "This fishbowl looks exactly like an old science fiction space helmet."
+        if self.get_data('has_bowl'):
+            return "This fishbowl looks exactly like an old science fiction space helmet."
+        else:
+            return "An evicted dead fish and some sand lie forlornly on the table"
 
 class Fishbowl(Item):
     "A bowl. Sans fish."
