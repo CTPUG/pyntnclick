@@ -1,15 +1,14 @@
-General:
-  * Lots of artwork.
-  * Lots of game logic and plot.
-  * Lots of refactoring.
-
 Specific:
-  * Create icon for windows executable.
-  * Make animations and description-only Things not clickable.
   * Make arrow keys work in rect_drawer
+  * Make number keys work in game
+  * Full screen mode
 
 Cleanups:
   * Clean-up finding and loading of speech strings.
-  * Move interacts out into their own module?
   * Fix thing.enter being called multiple times without leaving
 
+Hints:
+  * Interacts with broken pipes & cryo/pipe / tins
+  * Interacts with laser cutter & tins
+  * Interacts with cameras
+  * Interacts with cryo-resevoirs & empty bottle
