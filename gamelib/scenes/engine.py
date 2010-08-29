@@ -24,7 +24,6 @@ class Engine(Scene):
         super(Engine, self).__init__(state)
         self.add_item(CanOpener('canopener'))
         self.add_thing(CanOpenerThing())
-        self.add_item(BrokenSuperconductor('superconductor_broken'))
         self.add_thing(SuperconductorSocket())
         self.add_thing(PowerLines())
         self.add_thing(CryoContainers())
@@ -177,11 +176,6 @@ class CanOpenerThing(Thing):
                       "the vacuum has kept it in perfect condition.")
 
 
-class BrokenSuperconductor(Item):
-    INVENTORY_IMAGE = 'superconductor_broken.png'
-    CURSOR = CursorSprite('superconductor_broken_cursor.png')
-
-
 class SuperconductorSocket(Thing):
     NAME = 'engine.superconductor'
 
@@ -216,8 +210,8 @@ class SuperconductorSocket(Thing):
         if self.get_data('present') and not self.get_data('working'):
             self.set_interact('removed')
             self.set_data('present', False)
-            self.state.add_inventory_item('superconductor_broken')
-            return Result("With leverage, the burned-out superconductor snaps out.")
+            return Result("With leverage, the burned-out superconductor snaps out. "
+                          "You discard it.")
 
     def interact_with_superconductor(self, item):
         if self.get_data('present'):
