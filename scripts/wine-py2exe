@@ -57,6 +57,10 @@ rm -rf "${DEST}/pygame"
 cp -R "${WINE_PYTHON}/Lib/site-packages/pygame" "${DEST}"
 rm -rf "${DEST}/pygame/examples" "${DEST}/pygame/tests" "${DEST}/pygame/docs"
 
+echo "'docs/walkthrough.rst' -> '${DEST}/Resources'"
+rm -f "${DEST}/walkthrough.rst"
+cp "docs/walkthrough.rst" "${DEST}/walkthrough.rst"
+
 echo ""
 
 #
