@@ -184,7 +184,7 @@ class Stethoscope(Item):
 class StethoscopeThing(Thing):
     "Stehoscope on the doctor"
 
-    NAME ='bridge.stethoscope'
+    NAME = 'bridge.stethoscope'
 
     INTERACTS = {
         'stethoscope': InteractImage(650, 178, 'hanging_stethoscope.png'),
@@ -228,7 +228,7 @@ class Superconductor(Item):
 class SuperconductorThing(Thing):
     "Superconductor from the massage chair."
 
-    NAME ='bridge.superconductor'
+    NAME = 'bridge.superconductor'
 
     INTERACTS = {
         'superconductor': InteractImage(158, 138, 'superconductor.png'),
@@ -286,7 +286,7 @@ class BlinkingLights(Thing):
 
 class LeftLights(BlinkingLights):
 
-    NAME ='bridge.lights.1'
+    NAME = 'bridge.lights.1'
 
     INTERACTS = {
         "lights": InteractAnimated(176, 337, ["bridge_lights_1_1.png", "bridge_lights_1_2.png", "bridge_lights_1_3.png", "bridge_lights_1_2.png"], 5)
@@ -296,7 +296,7 @@ class LeftLights(BlinkingLights):
 
 class RightLights(BlinkingLights):
 
-    NAME ='bridge.lights.2'
+    NAME = 'bridge.lights.2'
 
     INTERACTS = {
         "lights": InteractAnimated(559, 332, ["bridge_lights_2_1.png", "bridge_lights_2_2.png", "bridge_lights_2_3.png", "bridge_lights_2_2.png"], 5)

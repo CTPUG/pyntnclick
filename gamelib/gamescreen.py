@@ -132,6 +132,7 @@ class StateWidget(Widget):
 class DetailWindow(Widget):
     def __init__(self, screen):
         Widget.__init__(self)
+        self.image_rect = None
         self.screen = screen
         self.state = screen.state
         self.border_width = 5

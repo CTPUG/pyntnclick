@@ -75,7 +75,7 @@ class BoomLabel(albow.controls.Label):
 class BoomButton(BoomLabel):
 
     def __init__(self, text, action, screen):
-        super(BoomLabel, self).__init__(text, font=get_font(20, 'Vera.ttf'), margin=4)
+        super(BoomButton, self).__init__(text, font=get_font(20, 'Vera.ttf'), margin=4)
         self.bg_color = (0, 0, 0)
         self._frame_color = Color(50, 50, 50)
         self.action = action

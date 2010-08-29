@@ -24,7 +24,7 @@ class EndScreen(Screen):
         self.add(self._quit_button)
 
     def draw(self, surface):
-        surface.blit(self.background, (0,0))
+        surface.blit(self.background, (0, 0))
         self._menu_button.draw(surface)
         self._quit_button.draw(surface)
 
