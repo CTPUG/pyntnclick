@@ -285,7 +285,9 @@ class Scene(StatefulGizmo):
 
     def remove_thing(self, thing):
         del self.things[thing.name]
-        self.leave()
+        if thing is self.state.current_thing:
+            self.state.current_thing.leave()
+            self.state.current_thing = None
 
     def _get_description(self):
         text = (self.state.current_thing and
