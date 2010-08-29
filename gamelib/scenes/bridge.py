@@ -323,7 +323,7 @@ class JimPanel(Thing):
 
     def interact_without(self):
         if self.scene.get_data('ai status') == 'online':
-            return self.interact_default()
+            return self.interact_default(None)
         elif self.scene.get_data('ai panel') == 'closed':
             return Result("You are unable to open the panel with your bare hands.")
         elif self.scene.get_data('ai panel') == 'open':
@@ -335,7 +335,7 @@ class JimPanel(Thing):
 
     def interact_with_machete(self, item):
         if self.scene.get_data('ai status') == 'online':
-            return self.interact_default()
+            return self.interact_default(item)
         elif self.scene.get_data('ai panel') == 'closed':
             self.scene.set_data('ai panel', 'open')
             self.set_interact('open')
@@ -346,7 +346,7 @@ class JimPanel(Thing):
             self.set_interact('broken')
             return Result("You smash various delicate components with the machete.")
 
-    def interact_default(self):
+    def interact_default(self, item):
         if self.scene.get_data('ai status') == 'online':
             return (Result('You feel a shock from the panel.'),
                     make_jim_dialog("Prisoner %s. Please step away from the panel. "
