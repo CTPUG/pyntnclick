@@ -1,5 +1,7 @@
 """Utilities and base classes for dealing with scenes."""
 
+import copy
+
 from albow.resource import get_image, get_font
 from albow.utils import frame_rect
 from widgets import BoomLabel
@@ -236,7 +238,9 @@ class StatefulGizmo(object):
     def __init__(self):
         self.data = {}
         if self.INITIAL_DATA:
-            self.data.update(self.INITIAL_DATA)
+            # deep copy of INITIAL_DATA allows lists, sets and
+            # other mutable types to safely be used in INITIAL_DATA
+            self.data.update(copy.deepcopy(self.INITIAL_DATA))
 
     def set_data(self, key, value):
         self.data[key] = value
