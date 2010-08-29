@@ -14,7 +14,7 @@ from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
-from pygame.locals import SWSURFACE
+from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN
 import pygame
 from pygame.colordict import THECOLORS
 
@@ -285,6 +285,19 @@ class AppImage(Widget):
             self.current_image.rect.topleft = e.pos
             self.invalidate()
 
+    def key_down(self, e):
+        if self.mode == 'image' and self.current_image:
+            # Move the image by 1 pixel
+            cur_pos = self.current_image.rect.topleft
+            if e.key == K_LEFT:
+                self.current_image.rect.topleft = (cur_pos[0] - 1, cur_pos[1])
+            elif e.key == K_RIGHT:
+                self.current_image.rect.topleft = (cur_pos[0] + 1, cur_pos[1])
+            elif e.key == K_UP:
+                self.current_image.rect.topleft = (cur_pos[0], cur_pos[1] - 1)
+            elif e.key == K_DOWN:
+                self.current_image.rect.topleft = (cur_pos[0], cur_pos[1] + 1)
+
     def mouse_down(self, e):
         if self.mode == 'del':
             pos = e.pos
@@ -322,6 +335,7 @@ class AppImage(Widget):
                 if cand:
                     self.images.remove(cand)
                     self.current_image = cand
+                    self.current_image.topleft = e.pos
                     self.invalidate()
 
     def mouse_up(self, e):
@@ -345,6 +359,46 @@ def make_button(text, action, ypos):
     button.rect.move_ip(805, ypos)
     return button
 
+class RectApp(RootWidget):
+    """Handle the app stuff for the rect drawer"""
+
+    def __init__(self, display):
+        super(RectApp, self).__init__(display)
+        self.image = AppImage(state)
+        self.add(self.image)
+        draw = make_button('Draw Rect', self.image.draw_mode, 0)
+        self.add(draw)
+        load_image = make_button("Load image", self.image.image_load, 35)
+        self.add(load_image)
+        add_image = make_button("Place/Move images", self.image.image_mode, 70)
+        add_image.enabled = False
+        self.add(add_image)
+        self.image.place_image_menu = add_image
+        delete = make_button('Delete Objects', self.image.del_mode, 105)
+        self.add(delete)
+        palette = AppPalette(self.image)
+        palette.rect.move_ip(810, 140)
+        self.add(palette)
+        print_rects = make_button("Print objects", self.image.print_objs, 300)
+        self.add(print_rects)
+        toggle_things = make_button("Toggle Things", self.image.toggle_things, 335)
+        self.add(toggle_things)
+        toggle_thing_rects = make_button("Toggle Thing Rects", self.image.toggle_thing_rects, 370)
+        self.add(toggle_thing_rects)
+        toggle_images = make_button("Toggle Images", self.image.toggle_images, 405)
+        self.add(toggle_images)
+        toggle_rects = make_button("Toggle Rects", self.image.toggle_rects, 440)
+        self.add(toggle_rects)
+        toggle_toolbar = make_button("Toggle Toolbar", self.image.toggle_toolbar, 475)
+        self.add(toggle_toolbar)
+        quit_but = make_button("Quit", self.quit, 565)
+        self.add(quit_but)
+
+    def key_down(self, event):
+        # Dispatch to image widget
+        self.image.key_down(event)
+
+
 if __name__ == "__main__":
     # FIXME: should load an actual scene with current things, not just a
     # background image
@@ -353,6 +407,8 @@ if __name__ == "__main__":
         sys.exit(0)
     pygame.display.init()
     pygame.font.init()
+    # enable key repeating
+    pygame.key.set_repeat(200, 100)
     display = pygame.display.set_mode((1000, 600))
     state = state.initial_state()
     if len(sys.argv) < 3:
@@ -370,34 +426,5 @@ if __name__ == "__main__":
         except KeyError:
             print 'Invalid scene name'
             sys.exit(1)
-    app = RootWidget(display)
-    image = AppImage(state)
-    app.add(image)
-    draw = make_button('Draw Rect', image.draw_mode, 0)
-    app.add(draw)
-    load_image = make_button("Load image", image.image_load, 35)
-    app.add(load_image)
-    add_image = make_button("Place/Move images", image.image_mode, 70)
-    add_image.enabled = False
-    app.add(add_image)
-    image.place_image_menu = add_image
-    delete = make_button('Delete Objects', image.del_mode, 105)
-    app.add(delete)
-    palette = AppPalette(image)
-    palette.rect.move_ip(810, 140)
-    app.add(palette)
-    print_rects = make_button("Print objects", image.print_objs, 300)
-    app.add(print_rects)
-    toggle_things = make_button("Toggle Things", image.toggle_things, 335)
-    app.add(toggle_things)
-    toggle_thing_rects = make_button("Toggle Thing Rects", image.toggle_thing_rects, 370)
-    app.add(toggle_thing_rects)
-    toggle_images = make_button("Toggle Images", image.toggle_images, 405)
-    app.add(toggle_images)
-    toggle_rects = make_button("Toggle Rects", image.toggle_rects, 440)
-    app.add(toggle_rects)
-    toggle_toolbar = make_button("Toggle Toolbar", image.toggle_toolbar, 475)
-    app.add(toggle_toolbar)
-    quit_but = make_button("Quit", app.quit, 565)
-    app.add(quit_but)
+    app = RectApp(display)
     app.run()
