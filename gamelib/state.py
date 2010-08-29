@@ -379,17 +379,22 @@ class InteractiveMixin(object):
     def is_interactive(self):
         return True
 
-    def interact(self, item):
+    def interact(self, tool):
         if not self.is_interactive():
-            return
-        if item is None:
+            return None
+        if tool is None:
             return self.interact_without()
+        handler = getattr(self, 'interact_with_' + tool.tool_name, None)
+        inverse_handler = self.get_inverse_interact(tool)
+        if handler is not None:
+            return handler(tool)
+        elif inverse_handler is not None:
+            return inverse_handler(self)
         else:
-            handler = getattr(self, 'interact_with_' + item.tool_name, None)
-            if handler is not None:
-                return handler(item)
-            else:
-                return self.interact_default(item)
+            return self.interact_default(tool)
+
+    def get_inverse_interact(self, tool):
+        return None
 
     def interact_without(self):
         return self.interact_default(None)
@@ -532,17 +537,8 @@ class Item(InteractiveMixin):
     def get_inventory_image(self):
         return self.inventory_image
 
-    def interact(self, tool):
-        if tool is None:
-            return self.interact_without(state)
-        handler = getattr(self, 'interact_with_' + tool.name, None)
-        inverse_handler = getattr(tool, 'interact_with_' + self.tool_name, None)
-        if handler is not None:
-            return handler(tool)
-        elif inverse_handler is not None:
-            return inverse_handler(self)
-        else:
-            return self.interact_default(tool)
+    def get_inverse_interact(self, tool):
+        return getattr(tool, 'interact_with_' + self.tool_name, None)
 
 
 class CloneableItem(Item):
