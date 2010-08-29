@@ -499,7 +499,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
                             rect.inflate(1, 1), 1)
 
 
-class Item(object):
+class Item(InteractiveMixin):
     """Base class for inventory items."""
 
     # image for inventory
