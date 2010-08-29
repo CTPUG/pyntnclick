@@ -532,20 +532,17 @@ class Item(InteractiveMixin):
     def get_inventory_image(self):
         return self.inventory_image
 
-    def interact(self, tool, state):
+    def interact(self, tool):
         if tool is None:
             return self.interact_without(state)
         handler = getattr(self, 'interact_with_' + tool.name, None)
         inverse_handler = getattr(tool, 'interact_with_' + self.tool_name, None)
         if handler is not None:
-            return handler(tool, state)
+            return handler(tool)
         elif inverse_handler is not None:
-            return inverse_handler(self, state)
+            return inverse_handler(self)
         else:
-            return self.interact_default(tool, state)
-
-    def interact_default(self, tool, state):
-        return Result("That doesn't do anything useful")
+            return self.interact_default(tool)
 
 
 class CloneableItem(Item):

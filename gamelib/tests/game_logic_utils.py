@@ -81,7 +81,7 @@ class GameLogicTestCase(unittest.TestCase):
         self.assert_inventory_item(target_item)
         item_obj = self.state.items[item]
         target_obj = self.state.items[target_item]
-        result = target_obj.interact(item_obj, self.state)
+        result = target_obj.interact(item_obj)
         return self.handle_result(result)
 
     def close_detail(self):

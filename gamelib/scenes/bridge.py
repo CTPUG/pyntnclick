@@ -217,10 +217,10 @@ class Superconductor(Item):
     INVENTORY_IMAGE = 'superconductor_fixed.png'
     CURSOR = CursorSprite('superconductor_fixed.png')
 
-    def interact_with_duct_tape(self, item, state):
+    def interact_with_duct_tape(self, item):
         taped_superconductor = TapedSuperconductor('taped_superconductor')
-        state.add_item(taped_superconductor)
-        state.replace_inventory_item(self.name, taped_superconductor.name)
+        self.state.add_item(taped_superconductor)
+        self.state.replace_inventory_item(self.name, taped_superconductor.name)
         return Result("You rip off a piece of duct tape and stick it on the superconductor. "
                       "It almost sticks to itself, but you successfully avoid disaster.")
 

@@ -50,22 +50,22 @@ class Mess(Scene):
 class BaseCan(CloneableItem):
     """Base class for the cans"""
 
-    def interact_with_full_can(self, item, state):
+    def interact_with_full_can(self, item):
         return Result("You bang the cans together. It sounds like two cans being banged together.", soundfile="can_hit.ogg")
 
-    def interact_with_dented_can(self, item, state):
-        return self.interact_with_full_can(item, state)
+    def interact_with_dented_can(self, item):
+        return self.interact_with_full_can(item)
 
-    def interact_with_empty_can(self, item, state):
-        return self.interact_with_full_can(item, state)
+    def interact_with_empty_can(self, item):
+        return self.interact_with_full_can(item)
 
-    def interact_with_machete(self, item, state):
+    def interact_with_machete(self, item):
         return Result("You'd mangle it beyond usefulness.")
 
-    def interact_with_canopener(self, item, state):
+    def interact_with_canopener(self, item):
         empty = EmptyCan('empty_can')
-        state.add_item(empty)
-        state.replace_inventory_item(self.name, empty.name)
+        self.state.add_item(empty)
+        self.state.replace_inventory_item(self.name, empty.name)
         return Result("You open both ends of the can, discarding the hideous contents.")
 
 
@@ -75,10 +75,10 @@ class EmptyCan(BaseCan):
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png')
 
-    def interact_with_titanium_leg(self, item, state):
+    def interact_with_titanium_leg(self, item):
         return Result("Flattening the can doesn't look like a useful thing to do.")
 
-    def interact_with_canopener(self, item, state):
+    def interact_with_canopener(self, item):
         return Result("There's nothing left to open on this can")
 
 
@@ -88,10 +88,10 @@ class FullCan(BaseCan):
     INVENTORY_IMAGE = "full_can.png"
     CURSOR = CursorSprite('full_can_cursor.png')
 
-    def interact_with_titanium_leg(self, item, state):
+    def interact_with_titanium_leg(self, item):
         dented = DentedCan("dented_can")
-        state.add_item(dented)
-        state.replace_inventory_item(self.name, dented.name)
+        self.state.add_item(dented)
+        self.state.replace_inventory_item(self.name, dented.name)
         return Result("You club the can with the femur. The can gets dented, but doesn't open.", soundfile="can_hit.ogg")
 
 
@@ -101,7 +101,7 @@ class DentedCan(BaseCan):
     INVENTORY_IMAGE = "dented_can.png"
     CURSOR = CursorSprite('dented_can_cursor.png')
 
-    def interact_with_titanium_leg(self, item, state):
+    def interact_with_titanium_leg(self, item):
         return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
 
 

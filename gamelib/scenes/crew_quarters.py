@@ -133,10 +133,10 @@ class Fishbowl(Item):
     CURSOR = CursorSprite('fishbowl.png')
     NAME = "fishbowl"
 
-    def interact_with_duct_tape(self, item, state):
+    def interact_with_duct_tape(self, item):
         helmet = FishbowlHelmet('helmet')
-        state.add_item(helmet)
-        state.replace_inventory_item(self.name, helmet.name)
+        self.state.add_item(helmet)
+        self.state.replace_inventory_item(self.name, helmet.name)
         return Result("You duct tape the edges of the helmet. The seal is"
                 " crude, but it will serve as a workable helmet if needed.")
 
