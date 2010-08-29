@@ -112,10 +112,10 @@ class BridgeComputer(Thing):
     def interact_without(self):
         return Result(detail_view='bridge_comp_detail')
 
-    def interact_with_titanium_leg(self):
+    def interact_with_titanium_leg(self, item):
         return Result("You can't break the duraplastic screen.")
 
-    def interact_with_machete(self):
+    def interact_with_machete(self, item):
         return Result("Scratching the screen won't help you.")
 
     def get_description(self):
