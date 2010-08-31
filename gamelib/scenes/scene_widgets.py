@@ -184,21 +184,22 @@ def make_jim_dialog(mesg, state):
 
 class BaseCamera(Thing):
     "Base class for the camera puzzles"
- 
+
     INITIAL = 'online'
     INITIAL_DATA = {
          'state': 'online',
     }
- 
+
     def get_description(self):
         return "A security camera watches over the room"
- 
+
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
-        ai_response = make_jim_dialog("3D scene reconstruction failed. Critical error. Entering emergency shutdown.", self.state)
-        self.state.scenes['bridge'].set_data('ai status', 'looping')
-        return ai_response
- 
+        if self.state.scenes['bridge'].get_data('ai status') == 'online':
+            ai_response = make_jim_dialog("3D scene reconstruction failed. Critical error. Entering emergency shutdown.", self.state)
+            self.state.scenes['bridge'].set_data('ai status', 'looping')
+            return ai_response
+
     def animate(self):
         ai_status = self.state.scenes['bridge'].get_data('ai status')
         if ai_status != self.get_data('status'):
