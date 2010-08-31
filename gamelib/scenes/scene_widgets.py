@@ -191,7 +191,16 @@ class BaseCamera(Thing):
     }
 
     def get_description(self):
-        return "A security camera watches over the room"
+        status = self.state.scenes['bridge'].get_data('ai status')
+        if status == 'online':
+            return "A security camera watches over the room"
+        elif status == 'looping':
+            return "The security camera is currently offline but should be working soon"
+        else:
+            return "The security camera is powered down"
+
+    def is_interactive(self):
+        return self.state.scenes['bridge'].get_data('ai status') == 'online'
 
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
