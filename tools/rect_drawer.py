@@ -199,6 +199,16 @@ class AppImage(Widget):
         self.start_pos = None
         self.end_pos = None
 
+    def draw_sub_image(self, image, surface, cropped_rect):
+        """Tweaked image drawing to avoid albow's centring the image in the
+           subsurface"""
+        surf = surface.subsurface(cropped_rect)
+        frame = surf.get_rect()
+        imsurf = image.get_image()
+        r = imsurf.get_rect()
+        r.topleft = frame.topleft
+        surf.blit(imsurf, r)
+
     def draw(self, surface):
         if self.state.current_detail:
             if self.draw_things:
@@ -223,15 +233,13 @@ class AppImage(Widget):
             for image in self.images:
                 if image.rect.colliderect(surface.get_rect()):
                     cropped_rect = image.rect.clip(surface.get_rect())
-                    sub = surface.subsurface(cropped_rect)
-                    image.draw(sub)
+                    self.draw_sub_image(image, surface, cropped_rect)
                 else:
                     print 'image outside surface', image
             if self.current_image and self.mode == 'image':
                 if self.current_image.rect.colliderect(surface.get_rect()):
                     cropped_rect = self.current_image.rect.clip(surface.get_rect())
-                    sub = surface.subsurface(cropped_rect)
-                    self.current_image.draw(sub)
+                    self.draw_sub_image(self.current_image, surface, cropped_rect)
         if self.draw_toolbar:
             toolbar_rect = pygame.rect.Rect(0, 550, 800, 50)
             tb_surf = surface.subsurface(0, 550, 800, 50).convert_alpha()
@@ -283,7 +291,7 @@ class AppImage(Widget):
         # So we do the right thing for off screen images
         self.old_mouse_pos = None
 
-    def mouse_move(self, e):
+    def do_mouse_move(self, e):
         if self.mode == 'image' and self.current_image:
             if self.old_mouse_pos:
                 delta = (e.pos[0] - self.old_mouse_pos[0], e.pos[1] - self.old_mouse_pos[1])
@@ -407,6 +415,11 @@ class RectApp(RootWidget):
     def key_down(self, event):
         # Dispatch to image widget
         self.image.key_down(event)
+
+    def mouse_delta(self, event):
+        # We propogate mouse move from here to draw region, so images move
+        # off-screen
+        self.image.do_mouse_move(event)
 
 
 if __name__ == "__main__":
