@@ -91,6 +91,7 @@ class AppImage(Widget):
         self.draw_thing_rects = True
         self.draw_images = True
         self.draw_toolbar = True
+        self.old_mouse_pos = None
         self.find_existing_intersects()
 
     def find_existing_intersects(self):
@@ -279,24 +280,31 @@ class AppImage(Widget):
         self.mode = 'image'
         self.start_pos = None
         self.end_pos = None
+        # So we do the right thing for off screen images
+        self.old_mouse_pos = None
 
     def mouse_move(self, e):
         if self.mode == 'image' and self.current_image:
-            self.current_image.rect.topleft = e.pos
+            if self.old_mouse_pos:
+                delta = (e.pos[0] - self.old_mouse_pos[0], e.pos[1] - self.old_mouse_pos[1])
+                self.current_image.rect.center = (self.current_image.rect.center[0] + delta[0], self.current_image.rect.center[1] + delta[1])
+            else:
+                self.current_image.rect.center = e.pos
             self.invalidate()
+            self.old_mouse_pos = e.pos
 
     def key_down(self, e):
         if self.mode == 'image' and self.current_image:
             # Move the image by 1 pixel
-            cur_pos = self.current_image.rect.topleft
+            cur_pos = self.current_image.rect.center
             if e.key == K_LEFT:
-                self.current_image.rect.topleft = (cur_pos[0] - 1, cur_pos[1])
+                self.current_image.rect.center = (cur_pos[0] - 1, cur_pos[1])
             elif e.key == K_RIGHT:
-                self.current_image.rect.topleft = (cur_pos[0] + 1, cur_pos[1])
+                self.current_image.rect.center = (cur_pos[0] + 1, cur_pos[1])
             elif e.key == K_UP:
-                self.current_image.rect.topleft = (cur_pos[0], cur_pos[1] - 1)
+                self.current_image.rect.center = (cur_pos[0], cur_pos[1] - 1)
             elif e.key == K_DOWN:
-                self.current_image.rect.topleft = (cur_pos[0], cur_pos[1] + 1)
+                self.current_image.rect.center = (cur_pos[0], cur_pos[1] + 1)
 
     def mouse_down(self, e):
         if self.mode == 'del':
@@ -325,6 +333,7 @@ class AppImage(Widget):
             if self.current_image:
                 self.images.append(self.current_image)
                 self.current_image = None
+                self.old_mouse_pos = None
                 self.invalidate()
             else:
                 cand = None
@@ -335,7 +344,8 @@ class AppImage(Widget):
                 if cand:
                     self.images.remove(cand)
                     self.current_image = cand
-                    self.current_image.topleft = e.pos
+                    # We want to move relative to the current mouse pos, so
+                    self.old_mouse_pos = e.pos
                     self.invalidate()
 
     def mouse_up(self, e):
