@@ -14,7 +14,9 @@ from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
-from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, BLEND_RGBA_MIN, SRCALPHA
+from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, \
+        K_t, K_d, K_i, K_r, K_o, K_b, \
+        BLEND_RGBA_MIN, SRCALPHA
 import pygame
 from pygame.colordict import THECOLORS
 
@@ -39,7 +41,7 @@ class AppPalette(PaletteView):
 
     def __init__(self, app_image):
         self.image = app_image
-        super(AppPalette, self).__init__((35, 35), 5, 5, margin=2)
+        super(AppPalette, self).__init__((35, 35), 4, 5, margin=2)
         self.selection = 0
         self.image.rect_color = pygame.color.Color(self.colors[self.selection])
 
@@ -323,6 +325,18 @@ class AppImage(Widget):
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] - 1)
             elif e.key == K_DOWN:
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] + 1)
+        if e.key == K_o:
+            self.toggle_trans_images()
+        elif e.key == K_t:
+            self.toggle_things()
+        elif e.key == K_r:
+            self.toggle_thing_rects()
+        elif e.key == K_i:
+            self.toggle_images()
+        elif e.key == K_d:
+            self.toggle_rects()
+        elif e.key == K_b:
+            self.toggle_toolbar()
 
     def mouse_down(self, e):
         if self.mode == 'del':
@@ -381,9 +395,9 @@ class AppImage(Widget):
             self.invalidate()
 
 def make_button(text, action, ypos):
-    button = Button(text, action=action)
+    button = Button(text, action=action, font=get_font(15, 'VeraBd.ttf'))
     button.align = 'l'
-    button.rect = pygame.rect.Rect(0, 0, 200, 35)
+    button.rect = pygame.rect.Rect(0, 0, 200, 30)
     button.rect.move_ip(805, ypos)
     return button
 
@@ -394,34 +408,46 @@ class RectApp(RootWidget):
         super(RectApp, self).__init__(display)
         self.image = AppImage(state)
         self.add(self.image)
-        draw = make_button('Draw Rect', self.image.draw_mode, 0)
+        y = 0
+        draw = make_button('Draw Rect', self.image.draw_mode, y)
         self.add(draw)
-        load_image = make_button("Load image", self.image.image_load, 35)
+        y += draw.get_rect().h
+        load_image = make_button("Load image", self.image.image_load, y)
         self.add(load_image)
-        add_image = make_button("Place/Move images", self.image.image_mode, 70)
+        y += load_image.get_rect().h
+        add_image = make_button("Place/Move images", self.image.image_mode, y)
         add_image.enabled = False
         self.add(add_image)
         self.image.place_image_menu = add_image
-        delete = make_button('Delete Objects', self.image.del_mode, 105)
+        y += add_image.get_rect().h
+        delete = make_button('Delete Objects', self.image.del_mode, y)
         self.add(delete)
+        y += delete.get_rect().h
         palette = AppPalette(self.image)
-        palette.rect.move_ip(810, 140)
+        palette.rect.move_ip(810, y)
         self.add(palette)
-        print_rects = make_button("Print objects", self.image.print_objs, 300)
+        y += palette.get_rect().h
+        print_rects = make_button("Print objects", self.image.print_objs, y)
         self.add(print_rects)
-        toggle_things = make_button("Toggle Things", self.image.toggle_things, 335)
+        y += print_rects.get_rect().h
+        toggle_things = make_button("Show Things (t)", self.image.toggle_things, y)
         self.add(toggle_things)
-        toggle_thing_rects = make_button("Toggle Thing Rects", self.image.toggle_thing_rects, 370)
+        y += toggle_things.get_rect().h
+        toggle_thing_rects = make_button("Show Thing Rects (r)", self.image.toggle_thing_rects, y)
         self.add(toggle_thing_rects)
-        toggle_images = make_button("Toggle Images", self.image.toggle_images, 405)
+        y += toggle_thing_rects.get_rect().h
+        toggle_images = make_button("Show Images (i)", self.image.toggle_images, y)
         self.add(toggle_images)
-        trans_images = make_button("Translucent Images", self.image.toggle_trans_images, 440)
+        y += toggle_images.get_rect().h
+        trans_images = make_button("Opaque Images (o)", self.image.toggle_trans_images, y)
         self.add(trans_images)
-        toggle_rects = make_button("Toggle Drawn Rects", self.image.toggle_rects, 475)
+        y += trans_images.get_rect().h
+        toggle_rects = make_button("Show Drawn Rects (d)", self.image.toggle_rects, y)
         self.add(toggle_rects)
-        toggle_toolbar = make_button("Toggle Toolbar", self.image.toggle_toolbar, 510)
+        y += toggle_rects.get_rect().h
+        toggle_toolbar = make_button("Show Toolbar (b)", self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
-        quit_but = make_button("Quit", self.quit, 565)
+        quit_but = make_button("Quit", self.quit, 570)
         self.add(quit_but)
 
     def key_down(self, event):
