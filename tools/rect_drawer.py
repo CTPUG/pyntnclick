@@ -14,7 +14,7 @@ from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
-from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN
+from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, BLEND_RGBA_MIN, SRCALPHA
 import pygame
 from pygame.colordict import THECOLORS
 
@@ -90,6 +90,7 @@ class AppImage(Widget):
         self.draw_things = True
         self.draw_thing_rects = True
         self.draw_images = True
+        self.trans_images = False
         self.draw_toolbar = True
         self.old_mouse_pos = None
         self.find_existing_intersects()
@@ -185,6 +186,10 @@ class AppImage(Widget):
     def toggle_images(self):
         self.draw_images = not self.draw_images
 
+    def toggle_trans_images(self):
+        self.trans_images = not self.trans_images
+        self.invalidate()
+
     def toggle_rects(self):
         self.draw_rects = not self.draw_rects
 
@@ -202,12 +207,17 @@ class AppImage(Widget):
     def draw_sub_image(self, image, surface, cropped_rect):
         """Tweaked image drawing to avoid albow's centring the image in the
            subsurface"""
-        surf = surface.subsurface(cropped_rect)
+        surf = pygame.surface.Surface((cropped_rect.w, cropped_rect.h), SRCALPHA).convert_alpha()
         frame = surf.get_rect()
-        imsurf = image.get_image()
+        imsurf = image.get_image().convert_alpha()
         r = imsurf.get_rect()
         r.topleft = frame.topleft
-        surf.blit(imsurf, r)
+        if self.trans_images:
+            surf.fill(pygame.color.Color(255, 255, 255, 96))
+            surf.blit(imsurf, r, None, BLEND_RGBA_MIN)
+        else:
+            surf.blit(imsurf, r, None)
+        surface.blit(surf, cropped_rect)
 
     def draw(self, surface):
         if self.state.current_detail:
@@ -405,9 +415,11 @@ class RectApp(RootWidget):
         self.add(toggle_thing_rects)
         toggle_images = make_button("Toggle Images", self.image.toggle_images, 405)
         self.add(toggle_images)
-        toggle_rects = make_button("Toggle Rects", self.image.toggle_rects, 440)
+        trans_images = make_button("Translucent Images", self.image.toggle_trans_images, 440)
+        self.add(trans_images)
+        toggle_rects = make_button("Toggle Drawn Rects", self.image.toggle_rects, 475)
         self.add(toggle_rects)
-        toggle_toolbar = make_button("Toggle Toolbar", self.image.toggle_toolbar, 475)
+        toggle_toolbar = make_button("Toggle Toolbar", self.image.toggle_toolbar, 510)
         self.add(toggle_toolbar)
         quit_but = make_button("Quit", self.quit, 565)
         self.add(quit_but)
