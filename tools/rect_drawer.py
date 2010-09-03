@@ -10,7 +10,7 @@ sys.path.append(script_path)
 from albow.root import RootWidget
 from albow.utils import frame_rect
 from albow.widget import Widget
-from albow.controls import Button, Image
+from albow.controls import Button, Image, Label
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
@@ -460,12 +460,28 @@ class AppImage(Widget):
             self.end_pos = self._conv_pos(e.pos)
             self.invalidate()
 
+
+class ModeLabel(BoomLabel):
+
+    def __init__(self, app_image):
+        self.app_image = app_image
+        super(ModeLabel, self).__init__('Mode : ', 200,
+                font=get_font(15, 'VeraBd.ttf'),
+                fg_color = pygame.color.Color(128, 0, 255))
+        self.rect.move_ip(805, 0)
+
+    def draw_all(self, surface):
+        self.set_text('Mode : %s' % self.app_image.mode)
+        super(ModeLabel, self).draw_all(surface)
+
+
 def make_button(text, action, ypos):
     button = Button(text, action=action, font=get_font(15, 'VeraBd.ttf'))
     button.align = 'l'
     button.rect = pygame.rect.Rect(0, 0, MENU_WIDTH, MENU_BUTTON_HEIGHT)
     button.rect.move_ip(805, ypos)
     return button
+
 
 class RectApp(RootWidget):
     """Handle the app stuff for the rect drawer"""
@@ -474,7 +490,9 @@ class RectApp(RootWidget):
         super(RectApp, self).__init__(display)
         self.image = AppImage(state)
         self.add(self.image)
-        y = 0
+        mode_label = ModeLabel(self.image)
+        self.add(mode_label)
+        y = mode_label.get_rect().h
         draw = make_button('Draw Rect', self.image.draw_mode, y)
         self.add(draw)
         y += draw.get_rect().h
