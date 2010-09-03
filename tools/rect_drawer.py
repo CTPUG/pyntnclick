@@ -25,6 +25,7 @@ constants.DEBUG = True
 MENU_WIDTH = 200
 MENU_BUTTON_HEIGHT = 30
 ZOOM = 4
+ZOOM_STEP = 100
 
 from gamelib import state
 state.DEBUG_RECTS = True
@@ -99,6 +100,7 @@ class AppImage(Widget):
         self.draw_toolbar = True
         self.old_mouse_pos = None
         self.zoom_display = False
+        self.zoom_offset = (600, 600)
         self.find_existing_intersects()
 
     def find_existing_intersects(self):
@@ -233,7 +235,8 @@ class AppImage(Widget):
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
             zoomed = pygame.transform.scale(base_surface, (ZOOM * constants.SCREEN[0], ZOOM * constants.SCREEN[1]))
-            surface.blit(zoomed, (0, 0))
+            area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1], self.zoom_offset[0] + constants.SCREEN[0], self.zoom_offset[1] + constants.SCREEN[1])
+            surface.blit(zoomed, (0, 0), area)
         else:
             self.do_unzoomed_draw(surface)
 
@@ -321,13 +324,42 @@ class AppImage(Widget):
 
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
-            pos = (mouse_pos[0] / ZOOM, mouse_pos[1] / ZOOM)
+            pos = ((mouse_pos[0] + self.zoom_offset[0]) / ZOOM, (mouse_pos[1] + self.zoom_offset[1]) / ZOOM)
         else:
             pos = mouse_pos
         return pos
 
+    def _check_limits(self, offset):
+        if offset[0] < 0:
+            offset[0] = 0
+        if offset[1] < 0:
+            offset[1] = 0
+        if offset[0] > ZOOM * constants.SCREEN[0] - constants.SCREEN[0]:
+            offset[0] = ZOOM * constants.SCREEN[0] - constants.SCREEN[0]
+        if offset[1] > ZOOM * constants.SCREEN[1] - constants.SCREEN[1]:
+            offset[1] = ZOOM * constants.SCREEN[1] - constants.SCREEN[1]
+
+    def _make_zoom_offset(self, pos):
+        zoom_pos = (pos[0] * ZOOM, pos[1] * ZOOM)
+        offset = [zoom_pos[0] - constants.SCREEN[0] / 2,
+                zoom_pos[1] - constants.SCREEN[1] / 2]
+        self._check_limits(offset)
+        print offset
+        self.zoom_offset = tuple(offset)
+
+    def _move_zoom(self, x, y):
+        offset = list(self.zoom_offset)
+        offset[0] += ZOOM_STEP * x
+        offset[1] += ZOOM_STEP * y
+        self._check_limits(offset)
+        print offset
+        self.zoom_offset = tuple(offset)
+
     def do_mouse_move(self, e):
         pos = self._conv_pos(e.pos)
+        if not self.zoom_display:
+            # Construct zoom offset from mouse pos
+            self._make_zoom_offset(e.pos)
         if self.mode == 'image' and self.current_image:
             if self.old_mouse_pos:
                 delta = (pos[0] - self.old_mouse_pos[0], pos[1] - self.old_mouse_pos[1])
@@ -349,6 +381,16 @@ class AppImage(Widget):
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] - 1)
             elif e.key == K_DOWN:
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] + 1)
+        elif self.zoom_display:
+            if e.key == K_LEFT:
+                self._move_zoom(-1, 0)
+            elif e.key == K_RIGHT:
+                self._move_zoom(1, 0)
+            elif e.key == K_UP:
+                self._move_zoom(0, -1)
+            elif e.key == K_DOWN:
+                self._move_zoom(0, 1)
+
         if e.key == K_o:
             self.toggle_trans_images()
         elif e.key == K_t:
