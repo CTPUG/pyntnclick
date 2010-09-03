@@ -15,13 +15,16 @@ from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
 from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, \
-        K_t, K_d, K_i, K_r, K_o, K_b, \
+        K_t, K_d, K_i, K_r, K_o, K_b, K_z, \
         BLEND_RGBA_MIN, SRCALPHA
 import pygame
 from pygame.colordict import THECOLORS
 
 from gamelib import constants
 constants.DEBUG = True
+MENU_WIDTH = 200
+MENU_BUTTON_HEIGHT = 30
+ZOOM = 4
 
 from gamelib import state
 state.DEBUG_RECTS = True
@@ -68,7 +71,7 @@ class AppImage(Widget):
 
     def __init__(self, state):
         self.state = state
-        super(AppImage, self).__init__(pygame.rect.Rect(0, 0, 800, 600))
+        super(AppImage, self).__init__(pygame.rect.Rect(0, 0, constants.SCREEN[0], constants.SCREEN[1]))
         self.mode = 'draw'
         self.rects = []
         self.images = []
@@ -95,6 +98,7 @@ class AppImage(Widget):
         self.trans_images = False
         self.draw_toolbar = True
         self.old_mouse_pos = None
+        self.zoom_display = False
         self.find_existing_intersects()
 
     def find_existing_intersects(self):
@@ -198,6 +202,9 @@ class AppImage(Widget):
     def toggle_toolbar(self):
         self.draw_toolbar = not self.draw_toolbar
 
+    def toggle_zoom(self):
+        self.zoom_display = not self.zoom_display
+
     def draw_mode(self):
         self.mode = 'draw'
 
@@ -222,6 +229,15 @@ class AppImage(Widget):
         surface.blit(surf, cropped_rect)
 
     def draw(self, surface):
+        if self.zoom_display:
+            base_surface = surface.copy()
+            self.do_unzoomed_draw(base_surface)
+            zoomed = pygame.transform.scale(base_surface, (ZOOM * constants.SCREEN[0], ZOOM * constants.SCREEN[1]))
+            surface.blit(zoomed, (0, 0))
+        else:
+            self.do_unzoomed_draw(surface)
+
+    def do_unzoomed_draw(self, surface):
         if self.state.current_detail:
             if self.draw_things:
                 self.state.draw_detail(surface, None)
@@ -253,10 +269,10 @@ class AppImage(Widget):
                     cropped_rect = self.current_image.rect.clip(surface.get_rect())
                     self.draw_sub_image(self.current_image, surface, cropped_rect)
         if self.draw_toolbar:
-            toolbar_rect = pygame.rect.Rect(0, 550, 800, 50)
-            tb_surf = surface.subsurface(0, 550, 800, 50).convert_alpha()
+            toolbar_rect = pygame.rect.Rect(0, constants.SCREEN[1] - constants.BUTTON_SIZE, constants.SCREEN[0], constants.BUTTON_SIZE)
+            tb_surf = surface.subsurface(0, constants.SCREEN[1] - constants.BUTTON_SIZE, constants.SCREEN[0], constants.BUTTON_SIZE).convert_alpha()
             tb_surf.fill(pygame.color.Color(127, 0, 0, 191))
-            surface.blit(tb_surf, (0, 550))
+            surface.blit(tb_surf, (0, constants.SCREEN[1] - constants.BUTTON_SIZE))
             # frame_rect(surface, (127, 0, 0), toolbar_rect, 2)
 
     def _make_dict(self):
@@ -292,7 +308,7 @@ class AppImage(Widget):
             self.current_image = Image(image_data)
             self.place_image_menu.enabled = True
             # ensure we're off screen to start
-            self.current_image.rect = image_data.get_rect().move(1000, 600)
+            self.current_image.rect = image_data.get_rect().move(constants.SCREEN[0] + MENU_WIDTH, constants.SCREEN[1])
         except pygame.error, e:
             print 'Unable to load image %s' % e
 
@@ -303,15 +319,23 @@ class AppImage(Widget):
         # So we do the right thing for off screen images
         self.old_mouse_pos = None
 
+    def _conv_pos(self, mouse_pos):
+        if self.zoom_display:
+            pos = (mouse_pos[0] / ZOOM, mouse_pos[1] / ZOOM)
+        else:
+            pos = mouse_pos
+        return pos
+
     def do_mouse_move(self, e):
+        pos = self._conv_pos(e.pos)
         if self.mode == 'image' and self.current_image:
             if self.old_mouse_pos:
-                delta = (e.pos[0] - self.old_mouse_pos[0], e.pos[1] - self.old_mouse_pos[1])
+                delta = (pos[0] - self.old_mouse_pos[0], pos[1] - self.old_mouse_pos[1])
                 self.current_image.rect.center = (self.current_image.rect.center[0] + delta[0], self.current_image.rect.center[1] + delta[1])
             else:
-                self.current_image.rect.center = e.pos
+                self.current_image.rect.center = pos
             self.invalidate()
-            self.old_mouse_pos = e.pos
+            self.old_mouse_pos = pos
 
     def key_down(self, e):
         if self.mode == 'image' and self.current_image:
@@ -337,10 +361,12 @@ class AppImage(Widget):
             self.toggle_rects()
         elif e.key == K_b:
             self.toggle_toolbar()
+        elif e.key == K_z:
+            self.toggle_zoom()
 
     def mouse_down(self, e):
+        pos = self._conv_pos(e.pos)
         if self.mode == 'del':
-            pos = e.pos
             cand = None
             # Images are drawn above rectangles, so search those first
             for image in self.images:
@@ -359,8 +385,8 @@ class AppImage(Widget):
                 self.rects.remove(cand)
                 self.invalidate()
         elif self.mode == 'draw':
-            self.start_pos = e.pos
-            self.end_pos = e.pos
+            self.start_pos = pos
+            self.end_pos = pos
         elif self.mode == 'image':
             if self.current_image:
                 self.images.append(self.current_image)
@@ -377,7 +403,7 @@ class AppImage(Widget):
                     self.images.remove(cand)
                     self.current_image = cand
                     # We want to move relative to the current mouse pos, so
-                    self.old_mouse_pos = e.pos
+                    self.old_mouse_pos = pos
                     self.invalidate()
 
     def mouse_up(self, e):
@@ -391,13 +417,13 @@ class AppImage(Widget):
 
     def mouse_drag(self, e):
         if self.mode == 'draw':
-            self.end_pos = e.pos
+            self.end_pos = self._conv_pos(e.pos)
             self.invalidate()
 
 def make_button(text, action, ypos):
     button = Button(text, action=action, font=get_font(15, 'VeraBd.ttf'))
     button.align = 'l'
-    button.rect = pygame.rect.Rect(0, 0, 200, 30)
+    button.rect = pygame.rect.Rect(0, 0, MENU_WIDTH, MENU_BUTTON_HEIGHT)
     button.rect.move_ip(805, ypos)
     return button
 
@@ -447,6 +473,10 @@ class RectApp(RootWidget):
         y += toggle_rects.get_rect().h
         toggle_toolbar = make_button("Show Toolbar (b)", self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
+        y += toggle_toolbar.get_rect().h
+        toggle_zoom = make_button("Zoom (z)", self.image.toggle_zoom, y)
+        self.add(toggle_zoom)
+        y += toggle_zoom.get_rect().h
         quit_but = make_button("Quit", self.quit, 570)
         self.add(quit_but)
 
@@ -470,7 +500,7 @@ if __name__ == "__main__":
     pygame.font.init()
     # enable key repeating
     pygame.key.set_repeat(200, 100)
-    display = pygame.display.set_mode((1000, 600))
+    display = pygame.display.set_mode((constants.SCREEN[0] + MENU_WIDTH, constants.SCREEN[1]))
     state = state.initial_state()
     if len(sys.argv) < 3:
         try:
