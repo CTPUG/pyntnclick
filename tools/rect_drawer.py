@@ -15,7 +15,7 @@ from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
 from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, \
-        K_t, K_d, K_i, K_r, K_o, K_b, K_z, \
+        K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z, \
         BLEND_RGBA_MIN, SRCALPHA
 import pygame
 from pygame.colordict import THECOLORS
@@ -23,7 +23,7 @@ from pygame.colordict import THECOLORS
 from gamelib import constants
 constants.DEBUG = True
 MENU_WIDTH = 200
-MENU_BUTTON_HEIGHT = 30
+MENU_BUTTON_HEIGHT = 25
 ZOOM = 4
 ZOOM_STEP = 100
 
@@ -100,15 +100,19 @@ class AppImage(Widget):
         self.draw_toolbar = True
         self.old_mouse_pos = None
         self.zoom_display = False
+        self.draw_anim = False
         self.zoom_offset = (600, 600)
         self.find_existing_intersects()
 
+    def _get_scene(self):
+        if self.state.current_detail:
+            return self.state.current_detail
+        else:
+            return self.state.current_scene
+
     def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
-        if self.state.current_detail:
-            scene = self.state.current_detail
-        else:
-            scene = self.state.current_scene
+        scene = self._get_scene()
         # Pylint hates this function
         for thing in scene.things.itervalues():
             for interact_name in thing.interacts:
@@ -138,10 +142,7 @@ class AppImage(Widget):
     def find_intersecting_rects(self, d):
         """Find if any rect collections intersect"""
         # I loath N^X brute search algorithm's, but whatever, hey
-        if self.state.current_detail:
-            scene = self.state.current_detail
-        else:
-            scene = self.state.current_scene
+        scene = self._get_scene()
         for (num, col) in enumerate(d):
             rect_list = d[col]
             for thing in scene.things.itervalues():
@@ -179,10 +180,7 @@ class AppImage(Widget):
 
     def toggle_thing_rects(self):
         self.draw_thing_rects = not self.draw_thing_rects
-        if self.state.current_detail:
-            scene = self.state.current_detail
-        else:
-            scene = self.state.current_scene
+        scene = self._get_scene()
         for thing in scene.things.itervalues():
             if not self.draw_thing_rects:
                 if not hasattr(thing, 'old_colour'):
@@ -206,6 +204,9 @@ class AppImage(Widget):
 
     def toggle_zoom(self):
         self.zoom_display = not self.zoom_display
+
+    def toggle_anim(self):
+        self.draw_anim = not self.draw_anim
 
     def draw_mode(self):
         self.mode = 'draw'
@@ -322,6 +323,9 @@ class AppImage(Widget):
         # So we do the right thing for off screen images
         self.old_mouse_pos = None
 
+    def cycle_mode(self):
+        self.mode = 'cycle'
+
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
             pos = ((mouse_pos[0] + self.zoom_offset[0]) / ZOOM, (mouse_pos[1] + self.zoom_offset[1]) / ZOOM)
@@ -403,6 +407,8 @@ class AppImage(Widget):
             self.toggle_toolbar()
         elif e.key == K_z:
             self.toggle_zoom()
+        elif e.key == K_a:
+            self.toggle_anim()
 
     def mouse_down(self, e):
         pos = self._conv_pos(e.pos)
@@ -424,6 +430,23 @@ class AppImage(Widget):
             if cand:
                 self.rects.remove(cand)
                 self.invalidate()
+        elif self.mode == 'cycle':
+            scene = self._get_scene()
+            cand = None
+            for thing in scene.things.itervalues():
+                if thing.contains(pos):
+                    cand = thing
+                    break
+            if cand:
+                # Find current interacts in this thing
+                cur_interact = cand.current_interact
+                j = cand.interacts.values().index(cur_interact)
+                if j + 1< len(cand.interacts):
+                    next_name = cand.interacts.keys()[j+1]
+                else:
+                    next_name = cand.interacts.keys()[0]
+                if cand.interacts[next_name] != cur_interact:
+                    cand.set_interact(next_name)
         elif self.mode == 'draw':
             self.start_pos = pos
             self.end_pos = pos
@@ -459,6 +482,11 @@ class AppImage(Widget):
         if self.mode == 'draw':
             self.end_pos = self._conv_pos(e.pos)
             self.invalidate()
+
+    def animate(self):
+        if self.draw_anim:
+            if self.state.animate():
+                self.invalidate()
 
 
 class ModeLabel(BoomLabel):
@@ -504,6 +532,9 @@ class RectApp(RootWidget):
         self.add(add_image)
         self.image.place_image_menu = add_image
         y += add_image.get_rect().h
+        cycle = make_button("Cycle interacts", self.image.cycle_mode, y)
+        self.add(cycle)
+        y += cycle.get_rect().h
         delete = make_button('Delete Objects', self.image.del_mode, y)
         self.add(delete)
         y += delete.get_rect().h
@@ -532,11 +563,15 @@ class RectApp(RootWidget):
         toggle_toolbar = make_button("Show Toolbar (b)", self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
         y += toggle_toolbar.get_rect().h
+        toggle_anim = make_button("Show Animations (a)", self.image.toggle_anim, y)
+        self.add(toggle_anim)
+        y += toggle_anim.get_rect().h
         toggle_zoom = make_button("Zoom (z)", self.image.toggle_zoom, y)
         self.add(toggle_zoom)
         y += toggle_zoom.get_rect().h
         quit_but = make_button("Quit", self.quit, 570)
         self.add(quit_but)
+        self.set_timer(constants.FRAME_RATE)
 
     def key_down(self, event):
         # Dispatch to image widget
@@ -546,6 +581,9 @@ class RectApp(RootWidget):
         # We propogate mouse move from here to draw region, so images move
         # off-screen
         self.image.do_mouse_move(event)
+
+    def begin_frame(self):
+        self.image.animate()
 
 
 if __name__ == "__main__":
