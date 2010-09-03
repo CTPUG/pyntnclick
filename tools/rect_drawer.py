@@ -344,7 +344,6 @@ class AppImage(Widget):
         offset = [zoom_pos[0] - constants.SCREEN[0] / 2,
                 zoom_pos[1] - constants.SCREEN[1] / 2]
         self._check_limits(offset)
-        print offset
         self.zoom_offset = tuple(offset)
 
     def _move_zoom(self, x, y):
@@ -352,7 +351,6 @@ class AppImage(Widget):
         offset[0] += ZOOM_STEP * x
         offset[1] += ZOOM_STEP * y
         self._check_limits(offset)
-        print offset
         self.zoom_offset = tuple(offset)
 
     def do_mouse_move(self, e):
