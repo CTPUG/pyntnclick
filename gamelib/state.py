@@ -114,6 +114,7 @@ class State(object):
 
     def add_item(self, item):
         self.items[item.name] = item
+        item.set_state(self)
 
     def load_scenes(self, modname):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
@@ -378,7 +379,36 @@ class Scene(StatefulGizmo):
         return self._background.get_size()
 
 
-class Thing(StatefulGizmo):
+class InteractiveMixin(object):
+    def is_interactive(self):
+        return True
+
+    def interact(self, tool):
+        if not self.is_interactive():
+            return None
+        if tool is None:
+            return self.interact_without()
+        handler = getattr(self, 'interact_with_' + tool.tool_name, None)
+        inverse_handler = self.get_inverse_interact(tool)
+        if handler is not None:
+            return handler(tool)
+        elif inverse_handler is not None:
+            return inverse_handler(self)
+        else:
+            return self.interact_default(tool)
+
+    def get_inverse_interact(self, tool):
+        return None
+
+    def interact_without(self):
+        return self.interact_default(None)
+
+    def interact_default(self, item=None):
+        return None
+
+
+
+class Thing(StatefulGizmo, InteractiveMixin):
     """Base class for things in a scene that you can interact with."""
 
     # name of thing
@@ -452,9 +482,6 @@ class Thing(StatefulGizmo):
     def get_description(self):
         return None
 
-    def is_interactive(self):
-        return True
-
     def enter(self, item):
         """Called when the cursor enters the Thing."""
         pass
@@ -463,26 +490,8 @@ class Thing(StatefulGizmo):
         """Called when the cursr leaves the Thing."""
         pass
 
-    def interact(self, item):
-        if not self.is_interactive():
-            return
-        if item is None:
-            return self.interact_without()
-        else:
-            handler = getattr(self, 'interact_with_' + item.tool_name, None)
-            if handler is not None:
-                return handler(item)
-            else:
-                return self.interact_default(item)
-
     def animate(self):
         return self.current_interact.animate()
-
-    def interact_without(self):
-        return self.interact_default(None)
-
-    def interact_default(self, item):
-        return None
 
     def draw(self, surface):
         old_rect = self.current_interact.rect
@@ -500,11 +509,14 @@ class Thing(StatefulGizmo):
                             rect.inflate(1, 1), 1)
 
 
-class Item(object):
+class Item(InteractiveMixin):
     """Base class for inventory items."""
 
     # image for inventory
     INVENTORY_IMAGE = None
+
+    # name of item
+    NAME = None
 
     # name for interactions (i.e. def interact_with_<TOOL_NAME>)
     TOOL_NAME = None
@@ -512,30 +524,25 @@ class Item(object):
     # set to instance of CursorSprite
     CURSOR = None
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name=None):
+        self.state = None
+        self.name = self.NAME
+        if name is not None:
+            self.name = name
         self.tool_name = name
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
         self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
 
+    def set_state(self, state):
+        assert self.state is None
+        self.state = state
+
     def get_inventory_image(self):
         return self.inventory_image
 
-    def interact(self, tool, state):
-        if tool is None:
-            return self.interact_without(state)
-        handler = getattr(self, 'interact_with_' + tool.name, None)
-        inverse_handler = getattr(tool, 'interact_with_' + self.tool_name, None)
-        if handler is not None:
-            return handler(tool, state)
-        elif inverse_handler is not None:
-            return inverse_handler(self, state)
-        else:
-            return self.interact_default(tool, state)
-
-    def interact_default(self, tool, state):
-        return Result("That doesn't do anything useful")
+    def get_inverse_interact(self, tool):
+        return getattr(tool, 'interact_with_' + self.tool_name, None)
 
 
 class CloneableItem(Item):
@@ -546,9 +553,7 @@ class CloneableItem(Item):
         cls._counter += 1
         return cls._counter - 1
 
-    def __init__(self, name):
+    def __init__(self, name=None):
+        super(CloneableItem, self).__init__(name)
         my_count = self._get_new_id()
-        super(CloneableItem, self).__init__("%s.%s" % (name, my_count))
-        self.tool_name = name
-        if self.TOOL_NAME is not None:
-            self.tool_name = self.TOOL_NAME
+        self.name = "%s.%s" % (self.name, my_count)
