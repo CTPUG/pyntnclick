@@ -544,6 +544,9 @@ class Item(InteractiveMixin):
     def get_inverse_interact(self, tool):
         return getattr(tool, 'interact_with_' + self.tool_name, None)
 
+    def is_interactive(self):
+        return False
+
 
 class CloneableItem(Item):
     _counter = 0
