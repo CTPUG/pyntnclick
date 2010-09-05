@@ -90,7 +90,7 @@ class CursorWidget(Widget):
 
     @classmethod
     def set_cursor(cls, item):
-        if item is None:
+        if item is None or item.CURSOR is None:
             cls.cursor = HAND
         else:
             cls.cursor = item.CURSOR
