@@ -208,17 +208,9 @@ class GameState(object):
             return self.current_scene.enter()
         raise RuntimeError('invalid do_check value %s' % self.do_check)
 
-    def mouse_move(self, pos):
-        self.current_scene.mouse_move(pos)
-        # So we can do sensible things on enter and leave
-        self.old_pos = pos
-
     def set_do_enter_leave(self):
         """Flag that we need to run the enter loop"""
         self.do_check = constants.LEAVE
-
-    def mouse_move_detail(self, pos):
-        self.current_detail.mouse_move(pos)
 
 
 class StatefulGizmo(object):

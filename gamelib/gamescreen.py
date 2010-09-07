@@ -10,7 +10,7 @@ from pygame import Rect, mouse
 from pygame.color import Color
 from pygame.locals import BLEND_ADD
 
-from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE
+from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
 from cursor import CursorWidget
 from state import initial_state, handle_result
 from widgets import (MessageDialog, BoomButton, HandButton, PopupMenu,
@@ -70,7 +70,7 @@ class StateWidget(Widget):
         self.state.draw(surface, self.screen)
 
     def draw(self, surface):
-        if self.state.previous_scene and self.state.do_check == constants.LEAVE:
+        if self.state.previous_scene and self.state.do_check == LEAVE:
             # We still need to handle leave events, so still display the scene
             self.state.previous_scene.draw(surface, self)
         else:
@@ -103,7 +103,8 @@ class StateWidget(Widget):
 
     def _mouse_move(self, pos):
         self.state.highlight_override = False
-        self.state.mouse_move(pos)
+        self.state.current_scene.mouse_move(pos)
+        self.state.old_pos = pos
 
     def show_message(self, message, style=None):
         # Display the message as a modal dialog
@@ -181,7 +182,7 @@ class DetailWindow(Widget):
 
     def _mouse_move(self, pos):
         self.state.highlight_override = False
-        self.state.mouse_move_detail(self.global_to_local(pos))
+        self.state.current_detail.mouse_move(self.global_to_local(pos))
 
     def show_message(self, message, style=None):
         self.parent.show_message(message, style)
