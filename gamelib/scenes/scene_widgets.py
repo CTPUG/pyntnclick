@@ -146,7 +146,7 @@ class GenericDescThing(Thing):
     def get_description(self):
         return self.description
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -160,7 +160,7 @@ class Door(Thing):
         self.NAME = self.SCENE + '.door'
         Thing.__init__(self)
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return True
 
     def interact_without(self):
@@ -199,7 +199,7 @@ class BaseCamera(Thing):
         else:
             return "The security camera is powered down"
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.state.scenes['bridge'].get_data('ai status') == 'online'
 
     def interact_with_escher_poster(self, item):

@@ -39,7 +39,7 @@ class InventoryView(PaletteView):
         item = self.state.inventory[item_no]
         if self.item_is_selected(item_no):
             self.unselect()
-        elif self.state.tool or item.is_interactive():
+        elif item.is_interactive(self.state.tool):
             result = item.interact(self.state.tool)
             handle_result(result, self.state_widget)
         else:

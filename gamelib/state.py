@@ -359,11 +359,11 @@ class Scene(StatefulGizmo):
 
 
 class InteractiveMixin(object):
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return True
 
     def interact(self, tool):
-        if not self.is_interactive():
+        if not self.is_interactive(tool):
             return None
         if tool is None:
             return self.interact_without()
@@ -523,7 +523,9 @@ class Item(InteractiveMixin):
     def get_inverse_interact(self, tool):
         return getattr(tool, 'interact_with_' + self.tool_name, None)
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
+        if tool:
+            return True
         return False
 
 

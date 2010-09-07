@@ -146,7 +146,7 @@ class Engines(Thing):
 
     INITIAL = 'on'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
     def get_description(self):
@@ -256,7 +256,7 @@ class CryoContainers(Thing):
             return "Those are coolant reservoirs. They look empty."
         return "The coolant reservoirs are full."
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -340,7 +340,7 @@ class CoolingPipes(Thing):
         return "These pipes carry coolant to the superconductors. " \
                "They are very cold."
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -366,7 +366,7 @@ class PowerLines(Thing):
             return "Power lines. They are delivering power to the engines."
         return "Power lines. It looks like they aren't working correctly."
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -383,7 +383,7 @@ class ArrowsTopLeft(Thing):
 
     INITIAL = 'arrows'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -400,7 +400,7 @@ class ArrowsBottomLeft(Thing):
 
     INITIAL = 'arrows'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -417,7 +417,7 @@ class ArrowsRight(Thing):
 
     INITIAL = 'arrows'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -433,7 +433,7 @@ class DangerSign(Thing):
 
     INITIAL = 'sign'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -449,7 +449,7 @@ class Stars(Thing):
 
     INITIAL = 'stars'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
     def get_description(self):

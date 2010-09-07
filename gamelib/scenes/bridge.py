@@ -170,7 +170,7 @@ class MassageChair(Thing):
         return self.state.current_scene.things['bridge.massagechair_base'] \
                    .get_description()
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -259,7 +259,7 @@ class StarField(Thing):
 
     INITIAL = 'stars'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
 
@@ -269,7 +269,7 @@ class BlinkingLights(Thing):
         super(BlinkingLights, self).__init__()
         self.description = None
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
     def leave(self):
@@ -377,7 +377,7 @@ class LogTab(Thing):
     INITIAL = 'log tab'
     COMPUTER = 'bridge_comp_detail'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.state.detail_views[self.COMPUTER].get_data('tab') != 'log'
 
     def interact_without(self):
@@ -397,7 +397,7 @@ class AlertTab(Thing):
     INITIAL = 'alert tab'
     COMPUTER = 'bridge_comp_detail'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.state.detail_views[self.COMPUTER].get_data('tab') != 'alert'
 
     def interact_without(self):
@@ -416,7 +416,7 @@ class NavTab(Thing):
     INITIAL = 'nav tab'
     COMPUTER = 'bridge_comp_detail'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.state.detail_views[self.COMPUTER].get_data('tab') != 'nav'
 
     def interact_without(self):
@@ -442,7 +442,7 @@ class DestNavPageLine(Thing):
         self.ai_blocked = ai_blocked
         self.set_interact('line')
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.state.detail_views[self.COMPUTER].get_data('tab') == 'nav'
 
     def interact_without(self):
@@ -466,7 +466,7 @@ class CompUpButton(Thing):
     INITIAL = 'up'
     COMPUTER = 'bridge_comp_detail'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         tab = self.state.detail_views[self.COMPUTER].get_data('tab')
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         return tab == 'log' and page > 0
@@ -489,7 +489,7 @@ class CompDownButton(Thing):
     INITIAL = 'down'
     COMPUTER = 'bridge_comp_detail'
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         tab = self.state.detail_views[self.COMPUTER].get_data('tab')
         page = self.state.detail_views[self.COMPUTER].get_data('log page')
         max_page = self.state.detail_views[self.COMPUTER].get_data('max page')

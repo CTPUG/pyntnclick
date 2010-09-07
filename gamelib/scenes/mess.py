@@ -248,7 +248,7 @@ class Boomslang(Thing):
 
     HISS = get_sound('boomslang.ogg')
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
     def animate(self):

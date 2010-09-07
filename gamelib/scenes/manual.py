@@ -35,7 +35,7 @@ class PageBase(Thing):
         self.set_data('display', display)
         self.set_interact(display)
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.get_data('display') == 'on'
 
 
@@ -94,7 +94,7 @@ class ManualPage(Thing):
         'page': 0,
         }
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return False
 
     def set_page(self, page):

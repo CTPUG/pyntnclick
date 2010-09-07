@@ -174,7 +174,7 @@ class CryoPipeBase(Thing):
                     ) % PLAYER_ID, self.state))
             return responses
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return self.get_data('fixed')
 
     def interact_without(self):
@@ -205,7 +205,7 @@ class UncuttableCryoPipes(Thing):
         return Result("These pipes carry fluid to the working cryo units."
                 " Chopping them down doesn't seem sensible.")
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return True
 
     def interact_without(self):
@@ -300,7 +300,7 @@ class GenericCryoUnit(GenericDescThing):
         super(GenericCryoUnit, self).__init__('cryo.unit', number, description, areas)
         self.detailed_description = detailed_description
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return True
 
     def interact_without(self):

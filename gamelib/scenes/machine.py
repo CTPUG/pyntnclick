@@ -286,7 +286,7 @@ class Manual(Item):
     INVENTORY_IMAGE = "manual.png"
     CURSOR = None
 
-    def is_interactive(self):
+    def is_interactive(self, tool=None):
         return True
 
     def interact_without(self):
