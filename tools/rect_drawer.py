@@ -586,24 +586,33 @@ class RectApp(RootWidget):
         self.image.animate()
 
 
+def list_scenes(state):
+    """List the scenes in the state"""
+    print 'Available scenes are : '
+    for scene in state.scenes:
+        print '    ',scene
+    print 'Available details are : '
+    for detail in state.detail_views:
+        print '    ',detail
+
 if __name__ == "__main__":
-    # FIXME: should load an actual scene with current things, not just a
-    # background image
-    if len(sys.argv) < 2:
-        print 'Please provide a scene name'
-        sys.exit(0)
     pygame.display.init()
     pygame.font.init()
-    # enable key repeating
-    pygame.key.set_repeat(200, 100)
     display = pygame.display.set_mode((constants.SCREEN[0] + MENU_WIDTH, constants.SCREEN[1]))
     state = state.initial_state()
+    if len(sys.argv) < 2:
+        print 'Please provide a scene name or scene and detail names'
+        list_scenes(state)
+        sys.exit(0)
+    # enable key repeating
+    pygame.key.set_repeat(200, 100)
     if len(sys.argv) < 3:
         try:
             state.set_current_scene(sys.argv[1])
             state.do_check = None
         except KeyError:
             print 'Invalid scene name'
+            list_scenes(state)
             sys.exit(1)
     else:
         try:
@@ -611,7 +620,8 @@ if __name__ == "__main__":
             state.set_current_detail(sys.argv[2])
             state.do_check = None
         except KeyError:
-            print 'Invalid scene name'
+            print 'Invalid scene or detail name'
+            list_scenes(state)
             sys.exit(1)
     app = RectApp(display)
     app.run()
