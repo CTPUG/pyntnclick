@@ -84,14 +84,6 @@ class AppImage(Widget):
         self.close_button = BoomLabel('Close', font=get_font(20, 'Vera.ttf'))
         self.close_button.fg_color = (0, 0, 0)
         self.close_button.bg_color = (0, 0, 0)
-        if self.state.current_detail:
-            w, h = self.state.current_detail.get_detail_size()
-            rect = pygame.rect.Rect(0, 0, w, h)
-            self.close_button.rect.midbottom = rect.midbottom
-            self.add(self.close_button)
-            self.offset = (0, 0)
-        else:
-            self.offset = (-self.state.current_scene.OFFSET[0], - self.state.current_scene.OFFSET[1])
         self.draw_rects = True
         self.draw_things = True
         self.draw_thing_rects = True
@@ -102,6 +94,13 @@ class AppImage(Widget):
         self.zoom_display = False
         self.draw_anim = False
         self.zoom_offset = (600, 600)
+        if self.state.current_detail:
+            w, h = self.state.current_detail.get_detail_size()
+            rect = pygame.rect.Rect(0, 0, w, h)
+            self.close_button.rect.midbottom = rect.midbottom
+            self.offset = (0, 0)
+        else:
+            self.offset = (-self.state.current_scene.OFFSET[0], - self.state.current_scene.OFFSET[1])
         self.find_existing_intersects()
 
     def _get_scene(self):
@@ -247,6 +246,16 @@ class AppImage(Widget):
                 self.state.current_detail.draw(surface, None)
             else:
                 self.state.current_detail.draw_background(surface)
+            # We duplicate Albow's draw logic here, so we zoom the close
+            # button correctly
+            r = self.close_button.get_rect()
+            surf_rect = surface.get_rect()
+            sub_rect = surf_rect.clip(r)
+            try:
+                sub = surface.subsurface(sub_rect)
+                self.close_button.draw_all(sub)
+            except ValueError, e:
+                print 'Error, failed to draw close button', e
         else:
             if self.draw_things:
                 self.state.current_scene.draw(surface, None)
