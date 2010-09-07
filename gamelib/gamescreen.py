@@ -67,9 +67,6 @@ class StateWidget(Widget):
         self.detail = DetailWindow(screen)
 
     def draw(self, surface):
-        self.state.draw(surface, self.screen)
-
-    def draw(self, surface):
         if self.state.previous_scene and self.state.do_check == LEAVE:
             # We still need to handle leave events, so still display the scene
             self.state.previous_scene.draw(surface, self)
