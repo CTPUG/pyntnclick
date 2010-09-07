@@ -358,8 +358,6 @@ class ChairDetail(Scene):
     BACKGROUND = 'chair_detail.png'
     NAME = 'chair_detail'
 
-    SIZE = (300, 300)
-
     def __init__(self, state):
         super(ChairDetail, self).__init__(state)
         self.add_thing(SuperconductorThing())
@@ -522,8 +520,6 @@ class BridgeCompDetail(Scene):
 
     FOLDER = 'bridge'
     NAME = 'bridge_comp_detail'
-
-    SIZE = (640, 400)
 
     ALERT_BASE = 'comp_alert_base.png'
     ALERTS = {

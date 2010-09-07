@@ -514,8 +514,6 @@ class EngineCompDetail(Scene):
     BACKGROUND = "engine_comp_detail.png"
     NAME = "engine_comp_detail"
 
-    SIZE = (640, 400)
-
     ALERTS = {
             'cryo leaking' : 'ec_cryo_leaking.png',
             'cryo empty' : 'ec_cryo_reservoir_empty.png',

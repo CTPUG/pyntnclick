@@ -476,8 +476,6 @@ class CryoCompDetail(Scene):
     BACKGROUND_FIXED = "comp_info_detail_fixed.png"
     NAME = "cryo_comp_detail"
 
-    SIZE = (640, 400)
-
     def __init__(self, state):
         super(CryoCompDetail, self).__init__(state)
         self._background_fixed = get_image(self.FOLDER, self.BACKGROUND_FIXED)
@@ -494,8 +492,6 @@ class CryoUnitWithCorpse(Scene):
     FOLDER = "cryo"
     BACKGROUND = "cryo_unit_detail.png"
     NAME = "cryo_detail"
-
-    SIZE = (300, 300)
 
     def __init__(self, state):
         super(CryoUnitWithCorpse, self).__init__(state)

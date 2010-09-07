@@ -247,9 +247,6 @@ class Scene(StatefulGizmo):
     # Offset of the background image
     OFFSET = (0, 0)
 
-    # size (for detail views)
-    SIZE = constants.SCENE_SIZE
-
     def __init__(self, state):
         StatefulGizmo.__init__(self)
         # scene name
