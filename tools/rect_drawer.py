@@ -244,12 +244,12 @@ class AppImage(Widget):
     def do_unzoomed_draw(self, surface):
         if self.state.current_detail:
             if self.draw_things:
-                self.state.draw_detail(surface, None)
+                self.state.current_detail.draw(surface, None)
             else:
                 self.state.current_detail.draw_background(surface)
         else:
             if self.draw_things:
-                self.state.draw(surface, None)
+                self.state.current_scene.draw(surface, None)
             else:
                 self.state.current_scene.draw_background(surface)
         if self.mode == 'draw' and self.start_pos and self.draw_rects:
