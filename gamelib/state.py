@@ -9,6 +9,7 @@ from pygame.rect import Rect
 from pygame.color import Color
 
 import constants
+from scenes import SCENE_LIST, INITIAL_SCENE
 from sound import get_sound
 
 # override the initial scene to for debugging
@@ -59,15 +60,9 @@ def handle_result(result, scene_widget):
 def initial_state():
     """Load the initial state."""
     state = GameState()
-    state.load_scenes("cryo")
-    state.load_scenes("bridge")
-    state.load_scenes("mess")
-    state.load_scenes("engine")
-    state.load_scenes("machine")
-    state.load_scenes("crew_quarters")
-    state.load_scenes("map")
-    state.load_scenes("manual")
-    initial_scene = "cryo" if DEBUG_SCENE is None else DEBUG_SCENE
+    for scene in SCENE_LIST:
+        state.load_scenes(scene)
+    initial_scene = INITIAL_SCENE if DEBUG_SCENE is None else DEBUG_SCENE
     state.set_current_scene(initial_scene)
     state.set_do_enter_leave()
     return state
