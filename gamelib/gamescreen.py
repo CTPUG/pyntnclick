@@ -69,6 +69,13 @@ class StateWidget(Widget):
     def draw(self, surface):
         self.state.draw(surface, self.screen)
 
+    def draw(self, surface):
+        if self.state.previous_scene and self.state.do_check == constants.LEAVE:
+            # We still need to handle leave events, so still display the scene
+            self.state.previous_scene.draw(surface, self)
+        else:
+            self.state.current_scene.draw(surface, self)
+
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1: # We have a right/middle click
@@ -159,7 +166,7 @@ class DetailWindow(Widget):
         overlay = scene_surface.convert_alpha()
         overlay.fill(Color(0, 0, 0, 191))
         scene_surface.blit(overlay, (0, 0))
-        self.state.draw_detail(surface.subsurface(self.image_rect), self.screen)
+        self.state.current_detail.draw(surface.subsurface(self.image_rect), self)
 
     def mouse_down(self, event):
         self.mouse_move(event)

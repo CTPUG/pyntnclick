@@ -168,16 +168,6 @@ class State(object):
     def set_tool(self, item):
         self.tool = item
 
-    def draw(self, surface, screen):
-        if self.do_check and self.previous_scene and self.do_check == constants.LEAVE:
-            # We still need to handle leave events, so still display the scene
-            self.previous_scene.draw(surface, screen)
-        else:
-            self.current_scene.draw(surface, screen)
-
-    def draw_detail(self, surface, screen):
-        self.current_detail.draw(surface, screen)
-
     def interact(self, pos):
         return self.current_scene.interact(self.tool, pos)
 
