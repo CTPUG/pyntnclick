@@ -58,7 +58,7 @@ def handle_result(result, scene_widget):
 
 def initial_state():
     """Load the initial state."""
-    state = State()
+    state = GameState()
     state.load_scenes("cryo")
     state.load_scenes("bridge")
     state.load_scenes("mess")
@@ -73,7 +73,7 @@ def initial_state():
     return state
 
 
-class State(object):
+class GameState(object):
     """Complete game state.
 
     Game state consists of:
