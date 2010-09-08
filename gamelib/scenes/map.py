@@ -8,11 +8,10 @@
    """
 
 from gamelib.state import Scene, Item, Thing, Result
+from gamelib.scenewidgets import InteractRectUnion
+
 from gamelib.scenes.game_constants import PLAYER_ID
-from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
-                                          InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing,
-                                          make_jim_dialog)
+from gamelib.scenes.game_widgets import make_jim_dialog
 
 
 class Map(Scene):

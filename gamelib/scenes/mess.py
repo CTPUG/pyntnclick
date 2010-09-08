@@ -4,14 +4,15 @@ from random import choice, randint
 
 from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.cursor import CursorSprite
-from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
-                                          InteractRectUnion, InteractImage,
-                                          InteractImageRect, InteractAnimated,
-                                          GenericDescThing)
-
 from gamelib.sound import get_sound
 from gamelib import constants
+from gamelib.scenewidgets import (InteractText, InteractNoImage,
+                                  InteractRectUnion, InteractImage,
+                                  InteractImageRect, InteractAnimated,
+                                  GenericDescThing)
+
 from gamelib.scenes.game_constants import PLAYER_ID
+from gamelib.scenes.game_widgets import Door
 
 
 class Mess(Scene):

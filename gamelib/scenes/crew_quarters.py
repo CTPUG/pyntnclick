@@ -2,12 +2,12 @@
 
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, Thing, Result
+from gamelib.scenewidgets import (InteractText, InteractNoImage,
+                                  InteractRectUnion, InteractImage,
+                                  InteractAnimated, GenericDescThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
-from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
-                                          InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing,
-                                          BaseCamera, make_jim_dialog)
+from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
 
 class CrewQuarters(Scene):
 

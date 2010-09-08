@@ -2,9 +2,11 @@
 
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.cursor import CursorSprite
-from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
-                                          InteractRectUnion, InteractImage,
-                                          InteractAnimated, GenericDescThing)
+from gamelib.scenewidgets import (InteractText, InteractNoImage,
+                                  InteractRectUnion, InteractImage,
+                                  InteractAnimated, GenericDescThing)
+
+from gamelib.scenes.game_widgets import Door
 
 
 class Machine(Scene):
