@@ -116,8 +116,8 @@ class StateWidget(Widget):
 
     def show_detail(self, detail):
         self.clear_detail()
-        w, h = self.state.set_current_detail(detail)
-        self.detail.set_image_rect(Rect(0, 0, w, h))
+        detail_obj = self.state.set_current_detail(detail)
+        self.detail.set_image_rect(Rect((0, 0), detail_obj.get_detail_size()))
         self.add_centered(self.detail)
         self.state.do_enter_detail()
 

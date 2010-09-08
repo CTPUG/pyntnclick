@@ -133,7 +133,7 @@ class GameState(object):
             self.current_detail = None
         else:
             self.current_detail = self.detail_views[name]
-            return self.current_detail.get_detail_size()
+            return self.current_detail
 
     def add_inventory_item(self, name):
         self.inventory.append(self.items[name])
@@ -250,10 +250,7 @@ class Scene(StatefulGizmo):
         self.state = state
         # map of thing names -> Thing objects
         self.things = {}
-        if self.BACKGROUND is not None:
-            self._background = get_image(self.FOLDER, self.BACKGROUND)
-        else:
-            self._background = None
+        self._background = None
 
     def add_item(self, item):
         self.state.add_item(item)
@@ -290,7 +287,12 @@ class Scene(StatefulGizmo):
                 Rect(400-w/2, 5, w, h))
             description.draw_all(sub)
 
+    def _cache_background(self):
+        if self.BACKGROUND and not self._background:
+            self._background = get_image(self.FOLDER, self.BACKGROUND)
+
     def draw_background(self, surface):
+        self._cache_background()
         if self._background is not None:
             surface.blit(self._background, self.OFFSET, None)
         else:
@@ -350,6 +352,7 @@ class Scene(StatefulGizmo):
         self.update_current_thing(pos)
 
     def get_detail_size(self):
+        self._cache_background()
         return self._background.get_size()
 
 
@@ -506,13 +509,18 @@ class Item(InteractiveMixin):
         self.tool_name = name
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
-        self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
+        self.inventory_image = None
+
+    def _cache_inventory_image(self):
+        if not self.inventory_image:
+            self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
 
     def set_state(self, state):
         assert self.state is None
         self.state = state
 
     def get_inventory_image(self):
+        self._cache_inventory_image()
         return self.inventory_image
 
     def get_inverse_interact(self, tool):
