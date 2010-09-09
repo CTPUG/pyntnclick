@@ -7,10 +7,16 @@ from gamelib import state
 from gamelib.constants import SCREEN
 
 
-# We need this stuff set up so we can load images and whatnot.
-pygame.display.init()
-pygame.font.init()
-pygame.display.set_mode(SCREEN, SWSURFACE)
+# Monkey-patch albow.resource.get_image to not do alpha-conversion,
+# which would require pygame display intialisation, which we don't
+# really want in the tests.
+import albow.resource
+
+def get_image_unoptimized(*names, **kw):
+    kw.setdefault('optimize', False)
+    return albow.resource._get_image(names, **kw)
+
+albow.resource.get_image = get_image_unoptimized
 
 
 class GameLogicTestCase(unittest.TestCase):
