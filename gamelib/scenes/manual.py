@@ -1,16 +1,10 @@
 """The inside of the maintenance manual."""
 
-import random
+from albow.music import change_playlist
 
-from albow.music import change_playlist, get_music, PlayList
-from albow.resource import get_image
-
-from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result
+from gamelib.state import Scene, Thing
 from gamelib.sound import get_current_playlist
 from gamelib.scenewidgets import InteractNoImage, InteractImage
-
-from gamelib.scenes.game_constants import PLAYER_ID
 
 
 # classes related the computer detail

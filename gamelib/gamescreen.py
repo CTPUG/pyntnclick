@@ -8,7 +8,6 @@ from albow.palette_view import PaletteView
 from albow.screen import Screen
 from pygame import Rect, mouse
 from pygame.color import Color
-from pygame.locals import BLEND_ADD
 
 from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
 from cursor import CursorWidget

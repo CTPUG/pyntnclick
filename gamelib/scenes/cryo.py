@@ -5,14 +5,11 @@ import random
 from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
-from gamelib import speech
-from gamelib.sound import get_sound
 from gamelib.cursor import CursorSprite
 from gamelib.state import Scene, Item, CloneableItem, Thing, Result
-from gamelib.constants import DEBUG
-from gamelib.scenewidgets import (InteractText, InteractNoImage,
-                                  InteractRectUnion, InteractImage,
-                                  InteractAnimated, GenericDescThing)
+from gamelib.scenewidgets import (InteractNoImage, InteractRectUnion,
+                                  InteractImage, InteractAnimated,
+                                  GenericDescThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, make_jim_dialog

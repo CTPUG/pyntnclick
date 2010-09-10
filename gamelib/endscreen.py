@@ -3,9 +3,7 @@
 # Victory screen for the game
 
 from albow.screen import Screen
-from albow.controls import Button
 from albow.resource import get_image
-from albow.layout import Column
 
 from gamelib.widgets import BoomImageButton
 

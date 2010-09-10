@@ -2,7 +2,7 @@
 
 import copy
 
-from albow.resource import get_image, get_font
+from albow.resource import get_image
 from albow.utils import frame_rect
 from widgets import BoomLabel
 from pygame.rect import Rect
@@ -271,7 +271,6 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = BoomLabel(text)
-        font = get_font(15, 'VeraBd.ttf')
         label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)

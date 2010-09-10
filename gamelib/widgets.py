@@ -10,7 +10,7 @@ import albow.menu
 from albow.resource import get_font, get_image
 from pygame.color import Color
 from pygame.rect import Rect
-from pygame.draw import lines
+from pygame.draw import lines as draw_lines
 from pygame import mouse
 
 from constants import BUTTON_SIZE
@@ -93,7 +93,7 @@ class BoomButton(BoomLabel):
         r = surface.get_rect()
         w = 2
         top, bottom, left, right = r.top, r.bottom, r.left, r.right
-        lines(surface, self._frame_color, False, [
+        draw_lines(surface, self._frame_color, False, [
             (left, bottom), (left, top), (right-w, top), (right-w, bottom)
             ], w)
 

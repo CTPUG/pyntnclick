@@ -3,10 +3,7 @@
 # Main menu for the game
 
 from albow.screen import Screen
-from albow.controls import Image, Button, Label
-from albow.layout import Column
 from albow.resource import get_image
-from pygame import Rect
 
 from gamelib.widgets import BoomImageButton
 

@@ -1,13 +1,12 @@
 """Mess where crew eat. Fun stuff."""
 
-from random import choice, randint
+from random import randint
 
 from gamelib.state import Scene, Item, CloneableItem, Thing, Result
 from gamelib.cursor import CursorSprite
 from gamelib.sound import get_sound
 from gamelib import constants
-from gamelib.scenewidgets import (InteractText, InteractNoImage,
-                                  InteractRectUnion, InteractImage,
+from gamelib.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractImageRect, InteractAnimated,
                                   GenericDescThing)
 

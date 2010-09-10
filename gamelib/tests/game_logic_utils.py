@@ -1,10 +1,6 @@
 import unittest
 
-import pygame
-from pygame.locals import SWSURFACE
-
 from gamelib import state
-from gamelib.constants import SCREEN
 
 
 # Monkey-patch albow.resource.get_image to not do alpha-conversion,

@@ -2,8 +2,7 @@
 
 from gamelib.state import Scene, Item, Thing, Result
 from gamelib.cursor import CursorSprite
-from gamelib.scenewidgets import (InteractText, InteractNoImage,
-                                  InteractRectUnion, InteractImage,
+from gamelib.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractAnimated, GenericDescThing)
 
 from gamelib.scenes.game_widgets import Door
