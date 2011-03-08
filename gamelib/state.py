@@ -293,7 +293,7 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = BoomLabel(text)
-        font = get_font(15, 'VeraBd.ttf')
+        #font = get_font(15, 'DejaVuSans-Bold.ttf')
         label.set_margin(5)
         label.border_width = 1
         label.border_color = (0, 0, 0)

@@ -17,11 +17,11 @@ If there is no file for your locale you need to generate it. To do
 this navigate to the `po/' directory in terminal and type command
 
   msginit -l <locale>
-  
+
 where <locale> is two-letters-language-code you need. Then translate
 generated file using your preferred editor.
 
-To get new translation worked you need to compile and install it by
+To get new translation to work you need to compile and install it by
 executing `install-po.sh' script.
 
 
@@ -29,14 +29,13 @@ executing `install-po.sh' script.
 
 Just surround it with _( and ) like 
   "Hello, world"    ->    _("Hello, world!")
-  
-_() is a function that I placed in `gamelib/i18n.py' file, so you
-might want to import it first.
+
+_() is a function in `gamelib/i18n.py' file, so you might want to
+import it first.
 
   from gamelib.i18n import _
 
 And don't forget to update message catalogs with new strings. To do
 that just execute `update-po.sh' script. It collects all translatable
-strings from files that are specified in `po/POTFILES'. Make sure file
-you worked on is in there.
-
+strings from files that are specified in `po/POTFILES'. Make sure the
+file you worked on is in there.

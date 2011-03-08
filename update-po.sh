@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#Updates translation catalogs
+# Updates translation catalogs
 
 xgettext -f po/POTFILES -o po/suspended-sentence.pot
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#Compiles and installs translation catalogs
+# Compiles and installs translation catalogs
 
 for pofile in po/*.po; do
   molang=`echo $pofile | sed -e 's#po/\(.*\)\\.po#\\1#'`;
