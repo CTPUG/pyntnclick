@@ -9,6 +9,8 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractAnimated, GenericDescThing,
                                           BaseCamera, make_jim_dialog)
 
+from gamelib.i18n import _
+
 class CrewQuarters(Scene):
 
     FOLDER = "crew_quarters"
@@ -27,10 +29,10 @@ class CrewQuarters(Scene):
         self.add_thing(PosterThing())
         self.add_thing(MonitorCamera())
         self.add_thing(GenericDescThing('crew.plant', 1,
-            "The plant is doing surprisingly well for centuries of neglect",
+            _("The plant is doing surprisingly well for centuries of neglect"),
             ((624, 215, 61, 108),)))
         self.add_thing(GenericDescThing('crew.cat', 2,
-            "A picture of a cat labelled 'Clementine'",
+            _("A picture of a cat labelled 'Clementine'"),
             ((722, 382, 66, 72),)))
 
 
@@ -69,30 +71,30 @@ class Safe(Thing):
                 self.set_data('has_tape', False)
                 self.state.add_inventory_item('duct_tape')
                 self.set_interact('empty_safe')
-                return Result("Duct tape. It'll stick to everything except "
-                              "ducts, apparently.")
-            return Result("The perfectly balanced door swings frictionlessly "
-                          "to and fro. What craftsmanship!")
-        return Result("The safe is locked. This might be an interesting "
-                      "challenge, if suitable equipment can be found.")
+                return Result(_("Duct tape. It'll stick to everything except "
+                              "ducts, apparently."))
+            return Result(_("The perfectly balanced door swings frictionlessly "
+                          "to and fro. What craftsmanship!"))
+        return Result(_("The safe is locked. This might be an interesting "
+                      "challenge, if suitable equipment can be found."))
 
     def interact_with_stethoscope(self, item):
         if self.get_data('is_cracked'):
-            return Result("It's already unlocked. There's no more challenge.")
+            return Result(_("It's already unlocked. There's no more challenge."))
         # TODO: Add years to the sentence for safecracking.
         # TODO: Wax lyrical some more about safecracking.
         self.set_data('is_cracked', True)
         self.set_interact('full_safe')
-        return (Result("Even after centuries of neglect, the tumblers slide"
+        return (Result(_("Even after centuries of neglect, the tumblers slide"
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
-                      " here."),
-                      make_jim_dialog("Prisoner %s, you have been observed committing a felony violation. "
-                          "This will go onto your permanent record, and your sentence may be extended by up to twenty years."
+                      " here.")),
+                      make_jim_dialog(_("Prisoner %s, you have been observed committing a felony violation. "
+                          "This will go onto your permanent record, and your sentence may be extended by up to twenty years.")
                           % PLAYER_ID, self.state))
 
     def get_description(self):
-        return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
+        return _("Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure.")
 
 
 class FishbowlThing(Thing):
@@ -113,15 +115,15 @@ class FishbowlThing(Thing):
 
     def interact_without(self):
         if not self.get_data('has_bowl'):
-            return Result("What's the point of lugging around a very dead fish "
-                          "and a kilogram or so of sand?")
+            return Result(_("What's the point of lugging around a very dead fish "
+                          "and a kilogram or so of sand?"))
         self.set_interact('fish_no_bowl')
         self.set_data('has_bowl', False)
         self.state.add_inventory_item('fishbowl')
-        return Result("The fishbowl is useful, but its contents aren't.")
+        return Result(_("The fishbowl is useful, but its contents aren't."))
 
     def get_description(self):
-        return "This fishbowl looks exactly like an old science fiction space helmet."
+        return _("This fishbowl looks exactly like an old science fiction space helmet.")
 
 class Fishbowl(Item):
     "A bowl. Sans fish."
@@ -134,8 +136,8 @@ class Fishbowl(Item):
         helmet = FishbowlHelmet('helmet')
         state.add_item(helmet)
         state.replace_inventory_item(self.name, helmet.name)
-        return Result("You duct tape the edges of the helmet. The seal is"
-                " crude, but it will serve as a workable helmet if needed.")
+        return Result(_("You duct tape the edges of the helmet. The seal is"
+                " crude, but it will serve as a workable helmet if needed."))
 
 
 class FishbowlHelmet(Item):
@@ -181,10 +183,10 @@ class PosterThing(Thing):
     def interact_without(self):
         self.state.add_inventory_item('escher_poster')
         self.scene.remove_thing(self)
-        return Result("This poster will go nicely on your bedroom wall.")
+        return Result(_("This poster will go nicely on your bedroom wall."))
 
     def get_description(self):
-        return "A paradoxical poster hangs below the security camera."
+        return _("A paradoxical poster hangs below the security camera.")
 
 
 class EscherPoster(Item):

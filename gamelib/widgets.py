@@ -16,6 +16,7 @@ from pygame import mouse
 from constants import BUTTON_SIZE
 from cursor import CursorWidget
 
+from gamelib.i18n import _
 
 class BoomLabel(albow.controls.Label):
 
@@ -75,7 +76,7 @@ class BoomLabel(albow.controls.Label):
 class BoomButton(BoomLabel):
 
     def __init__(self, text, action, screen):
-        super(BoomButton, self).__init__(text, font=get_font(20, 'Vera.ttf'), margin=4)
+        super(BoomButton, self).__init__(text, font=get_font(20, 'DejaVuSans.ttf'), margin=4)
         self.bg_color = (0, 0, 0)
         self._frame_color = Color(50, 50, 50)
         self.action = action
@@ -159,7 +160,7 @@ class PopupMenuButton(albow.controls.Button):
     def __init__(self, text, action):
         albow.controls.Button.__init__(self, text, action)
 
-        self.font = get_font(16, 'Vera.ttf')
+        self.font = get_font(16, 'DejaVuSans.ttf')
         self.set_rect(Rect(0, 0, BUTTON_SIZE, BUTTON_SIZE))
         self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
 
@@ -171,12 +172,12 @@ class PopupMenu(albow.menu.Menu, CursorWidget):
         self.screen = screen
         self.shell = screen.shell
         items = [
-                ('Quit Game', 'quit'),
-                ('Exit to Main Menu', 'main_menu'),
+                (_('Quit Game'), 'quit'),
+                (_('Exit to Main Menu'), 'main_menu'),
                 ]
         # albow.menu.Menu ignores title string
         albow.menu.Menu.__init__(self, None, items)
-        self.font = get_font(16, 'Vera.ttf')
+        self.font = get_font(16, 'DejaVuSans.ttf')
 
     def show_menu(self):
         """Call present, with the correct position"""

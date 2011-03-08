@@ -12,6 +12,7 @@ from gamelib.state import Thing, Result
 from gamelib.constants import DEBUG
 from gamelib.widgets import BoomLabel
 
+from gamelib.i18n import _
 
 class Interact(object):
 
@@ -168,7 +169,7 @@ class Door(Thing):
         self.state.set_current_scene("map")
 
     def get_description(self):
-        return 'An open doorway leads to the rest of the ship.'
+        return _('An open doorway leads to the rest of the ship.')
 
     def interact_default(self, item):
         return self.interact_without()
@@ -191,11 +192,11 @@ class BaseCamera(Thing):
     }
  
     def get_description(self):
-        return "A security camera watches over the room"
+        return _("A security camera watches over the room")
  
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
-        ai_response = make_jim_dialog("3D scene reconstruction failed. Critical error. Entering emergency shutdown.", self.state)
+        ai_response = make_jim_dialog(_("3D scene reconstruction failed. Critical error. Entering emergency shutdown."), self.state)
         self.state.scenes['bridge'].set_data('ai status', 'looping')
         return ai_response
  

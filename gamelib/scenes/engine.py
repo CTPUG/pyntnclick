@@ -9,6 +9,7 @@ from gamelib.scenes.scene_widgets import (Door, InteractText, InteractNoImage,
                                           InteractAnimated, GenericDescThing,
                                           make_jim_dialog)
 
+from gamelib.i18n import _
 
 class Engine(Scene):
 
@@ -39,20 +40,20 @@ class Engine(Scene):
         self.add_thing(ComputerConsole())
         self.add_thing(ToMap())
         self.add_thing(GenericDescThing('engine.body', 1,
-            "Dead. Those cans must have been past their sell-by date.",
+            _("Dead. Those cans must have been past their sell-by date."),
             (
                 (594, 387, 45, 109),
                 (549, 479, 60, 55),
             )
         ))
         self.add_thing(GenericDescThing('engine.controlpanel', 2,
-            "A control panel. It seems dead.",
+            _("A control panel. It seems dead."),
             (
                 (513, 330, 58, 50),
             )
         ))
         self.add_thing(GenericDescThing('engine.superconductors', 4,
-            "Superconductors. The engines must be power hogs.",
+            _("Superconductors. The engines must be power hogs."),
             (
                 (679, 246, 50, 56),
                 (473, 280, 28, 23),
@@ -60,7 +61,7 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.floor_hole', 5,
-            "A gaping hole in the floor of the room. You're guessing that's why there's a vacuum in here.",
+            _("A gaping hole in the floor of the room. You're guessing that's why there's a vacuum in here."),
             (
                 (257, 493, 141, 55),
                 (301, 450, 95, 45),
@@ -69,25 +70,25 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.empty_cans', 7,
-            "Empty chocolate-covered bacon cans? Poor guy, he must have found them irresistible.",
+            _("Empty chocolate-covered bacon cans? Poor guy, he must have found them irresistible."),
             (
                 (562, 422, 30, 31),
             )
         ))
         self.add_thing(GenericDescThing('engine.engines', 8,
-            "The engines. They don't look like they are working.",
+            _("The engines. They don't look like they are working."),
             (
                 (342, 261, 109, 81),
             )
         ))
         self.add_thing(GenericDescThing('engine.laser_cutter', 9,
-            "A burned-out laser cutter. It may be responsible for the hole in the floor.",
+            _("A burned-out laser cutter. It may be responsible for the hole in the floor."),
             (
                 (120, 466, 115, 67),
             )
         ))
         self.add_thing(GenericDescThing('engine.fuel_lines', 10,
-            "The main fuel line for the engines.",
+            _("The main fuel line for the engines."),
             (
                 (220, 49, 59, 75),
                 (239, 84, 51, 66),
@@ -107,19 +108,19 @@ class Engine(Scene):
             )
         ))
         self.add_thing(GenericDescThing('engine.spare_fuel_line', 11,
-            "The spare fuel line. If something went wrong with the main one, you would hook that one up.",
+            _("The spare fuel line. If something went wrong with the main one, you would hook that one up."),
             (
                 (512, 49, 68, 44),
             )
         ))
         self.add_thing(GenericDescThing('engine.danger_area', 12,
-            "The sign says DANGER. You would be wise to listen to it.",
+            _("The sign says DANGER. You would be wise to listen to it."),
             (
                 (293, 343, 211, 46),
             )
         ))
         self.add_thing(GenericDescThing('engine.exit_sign', 13,
-            "It's one of those glow-in-the-dark exit signs that you see everywhere.",
+            _("It's one of those glow-in-the-dark exit signs that you see everywhere."),
             (
                 (681, 322, 80, 33),
             )
@@ -131,16 +132,16 @@ class Engine(Scene):
             self.set_data('engine online', True)
             self.remove_thing(self.things['engine.engines.8'])
             self.add_thing(Engines())
-            return make_jim_dialog("The engines are now operational. You have"
-                                   "done a satisfactory job, Prisoner %s." % PLAYER_ID,
+            return make_jim_dialog(_("The engines are now operational. You have"
+                                   "done a satisfactory job, Prisoner %s.") % PLAYER_ID,
                                    self.state)
 
     def enter(self):
         if self.get_data('greet'):
             self.set_data('greet', False)
             return Result(
-                    "With your improvised helmet, the automatic airlock allows you into the engine room. Even if there wasn't a vacuum "
-                    "it would be eerily quiet.")
+                    _("With your improvised helmet, the automatic airlock allows you into the engine room. Even if there wasn't a vacuum "
+                    "it would be eerily quiet."))
 
 class Engines(Thing):
     NAME = 'engine.engines'
@@ -155,7 +156,7 @@ class Engines(Thing):
         return False
 
     def get_description(self):
-        return "All systems are go! Or at least the engines are."
+        return _("All systems are go! Or at least the engines are.")
 
 
 class CanOpener(Item):
@@ -173,13 +174,13 @@ class CanOpenerThing(Thing):
     INITIAL = 'canopener'
 
     def get_description(self):
-        return "A can opener. Looks like you won't be starving"
+        return _("A can opener. Looks like you won't be starving")
 
     def interact_without(self):
         self.state.add_inventory_item('canopener')
         self.scene.remove_thing(self)
-        return Result("You pick up the can opener. It looks brand new; "
-                      "the vacuum has kept it in perfect condition.")
+        return Result(_("You pick up the can opener. It looks brand new; "
+                      "the vacuum has kept it in perfect condition."))
 
 
 class BrokenSuperconductor(Item):
@@ -205,33 +206,33 @@ class SuperconductorSocket(Thing):
 
     def get_description(self):
         if self.get_data('present') and not self.get_data('working'):
-            return "That superconductor looks burned out. It's wedged in there pretty firmly."
+            return _("That superconductor looks burned out. It's wedged in there pretty firmly.")
         elif not self.get_data('present'):
-            return "An empty superconductor socket"
+            return _("An empty superconductor socket")
         else:
-            return "A working superconductor."
+            return _("A working superconductor.")
 
     def interact_without(self):
         if self.get_data('present') and not self.get_data('working'):
-            return Result("It's wedged in there pretty firmly, it won't come out.")
+            return Result(_("It's wedged in there pretty firmly, it won't come out."))
         elif self.get_data('working'):
-            return Result("You decide that working engines are more important than having a shiny superconductor.")
+            return Result(_("You decide that working engines are more important than having a shiny superconductor."))
 
     def interact_with_machete(self, item):
         if self.get_data('present') and not self.get_data('working'):
             self.set_interact('removed')
             self.set_data('present', False)
             self.state.add_inventory_item('superconductor_broken')
-            return Result("With leverage, the burned-out superconductor snaps out.")
+            return Result(_("With leverage, the burned-out superconductor snaps out."))
 
     def interact_with_superconductor(self, item):
         if self.get_data('present'):
-            return Result("It might help to remove the broken superconductor first")
+            return Result(_("It might help to remove the broken superconductor first"))
         else:
-            return Result("You plug in the superconductor, and feel a hum "
+            return Result(_("You plug in the superconductor, and feel a hum "
                           "as things kick into life. "
                           "Unfortunately, it's the wrong size for the socket "
-                          "and just falls out again when you let go.")
+                          "and just falls out again when you let go."))
 
     def interact_with_taped_superconductor(self, item):
         if not self.get_data('present'):
@@ -239,12 +240,12 @@ class SuperconductorSocket(Thing):
             self.set_data('present', True)
             self.set_data('working', True)
             self.state.remove_inventory_item(item.name)
-            results = [Result("The chair's superconductor looks over-specced "
-                              "for this job, but it should work.")]
+            results = [Result(_("The chair's superconductor looks over-specced "
+                              "for this job, but it should work."))]
             results.append(self.scene.engine_online_check())
             return results
         else:
-            return Result("It might help to remove the broken superconductor first.")
+            return Result(_("It might help to remove the broken superconductor first."))
 
 
 class CryoContainers(Thing):
@@ -263,8 +264,8 @@ class CryoContainers(Thing):
 
     def get_description(self):
         if not self.get_data('filled'):
-            return "Those are coolant reservoirs. They look empty."
-        return "The coolant reservoirs are full."
+            return _("Those are coolant reservoirs. They look empty.")
+        return _("The coolant reservoirs are full.")
 
     def is_interactive(self):
         return False
@@ -284,22 +285,22 @@ class CryoContainerReceptacle(Thing):
     INITIAL = 'containers'
 
     def get_description(self):
-        return "The receptacles for the coolant reservoirs."
+        return _("The receptacles for the coolant reservoirs.")
 
     def interact_without(self):
-        return Result("You stick your finger in the receptacle. "
-                      "It almost gets stuck.")
+        return Result(_("You stick your finger in the receptacle. "
+                      "It almost gets stuck."))
 
     def interact_with_full_detergent_bottle(self, item):
         if not self.scene.things['engine.cracked_pipe'].get_data('fixed'):
-            return Result("Pouring the precious cryo fluid into a"
-                    " container connected to a cracked pipe would be a waste.")
+            return Result(_("Pouring the precious cryo fluid into a"
+                    " container connected to a cracked pipe would be a waste."))
         self.state.remove_inventory_item(item.name)
         self.scene.things['engine.cryo_containers'].set_data('filled', True)
         self.scene.things['engine.cryo_containers'].set_interact('full')
-        results = [Result("You fill the reservoirs. "
+        results = [Result(_("You fill the reservoirs. "
                           "The detergent bottle was just big enough, which "
-                          "is handy, because it's sprung a leak.")]
+                          "is handy, because it's sprung a leak."))]
         results.append(self.scene.engine_online_check())
         return results
 
@@ -345,10 +346,10 @@ class CoolingPipes(Thing):
 
     def get_description(self):
         if not self.scene.things['engine.cryo_containers'].get_data('filled'):
-            return "These pipes carry coolant to the superconductors. " \
-                   "They feel warm."
-        return "These pipes carry coolant to the superconductors. " \
-               "They are very cold."
+            return _("These pipes carry coolant to the superconductors. " \
+                   "They feel warm.")
+        return _("These pipes carry coolant to the superconductors. " \
+               "They are very cold.")
 
     def is_interactive(self):
         return False
@@ -373,8 +374,8 @@ class PowerLines(Thing):
 
     def get_description(self):
         if self.scene.things['engine.superconductor'].get_data('working'):
-            return "Power lines. They are delivering power to the engines."
-        return "Power lines. It looks like they aren't working correctly."
+            return _("Power lines. They are delivering power to the engines.")
+        return _("Power lines. It looks like they aren't working correctly.")
 
     def is_interactive(self):
         return False
@@ -463,8 +464,8 @@ class Stars(Thing):
         return False
 
     def get_description(self):
-        return "A gaping hole in the floor of the room. You're guessing" \
-            " that's why there's a vacuum in here."
+        return _("A gaping hole in the floor of the room. You're guessing" \
+            " that's why there's a vacuum in here.")
 
 
 class CrackedPipe(Thing):
@@ -483,20 +484,20 @@ class CrackedPipe(Thing):
 
     def get_description(self):
         if self.get_data('fixed'):
-            return "The duct tape appears to be holding."
+            return _("The duct tape appears to be holding.")
         else:
-            return "The pipe looks cracked and won't hold" \
-                   " fluid until it's fixed."
+            return _("The pipe looks cracked and won't hold" \
+                   " fluid until it's fixed.")
 
     def interact_with_duct_tape(self, item):
         if self.get_data('fixed'):
-            return Result("The duct tape already there appears to be "
-                          "sufficient.")
+            return Result(_("The duct tape already there appears to be "
+                          "sufficient."))
         else:
             self.set_data('fixed', True)
             self.set_interact('taped')
-            return Result("You apply your trusty duct tape to the "
-                          "creak, sealing it.")
+            return Result(_("You apply your trusty duct tape to the "
+                          "creak, sealing it."))
 
 
 class ComputerConsole(Thing):
@@ -512,7 +513,7 @@ class ComputerConsole(Thing):
         return Result(detail_view='engine_comp_detail')
 
     def get_description(self):
-        return "A computer console. It's alarmingly close to the engine."
+        return _("A computer console. It's alarmingly close to the engine.")
 
 
 class EngineCompDetail(Scene):
@@ -571,7 +572,7 @@ class ToMap(Door):
     INITIAL = "door"
 
     def get_description(self):
-        return "The airlock leads back to the rest of the ship."
+        return _("The airlock leads back to the rest of the ship.")
 
 
 SCENES = [Engine]

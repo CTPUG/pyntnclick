@@ -23,6 +23,8 @@ from constants import SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG
 from sound import no_sound, disable_sound
 import state
 import data
+from locale import setlocale, LC_ALL
+from gettext import bindtextdomain, textdomain
 
 def parse_args(args):
     parser = OptionParser()
@@ -63,6 +65,9 @@ def main():
             # debug the specified scene
             state.DEBUG_SCENE = opts.scene
         state.DEBUG_RECTS = opts.rects
+    setlocale(LC_ALL, "")
+    bindtextdomain("suspended-sentence", data.filepath('locale'))
+    textdomain("suspended-sentence")
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     pygame.display.set_icon(pygame.image.load(
         data.filepath('icons/suspended_sentence24x24.png')))
