@@ -10,6 +10,8 @@ import sys
 import os.path
 right_path = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, right_path)
+import gettext
+import locale
 from optparse import OptionParser
 
 import pygame
@@ -63,6 +65,11 @@ def main():
             # debug the specified scene
             state.DEBUG_SCENE = opts.scene
         state.DEBUG_RECTS = opts.rects
+
+    locale.setlocale(locale.LC_ALL, "")
+    gettext.bindtextdomain("suspended-sentence", data.filepath('locale'))
+    gettext.textdomain("suspended-sentence")
+
     display =  pygame.display.set_mode(SCREEN, SWSURFACE)
     pygame.display.set_icon(pygame.image.load(
         data.filepath('icons/suspended_sentence24x24.png')))

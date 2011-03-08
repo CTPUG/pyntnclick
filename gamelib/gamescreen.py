@@ -15,6 +15,7 @@ from state import initial_state, handle_result
 from widgets import (MessageDialog, BoomButton, HandButton, PopupMenu,
                      PopupMenuButton)
 
+from gamelib.i18n import _
 
 class InventoryView(PaletteView):
 
@@ -142,7 +143,7 @@ class DetailWindow(Widget):
         self.border_width = 5
         self.border_color = (0, 0, 0)
         # parent only gets set when we get added to the scene
-        self.close = BoomButton('Close', self.close_but, screen)
+        self.close = BoomButton(_('Close'), self.close_but, screen)
         self.add(self.close)
 
     def close_but(self):
@@ -214,7 +215,7 @@ class GameScreen(Screen, CursorWidget):
         self.add(self.state_widget)
 
         self.popup_menu = PopupMenu(self)
-        self.menubutton = PopupMenuButton('Menu',
+        self.menubutton = PopupMenuButton(_('Menu'),
                 action=self.popup_menu.show_menu)
 
         self.handbutton = HandButton(action=self.hand_pressed)

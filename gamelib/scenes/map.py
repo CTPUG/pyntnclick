@@ -13,6 +13,7 @@ from gamelib.scenewidgets import InteractRectUnion
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import make_jim_dialog
 
+from gamelib.i18n import _
 
 class Map(Scene):
 
@@ -38,15 +39,15 @@ class Map(Scene):
         if self.get_data('implant'):
             self.set_data('implant', False)
             ai1 = make_jim_dialog(
-                "Under the terms of the emergency conscription "
+                _("Under the terms of the emergency conscription "
                 "act, I have downloaded the ship's schematics to your "
-                "neural implant to help you navigate around the ship.",
+                "neural implant to help you navigate around the ship."),
                 self.state)
             if ai1:
-                return ai1, make_jim_dialog("Prisoner %s, you are a "
+                return ai1, make_jim_dialog(_("Prisoner %s, you are a "
                 "class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on your sentence." % PLAYER_ID, self.state)
+                "of an additional 3 years on your sentence.") % PLAYER_ID, self.state)
 
 
 class DoorThing(Thing):
@@ -125,9 +126,9 @@ class ToEngine(DoorThing):
 
     def interact(self, item):
         if not self.state.is_in_inventory('helmet'):
-            return Result('The airlock refuses to open. The automated'
+            return Result(_('The airlock refuses to open. The automated'
                     ' voice says: "Hull breach beyond this door. Personnel'
-                    ' must be equipped for vacuum before entry."')
+                    ' must be equipped for vacuum before entry."'))
         else:
             return super(ToEngine, self).interact(item)
 
@@ -180,8 +181,8 @@ class InaccessibleArea(Thing):
     INITIAL = 'areas'
 
     def interact(self, _item):
-        return Result("You look in the door, but just see empty space: "
-                      "that room appears to have been obliterated by meteors.")
+        return Result(_("You look in the door, but just see empty space: "
+                      "that room appears to have been obliterated by meteors."))
 
 
 class HydroponicsArea(Thing):
@@ -197,9 +198,9 @@ class HydroponicsArea(Thing):
     INITIAL = 'areas'
 
     def interact(self, _item):
-        return Result("Peering in through the window, you see that the entire "
+        return Result(_("Peering in through the window, you see that the entire "
                       "chamber is overgrown with giant broccoli. It would "
-                      "take you years to cut a path through that.")
+                      "take you years to cut a path through that."))
 
 
 SCENES = [Map]
