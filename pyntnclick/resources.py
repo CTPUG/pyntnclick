@@ -11,6 +11,13 @@ class ResourceNotFound(Exception):
 
 
 class Resources(object):
+    """Resource loader and manager.
+
+    The `CONVERT_ALPHA` flag allows alpha conversions to be disabled so that
+    images may be loaded without having a display initialised. This is useful
+    in unit tests, for example.
+    """
+
     DEFAULT_RESOURCE_MODULE = "pyntnclick.data"
     CONVERT_ALPHA = True
 
@@ -21,7 +28,20 @@ class Resources(object):
         self._mutated_image_cache = {}
 
     def get_resource_path(self, *resource_path_fragments):
-        resource_name = os.path.join(*resource_path_fragments)
+        """Find the resource in one of a number of different places.
+
+        The following directories are searched, in order:
+
+         * <resource_module>/<lang>/
+         * <resource_module>/
+         * <default_resource_module>/<lang>/
+         * <default_resource_module>/
+
+        If the `language` attribute is `None`, the paths with <lang> in them
+        are skipped.
+        """
+        resource_name = '/'.join(resource_path_fragments)
+        resource_name = os.path.join(*resource_name.split('/'))
         for path in self.get_paths(resource_name):
             if os.path.exists(path):
                 return path
@@ -36,8 +56,10 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def load_image(self, image_name, mutators=(), basedir='images'):
-        image_path = self.get_resource_path(basedir, image_name)
+    def load_image(self, image_name_fragments, mutators=(), basedir='images'):
+        if isinstance(image_name_fragments, basestring):
+            image_name_fragments = [image_name_fragments]
+        image_path = self.get_resource_path(basedir, *image_name_fragments)
 
         if image_path not in self._image_cache:
             image = pygame.image.load(image_path)

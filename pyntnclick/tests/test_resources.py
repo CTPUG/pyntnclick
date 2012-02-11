@@ -52,6 +52,10 @@ class ResourcesTestCase(TestCase):
         image = self.res.load_image('pyntnclick/hand.png')
         self.assertTrue(isinstance(image, Surface))
 
+    def test_load_image_fragments(self):
+        image = self.res.load_image(['pyntnclick', 'hand.png'])
+        self.assertTrue(isinstance(image, Surface))
+
     def test_load_image_different_basedir(self):
         image = self.res.load_image('hand.png', basedir='images/pyntnclick')
         self.assertTrue(isinstance(image, Surface))
