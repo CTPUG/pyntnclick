@@ -27,16 +27,16 @@ class MenuScreen(Screen):
     def draw_background(self):
         self.surface.blit(self._background, self.surface.get_rect())
 
-    def start(self):
+    def start(self, ev, widget):
         self.shell.game_screen.start_game()
         self.shell.show_screen(self.shell.game_screen)
 
     def check_running(self):
         return self.shell.game_screen.running
 
-    def resume(self):
+    def resume(self, ev, widget):
         if self.shell.game_screen.running:
             self.shell.show_screen(self.shell.game_screen)
 
-    def quit(self):
+    def quit(self, ev, widget):
         pygame.event.Event(QUIT)
