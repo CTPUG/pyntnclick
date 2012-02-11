@@ -3,3 +3,6 @@ deps/Albow-2.1.0
 build
 dist
 py2exe.log
+.dir-locals.el
+_trial_temp
+trialscript
