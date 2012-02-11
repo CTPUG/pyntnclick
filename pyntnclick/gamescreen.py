@@ -71,6 +71,7 @@ class StateWidget(Widget):
         self.detail = DetailWindow(screen)
 
     def draw(self, surface):
+        self.animate()
         if self.game.previous_scene and self.game.do_check == LEAVE:
             # We still need to handle leave events, so still display the scene
             self.game.previous_scene.draw(surface, self)
@@ -243,25 +244,16 @@ class GameScreen(Screen):
     def leave_screen(self):
         CursorWidget.leave_screen(self)
 
-    # Albow uses magic method names (command + '_cmd'). Yay.
-    # Albow's search order means they need to be defined here, not in
-    # PopMenu, which is annoying.
-    def hide_cmd(self):
-        # This option does nothing, but the method needs to exist for albow
-        return
-
+    # albow callback:
     def main_menu_cmd(self):
         self.shell.show_screen(self.shell.menu_screen)
 
+    # albow callback:
     def quit_cmd(self):
         self.shell.quit()
 
     def hand_pressed(self):
         self.inventory.unselect()
-
-    def begin_frame(self):
-        if self.running:
-            self.state_widget.animate()
 
 
 class DefEndScreen(Screen):
