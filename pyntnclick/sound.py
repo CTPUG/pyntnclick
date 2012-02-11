@@ -34,23 +34,23 @@ class DummySound(object):
 
        Inpsired by the same idea in Albow (by Greg Ewing)"""
 
-   def play(self, *args):
-       pass
+    def play(self, *args):
+        pass
 
-   def stop(self):
-       pass
+    def stop(self):
+        pass
 
-   def get_length(self):
-       return 0.0
+    def get_length(self):
+        return 0.0
 
-   def get_num_channel(self):
-       return 0
+    def get_num_channel(self):
+        return 0
 
-   def get_volume(self):
-       return 0.0
+    def get_volume(self):
+        return 0.0
 
-   def fadeout(self, *args):
-       pass
+    def fadeout(self, *args):
+        pass
 
 
 class Sound(object):
@@ -82,12 +82,12 @@ class Sound(object):
 
     def get_sound(self, *names):
         if not self.sound_enabled:
-            return dummy_sound
+            return DummySound()
         soundfile = os.path.join(names)
         sound = None
         try:
             path = self._resource_finder("sounds", soundfile)
-            sound = sound_cache.get(path, None)
+            sound = self.sound_cache.get(path, None)
         except ResourceNotFound:
             print "Sound file not found: %s" % soundfile
             # Cache failed lookup
@@ -110,6 +110,7 @@ class Sound(object):
 
     def change_playlist(self, new_playlist):
         albow.music.change_playlist(new_playlist)
+
 
 def start_next_music():
     """Start playing the next item from the current playlist immediately."""
