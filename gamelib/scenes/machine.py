@@ -69,7 +69,7 @@ class Machine(Scene):
                 (605, 304, 26, 8),
             )))
         self.add_thing(GenericDescThing("machine.drill_press_block", 7,
-            "The block for the laser drill press", # TODO: fix description
+            "The block for the laser drill press",  # TODO: fix description
             ((461, 446, 38, 27),)))
 
 
@@ -133,12 +133,14 @@ class LaserWelderSlot(Thing):
         self.state.remove_inventory_item(item.name)
         contents.add("tube")
         self.update_contents()
-        return Result("You carefully place the tube fragments in the laser welder.")
+        return Result("You carefully place the tube fragments in the"
+                      " laser welder.")
 
     def get_description(self):
         contents = self.get_data('contents')
         if not contents:
-            return "This is a Smith and Wesson 'zOMG' class high-precision laser welder."
+            return ("This is a Smith and Wesson 'zOMG' class high-precision"
+                    " laser welder.")
         if len(contents) == 1:
             msg = "The laser welder looks hungry, somehow."
             if "can" in contents:
@@ -148,7 +150,8 @@ class LaserWelderSlot(Thing):
         elif len(contents) == 2:
             msg = "The laser welder looks expectant. "
             if "can" in contents and "tube" in contents:
-                msg += " It currently contains an empty can and a tube fragment."
+                msg += (" It currently contains an empty can and a"
+                        " tube fragment.")
         return msg
 
 
@@ -163,34 +166,43 @@ class LaserWelderButton(Thing):
     INITIAL = "button"
 
     def interact_without(self):
-        contents = self.scene.things["machine.welder.slot"].get_data("contents")
+        welder_slot = self.scene.things["machine.welder.slot"]
+        contents = welder_slot.get_data("contents")
         if not contents:
-            return Result("The laser welder doesn't currently contain anything weldable.")
+            return Result("The laser welder doesn't currently contain"
+                          " anything weldable.")
         elif len(contents) == 1:
             if "can" in contents:
-                return Result("The laser welder needs something to weld the can to.")
+                return Result("The laser welder needs something to weld the"
+                              " can to.")
             elif "tube" in contents:
-                return Result("The laser welder needs something to weld the tube fragments to.")
+                return Result("The laser welder needs something to weld the"
+                              " tube fragments to.")
         else:
-            self.scene.things["machine.welder.slot"].set_data("contents", set())
-            self.scene.things["machine.welder.slot"].update_contents()
+            welder_slot.set_data("contents", set())
+            welder_slot.update_contents()
             if self.state.items["cryo_pipes_one"] in self.state.inventory:
-                self.state.replace_inventory_item("cryo_pipes_one", "cryo_pipes_two")
+                self.state.replace_inventory_item("cryo_pipes_one",
+                                                  "cryo_pipes_two")
                 return Result("With high-precision spitzensparken, you weld"
-                        " together a second pipe. You bundle the two pipes together.",
+                              " together a second pipe. You bundle the two"
+                              " pipes together.",
                         soundfile='laser.ogg')
             elif self.state.items["cryo_pipes_two"] in self.state.inventory:
-                self.state.replace_inventory_item("cryo_pipes_two", "cryo_pipes_three")
-                return Result("With high-precision spitzensparken, you create yet"
-                        " another pipe. You store it with the other two.",
+                self.state.replace_inventory_item("cryo_pipes_two",
+                                                  "cryo_pipes_three")
+                return Result("With high-precision spitzensparken, you create"
+                              " yet another pipe. You store it with the other"
+                              " two.",
                         soundfile='laser.ogg')
             elif self.state.items["cryo_pipes_three"] in self.state.inventory:
                 # just for safety
                 return None
             else:
                 self.state.add_inventory_item("cryo_pipes_one")
-                return Result("With high-precision spitzensparken, the can and tube are welded"
-                        " into a whole greater than the sum of the parts.",
+                return Result("With high-precision spitzensparken, the can and"
+                              " tube are welded into a whole greater than the"
+                              " sum of the parts.",
                         soundfile='laser.ogg')
 
 
@@ -199,7 +211,9 @@ class LaserWelderPowerLights(Thing):
     NAME = "machine.welder.lights"
 
     INTERACTS = {
-        "lights": InteractAnimated(199, 273, ["power_lights_%d.png" % i for i in range(8) + range(6,0,-1)], 10)
+        "lights": InteractAnimated(199, 273, ["power_lights_%d.png" % i for i
+                                              in range(8) + range(6, 0, -1)],
+                                   10),
     }
 
     INITIAL = 'lights'
@@ -243,7 +257,8 @@ class Grinder(Thing):
     INITIAL = "grind"
 
     def interact_without(self):
-        return Result("It looks like it eats fingers. Perhaps a different approach is in order?")
+        return Result("It looks like it eats fingers. Perhaps a different"
+                      " approach is in order?")
 
     def interact_with_titanium_leg(self, item):
         self.state.replace_inventory_item(item.name, 'machete')

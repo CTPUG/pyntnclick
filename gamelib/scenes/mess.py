@@ -20,7 +20,7 @@ class Mess(Scene):
     BACKGROUND = "mess_hall.png"
 
     INITIAL_DATA = {
-        'life support status': 'broken', # broken, replaced, fixed
+        'life support status': 'broken',  # broken, replaced, fixed
         }
 
     def __init__(self, state):
@@ -51,7 +51,9 @@ class BaseCan(CloneableItem):
     """Base class for the cans"""
 
     def interact_with_full_can(self, item):
-        return Result("You bang the cans together. It sounds like two cans being banged together.", soundfile="can_hit.ogg")
+        return Result("You bang the cans together. It sounds like two"
+                      " cans being banged together.",
+                      soundfile="can_hit.ogg")
 
     def interact_with_dented_can(self, item):
         return self.interact_with_full_can(item)
@@ -66,7 +68,8 @@ class BaseCan(CloneableItem):
         empty = EmptyCan('empty_can')
         self.state.add_item(empty)
         self.state.replace_inventory_item(self.name, empty.name)
-        return Result("You open both ends of the can, discarding the hideous contents.")
+        return Result("You open both ends of the can, discarding the"
+                      " hideous contents.")
 
 
 class EmptyCan(BaseCan):
@@ -76,7 +79,8 @@ class EmptyCan(BaseCan):
     CURSOR = CursorSprite('empty_can_cursor.png')
 
     def interact_with_titanium_leg(self, item):
-        return Result("Flattening the can doesn't look like a useful thing to do.")
+        return Result("Flattening the can doesn't look like a useful"
+                      " thing to do.")
 
     def interact_with_canopener(self, item):
         return Result("There's nothing left to open on this can")
@@ -92,7 +96,8 @@ class FullCan(BaseCan):
         dented = DentedCan("dented_can")
         self.state.add_item(dented)
         self.state.replace_inventory_item(self.name, dented.name)
-        return Result("You club the can with the femur. The can gets dented, but doesn't open.", soundfile="can_hit.ogg")
+        return Result("You club the can with the femur. The can gets dented,"
+                      " but doesn't open.", soundfile="can_hit.ogg")
 
 
 class DentedCan(BaseCan):
@@ -102,7 +107,9 @@ class DentedCan(BaseCan):
     CURSOR = CursorSprite('dented_can_cursor.png')
 
     def interact_with_titanium_leg(self, item):
-        return Result("You club the can with the femur. The dents shift around, but it still doesn't open.", soundfile="can_hit.ogg")
+        return Result("You club the can with the femur. The dents shift"
+                      " around, but it still doesn't open.",
+                      soundfile="can_hit.ogg")
 
 
 class CansOnShelf(Thing):
@@ -133,7 +140,8 @@ class CansOnShelf(Thing):
             if starting_cans == 1:
                 self.scene.remove_thing(self)
             return Result({
-                    3: "Best before a long time in the past. Better not eat these.",
+                    3: "Best before a long time in the past."
+                       " Better not eat these.",
                     2: "Mmmm. Nutritious bacteria stew.",
                     1: "Candied silkworms. Who stocked this place?!",
                     }[starting_cans])
@@ -163,11 +171,13 @@ class Tubes(Thing):
 
     def get_description(self):
         if self.get_data('status') == "blocked":
-            return "The broccoli seems to have become entangled with something."
+            return ("The broccoli seems to have become"
+                    " entangled with something.")
         elif self.get_data("status") == "broken":
             return "These broken pipes look important."
         elif self.get_data("status") == "replaced":
-            return "The pipes have been repaired but are the repairs aren't airtight, yet"
+            return ("The pipes have been repaired but are the repairs"
+                    " aren't airtight, yet")
         else:
             return "Your fix looks like it's holding up well."
 
@@ -196,10 +206,9 @@ class Tubes(Thing):
             self.set_data('status', 'replaced')
             self.set_interact("replaced")
             self.scene.set_data('life support status', 'replaced')
-            return Result(
-                "The pipes slot neatly into place, but don't make an airtight seal. "
-                "One of the pipes has cracked slightly as well."
-            )
+            return Result("The pipes slot neatly into place, but don't make"
+                          " an airtight seal. One of the pipes has cracked"
+                          " slightly as well.")
 
     def interact_with_duct_tape(self, item):
         if self.get_data("status") == "broken":
@@ -212,9 +221,10 @@ class Tubes(Thing):
             self.set_interact("fixed")
             self.scene.set_data('life support status', 'fixed')
             # TODO: A less anticlimactic climax?
-            return Result("It takes quite a lot of tape, but eventually everything is"
-                          " airtight and ready to hold pressure. Who'd've thought duct"
-                          " tape could actually be used to tape ducts?")
+            return Result("It takes quite a lot of tape, but eventually"
+                          "everything is airtight and ready to hold pressure."
+                          " Who'd've thought duct tape could actually be used"
+                          " to tape ducts?")
 
     def interact_without(self):
         if self.get_data("status") == "blocked":
@@ -225,7 +235,8 @@ class Tubes(Thing):
             return Result("Do you really want to hold it together for the "
                           "rest of the voyage?")
         else:
-            return Result("You don't find any leaks. Good job, Prisoner %s." % PLAYER_ID)
+            return Result("You don't find any leaks. Good job, Prisoner %s."
+                          % PLAYER_ID)
 
 
 class Boomslang(Thing):
@@ -272,7 +283,8 @@ class DetergentThing(Thing):
     NAME = "mess.detergent"
 
     INTERACTS = {
-        'present': InteractImageRect(581, 424, 'detergent_lid.png', 565, 399, 62, 95),
+        'present': InteractImageRect(581, 424, 'detergent_lid.png',
+                                     565, 399, 62, 95),
         'taken': InteractNoImage(565, 399, 62, 95),
     }
 
@@ -288,7 +300,8 @@ class DetergentThing(Thing):
         self.set_data('taken', True)
         self.set_interact('taken')
         self.state.add_inventory_item('detergent_bottle')
-        return Result("You pick up an empty dishwashing liquid bottle. You can't find any sponges.")
+        return Result("You pick up an empty dishwashing liquid bottle. You"
+                      " can't find any sponges.")
 
     def get_description(self):
         return "Empty plastic containers. They used to hold dishwasher soap."
