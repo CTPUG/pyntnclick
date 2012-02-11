@@ -21,6 +21,7 @@ from pyntnclick.gamescreen import GameScreen
 from pyntnclick.endscreen import EndScreen
 from pyntnclick.constants import (
     SCREEN, FRAME_RATE, DEBUG)
+from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state, data
 
@@ -47,6 +48,9 @@ class GameDescription(object):
     # list of game scenes
     SCENE_LIST = None
 
+    # resource module
+    RESOURCE_MODULE = "Resources"
+
     def __init__(self):
         if self.INITIAL_SCENE is None:
             raise GameDescriptionError("A game must have an initial scene.")
@@ -55,9 +59,9 @@ class GameDescription(object):
                                        " of scenes.")
         self._initial_scene = self.INITIAL_SCENE
         self._scene_list = self.SCENE_LIST
+        self._resource_module = self.RESOURCE_MODULE
         self._debug_rects = False
-        # TODO: make these real objects
-        self.resource = object()
+        self.resource = Resources(self._resource_module)
         self.sound = Sound(self.resource)
 
     def initial_state(self):
