@@ -49,7 +49,8 @@ class BaseCamera(Thing):
         if status == 'online':
             return "A security camera watches over the room"
         elif status == 'looping':
-            return "The security camera is currently offline but should be working soon"
+            return "The security camera is currently offline but should be" \
+                    " working soon"
         else:
             return "The security camera is powered down"
 
@@ -59,7 +60,9 @@ class BaseCamera(Thing):
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
         if self.state.scenes['bridge'].get_data('ai status') == 'online':
-            ai_response = make_jim_dialog("3D scene reconstruction failed. Critical error. Entering emergency shutdown.", self.state)
+            ai_response = make_jim_dialog("3D scene reconstruction failed."
+                    " Critical error. Entering emergency shutdown.",
+                    self.state)
             self.state.scenes['bridge'].set_data('ai status', 'looping')
             return ai_response
 
@@ -69,4 +72,3 @@ class BaseCamera(Thing):
             self.set_data('status', ai_status)
             self.set_interact(ai_status)
         super(BaseCamera, self).animate()
-
