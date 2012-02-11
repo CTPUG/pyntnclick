@@ -209,10 +209,11 @@ class GameScreen(Screen):
     def setup(self):
         self.running = False
         self.create_initial_state = self.game_description.initial_state
+        self.start_game()
 
     def _clear_all(self):
-        for widget in self.subwidgets[:]:
-            self.remove(widget)
+        for widget in self.container.children[:]:
+            self.container.remove(widget)
 
     def start_game(self):
         self._clear_all()
