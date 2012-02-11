@@ -27,12 +27,31 @@ def gen_sine(freq, secs):
     for x in range(int(freq * secs)):
         output.write(''.join(data))
     output.close()
+    return filename
 
+
+def usage():
+    print 'Unexpected input'
+    print 'Usage: gen_sound.py <freq> [<length>]'
+    print ' where <freq> is the frequency in Hz (integer)'
+    print ' and [<length>] is the time is seconds (float)'
 
 if __name__ == "__main__":
-    freq = int(sys.argv[1])
+    try:
+        freq = int(sys.argv[1])
+    except Exception, exc:
+        usage()
+        print 'Error was: %s' % exc
+        sys.exit(1)
+
     if len(sys.argv) > 2:
-        secs = float(sys.argv[2])
+        try:
+            secs = float(sys.argv[2])
+        except Exception, exc:
+            usage()
+            print 'Error was: %s' % exc
+            sys.exit(1)
     else:
         secs = 0.25
-    gen_sine(freq, secs)
+    output = gen_sine(freq, secs)
+    print 'Wrote sample to %s' % output
