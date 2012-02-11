@@ -1,6 +1,7 @@
 # Generate 'perfect' sine wave sounds
 
-# Design notes: produces ~= (use requested) s raw CDDA audio - 44100 Hz, 16 bit signed values
+# Design notes: produces ~= (use requested) s raw CDDA audio - 44100 Hz
+#                           16 bit signed values
 # Input is freq in Hz - 440 for A, etc. - must be an integer
 # Output is written the file beep<freq>.pcm
 # Convert to ogg with oggenc -r <file>
@@ -9,9 +10,9 @@ import sys
 import math
 import struct
 
-
 CDDA_RATE = 44100
-MAX = 105*256 # Max value for sine wave
+MAX = 105 * 256  # Max value for sine wave
+
 
 def gen_sine(freq, secs):
     filename = 'beep%s.pcm' % freq

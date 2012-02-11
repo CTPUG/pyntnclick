@@ -10,15 +10,14 @@ sys.path.append(script_path)
 from albow.root import RootWidget
 from albow.utils import frame_rect
 from albow.widget import Widget
-from albow.controls import Button, Image, Label
+from albow.controls import Button, Image
 from albow.palette_view import PaletteView
 from albow.file_dialogs import request_old_filename
 from albow.resource import get_font
-from pygame.locals import SWSURFACE, K_LEFT, K_RIGHT, K_UP, K_DOWN, \
-        K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z, \
-        BLEND_RGBA_MIN, SRCALPHA
+from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
+                           K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
+                           BLEND_RGBA_MIN, SRCALPHA)
 import pygame
-from pygame.colordict import THECOLORS
 
 from gamelib import constants
 constants.DEBUG = True
@@ -72,7 +71,9 @@ class AppImage(Widget):
 
     def __init__(self, state):
         self.state = state
-        super(AppImage, self).__init__(pygame.rect.Rect(0, 0, constants.SCREEN[0], constants.SCREEN[1]))
+        super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
+                                                        constants.SCREEN[0],
+                                                        constants.SCREEN[1]))
         self.mode = 'draw'
         self.rects = []
         self.images = []
@@ -100,7 +101,8 @@ class AppImage(Widget):
             self.close_button.rect.midbottom = rect.midbottom
             self.offset = (0, 0)
         else:
-            self.offset = (-self.state.current_scene.OFFSET[0], - self.state.current_scene.OFFSET[1])
+            self.offset = (-self.state.current_scene.OFFSET[0],
+                           -self.state.current_scene.OFFSET[1])
         self.find_existing_intersects()
 
     def _get_scene(self):
@@ -133,8 +135,10 @@ class AppImage(Widget):
                             for other_rect in thing2_rects:
                                 if my_rect.colliderect(other_rect):
                                     print 'Existing Intersecting rects'
-                                    print "  Thing1 %s Interact %s" % (thing.name, interact_name)
-                                    print "  Thing2 %s Interact %s" % (thing2.name, interact2_name)
+                                    print ("  Thing1 %s Interact %s"
+                                           % (thing.name, interact_name))
+                                    print ("  Thing2 %s Interact %s"
+                                           % (thing2.name, interact2_name))
                                     print "     Rects", my_rect, other_rect
         print
 
@@ -156,7 +160,8 @@ class AppImage(Widget):
                             if my_rect.colliderect(other_rect):
                                 print 'Intersecting rects'
                                 print "  Object %s" % num
-                                print "  Thing %s Interact %s" % (thing.name, interact_name)
+                                print ("  Thing %s Interact %s"
+                                       % (thing.name, interact_name))
                                 print "     Rects", my_rect, other_rect
                 if thing.INITIAL:
                     thing.set_interact(thing.INITIAL)
@@ -218,7 +223,8 @@ class AppImage(Widget):
     def draw_sub_image(self, image, surface, cropped_rect):
         """Tweaked image drawing to avoid albow's centring the image in the
            subsurface"""
-        surf = pygame.surface.Surface((cropped_rect.w, cropped_rect.h), SRCALPHA).convert_alpha()
+        surf = pygame.surface.Surface((cropped_rect.w, cropped_rect.h),
+                                      SRCALPHA).convert_alpha()
         frame = surf.get_rect()
         imsurf = image.get_image().convert_alpha()
         r = imsurf.get_rect()
@@ -234,8 +240,12 @@ class AppImage(Widget):
         if self.zoom_display:
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
-            zoomed = pygame.transform.scale(base_surface, (ZOOM * constants.SCREEN[0], ZOOM * constants.SCREEN[1]))
-            area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1], self.zoom_offset[0] + constants.SCREEN[0], self.zoom_offset[1] + constants.SCREEN[1])
+            zoomed = pygame.transform.scale(base_surface,
+                                            (ZOOM * constants.SCREEN[0],
+                                             ZOOM * constants.SCREEN[1]))
+            area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1],
+                                    self.zoom_offset[0] + constants.SCREEN[0],
+                                    self.zoom_offset[1] + constants.SCREEN[1])
             surface.blit(zoomed, (0, 0), area)
         else:
             self.do_unzoomed_draw(surface)
@@ -279,14 +289,18 @@ class AppImage(Widget):
                     print 'image outside surface', image
             if self.current_image and self.mode == 'image':
                 if self.current_image.rect.colliderect(surface.get_rect()):
-                    cropped_rect = self.current_image.rect.clip(surface.get_rect())
-                    self.draw_sub_image(self.current_image, surface, cropped_rect)
+                    cropped_rect = self.current_image.rect.clip(
+                            surface.get_rect())
+                    self.draw_sub_image(self.current_image, surface,
+                                        cropped_rect)
         if self.draw_toolbar:
-            toolbar_rect = pygame.rect.Rect(0, constants.SCREEN[1] - constants.BUTTON_SIZE, constants.SCREEN[0], constants.BUTTON_SIZE)
-            tb_surf = surface.subsurface(0, constants.SCREEN[1] - constants.BUTTON_SIZE, constants.SCREEN[0], constants.BUTTON_SIZE).convert_alpha()
+            tb_surf = surface.subsurface(0, constants.SCREEN[1]
+                                            - constants.BUTTON_SIZE,
+                                         constants.SCREEN[0],
+                                         constants.BUTTON_SIZE).convert_alpha()
             tb_surf.fill(pygame.color.Color(127, 0, 0, 191))
-            surface.blit(tb_surf, (0, constants.SCREEN[1] - constants.BUTTON_SIZE))
-            # frame_rect(surface, (127, 0, 0), toolbar_rect, 2)
+            surface.blit(tb_surf, (0, constants.SCREEN[1]
+                                      - constants.BUTTON_SIZE))
 
     def _make_dict(self):
         d = {}
@@ -314,14 +328,17 @@ class AppImage(Widget):
         print
 
     def image_load(self):
-        image_path= '%s/Resources/images/%s' % (script_path, self.state.current_scene.FOLDER)
+        image_path = ('%s/Resources/images/%s'
+                      % (script_path, self.state.current_scene.FOLDER))
         imagename = request_old_filename(directory=image_path)
         try:
             image_data = pygame.image.load(imagename)
             self.current_image = Image(image_data)
             self.place_image_menu.enabled = True
             # ensure we're off screen to start
-            self.current_image.rect = image_data.get_rect().move(constants.SCREEN[0] + MENU_WIDTH, constants.SCREEN[1])
+            self.current_image.rect = image_data.get_rect() \
+                    .move(constants.SCREEN[0] + MENU_WIDTH,
+                          constants.SCREEN[1])
         except pygame.error, e:
             print 'Unable to load image %s' % e
 
@@ -337,7 +354,8 @@ class AppImage(Widget):
 
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
-            pos = ((mouse_pos[0] + self.zoom_offset[0]) / ZOOM, (mouse_pos[1] + self.zoom_offset[1]) / ZOOM)
+            pos = ((mouse_pos[0] + self.zoom_offset[0]) / ZOOM,
+                   (mouse_pos[1] + self.zoom_offset[1]) / ZOOM)
         else:
             pos = mouse_pos
         return pos
@@ -373,8 +391,11 @@ class AppImage(Widget):
             self._make_zoom_offset(e.pos)
         if self.mode == 'image' and self.current_image:
             if self.old_mouse_pos:
-                delta = (pos[0] - self.old_mouse_pos[0], pos[1] - self.old_mouse_pos[1])
-                self.current_image.rect.center = (self.current_image.rect.center[0] + delta[0], self.current_image.rect.center[1] + delta[1])
+                delta = (pos[0] - self.old_mouse_pos[0],
+                         pos[1] - self.old_mouse_pos[1])
+                self.current_image.rect.center = (
+                        self.current_image.rect.center[0] + delta[0],
+                        self.current_image.rect.center[1] + delta[1])
             else:
                 self.current_image.rect.center = pos
             self.invalidate()
@@ -504,7 +525,7 @@ class ModeLabel(BoomLabel):
         self.app_image = app_image
         super(ModeLabel, self).__init__('Mode : ', 200,
                 font=get_font(15, 'VeraBd.ttf'),
-                fg_color = pygame.color.Color(128, 0, 255))
+                fg_color=pygame.color.Color(128, 0, 255))
         self.rect.move_ip(805, 0)
 
     def draw_all(self, surface):
@@ -554,25 +575,32 @@ class RectApp(RootWidget):
         print_rects = make_button("Print objects", self.image.print_objs, y)
         self.add(print_rects)
         y += print_rects.get_rect().h
-        toggle_things = make_button("Show Things (t)", self.image.toggle_things, y)
+        toggle_things = make_button("Show Things (t)",
+                                    self.image.toggle_things, y)
         self.add(toggle_things)
         y += toggle_things.get_rect().h
-        toggle_thing_rects = make_button("Show Thing Rects (r)", self.image.toggle_thing_rects, y)
+        toggle_thing_rects = make_button("Show Thing Rects (r)",
+                                         self.image.toggle_thing_rects, y)
         self.add(toggle_thing_rects)
         y += toggle_thing_rects.get_rect().h
-        toggle_images = make_button("Show Images (i)", self.image.toggle_images, y)
+        toggle_images = make_button("Show Images (i)",
+                                    self.image.toggle_images, y)
         self.add(toggle_images)
         y += toggle_images.get_rect().h
-        trans_images = make_button("Opaque Images (o)", self.image.toggle_trans_images, y)
+        trans_images = make_button("Opaque Images (o)",
+                                   self.image.toggle_trans_images, y)
         self.add(trans_images)
         y += trans_images.get_rect().h
-        toggle_rects = make_button("Show Drawn Rects (d)", self.image.toggle_rects, y)
+        toggle_rects = make_button("Show Drawn Rects (d)",
+                                   self.image.toggle_rects, y)
         self.add(toggle_rects)
         y += toggle_rects.get_rect().h
-        toggle_toolbar = make_button("Show Toolbar (b)", self.image.toggle_toolbar, y)
+        toggle_toolbar = make_button("Show Toolbar (b)",
+                                     self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
         y += toggle_toolbar.get_rect().h
-        toggle_anim = make_button("Show Animations (a)", self.image.toggle_anim, y)
+        toggle_anim = make_button("Show Animations (a)",
+                                  self.image.toggle_anim, y)
         self.add(toggle_anim)
         y += toggle_anim.get_rect().h
         toggle_zoom = make_button("Zoom (z)", self.image.toggle_zoom, y)
@@ -599,15 +627,16 @@ def list_scenes(state):
     """List the scenes in the state"""
     print 'Available scenes are : '
     for scene in state.scenes:
-        print '    ',scene
+        print '    ', scene
     print 'Available details are : '
     for detail in state.detail_views:
-        print '    ',detail
+        print '    ', detail
 
 if __name__ == "__main__":
     pygame.display.init()
     pygame.font.init()
-    display = pygame.display.set_mode((constants.SCREEN[0] + MENU_WIDTH, constants.SCREEN[1]))
+    display = pygame.display.set_mode((constants.SCREEN[0] + MENU_WIDTH,
+                                      constants.SCREEN[1]))
     state = state.initial_state()
     if len(sys.argv) < 2:
         print 'Please provide a scene name or scene and detail names'
