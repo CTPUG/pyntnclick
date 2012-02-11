@@ -1,6 +1,8 @@
 import os.path
 from unittest import TestCase
 
+from pygame.surface import Surface
+
 from pyntnclick.resources import Resources, ResourceNotFound
 
 
@@ -40,3 +42,9 @@ class ResourcesTestCase(TestCase):
         res = Resources('pyntnclick.tests')
         self.assertEqual(data_path('images/pyntnclick/hand.png'),
                          res.get_resource_path('images/pyntnclick/hand.png'))
+
+    def test_load_image(self):
+        res = Resources('pyntnclick.tests')
+        res.CONVERT_ALPHA = False
+        image = res.load_image('pyntnclick/hand.png')
+        self.assertTrue(isinstance(image, Surface))
