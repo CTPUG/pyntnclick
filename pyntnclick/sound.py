@@ -1,10 +1,8 @@
-# Sound management for Suspended Sentence
+# sound management for pyntnclick
 
 # This re-implements some of the albow.resource code to
 # a) work around an annoying bugs
 # b) add some missing functionality (disable_sound)
-
-import os
 
 import pygame
 
