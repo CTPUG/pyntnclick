@@ -34,7 +34,7 @@ class MainShell(Shell):
         self.menu_screen = MenuScreen(self, game_description)
         self.game_screen = GameScreen(self, game_description)
         self.end_screen = EndScreen(self, game_description)
-        self.set_timer(game_description.constants.frame_rate)
+        #self.set_timer(game_description.constants.frame_rate)
         self.show_screen(self.menu_screen)
 
 
