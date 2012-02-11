@@ -7,6 +7,7 @@ from albow.resource import get_image
 
 from gamelib.widgets import BoomImageButton
 
+
 class EndImageButton(BoomImageButton):
 
     FOLDER = 'won'
@@ -16,8 +17,10 @@ class EndScreen(Screen):
     def __init__(self, shell):
         Screen.__init__(self, shell)
         self.background = get_image('won', 'won.png')
-        self._menu_button = EndImageButton('menu.png', 26, 500, action=self.main_menu)
-        self._quit_button = EndImageButton('quit.png', 250, 500, action=shell.quit)
+        self._menu_button = EndImageButton('menu.png', 26, 500,
+                action=self.main_menu)
+        self._quit_button = EndImageButton('quit.png', 250, 500,
+                action=shell.quit)
         self.add(self._menu_button)
         self.add(self._quit_button)
 
@@ -28,5 +31,3 @@ class EndScreen(Screen):
 
     def main_menu(self):
         self.shell.show_screen(self.shell.menu_screen)
-
-
