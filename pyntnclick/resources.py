@@ -18,6 +18,7 @@ class Resources(object):
         self.resource_module = resource_module
         self.language = language
         self._image_cache = {}
+        self._mutated_image_cache = {}
 
     def get_resource_path(self, *resource_path_fragments):
         resource_name = os.path.join(*resource_path_fragments)
@@ -35,11 +36,21 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def load_image(self, image_name):
+    def load_image(self, image_name, mutators=()):
         image_path = self.get_resource_path('images', image_name)
+
         if image_path not in self._image_cache:
             image = pygame.image.load(image_path)
             if self.CONVERT_ALPHA:
                 image = image.convert_alpha(pygame.display.get_surface())
             self._image_cache[image_path] = image
-        return self._image_cache[image_path]
+
+        image = self._image_cache[image_path]
+        key = (image_path, mutators)
+
+        if key not in self._mutated_image_cache:
+            for mutator in mutators:
+                image = mutator(image)
+            self._mutated_image_cache[key] = image
+
+        return self._mutated_image_cache[key]
