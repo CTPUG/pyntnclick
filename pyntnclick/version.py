@@ -1,6 +1,6 @@
-"""Suspended Sentence Version Information"""
+"""Pyntnclick Version Information"""
 
-VERSION = (1, 1, 0, 'alpha', 0)
+VERSION = (0, 0, 1, 'alpha', 0)
 BASE_VERSION_STR = '.'.join([str(x) for x in VERSION[:3]])
 VERSION_STR = {
     'final': BASE_VERSION_STR,
@@ -8,8 +8,8 @@ VERSION_STR = {
     'rc': BASE_VERSION_STR + 'rc' + str(VERSION[4]),
 }[VERSION[3]]
 
-NAME = 'Suspended Sentence'
-DESCRIPTION = 'Point-and-click adventure game written using Pygame.'
+NAME = 'Pyntnclick'
+DESCRIPTION = 'Point-and-click adventure game engine using Pygame.'
 
 PEOPLE = {
     'Simon': ('Simon Cross', 'hodgestar+rinkhals@gmail.com'),
@@ -41,6 +41,7 @@ ARTISTS = [
 
 DOCUMENTERS = [
     PEOPLE['Simon'],
+    PEOPLE['Stefano'],
 ]
 
 # SOURCEFORGE_URL = 'http://sourceforge.net/projects/XXXX/'
@@ -54,7 +55,7 @@ CLASSIFIERS = [
     'Environment :: MacOS X',
     'Environment :: Win32 (MS Windows)',
     'Environment :: X11 Applications',
-    'Intended Audience :: End Users/Desktop',
+    'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
     'Operating System :: Microsoft :: Windows',
@@ -62,7 +63,7 @@ CLASSIFIERS = [
     'Operating System :: MacOS :: MacOS X',
     'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
-    'Topic :: Games/Entertainment :: Role-Playing',
+    'Topic :: Games/Entertainment',
 ]
 
 PLATFORMS = [
