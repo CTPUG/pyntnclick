@@ -13,10 +13,6 @@ from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
                                   InteractImage, InteractAnimated,
                                   GenericDescThing)
 
-# XXX: Need a way to get at the constants.
-from pyntnclick.constants import GameConstants
-DEBUG = GameConstants().debug
-
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
 
@@ -454,8 +450,8 @@ class DestNavPageLine(Thing):
     def __init__(self, number, rect, ai_blocked):
         super(DestNavPageLine, self).__init__()
         self.name = 'bridge_comp.nav_line%s' % number
-        if DEBUG:
-            self._interact_hilight_color = Color(THECOLORS.keys()[number])
+        # set debugging higlight color for when DEBUG is on.
+        self._interact_hilight_color = Color(THECOLORS.keys()[number])
         r = Rect(rect)
         self.interacts = {}
         self.interacts['line'] = InteractNoImage(r.x, r.y, r.w, r.h)

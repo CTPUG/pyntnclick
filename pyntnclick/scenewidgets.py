@@ -10,10 +10,6 @@ from albow.resource import get_image
 from pyntnclick.state import Thing
 from pyntnclick.widgets import BoomLabel
 
-# XXX: Need a way to get at the constants.
-from pyntnclick.constants import GameConstants
-DEBUG = GameConstants().debug
-
 
 class Interact(object):
 
@@ -141,9 +137,8 @@ class GenericDescThing(Thing):
         self.interacts = {
                 'description': InteractRectUnion(areas)
                 }
-        if DEBUG:
-            # Individual colors to make debugging easier
-            self._interact_hilight_color = Color(THECOLORS.keys()[number])
+        # Individual colors to make debugging easier
+        self._interact_hilight_color = Color(THECOLORS.keys()[number])
 
     def get_description(self):
         return self.description
