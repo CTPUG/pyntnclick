@@ -10,9 +10,9 @@ from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 class EndScreen(Screen):
     def setup(self):
-        self._background = self.resource.get_image(('won', 'won.png'))
-        self.add_image_button((26, 500), ('won', 'menu.png'), self.main_menu)
-        self.add_image_button((250, 500), ('won', 'quit.png'), self.quit)
+        self._background = self.resource.get_image('won/won.png')
+        self.add_image_button((26, 500), 'won/menu.png', self.main_menu)
+        self.add_image_button((250, 500), 'won/quit.png', self.quit)
 
     def add_image_button(self, rect, image_name, callback):
         image = self.resource.get_image(image_name)
