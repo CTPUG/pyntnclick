@@ -73,7 +73,7 @@ class Bridge(Scene):
         self.add_thing(self.doctor)
 
     def enter(self):
-        pieces = [self.sound.get_music(x, prefix='sounds') for x in self.MUSIC]
+        pieces = [self.sound.get_music(x) for x in self.MUSIC]
         self.background_playlist = self.sound.get_playlist(pieces, random=True,
                                                            repeat=True)
         self.sound.change_playlist(self.background_playlist)

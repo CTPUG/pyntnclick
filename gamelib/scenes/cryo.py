@@ -125,7 +125,7 @@ class Cryo(Scene):
 
     def enter(self):
         # Setup music
-        pieces = [self.sound.get_music(x, prefix='sounds') for x in self.MUSIC]
+        pieces = [self.sound.get_music(x) for x in self.MUSIC]
         background_playlist = self.sound.get_playlist(pieces, random=True,
                                                       repeat=True)
         self.sound.change_playlist(background_playlist)

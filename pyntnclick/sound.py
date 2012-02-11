@@ -4,6 +4,9 @@
 # a) work around an annoying bugs
 # b) add some missing functionality (disable_sound)
 
+from random import randrange
+
+
 import pygame
 
 try:
@@ -17,8 +20,33 @@ except ImportError, e:
     music = None
 
 from pyntnclick.resources import ResourceNotFound
+from pyntnclick.engine import MUSIC_ENDED
 
-import albow.music
+
+class PlayList(object):
+    """Hold a playlist of music filenames"""
+
+    def __init__(self, pieces, random, repeat):
+        self._pieces = pieces
+        self._random = random
+        self._repeate = repeat
+
+    def get_next(self):
+        # Get the next piece
+        if self.pieces:
+            if self._random:
+                if not self._repeat or len(self._items) < 3:
+                    i = randrange(0, len(self.items))
+                else:
+                    # Ignore the last entry, since we possibly just played it
+                    i = randrange(0, len(self.items) - 1)
+            else:
+                i = 0
+            result = self.items.pop(i)
+            if self._repeat:
+                self.items.push(result)
+            return result
+        return None
 
 
 class DummySound(object):
@@ -57,6 +85,7 @@ class Sound(object):
         self.sound_enabled = False
         self.sound_cache = {}
         self._resource_finder = resource_finder
+        self._current_playlist = None
 
     def enable_sound(self, constants):
         """Attempt to initialise the sound system"""
@@ -69,6 +98,7 @@ class Sound(object):
                               constants.snd_channels,
                               constants.snd_buffer)
             self.sound_enabled = True
+            music.set_endevent(MUSIC_ENDED)
         except pygame.error, exc:
             self.disable_sound(exc)
 
@@ -102,33 +132,32 @@ class Sound(object):
         return sound
 
     def get_playlist(self, pieces, random=False, repeat=False):
-        return albow.music.PlayList(pieces, random, repeat)
+        return PlayList(pieces, random, repeat)
 
-    def get_music(self, name, prefix):
+    def get_music(self, name):
         if self.sound_enabled:
-            return albow.music.get_music(name, prefix=prefix)
+            music_file = self._resource_finder.get_resource_path("sounds",
+                    name)
+            return music_file
+        return None
+
+    def music_ended(self):
+        if self._current_playlist:
+            # Try start the next tune
+            self.start_next_music()
 
     def change_playlist(self, new_playlist):
         if self.sound_enabled:
-            albow.music.change_playlist(new_playlist)
+            music.stop_music()
+            self._current_playlist = new_playlist
+            self.start_next_music()
+
+    def start_next_music(self):
+        if self._current_playlist:
+            tune = self._current_playlist.get_next()
+            if tune:
+                music.load(tune)
+                music.play()
 
     def get_current_playlist(self):
-        if self.sound_enabled and albow.music.music_enabled and \
-                albow.music.current_playlist:
-            return albow.music.current_playlist
-
-
-def start_next_music():
-    """Start playing the next item from the current playlist immediately."""
-    if albow.music.music_enabled and albow.music.current_playlist:
-        next_music = albow.music.current_playlist.next()
-        if next_music:
-            #print "albow.music: loading", repr(next_music)
-            music.load(next_music)
-            music.play()
-            albow.music.next_change_delay = albow.music.change_delay
-        albow.music.current_music = next_music
-
-
-# Monkey patch
-albow.music.start_next_music = start_next_music
+        return self._current_playlist
