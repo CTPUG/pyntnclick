@@ -2,8 +2,6 @@
 
 import random
 
-from albow.resource import get_image
-
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
 from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
@@ -493,7 +491,8 @@ class CryoCompDetail(Scene):
 
     def __init__(self, state):
         super(CryoCompDetail, self).__init__(state)
-        self._background_fixed = get_image(self.FOLDER, self.BACKGROUND_FIXED)
+        self._background_fixed = self.get_image(
+            self.FOLDER, self.BACKGROUND_FIXED)
 
     def draw_background(self, surface):
         if self.state.scenes['engine'].get_data('engine online'):

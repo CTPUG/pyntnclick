@@ -373,6 +373,9 @@ class Scene(StatefulGizmo):
         self._cache_background()
         return self._background.get_size()
 
+    def get_image(self, *image_name_fragments, **kw):
+        return self.resource.get_image(image_name_fragments, **kw)
+
 
 class InteractiveMixin(object):
     def is_interactive(self, tool=None):

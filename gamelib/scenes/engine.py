@@ -1,6 +1,5 @@
 """Engine room where things need to be repaired."""
 
-from albow.resource import get_image
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
@@ -539,7 +538,7 @@ class EngineCompDetail(Scene):
     def setup(self):
         self._alert_messages = {}
         for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = get_image(self.FOLDER, name)
+            self._alert_messages[key] = self.get_image(self.FOLDER, name)
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET
