@@ -39,23 +39,16 @@ class TextWidget(Widget):
 
 class TextButton(Button, TextWidget):
     def __init__(self, *args, **kwargs):
-        self.focus_color = kwargs.pop('focus_color', FOCUS_COLOR)
         self.padding = kwargs.pop('padding', 10)
         self.border = kwargs.pop('border', 3)
         super(TextButton, self).__init__(*args, **kwargs)
-        if not isinstance(self.focus_color, pygame.Color):
-            self.focus_color = pygame.Color(self.focus_color)
-        self.focussable = True
 
     def prepare(self):
         super(TextButton, self).prepare()
         text = self.surface
         text_rect = self.text_rect
-        self._focussed = self.focussed
         if self.disabled:
             color = pygame.Color('#666666')
-        elif self.focussed:
-            color = self.focus_color
         else:
             color = self.color
 
@@ -71,6 +64,4 @@ class TextButton(Button, TextWidget):
                          self.border)
 
     def draw(self, surface):
-        if self._focussed != self.focussed:
-            self.prepare()
         super(TextButton, self).draw(surface)

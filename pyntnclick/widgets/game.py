@@ -11,7 +11,6 @@ class GameWidget(Widget):
         self.world = world
         rect = Rect(offset, world.get_size())
         super(GameWidget, self).__init__(rect)
-        self.focussable = True
         self.add_callback(FlipArrowsEvent, self.flip_arrows)
 
     def flip_arrows(self, ev, widget):
@@ -23,4 +22,3 @@ class GameWidget(Widget):
 
     def restart(self):
         self.world.restart()
-        self.grab_focus()

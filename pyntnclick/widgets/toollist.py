@@ -16,7 +16,6 @@ class ToolListWidget(Container):
         self.prev_but = None
         self.next_but = None
         self.fill_page()
-        self.focussable = True
 
     def fill_page(self):
         for widget in self.children[:]:

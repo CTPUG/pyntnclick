@@ -39,6 +39,3 @@ class ListBox(Box):
             self.parent.paused = False
         self.parent.remove(self)
         return True
-
-    def grab_focus(self):
-        return self.ok_button.grab_focus()

@@ -49,6 +49,3 @@ class MessageBox(Box):
             self.post_callback()
         if getattr(self, 'parent_modal', False):
             self.parent.modal = True
-
-    def grab_focus(self):
-        return self.ok_button.grab_focus()
