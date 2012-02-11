@@ -26,8 +26,8 @@ class InventoryView(Widget):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, screen):
-        Widget.__init__(self, Rect((0, 0) + screen.surface_size))
+    def __init__(self, gd, screen):
+        Widget.__init__(self, Rect((0, 0) + screen.surface_size), gd)
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
@@ -64,11 +64,11 @@ class InventoryView(Widget):
 
 class StateWidget(Widget):
 
-    def __init__(self, rect, screen):
-        Widget.__init__(self, rect)
+    def __init__(self, rect, gd, screen):
+        Widget.__init__(self, rect, gd)
         self.screen = screen
         self.game = screen.game
-        self.detail = DetailWindow(rect, screen)
+        self.detail = DetailWindow(rect, gd, screen)
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEMOTION, self.mouse_move)
 
@@ -135,8 +135,8 @@ class StateWidget(Widget):
 
 
 class DetailWindow(Container):
-    def __init__(self, rect, screen):
-        Container.__init__(self, rect)
+    def __init__(self, rect, gd, screen):
+        Container.__init__(self, rect, gd)
         self.image_rect = None
         self.screen = screen
         self.game = screen.game
@@ -205,7 +205,7 @@ class GameScreen(Screen):
 
     def setup(self):
         self.running = False
-        self.create_initial_state = self.game_description.initial_state
+        self.create_initial_state = self.gd.initial_state
 
     def _clear_all(self):
         for widget in self.container.children[:]:
@@ -217,11 +217,11 @@ class GameScreen(Screen):
 
     def start_game(self):
         self._clear_all()
-        toolbar_height = self.game_description.constants.button_size
+        toolbar_height = self.gd.constants.button_size
         rect = Rect(0, 0, self.surface_size[0],
                     self.surface_size[1] - toolbar_height)
         self.game = self.create_initial_state()
-        self.state_widget = StateWidget(rect, self)
+        self.state_widget = StateWidget(rect, self.gd, self)
         self.container.add(self.state_widget)
 
         # XXX: self.popup_menu = PopupMenu(self)
@@ -230,7 +230,7 @@ class GameScreen(Screen):
 
         # XXX: self.handbutton = HandButton(action=self.hand_pressed)
 
-        self.inventory = InventoryView(self)
+        self.inventory = InventoryView(self.gd, self)
 
         # XXX: self.toolbar = ToolBar([
         #        self.menubutton,

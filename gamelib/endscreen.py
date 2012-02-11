@@ -16,7 +16,7 @@ class EndScreen(Screen):
 
     def add_image_button(self, rect, image_name, callback):
         image = self.resource.get_image(image_name)
-        widget = ImageButtonWidget(rect, image)
+        widget = ImageButtonWidget(rect, self.gd, image)
         widget.add_callback('clicked', callback)
         self.container.add(widget)
 

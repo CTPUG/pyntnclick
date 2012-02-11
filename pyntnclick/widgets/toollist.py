@@ -5,14 +5,14 @@ from pyntntclick.widgets.text import TextButton
 class ToolListWidget(Container):
     """List of other widgets, with some paging trickery"""
 
-    def __init__(self, rect, widget_list, page_length,
+    def __init__(self, rect, gd, widget_list, page_length,
                  padding=2):
         widget_list.sort(key=lambda w: w.text)
         self.widget_list = widget_list
         self.page_length = page_length
         self.padding = padding
         self.page = 0
-        super(ToolListWidget, self).__init__(rect)
+        super(ToolListWidget, self).__init__(rect, gd)
         self.prev_but = None
         self.next_but = None
         self.fill_page()

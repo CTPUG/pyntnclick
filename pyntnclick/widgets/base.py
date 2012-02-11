@@ -9,10 +9,12 @@ from pyntnclick.engine import UserEvent
 
 class Widget(object):
 
-    def __init__(self, rect):
+    def __init__(self, rect, gd):
         if not isinstance(rect, pygame.Rect):
             rect = pygame.Rect(rect, (0, 0))
         self.rect = rect
+        self.gd = gd
+        self.resource = gd.resource
         self.modal = False
         self.parent = None
         self.disabled = False
@@ -77,10 +79,10 @@ class Button(Widget):
 
 class Container(Widget):
 
-    def __init__(self, rect=None):
+    def __init__(self, rect, gd):
         if rect is None:
             rect = pygame.Rect(0, 0, 0, 0)
-        super(Container, self).__init__(rect)
+        super(Container, self).__init__(rect, gd)
         self.children = []
 
     def event(self, ev):

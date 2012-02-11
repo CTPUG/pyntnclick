@@ -11,8 +11,8 @@ get_font = Resources("Resources").get_font
 class TextWidget(Widget):
     fontcache = {}
 
-    def __init__(self, rect, text, fontname=None, fontsize=None, color=None):
-        super(TextWidget, self).__init__(rect)
+    def __init__(self, rect, gd, text, fontname=None, fontsize=None, color=None):
+        super(TextWidget, self).__init__(rect, gd)
         self.text = text
         if fontname is None:
             self.fontname = 'Vera.ttf'  # FIXME: Hardcoded...

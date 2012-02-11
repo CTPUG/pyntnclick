@@ -5,9 +5,9 @@ from pyntnclick.widgets.text import TextWidget, TextButton
 
 class MessageBox(Box):
 
-    def __init__(self, rect, text, post_callback=None, color='red',
+    def __init__(self, rect, gd, text, post_callback=None, color='red',
             fontsize=FONT_SIZE):
-        super(MessageBox, self).__init__(rect)
+        super(MessageBox, self).__init__(rect, gd)
         self.text = text
         self.font_size = fontsize
         self.post_callback = post_callback

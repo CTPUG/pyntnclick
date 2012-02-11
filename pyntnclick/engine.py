@@ -13,9 +13,9 @@ MUSIC_ENDED = USEREVENT + 1
 
 
 class Engine(object):
-    def __init__(self, game_description):
+    def __init__(self, gd):
         self._screen = None
-        self._game_description = game_description
+        self._gd = gd
         self.screens = {}
 
     def set_screen(self, screen_name):
@@ -40,7 +40,7 @@ class Engine(object):
                 if ev.type == QUIT:
                     return
                 elif ev.type == MUSIC_ENDED:
-                    self._game_description.sound.music_ended()
+                    self._gd.sound.music_ended()
                 elif ScreenChangeEvent.matches(ev):
                     self.set_screen(ev.screen_name)
                 elif ScreenEvent.matches(ev):
@@ -52,22 +52,23 @@ class Engine(object):
             self._screen.draw(surface)
             flip()
             self._fps = 1000.0 / clock.tick(
-                    self._game_description.constants.frame_rate)
+                    self._gd.constants.frame_rate)
 
 
 class Screen(object):
     """A top level object for the screen being displayed"""
 
-    def __init__(self, game_description):
+    def __init__(self, gd):
         # Avoid import loop
         from pyntnclick.widgets.base import Container
 
-        self.game_description = game_description
-        self.resource = game_description.resource
+        self.gd = gd
+        self.resource = gd.resource
 
-        self.surface_size = game_description.constants.screen
+        self.surface_size = gd.constants.screen
         self.surface = None
-        self.container = Container(pygame.Rect((0, 0), self.surface_size))
+        self.container = Container(pygame.Rect((0, 0),  self.surface_size),
+                self.gd)
         self.setup()
 
     def on_enter(self):
