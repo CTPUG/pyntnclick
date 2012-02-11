@@ -18,10 +18,12 @@ DEBUG_SCENE = None
 # whether to show debugging rects
 DEBUG_RECTS = False
 
+
 class Result(object):
     """Result of interacting with a thing"""
 
-    def __init__(self, message=None, soundfile=None, detail_view=None, style=None, close_detail=False, end_game=False):
+    def __init__(self, message=None, soundfile=None, detail_view=None,
+                 style=None, close_detail=False, end_game=False):
         self.message = message
         self.sound = None
         if soundfile:
@@ -39,7 +41,9 @@ class Result(object):
             scene_widget.show_message(self.message, self.style)
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
-        if self.close_detail and hasattr(scene_widget, 'parent') and hasattr(scene_widget.parent, 'clear_detail'):
+        if (self.close_detail
+            and hasattr(scene_widget, 'parent')
+            and hasattr(scene_widget.parent, 'clear_detail')):
             scene_widget.parent.clear_detail()
         if self.end_game:
             scene_widget.end_game()
@@ -283,7 +287,7 @@ class Scene(StatefulGizmo):
         if description is not None:
             w, h = description.size
             sub = screen.get_root().surface.subsurface(
-                Rect(400-w/2, 5, w, h))
+                Rect(400 - w / 2, 5, w, h))
             description.draw_all(sub)
 
     def _cache_background(self):
@@ -381,7 +385,6 @@ class InteractiveMixin(object):
 
     def interact_default(self, item=None):
         return None
-
 
 
 class Thing(StatefulGizmo, InteractiveMixin):

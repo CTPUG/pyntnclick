@@ -22,7 +22,8 @@ class InventoryView(PaletteView):
     sel_width = 2
 
     def __init__(self, screen):
-        PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6, scrolling=True)
+        PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6,
+                             scrolling=True)
         self.screen = screen
         self.state = screen.state
         self.state_widget = screen.state_widget
@@ -74,7 +75,7 @@ class StateWidget(Widget):
 
     def mouse_down(self, event):
         self.mouse_move(event)
-        if event.button != 1: # We have a right/middle click
+        if event.button != 1:  # We have a right/middle click
             self.state.cancel_doodah(self.screen)
         elif self.subwidgets:
             self.clear_detail()
@@ -155,7 +156,7 @@ class DetailWindow(Widget):
         bw = self.border_width
         self.image_rect = rect
         self.image_rect.topleft = (bw, bw)
-        self.set_rect(rect.inflate(bw*2, bw*2))
+        self.set_rect(rect.inflate(bw * 2, bw * 2))
         self.close.rect.midbottom = rect.midbottom
 
     def draw(self, surface):
@@ -163,14 +164,16 @@ class DetailWindow(Widget):
         overlay = scene_surface.convert_alpha()
         overlay.fill(Color(0, 0, 0, 191))
         scene_surface.blit(overlay, (0, 0))
-        self.state.current_detail.draw(surface.subsurface(self.image_rect), self)
+        self.state.current_detail.draw(
+            surface.subsurface(self.image_rect), self)
 
     def mouse_down(self, event):
         self.mouse_move(event)
-        if event.button != 1: # We have a right/middle click
+        if event.button != 1:  # We have a right/middle click
             self.state.cancel_doodah(self.screen)
         else:
-            result = self.state.interact_detail(self.global_to_local(event.pos))
+            result = self.state.interact_detail(
+                self.global_to_local(event.pos))
             handle_result(result, self)
 
     def mouse_move(self, event):
