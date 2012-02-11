@@ -104,7 +104,7 @@ class GameDescription(object):
             self._debug_rects = opts.rects
         display = pygame.display.set_mode(self.constants.screen,
                                           SWSURFACE)
-        pygame.display.set_icon(self.resource.load_image(
+        pygame.display.set_icon(self.resource.get_image(
                 'suspended_sentence24x24.png', basedir='icons'))
         pygame.display.set_caption("Suspended Sentence")
         shell = MainShell(display, self)

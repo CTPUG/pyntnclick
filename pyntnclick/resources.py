@@ -48,6 +48,8 @@ class Resources(object):
         raise ResourceNotFound(resource_name)
 
     def get_paths(self, resource_path):
+        """Get list of resource paths to search.
+        """
         paths = []
         for module in [self.resource_module, self.DEFAULT_RESOURCE_MODULE]:
             if self.language:
@@ -56,23 +58,41 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def load_image(self, image_name_fragments, mutators=(), basedir='images'):
+    def get_image(self, image_name_fragments, mutators=(), basedir='images'):
+        """Load an image and optionally apply mutators.
+
+        The `image_name_fragments` parameter may be either a string or a list
+        of strings. The latter is a convenience for things that compose an
+        image name out of several fragments.
+
+        The `mutators` param may contain mutators, which modify an image
+        in-place to apply various effects. TODO: Implement mutators somewhere,
+        so this becomes useful.
+
+        The `basedir` param defaults to 'images', but may be overriden to load
+        images from other places. ('icons', for example.)
+        """
+
+        # Juggle our various params and find an appropriate image path.
         if isinstance(image_name_fragments, basestring):
             image_name_fragments = [image_name_fragments]
         image_path = self.get_resource_path(basedir, *image_name_fragments)
+
+        key = (image_path, mutators)
+        if key in self._mutated_image_cache:
+            # We already have this cached, so shortcut the whole process.
+            return self._mutated_image_cache[key]
 
         if image_path not in self._image_cache:
             image = pygame.image.load(image_path)
             if self.CONVERT_ALPHA:
                 image = image.convert_alpha(pygame.display.get_surface())
             self._image_cache[image_path] = image
-
         image = self._image_cache[image_path]
-        key = (image_path, mutators)
 
-        if key not in self._mutated_image_cache:
-            for mutator in mutators:
-                image = mutator(image)
-            self._mutated_image_cache[key] = image
+        # Apply any mutators we're given.
+        for mutator in mutators:
+            image = mutator(image)
+        self._mutated_image_cache[key] = image
 
-        return self._mutated_image_cache[key]
+        return image

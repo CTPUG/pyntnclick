@@ -15,7 +15,7 @@ class SplashButton(BoomImageButton):
 class MenuScreen(Screen):
     def __init__(self, shell, game_description):
         Screen.__init__(self, shell)
-        self._background = game_description.resource.load_image(
+        self._background = game_description.resource.get_image(
                 ('splash', 'splash.png'))
         self._start_button = SplashButton('play.png', 16, 523, self.start)
         self._resume_button = SplashButton('resume.png', 256, 523, self.resume,

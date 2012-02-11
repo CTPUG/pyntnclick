@@ -280,7 +280,7 @@ class Scene(StatefulGizmo):
 
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
-            self._background = self.state.gd.resource.load_image(
+            self._background = self.state.gd.resource.get_image(
                     (self.FOLDER, self.BACKGROUND))
 
     def draw_background(self, surface):
@@ -504,7 +504,7 @@ class Item(InteractiveMixin):
 
     def _cache_inventory_image(self):
         if not self.inventory_image:
-            self.inventory_image = self.state.resource.load_image(
+            self.inventory_image = self.state.resource.get_image(
                     'items', self.INVENTORY_IMAGE)
 
     def set_state(self, state):
