@@ -20,7 +20,7 @@ from pyntnclick.menu import MenuScreen
 from pyntnclick.gamescreen import GameScreen
 from pyntnclick.endscreen import EndScreen
 from pyntnclick.constants import (
-    SCREEN, FRAME_RATE)
+    SCREEN, FRAME_RATE, DEBUG)
 from pyntnclick.sound import Sound
 from pyntnclick import state, data
 
