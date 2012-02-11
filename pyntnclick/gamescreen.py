@@ -8,9 +8,7 @@ from pygame.color import Color
 from pyntnclick.cursor import CursorWidget
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
-from pyntnclick.widgets.base import Widget
-from pyntnclick.widgets import (
-    MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
+from pyntnclick.widgets.base import Widget, Container
 
 # XXX: Need a way to get at the constants.
 from pyntnclick.constants import GameConstants
@@ -27,7 +25,8 @@ class InventoryView(Widget):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, rect):
+    def __init__(self, screen):
+        Widget.__init__(self, Rect((0, 0) + screen.surface_size))
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
@@ -110,7 +109,8 @@ class StateWidget(Widget):
 
     def show_message(self, message, style=None):
         # Display the message as a modal dialog
-        MessageDialog(self.screen, message, 60, style=style).present()
+        print message
+        # XXX: MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
         self.invalidate()
         # The cursor could have gone anywhere
@@ -139,17 +139,17 @@ class StateWidget(Widget):
         self.screen.shell.show_screen(self.screen.shell.end_screen)
 
 
-class DetailWindow(Widget):
+class DetailWindow(Container):
     def __init__(self, screen):
-        Widget.__init__(self)
+        Container.__init__(self, Rect((0, 0) + screen.surface_size))
         self.image_rect = None
         self.screen = screen
         self.game = screen.game
         self.border_width = 5
         self.border_color = (0, 0, 0)
         # parent only gets set when we get added to the scene
-        self.close = BoomButton('Close', self.close_but, screen)
-        self.add(self.close)
+        # XXX: self.close = BoomButton('Close', self.close_but, screen)
+        # self.add(self.close)
 
     def close_but(self):
         self.parent.clear_detail()
@@ -195,13 +195,15 @@ class DetailWindow(Widget):
 
 class ToolBar(Widget):
     def __init__(self, items):
+        # XXX: ?o!
+        Widget.__init__(self, Rect(0, 0, 100, 100))
         for item in items:
             item.height = BUTTON_SIZE
         self.bg_color = (31, 31, 31)
 
     def draw(self, surface):
         surface.fill(self.bg_color)
-        Row.draw(self, surface)
+        # Row.draw(self, surface)
 
 
 class GameScreen(Screen):
@@ -222,23 +224,23 @@ class GameScreen(Screen):
         self._clear_all()
         self.game = self.create_initial_state()
         self.state_widget = StateWidget(self)
-        self.add(self.state_widget)
+        self.container.add(self.state_widget)
 
-        self.popup_menu = PopupMenu(self)
-        self.menubutton = PopupMenuButton('Menu',
-                action=self.popup_menu.show_menu)
+        # XXX: self.popup_menu = PopupMenu(self)
+        # XXX: self.menubutton = PopupMenuButton('Menu',
+        #        action=self.popup_menu.show_menu)
 
-        self.handbutton = HandButton(action=self.hand_pressed)
+        # XXX: self.handbutton = HandButton(action=self.hand_pressed)
 
         self.inventory = InventoryView(self)
 
-        self.toolbar = ToolBar([
-                self.menubutton,
-                self.handbutton,
-                self.inventory,
-                ])
-        self.toolbar.bottomleft = self.bottomleft
-        self.add(self.toolbar)
+        # XXX: self.toolbar = ToolBar([
+        #        self.menubutton,
+        #        self.handbutton,
+        #        self.inventory,
+        #        ])
+        # XXX: self.toolbar.bottomleft = self.bottomleft
+        # self.container.add(self.toolbar)
 
         self.running = True
 
