@@ -1,6 +1,5 @@
 import pygame
-from pygame.constants import (SRCALPHA, KEYDOWN, K_ESCAPE, K_RETURN, K_UP,
-        K_DOWN, K_SPACE, K_KP_ENTER)
+from pygame.constants import SRCALPHA
 
 from pyntnclick.constants import COLOR, FONT_SIZE, FOCUS_COLOR, DELETE_KEYS
 from pyntnclick.widgets.base import Widget, Button
@@ -75,57 +74,3 @@ class TextButton(Button, TextWidget):
         if self._focussed != self.focussed:
             self.prepare()
         super(TextButton, self).draw(surface)
-
-    def event(self, ev):
-        if ev.type == KEYDOWN and ev.key == K_SPACE:
-            return self.forced_click()
-        return super(TextButton, self).event(ev)
-
-
-class EntryTextWidget(TextWidget):
-    def __init__(self, rect, text, **kwargs):
-        self.focus_color = kwargs.pop('focus_color', FOCUS_COLOR)
-        self.prompt = kwargs.pop('prompt', 'Entry:')
-        self.value = text
-        text = '%s %s' % (self.prompt, text)
-        self.base_color = COLOR
-        self.update_func = kwargs.pop('update', None)
-        super(EntryTextWidget, self).__init__(rect, text, **kwargs)
-        if not isinstance(self.focus_color, pygame.Color):
-            self.focus_color = pygame.Color(self.focus_color)
-        self.focussable = True
-        self.base_color = self.color
-        self.add_callback(KEYDOWN, self.update)
-
-    def update(self, ev, widget):
-        old_value = self.value
-        if ev.key in DELETE_KEYS:
-            if self.value:
-                self.value = self.value[:-1]
-        elif ev.key in (K_ESCAPE, K_RETURN, K_KP_ENTER, K_UP, K_DOWN):
-            return False  # ignore these
-        else:
-            self.value += ev.unicode
-        if old_value != self.value:
-            self.text = '%s %s' % (self.prompt, self.value)
-            self.prepare()
-        return True
-
-    def prepare(self):
-        self.color = self.focus_color if self.focussed else self.base_color
-        super(EntryTextWidget, self).prepare()
-        self._focussed = self.focussed
-
-    def draw(self, surface):
-        if self._focussed != self.focussed:
-            self.prepare()
-        super(EntryTextWidget, self).draw(surface)
-        if self.focussed:
-            text_rect = self.text_rect
-            # Warning, 00:30 AM code on the last Saturday
-            cur_start = text_rect.move(
-                    (self.rect.left + 2, self.rect.top + 3)).topright
-            cur_end = text_rect.move(
-                    (self.rect.left + 2, self.rect.top - 3)).bottomright
-            pygame.draw.line(surface, self.focus_color,
-                    cur_start, cur_end, 2)

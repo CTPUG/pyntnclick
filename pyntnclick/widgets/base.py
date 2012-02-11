@@ -1,11 +1,9 @@
 import collections
 
 import pygame
-from pygame.locals import (KEYDOWN, K_DOWN, K_LEFT, K_RETURN, K_RIGHT, K_UP,
-                           K_KP_ENTER, MOUSEBUTTONDOWN, MOUSEBUTTONUP,
+from pygame.locals import (MOUSEBUTTONDOWN, MOUSEBUTTONUP,
                            MOUSEMOTION, SRCALPHA, USEREVENT)
 
-from pyntnclick.constants import UP, DOWN, LEFT, RIGHT
 from pyntnclick.engine import UserEvent
 
 
@@ -104,8 +102,7 @@ class Button(Widget):
     def event(self, ev):
         if super(Button, self).event(ev):
             return True
-        if (ev.type == MOUSEBUTTONDOWN
-                or (ev.type == KEYDOWN and ev.key in (K_RETURN, K_KP_ENTER))):
+        if ev.type == MOUSEBUTTONDOWN:
             for callback, args in self.callbacks['clicked']:
                 if callback(ev, self, *args):
                     return True
@@ -142,11 +139,6 @@ class Container(Widget):
                     if child.event(ev):
                         return True
 
-        elif ev.type == KEYDOWN:
-            for i, child in enumerate(self.children):
-                if child.focussed or i == self.focussed_child:
-                    if child.event(ev):
-                        return True
         else:
             # Other events go to all children first
             for child in self.children[:]:
@@ -154,9 +146,6 @@ class Container(Widget):
                     return True
         if super(Container, self).event(ev):
             return True
-        if (self.parent is None and ev.type == KEYDOWN
-                and ev.key in (K_UP, K_DOWN)):
-            return self.adjust_focus(1 if ev.key == K_DOWN else -1)
 
     def add(self, widget):
         widget.parent = self
@@ -248,20 +237,6 @@ class GridContainer(Container):
     def __init__(self, width, rect=None):
         super(GridContainer, self).__init__(rect)
         self.width = width
-
-    def event(self, ev):
-        if (ev.type == KEYDOWN and ev.key in (K_UP, K_DOWN, K_LEFT, K_RIGHT)):
-            direction = None
-            if ev.key == K_UP:
-                direction = UP
-            elif ev.key == K_DOWN:
-                direction = DOWN
-            elif ev.key == K_LEFT:
-                direction = LEFT
-            elif ev.key == K_RIGHT:
-                direction = RIGHT
-            return self.adjust_focus(direction)
-        super(GridContainer, self).event(ev)
 
     def add(self, widget):
         assert not isinstance(widget, Container)

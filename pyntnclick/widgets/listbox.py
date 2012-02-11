@@ -8,8 +8,7 @@ class ListBox(Box):
     def __init__(self, rect, text, widget_list, page_length=8):
         super(ListBox, self).__init__(rect)
         self.message = TextWidget(rect, text)
-        self.toolbar = ToolListWidget(rect, widget_list, page_length,
-                start_key=None)
+        self.toolbar = ToolListWidget(rect, widget_list, page_length)
         self.prepare()
         self.modal = True
 
