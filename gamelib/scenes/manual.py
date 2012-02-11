@@ -105,9 +105,7 @@ class ManualDetail(Scene):
 
     BACKGROUND = 'manual_detail.png'
 
-    def __init__(self, state):
-        super(ManualDetail, self).__init__(state)
-
+    def setup(self):
         self.add_thing(ManualPage())
         self.add_thing(PagePrior())
         self.add_thing(PageNext())

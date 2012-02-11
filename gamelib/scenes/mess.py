@@ -21,8 +21,7 @@ class Mess(Scene):
         'life support status': 'broken',  # broken, replaced, fixed
         }
 
-    def __init__(self, state):
-        super(Mess, self).__init__(state)
+    def setup(self):
         self.add_thing(CansOnShelf())
         self.add_thing(Tubes())
         self.add_thing(ToMap())

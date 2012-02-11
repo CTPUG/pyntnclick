@@ -13,8 +13,7 @@ class Machine(Scene):
     FOLDER = "machine"
     BACKGROUND = "machine_room.png"
 
-    def __init__(self, state):
-        super(Machine, self).__init__(state)
+    def setup(self):
         self.add_thing(ToMap())
         self.add_thing(LaserWelderSlot())
         self.add_thing(LaserWelderButton())

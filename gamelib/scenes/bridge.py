@@ -40,8 +40,7 @@ class Bridge(Scene):
         'ai panel': 'closed',  # closed, open, broken
         }
 
-    def __init__(self, state):
-        super(Bridge, self).__init__(state)
+    def setup(self):
         self.background_playlist = None
         self.add_item(Superconductor('superconductor'))
         self.add_item(Stethoscope('stethoscope'))
@@ -265,8 +264,7 @@ class StarField(Thing):
 
 class BlinkingLights(Thing):
 
-    def __init__(self):
-        super(BlinkingLights, self).__init__()
+    def setup(self):
         self.description = None
 
     def is_interactive(self, tool=None):
@@ -372,8 +370,7 @@ class ChairDetail(Scene):
     BACKGROUND = 'chair_detail.png'
     NAME = 'chair_detail'
 
-    def __init__(self, state):
-        super(ChairDetail, self).__init__(state)
+    def setup(self):
         self.add_thing(SuperconductorThing())
 
 
@@ -573,9 +570,7 @@ class BridgeCompDetail(Scene):
             'max page': len(LOGS),
     }
 
-    def __init__(self, state):
-        super(BridgeCompDetail, self).__init__(state)
-
+    def setup(self):
         self.add_thing(LogTab())
         self.add_thing(AlertTab())
         self.add_thing(NavTab())

@@ -34,8 +34,7 @@ class Cryo(Scene):
             'silent.ogg',
             ]
 
-    def __init__(self, state):
-        super(Cryo, self).__init__(state)
+    def setup(self):
         self.add_item(TitaniumLeg("titanium_leg"))
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
@@ -509,8 +508,7 @@ class CryoUnitWithCorpse(Scene):
     BACKGROUND = "cryo_unit_detail.png"
     NAME = "cryo_detail"
 
-    def __init__(self, state):
-        super(CryoUnitWithCorpse, self).__init__(state)
+    def setup(self):
         self.add_thing(TitaniumLegThing())
         self.add_thing(PlaqueThing())
 

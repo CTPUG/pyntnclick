@@ -23,8 +23,7 @@ class Map(Scene):
         'implant': True,
     }
 
-    def __init__(self, state):
-        super(Map, self).__init__(state)
+    def setup(self):
         self.add_thing(ToCryo())
         self.add_thing(ToBridge())
         self.add_thing(ToMess())

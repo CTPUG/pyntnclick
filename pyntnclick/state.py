@@ -92,14 +92,16 @@ class GameState(object):
         self.debug_rects = value
 
     def add_scene(self, scene):
+        scene.set_state(self)
         self.scenes[scene.name] = scene
 
     def add_detail_view(self, detail_view):
+        detail_view.set_state(self)
         self.detail_views[detail_view.name] = detail_view
 
     def add_item(self, item):
-        self.items[item.name] = item
         item.set_state(self)
+        self.items[item.name] = item
 
     def load_scenes(self, modname):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
@@ -198,12 +200,39 @@ class GameState(object):
         self.do_check = self.gd.constants.leave
 
 
-class StatefulGizmo(object):
+class GameDeveloperGizmo(object):
+    """Base class for objects game developers see."""
+
+    def __init__(self):
+        """Set """
+        self.state = None
+        self.gd = None
+        self.resource = None
+        self.sound = None
+
+    def set_state(self, state):
+        self.state = state
+        self.gd = state.gd
+        self.resource = self.gd.resource
+        self.sound = self.gd.sound
+        self.setup()
+
+    def setup(self):
+        """Game developers should override this to do their setup.
+
+        It will be called after all the useful state functions have been
+        set.
+        """
+        pass
+
+
+class StatefulGizmo(GameDeveloperGizmo):
 
     # initial data (optional, defaults to none)
     INITIAL_DATA = None
 
     def __init__(self):
+        GameDeveloperGizmo.__init__(self)
         self.data = {}
         if self.INITIAL_DATA:
             # deep copy of INITIAL_DATA allows lists, sets and
@@ -236,10 +265,6 @@ class Scene(StatefulGizmo):
         StatefulGizmo.__init__(self)
         # scene name
         self.name = self.NAME if self.NAME is not None else self.FOLDER
-        # link back to state object
-        self.state = state
-        self.sound = state.gd.sound
-        self.resource = state.gd.resource
         # map of thing names -> Thing objects
         self.things = {}
         self._background = None
@@ -249,6 +274,7 @@ class Scene(StatefulGizmo):
 
     def add_thing(self, thing):
         self.things[thing.name] = thing
+        thing.set_state(self.state)
         thing.set_scene(self)
 
     def remove_thing(self, thing):
@@ -280,7 +306,7 @@ class Scene(StatefulGizmo):
 
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
-            self._background = self.state.gd.resource.get_image(
+            self._background = self.resource.get_image(
                     (self.FOLDER, self.BACKGROUND))
 
     def draw_background(self, surface):
@@ -405,7 +431,6 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.interacts = self.INTERACTS
         # these are set by set_scene
         self.scene = None
-        self.state = None
         self.current_interact = None
         self.rect = None
         self.orig_rect = None
@@ -477,7 +502,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
                             rect.inflate(1, 1), 1)
 
 
-class Item(InteractiveMixin):
+class Item(GameDeveloperGizmo, InteractiveMixin):
     """Base class for inventory items."""
 
     # image for inventory
@@ -493,7 +518,7 @@ class Item(InteractiveMixin):
     CURSOR = None
 
     def __init__(self, name=None):
-        self.state = None
+        GameDeveloperGizmo.__init__(self)
         self.name = self.NAME
         if name is not None:
             self.name = name
@@ -504,12 +529,8 @@ class Item(InteractiveMixin):
 
     def _cache_inventory_image(self):
         if not self.inventory_image:
-            self.inventory_image = self.state.gd.resource.get_image(
+            self.inventory_image = self.resource.get_image(
                     ('items', self.INVENTORY_IMAGE))
-
-    def set_state(self, state):
-        assert self.state is None
-        self.state = state
 
     def get_inventory_image(self):
         self._cache_inventory_image()

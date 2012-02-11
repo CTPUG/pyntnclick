@@ -21,8 +21,7 @@ class Engine(Scene):
         'greet': True,
         }
 
-    def __init__(self, state):
-        super(Engine, self).__init__(state)
+    def setup(self):
         self.add_item(CanOpener('canopener'))
         self.add_thing(CanOpenerThing())
         self.add_thing(SuperconductorSocket())
@@ -537,9 +536,7 @@ class EngineCompDetail(Scene):
     ALERT_OFFSET = (16, 100)
     ALERT_SPACING = 4
 
-    def __init__(self, state):
-        super(EngineCompDetail, self).__init__(state)
-
+    def setup(self):
         self._alert_messages = {}
         for key, name in self.ALERTS.iteritems():
             self._alert_messages[key] = get_image(self.FOLDER, name)

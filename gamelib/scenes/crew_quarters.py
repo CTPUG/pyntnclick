@@ -16,8 +16,7 @@ class CrewQuarters(Scene):
 
     OFFSET = (0, -50)
 
-    def __init__(self, state):
-        super(CrewQuarters, self).__init__(state)
+    def setup(self):
         self.add_thing(ToMap())
         self.add_thing(Safe())
         self.add_thing(FishbowlThing())
