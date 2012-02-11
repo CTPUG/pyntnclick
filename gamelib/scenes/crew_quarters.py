@@ -8,6 +8,7 @@ from gamelib.scenewidgets import (InteractNoImage, InteractImage,
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
 
+
 class CrewQuarters(Scene):
 
     FOLDER = "crew_quarters"
@@ -86,12 +87,15 @@ class Safe(Thing):
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
                       " here."),
-                      make_jim_dialog("Prisoner %s, you have been observed committing a felony violation. "
-                          "This will go onto your permanent record, and your sentence may be extended by up to twenty years."
+                      make_jim_dialog("Prisoner %s, you have been observed"
+                          " committing a felony violation. This will go onto"
+                          " your permanent record, and your sentence may be"
+                          " extended by up to twenty years."
                           % PLAYER_ID, self.state))
 
     def get_description(self):
-        return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
+        return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but" \
+                " reasonably secure."
 
 
 class FishbowlThing(Thing):
@@ -112,8 +116,8 @@ class FishbowlThing(Thing):
 
     def interact_without(self):
         if not self.get_data('has_bowl'):
-            return Result("What's the point of lugging around a very dead fish "
-                          "and a kilogram or so of sand?")
+            return Result("What's the point of lugging around a very dead"
+                    " fish and a kilogram or so of sand?")
         self.set_interact('fish_no_bowl')
         self.set_data('has_bowl', False)
         self.state.add_inventory_item('fishbowl')
@@ -121,9 +125,12 @@ class FishbowlThing(Thing):
 
     def get_description(self):
         if self.get_data('has_bowl'):
-            return "This fishbowl looks exactly like an old science fiction space helmet."
+            return "This fishbowl looks exactly like an old science fiction" \
+                    " space helmet."
         else:
-            return "An evicted dead fish and some sand lie forlornly on the table"
+            return "An evicted dead fish and some sand lie forlornly on the" \
+                    " table"
+
 
 class Fishbowl(Item):
     "A bowl. Sans fish."
@@ -143,7 +150,7 @@ class Fishbowl(Item):
 class FishbowlHelmet(Item):
     "A bowl with duct-tape"
 
-    INVENTORY_IMAGE  = "fishbowl_helmet.png"
+    INVENTORY_IMAGE = "fishbowl_helmet.png"
     CURSOR = CursorSprite('fishbowl_helmet.png')
     NAME = "helmet"
 
@@ -161,7 +168,7 @@ class MonitorCamera(BaseCamera):
     NAME = 'crew.camera'
 
     INTERACTS = {
-        'online' : InteractImage(85, 97, 'camera_medium.png'),
+        'online': InteractImage(85, 97, 'camera_medium.png'),
         'dead': InteractImage(85, 97, 'camera_medium_gray.png'),
         'looping': InteractAnimated(85, 97, ('camera_medium.png',
                                              'camera_medium_gray.png'),
