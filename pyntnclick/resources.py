@@ -66,8 +66,7 @@ class Resources(object):
         image name out of several fragments.
 
         The `transforms` param may contain transforms, which modify an image
-        in-place to apply various effects. TODO: Implement transforms
-        somewhere, so this becomes useful.
+        in-place to apply various effects.
 
         The `basedir` param defaults to 'images', but may be overriden to load
         images from other places. ('icons', for example.)
@@ -90,7 +89,7 @@ class Resources(object):
             self._image_cache[image_path] = image
         image = self._image_cache[image_path]
 
-        # Apply any mutators we're given.
+        # Apply any transforms we're given.
         for transform in transforms:
             image = transform(image)
         self._transformed_image_cache[key] = image
