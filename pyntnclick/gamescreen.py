@@ -63,11 +63,11 @@ class InventoryView(Widget):
 
 class StateWidget(Widget):
 
-    def __init__(self, rect):
-        Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
+    def __init__(self, rect, screen):
+        Widget.__init__(self, rect)
         self.screen = screen
         self.game = screen.game
-        self.detail = DetailWindow(screen)
+        self.detail = DetailWindow(rect, screen)
 
     def draw(self, surface):
         self.animate()
@@ -140,8 +140,8 @@ class StateWidget(Widget):
 
 
 class DetailWindow(Container):
-    def __init__(self, screen):
-        Container.__init__(self, Rect((0, 0) + screen.surface_size))
+    def __init__(self, rect, screen):
+        Container.__init__(self, rect)
         self.image_rect = None
         self.screen = screen
         self.game = screen.game
@@ -222,8 +222,9 @@ class GameScreen(Screen):
 
     def start_game(self):
         self._clear_all()
+        rect = Rect((0, 0) + self.surface_size)
         self.game = self.create_initial_state()
-        self.state_widget = StateWidget(self)
+        self.state_widget = StateWidget(rect, self)
         self.container.add(self.state_widget)
 
         # XXX: self.popup_menu = PopupMenu(self)
