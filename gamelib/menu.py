@@ -13,8 +13,8 @@ class MenuScreen(Screen):
         self._background = self.resource.get_image('splash/splash.png')
 
         self.add_image_button((16, 523), 'splash/play.png', self.start)
-        # FIXME: Only show this when check_running:
-        self.add_image_button((256, 523), 'splash/resume.png', self.resume)
+        if self.check_running():
+            self.add_image_button((256, 523), 'splash/resume.png', self.resume)
         self.add_image_button((580, 523), 'splash/quit.png', self.quit)
 
     def add_image_button(self, rect, image_name, callback):
@@ -30,11 +30,12 @@ class MenuScreen(Screen):
         self.change_screen('end')
 
     def check_running(self):
-        return self.shell.game_screen.running
+        # TODO: Implement this magic.
+        return False
 
     def resume(self, ev, widget):
-        if self.shell.game_screen.running:
-            self.shell.show_screen(self.shell.game_screen)
+        # TODO: Implement this magic.
+        pass
 
     def quit(self, ev, widget):
         pygame.event.post(pygame.event.Event(QUIT))
