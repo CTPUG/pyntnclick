@@ -26,12 +26,12 @@ from pyntnclick import state
 
 
 class MainShell(Shell):
-    def __init__(self, display, initial_state, frame_rate):
+    def __init__(self, display, game_description):
         Shell.__init__(self, display)
-        self.menu_screen = MenuScreen(self)
-        self.game_screen = GameScreen(self, initial_state)
-        self.end_screen = EndScreen(self)
-        self.set_timer(frame_rate)
+        self.menu_screen = MenuScreen(self, game_description)
+        self.game_screen = GameScreen(self, game_description)
+        self.end_screen = EndScreen(self, game_description)
+        self.set_timer(game_description.constants.frame_rate)
         self.show_screen(self.menu_screen)
 
 
@@ -107,8 +107,7 @@ class GameDescription(object):
         pygame.display.set_icon(self.resource.load_image(
                 'suspended_sentence24x24.png', basedir='icons'))
         pygame.display.set_caption("Suspended Sentence")
-        shell = MainShell(display, self.initial_state,
-                          self.constants.frame_rate)
+        shell = MainShell(display, self)
         try:
             shell.run()
         except KeyboardInterrupt:
