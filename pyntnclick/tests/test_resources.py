@@ -1,7 +1,7 @@
 import os.path
 from unittest import TestCase
 
-from pyntnclick.resources import Resources
+from pyntnclick.resources import Resources, ResourceNotFound
 
 
 TEST_PATH = os.path.dirname(__file__)
@@ -22,3 +22,21 @@ class ResourcesTestCase(TestCase):
         self.assertEqual([test_path('en/thing'), test_path('thing'),
                           data_path('en/thing'), data_path('thing')],
                          res.get_paths('thing'))
+
+    def test_get_resource_path_missing(self):
+        res = Resources('pyntnclick.tests')
+        try:
+            res.get_resource_path('should_not_exist')
+            self.fail('Expected ResourceNotFound error.')
+        except ResourceNotFound, e:
+            self.assertEqual('should_not_exist', e.args[0])
+
+    def test_get_resource_path_in_test(self):
+        res = Resources('pyntnclick.tests')
+        self.assertEqual(test_path('test_resources.py'),
+                         res.get_resource_path('test_resources.py'))
+
+    def test_get_resource_path_in_data(self):
+        res = Resources('pyntnclick.tests')
+        self.assertEqual(data_path('images/pyntnclick/hand.png'),
+                         res.get_resource_path('images/pyntnclick/hand.png'))
