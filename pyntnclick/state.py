@@ -316,20 +316,21 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = TextWidget((10, 10), self.gd, text)
-        label.set_margin(5)
-        label.border_width = 1
-        label.border_color = (0, 0, 0)
-        label.bg_color = Color(210, 210, 210, 255)
-        label.fg_color = (0, 0, 0)
+        #label.set_margin(5)
+        #label.border_width = 1
+        #label.border_color = (0, 0, 0)
+        #label.bg_color = Color(210, 210, 210, 255)
+        #label.fg_color = (0, 0, 0)
         return label
 
     def draw_description(self, surface, screen):
         description = self._get_description()
         if description is not None:
-            w, h = description.size
-            sub = screen.get_root().surface.subsurface(
-                Rect(400 - w / 2, 5, w, h))
-            description.draw_all(sub)
+            description.draw(surface)
+            #x, y, w, h = description.rect
+            #sub = screen.get_root().surface.subsurface(
+            #    Rect(400 - w / 2, 5, w, h))
+            #description.draw_all(sub)
 
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
