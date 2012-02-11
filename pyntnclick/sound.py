@@ -85,13 +85,12 @@ class Sound(object):
     def get_sound(self, *names):
         if not self.sound_enabled:
             return DummySound()
-        soundfile = os.path.join(names)
         sound = None
         try:
-            path = self._resource_finder("sounds", soundfile)
+            path = self._resource_finder.get_resource_path("sounds", *names)
             sound = self.sound_cache.get(path, None)
         except ResourceNotFound:
-            print "Sound file not found: %s" % soundfile
+            print "Sound file not found: %s" % names
             # Cache failed lookup
             sound = DummySound()
             self.sound_cache[path] = sound
@@ -99,7 +98,7 @@ class Sound(object):
             try:
                 sound = pygame_Sound(path)
             except pygame.error:
-                print "Sound file not found: %s" % soundfile
+                print "Sound file not found: %s" % names
                 sound = DummySound()
             self.sound_cache[path] = sound
         return sound
@@ -108,13 +107,16 @@ class Sound(object):
         return albow.music.PlayList(pieces, random, repeat)
 
     def get_music(self, name, prefix):
-        return albow.music.get_music(name, prefix=prefix)
+        if self.sound_enabled:
+            return albow.music.get_music(name, prefix=prefix)
 
     def change_playlist(self, new_playlist):
-        albow.music.change_playlist(new_playlist)
+        if self.sound_enabled:
+            albow.music.change_playlist(new_playlist)
 
-    def get_current_playlist():
-        if albow.music.music_enabled and albow.music.current_playlist:
+    def get_current_playlist(self):
+        if self.sound_enabled and albow.music.music_enabled and \
+                albow.music.current_playlist:
             return albow.music.current_playlist
 
 
