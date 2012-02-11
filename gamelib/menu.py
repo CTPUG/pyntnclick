@@ -41,4 +41,3 @@ class MenuScreen(Screen):
     def resume(self):
         if self.shell.game_screen.running:
             self.shell.show_screen(self.shell.game_screen)
-

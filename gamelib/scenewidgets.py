@@ -136,7 +136,7 @@ class GenericDescThing(Thing):
         self.description = description
         self.name = '%s.%s' % (prefix, number)
         self.interacts = {
-                'description' : InteractRectUnion(areas)
+                'description': InteractRectUnion(areas)
                 }
         if DEBUG:
             # Individual colors to make debugging easier
@@ -147,4 +147,3 @@ class GenericDescThing(Thing):
 
     def is_interactive(self, tool=None):
         return False
-
