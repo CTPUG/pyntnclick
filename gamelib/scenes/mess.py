@@ -261,7 +261,7 @@ class Boomslang(Thing):
         return False
 
     def animate(self):
-        hiss = self.state.sound.get_sound(self.HISS)
+        hiss = self.state.gd.sound.get_sound(self.HISS)
         if self.get_data('anim_pos') > -1:
             self.current_interact.animate()
             if self.get_data('anim_pos') > self.current_interact._anim_pos:
