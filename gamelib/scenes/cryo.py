@@ -491,7 +491,7 @@ class CryoCompDetail(Scene):
 
     def setup(self):
         self._background_fixed = self.get_image(
-            self.FOLDER, self.BACKGROUND_FIXED)
+            (self.FOLDER, self.BACKGROUND_FIXED))
 
     def draw_background(self, surface):
         if self.game.scenes['engine'].get_data('engine online'):

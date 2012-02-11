@@ -538,7 +538,7 @@ class EngineCompDetail(Scene):
     def setup(self):
         self._alert_messages = {}
         for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = self.get_image(self.FOLDER, name)
+            self._alert_messages[key] = self.get_image((self.FOLDER, name))
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET

@@ -576,20 +576,20 @@ class BridgeCompDetail(Scene):
         #self.add_thing(CompUpButton())
         #self.add_thing(CompDownButton())
         self._scene_playlist = None
-        self._alert = self.get_image(self.FOLDER, self.ALERT_BASE)
+        self._alert = self.get_image((self.FOLDER, self.ALERT_BASE))
         self._alert_messages = {}
         self._nav_messages = {}
         for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = self.get_image(self.FOLDER, name)
+            self._alert_messages[key] = self.get_image((self.FOLDER, name))
         for key, name in self.NAVIGATION.iteritems():
-            self._nav_messages[key] = self.get_image(self.FOLDER, name)
+            self._nav_messages[key] = self.get_image((self.FOLDER, name))
         self._nav_lines = []
         self._nav_lines.append(DestNavPageLine(1, (14, 99, 595, 30), False))
         self._nav_lines.append(DestNavPageLine(2, (14, 135, 595, 30), True))
         self._nav_lines.append(DestNavPageLine(3, (14, 167, 595, 30), True))
         self._nav_lines.append(DestNavPageLine(4, (14, 203, 595, 30), True))
         self._nav_lines.append(DestNavPageLine(5, (14, 239, 595, 30), True))
-        self._logs = [self.get_image(self.FOLDER, x) for x in self.LOGS]
+        self._logs = [self.get_image((self.FOLDER, x)) for x in self.LOGS]
 
     def enter(self):
         self._scene_playlist = self.sound.get_current_playlist()
