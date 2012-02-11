@@ -99,11 +99,8 @@ class StateWidget(Widget):
 
     def mouse_move(self, event, widget):
         self.game.highlight_override = False
-
-    def _mouse_move(self, pos):
-        self.game.highlight_override = False
-        self.game.current_scene.mouse_move(pos)
-        self.game.old_pos = pos
+        self.game.current_scene.mouse_move(event.pos)
+        self.game.old_pos = event.pos
 
     def show_message(self, message, style=None):
         # Display the message as a modal dialog
