@@ -58,23 +58,24 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def get_image(self, image_name_fragments, transforms=(), basedir='images'):
+    def get_image(self, *image_name_fragments, **kw):
         """Load an image and optionally apply mutators.
 
-        The `image_name_fragments` parameter may be either a string or a list
-        of strings. The latter is a convenience for things that compose an
-        image name out of several fragments.
+        All positional params end up in `image_name_fragments` and are joined
+        with the path separator.
 
-        The `transforms` param may contain transforms, which modify an image
-        in-place to apply various effects.
+        Two keyword parameters are also accepted:
 
-        The `basedir` param defaults to 'images', but may be overriden to load
-        images from other places. ('icons', for example.)
+         * `transforms` may contain transforms, which modify an image in-place
+           to apply various effects.
+
+         * `basedir` defaults to 'images', but may be overridden to load images
+           from other places. ('icons', for example.)
         """
 
-        # Juggle our various params and find an appropriate image path.
-        if isinstance(image_name_fragments, basestring):
-            image_name_fragments = [image_name_fragments]
+        transforms = kw.get('transforms', ())
+        basedir = kw.get('basedir', 'images')
+
         image_path = self.get_resource_path(basedir, *image_name_fragments)
 
         key = (image_path, transforms)

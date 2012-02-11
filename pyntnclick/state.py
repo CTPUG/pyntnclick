@@ -327,7 +327,7 @@ class Scene(StatefulGizmo):
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
             self._background = self.resource.get_image(
-                    (self.FOLDER, self.BACKGROUND))
+                self.FOLDER, self.BACKGROUND)
 
     def draw_background(self, surface):
         self._cache_background()
@@ -394,7 +394,7 @@ class Scene(StatefulGizmo):
         return self._background.get_size()
 
     def get_image(self, *image_name_fragments, **kw):
-        return self.resource.get_image(image_name_fragments, **kw)
+        return self.resource.get_image(*image_name_fragments, **kw)
 
 
 class InteractiveMixin(object):
@@ -555,7 +555,7 @@ class Item(GameDeveloperGizmo, InteractiveMixin):
     def _cache_inventory_image(self):
         if not self.inventory_image:
             self.inventory_image = self.resource.get_image(
-                    ('items', self.INVENTORY_IMAGE))
+                    'items', self.INVENTORY_IMAGE)
 
     def get_inventory_image(self):
         self._cache_inventory_image()

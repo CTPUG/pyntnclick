@@ -77,7 +77,7 @@ class InteractImage(Interact):
         self._image_name = image_name
 
     def set_thing(self, thing):
-        self.image = get_image((thing.folder, self._image_name))
+        self.image = get_image(thing.folder, self._image_name)
         self.rect = Rect(self._pos, self.image.get_size())
         self.interact_rect = self.rect
 
@@ -109,7 +109,7 @@ class InteractAnimated(Interact):
         self._delay = delay
 
     def set_thing(self, thing):
-        self._anim_seq = [get_image((thing.folder, x)) for x in self._names]
+        self._anim_seq = [get_image(thing.folder, x) for x in self._names]
         self.image = self._anim_seq[0]
         self.rect = Rect(self._pos, self.image.get_size())
         self.interact_rect = self.rect

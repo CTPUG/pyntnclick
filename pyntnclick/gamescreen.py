@@ -264,7 +264,7 @@ class DefEndScreen(Screen):
     """A placeholder 'Game Over' screen so people can get started easily"""
 
     def setup(self):
-        self.background = self.resource.get_image(('pyntnclick', 'end.png'))
+        self.background = self.resource.get_image('pyntnclick/end.png')
 
     def draw(self, surface):
         surface.blit(self.background, (0, 0))
@@ -274,7 +274,7 @@ class DefMenuScreen(Screen):
     """A placeholder Start screen so people can get started easily"""
 
     def setup(self):
-        self.background = self.resource.get_image(('pyntnclick', 'start.png'))
+        self.background = self.resource.get_image('pyntnclick/start.png')
 
     def draw(self, surface):
         surface.blit(self.background, (0, 0))

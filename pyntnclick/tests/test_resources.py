@@ -53,7 +53,7 @@ class ResourcesTestCase(TestCase):
         self.assertTrue(isinstance(image, Surface))
 
     def test_get_image_fragments(self):
-        image = self.res.get_image(['pyntnclick', 'hand.png'])
+        image = self.res.get_image('pyntnclick', 'hand.png')
         self.assertTrue(isinstance(image, Surface))
 
     def test_get_image_different_basedir(self):
