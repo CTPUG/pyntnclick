@@ -19,7 +19,7 @@ from albow.shell import Shell
 from pyntnclick.menu import MenuScreen
 from pyntnclick.gamescreen import GameScreen
 from pyntnclick.endscreen import EndScreen
-from pyntnclick.constants import GameConstants
+from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state
@@ -66,6 +66,7 @@ class GameDescription(object):
         self.resource = Resources(self._resource_module)
         self.sound = Sound(self.resource)
         self.constants = self.game_constants()
+        self.debug_options = []
 
     def initial_state(self):
         """Create a copy of the initial game state."""
@@ -84,6 +85,9 @@ class GameDescription(object):
         parser = OptionParser()
         parser.add_option("--no-sound", action="store_false", default=True,
                 dest="sound", help="disable sound")
+        # We flag these, so we can warn the user that these require debug mode
+        self.debug_options = ['--scene', '--no-rects', '--rect-drawer',
+                '--list-scenes', '--details']
         if self.constants.debug:
             parser.add_option("--scene", type="str", default=None,
                 dest="scene", help="initial scene")
@@ -100,8 +104,19 @@ class GameDescription(object):
                     dest="detail", help="Detailed view for rect_drawer")
         return parser
 
+    def warn_debug(self, option):
+        """Warn the user that he needs debug mode"""
+        print '%s is only valid in debug mode' % option
+        print 'set %s to enable debug mode' % DEBUG_ENVVAR
+        print
+
     def main(self):
         parser = self.option_parser()
+        # This is a bit hack'ish, but works
+        if not self.constants.debug:
+            for option in self.debug_options:
+                if option in sys.argv:
+                    self.warn_debug(option)
         opts, _ = parser.parse_args(sys.argv)
         pygame.display.init()
         pygame.font.init()

@@ -1,6 +1,17 @@
 # Useful constants
 # copyright boomslang team (see COPYRIGHT file for details)
 
+import os
+
+DEBUG_ENVVAR = 'PYNTNCLICK_DEBUG'
+
+
+def _get_debug():
+    debug = os.getenv(DEBUG_ENVVAR, default=False)
+    if debug in [False, 'False', '0']:
+        return False
+    return True
+
 
 class GameConstants(object):
     screen = (800, 600)
@@ -12,7 +23,7 @@ class GameConstants(object):
     button_size = 50
     scene_size = (screen[0], screen[1] - button_size)
     frame_rate = 25
-    debug = False
+    debug = _get_debug()
 
     # User event IDs:
     enter = 1
