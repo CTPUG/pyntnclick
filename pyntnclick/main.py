@@ -39,16 +39,16 @@ def parse_args(args):
 
 
 class MainShell(Shell):
-    def __init__(self, display):
+    def __init__(self, display, initial_state):
         Shell.__init__(self, display)
         self.menu_screen = MenuScreen(self)
-        self.game_screen = GameScreen(self)
+        self.game_screen = GameScreen(self, initial_state)
         self.end_screen = EndScreen(self)
         self.set_timer(FRAME_RATE)
         self.show_screen(self.menu_screen)
 
 
-def main():
+def main(initial_scene, scene_list, debug_rects=False):
     opts = parse_args(sys.argv)
     pygame.display.init()
     pygame.font.init()
@@ -63,13 +63,15 @@ def main():
     if DEBUG:
         if opts.scene is not None:
             # debug the specified scene
-            state.DEBUG_SCENE = opts.scene
-        state.DEBUG_RECTS = opts.rects
+            initial_scene = opts.scene
+        debug_rects = opts.rects
+    initial_state = state.initial_state_creator(initial_scene, scene_list,
+                                                debug_rects)
     display = pygame.display.set_mode(SCREEN, SWSURFACE)
     pygame.display.set_icon(pygame.image.load(
         data.filepath('icons/suspended_sentence24x24.png')))
     pygame.display.set_caption("Suspended Sentence")
-    shell = MainShell(display)
+    shell = MainShell(display, initial_state)
     try:
         shell.run()
     except KeyboardInterrupt:

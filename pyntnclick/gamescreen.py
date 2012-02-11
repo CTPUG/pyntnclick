@@ -11,7 +11,7 @@ from pygame.color import Color
 
 from pyntnclick.constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
 from pyntnclick.cursor import CursorWidget
-from pyntnclick.state import initial_state, handle_result
+from pyntnclick.state import handle_result
 from pyntnclick.widgets import (
     MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
 
@@ -201,10 +201,11 @@ class ToolBar(Row):
 
 
 class GameScreen(Screen, CursorWidget):
-    def __init__(self, shell):
+    def __init__(self, shell, create_initial_state):
         CursorWidget.__init__(self, self)
         Screen.__init__(self, shell)
         self.running = False
+        self.create_initial_state = create_initial_state
 
     def _clear_all(self):
         for widget in self.subwidgets[:]:
@@ -212,7 +213,7 @@ class GameScreen(Screen, CursorWidget):
 
     def start_game(self):
         self._clear_all()
-        self.state = initial_state()
+        self.state = self.create_initial_state()
         self.state_widget = StateWidget(self)
         self.add(self.state_widget)
 

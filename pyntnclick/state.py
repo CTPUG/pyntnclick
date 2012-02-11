@@ -11,14 +11,6 @@ from pygame.color import Color
 from pyntnclick import constants
 from pyntnclick.sound import get_sound
 
-from gamelib.scenes import SCENE_LIST, INITIAL_SCENE
-
-# override the initial scene to for debugging
-DEBUG_SCENE = None
-
-# whether to show debugging rects
-DEBUG_RECTS = False
-
 
 class Result(object):
     """Result of interacting with a thing"""
@@ -62,15 +54,17 @@ def handle_result(result, scene_widget):
                     res.process(scene_widget)
 
 
-def initial_state():
-    """Load the initial state."""
-    state = GameState()
-    for scene in SCENE_LIST:
-        state.load_scenes(scene)
-    initial_scene = INITIAL_SCENE if DEBUG_SCENE is None else DEBUG_SCENE
-    state.set_current_scene(initial_scene)
-    state.set_do_enter_leave()
-    return state
+def initial_state_creator(initial_scene, scene_list, debug_rects=False):
+    def initial_state():
+        """Load the initial state."""
+        state = GameState()
+        state.set_debug_rects(debug_rects)
+        for scene in scene_list:
+            state.load_scenes(scene)
+        state.set_current_scene(initial_scene)
+        state.set_do_enter_leave()
+        return state
+    return initial_state
 
 
 class GameState(object):
@@ -81,7 +75,6 @@ class GameState(object):
     * items
     * scenes
     """
-
     def __init__(self):
         # map of scene name -> Scene object
         self.scenes = {}
@@ -105,6 +98,11 @@ class GameState(object):
         # current thing
         self.current_thing = None
         self.highlight_override = False
+        # debug rects
+        self.debug_rects = False
+
+    def set_debug_rects(self, value=True):
+        self.debug_rects = value
 
     def add_scene(self, scene):
         self.scenes[scene.name] = scene
@@ -479,7 +477,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
             self.current_interact.rect = old_rect.move(self.scene.OFFSET)
         self.current_interact.draw(surface)
         self.current_interact.rect = old_rect
-        if DEBUG_RECTS and self._interact_hilight_color:
+        if self.state.debug_rects and self._interact_hilight_color:
             if hasattr(self.rect, 'collidepoint'):
                 frame_rect(surface, self._interact_hilight_color,
                         self.rect.inflate(1, 1), 1)
