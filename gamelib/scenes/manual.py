@@ -75,9 +75,9 @@ class ManualPage(Thing):
 
     INTERACTS = {
             0: InteractImage(0, 0, 'manual_p1.png'),
-            1 : InteractImage(0, 0, 'manual_p2.png'),
-            2 : InteractImage(0, 0, 'manual_p3.png'),
-            3 : InteractImage(0, 0, 'manual_p4.png'),
+            1: InteractImage(0, 0, 'manual_p2.png'),
+            2: InteractImage(0, 0, 'manual_p3.png'),
+            3: InteractImage(0, 0, 'manual_p4.png'),
             }
     INITIAL = 0
 
