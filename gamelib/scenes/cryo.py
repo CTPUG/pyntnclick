@@ -2,7 +2,6 @@
 
 import random
 
-from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
 from pyntnclick.cursor import CursorSprite
@@ -129,9 +128,10 @@ class Cryo(Scene):
 
     def enter(self):
         # Setup music
-        pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
-        background_playlist = PlayList(pieces, random=True, repeat=True)
-        change_playlist(background_playlist)
+        pieces = [self.sound.get_music(x, prefix='sounds') for x in self.MUSIC]
+        background_playlist = self.sound.get_playlist(pieces, random=True,
+                                                      repeat=True)
+        self.sound.change_playlist(background_playlist)
         if self.get_data('greet'):
             self.set_data('greet', False)
             return make_jim_dialog(
@@ -146,7 +146,7 @@ class Cryo(Scene):
 
     def leave(self):
         # Stop music
-        change_playlist(None)
+        self.sound.change_playlist(None)
 
 
 class CryoPipeBase(Thing):

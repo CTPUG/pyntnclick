@@ -5,12 +5,10 @@ import random
 from pygame.colordict import THECOLORS
 from pygame.color import Color
 from pygame.rect import Rect
-from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
-from pyntnclick.sound import get_current_playlist
 from pyntnclick.constants import DEBUG
 from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
                                   InteractImage, InteractAnimated,
@@ -78,12 +76,13 @@ class Bridge(Scene):
         self.add_thing(self.doctor)
 
     def enter(self):
-        pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
-        self.background_playlist = PlayList(pieces, random=True, repeat=True)
-        change_playlist(self.background_playlist)
+        pieces = [self.sound.get_music(x, prefix='sounds') for x in self.MUSIC]
+        self.background_playlist = self.sound.get_playlist(pieces, random=True,
+                                                           repeat=True)
+        self.sound.change_playlist(self.background_playlist)
 
     def leave(self):
-        change_playlist(None)
+        self.sound.change_playlist(None)
 
 
 class ToMap(Door):
@@ -600,12 +599,12 @@ class BridgeCompDetail(Scene):
         self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
 
     def enter(self):
-        self._scene_playlist = get_current_playlist()
-        change_playlist(None)
+        self._scene_playlist = self.sound.get_current_playlist()
+        self.sound.change_playlist(None)
         self.set_background()
 
     def leave(self):
-        change_playlist(self._scene_playlist)
+        self.sound.change_playlist(self._scene_playlist)
 
     def set_background(self):
         if self.get_data('tab') == 'alert':

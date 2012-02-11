@@ -4,7 +4,6 @@ from random import randint
 
 from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
 from pyntnclick.cursor import CursorSprite
-from pyntnclick.sound import get_sound
 from pyntnclick import constants
 from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractImageRect, InteractAnimated,
@@ -257,7 +256,11 @@ class Boomslang(Thing):
         'anim_pos': -1,
         }
 
-    HISS = get_sound('boomslang.ogg')
+    HISS = 'boomslang.ogg'
+
+    def __init__(self, state):
+        super(Boomslang, self).__init__(state)
+        self.hiss = self.sound.get_sound(self.HISS)
 
     def is_interactive(self, tool=None):
         return False
@@ -274,7 +277,7 @@ class Boomslang(Thing):
         if randint(0, 30 * constants.FRAME_RATE) == 0:
             self.set_interact('snake')
             self.set_data('anim_pos', 0)
-            self.HISS.play()
+            self.hiss.play()
         return False
 
 
