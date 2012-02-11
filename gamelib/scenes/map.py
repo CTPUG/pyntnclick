@@ -46,7 +46,8 @@ class Map(Scene):
                 return ai1, make_jim_dialog("Prisoner %s, you are a "
                 "class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on your sentence." % PLAYER_ID, self.state)
+                "of an additional 3 years on your sentence." % PLAYER_ID,
+                self.state)
 
 
 class DoorThing(Thing):

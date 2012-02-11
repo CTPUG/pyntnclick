@@ -21,7 +21,7 @@ class Cryo(Scene):
     BACKGROUND = "cryo_room.png"
 
     INITIAL_DATA = {
-        'greet' : True,
+        'greet': True,
         'vandalism_warn': True,
         }
 
@@ -70,7 +70,8 @@ class Cryo(Scene):
                 )))
 
         self.add_thing(GenericCryoUnit(3,
-            "A working cryo chamber. The frosted glass obscures the details of the occupant.",
+            "A working cryo chamber. The frosted glass obscures the details"
+            " of the occupant.",
             "Prisoner 9334-CE1EB0243BAB. Murder. 40 years.",
             (
                 (215, 430, 50, 35),
@@ -80,8 +81,10 @@ class Cryo(Scene):
                 )))
 
         self.add_thing(GenericCryoUnit(4,
-            "A broken cryo chamber. The skeleton inside has been picked clean.",
-            "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter. 15 years.",
+            "A broken cryo chamber. The skeleton inside has been picked"
+            " clean.",
+            "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter."
+            " 15 years.",
             (
                 (275, 430, 50, 70),
                 (255, 460, 50, 70),
@@ -89,7 +92,8 @@ class Cryo(Scene):
                 )))
 
         self.add_thing(GenericCryoUnit(5,
-            "A working cryo chamber. The frosted glass obscures the details of the occupant.",
+            "A working cryo chamber. The frosted glass obscures the details of"
+            " the occupant.",
             "Prisoner B520-99495B8C41CE. Copyright infringement. 60 years.",
             (
                 (340, 430, 50, 70),
@@ -161,9 +165,9 @@ class CryoPipeBase(Thing):
             self.state.add_item(pipe)
             self.state.add_inventory_item(pipe.name)
             self.set_interact("chopped")
-            responses = [Result("It takes more effort than one would expect, but "
-                                "eventually the pipe is separated from the wall.",
-                                soundfile="chop-chop.ogg")]
+            responses = [Result("It takes more effort than one would expect,"
+                " but eventually the pipe is separated from the wall.",
+                soundfile="chop-chop.ogg")]
             if self.state.current_scene.get_data('vandalism_warn'):
                 self.state.current_scene.set_data('vandalism_warn', False)
                 responses.append(make_jim_dialog(
@@ -177,7 +181,8 @@ class CryoPipeBase(Thing):
 
     def interact_without(self):
         if self.get_data('fixed'):
-            return Result("These pipes aren't attached to the wall very solidly.")
+            return Result("These pipes aren't attached to the wall very"
+                    " solidly.")
         return None
 
     def get_description(self):
@@ -192,7 +197,7 @@ class UncuttableCryoPipes(Thing):
     NAME = "cryo.pipes.2"
 
     INTERACTS = {
-        "fixed" : InteractRectUnion((
+        "fixed": InteractRectUnion((
                 (2, 130, 44, 394),
                 (756, 127, 52, 393),))
         }
@@ -282,12 +287,14 @@ class CryoUnitAlpha(Thing):
         return Result(detail_view='cryo_detail')
 
     def interact_with_titanium_leg(self, item):
-        return Result("You hit the chamber that used to hold this very leg. Nothing happens as a result.",
+        return Result("You hit the chamber that used to hold this very leg."
+                " Nothing happens as a result.",
                 soundfile="clang2.ogg")
 
     def get_description(self):
         if self.get_data('contains_titanium_leg'):
-            return "A broken cryo chamber, with a poor unfortunate corpse inside."
+            return "A broken cryo chamber, with a poor unfortunate corpse" \
+                    " inside."
         return "A broken cryo chamber. The corpse inside is missing a leg."
 
 
@@ -295,7 +302,8 @@ class GenericCryoUnit(GenericDescThing):
     "Generic Cryo unit"
 
     def __init__(self, number, description, detailed_description, areas):
-        super(GenericCryoUnit, self).__init__('cryo.unit', number, description, areas)
+        super(GenericCryoUnit, self).__init__('cryo.unit', number,
+                description, areas)
         self.detailed_description = detailed_description
 
     def is_interactive(self, tool=None):
@@ -309,8 +317,10 @@ class GenericCryoUnit(GenericDescThing):
 
     def interact_with_titanium_leg(self, item):
         return Result(random.choice([
-                "You bang on the chamber with the titanium femur. Nothing much happens.",
-                "Hitting the cryo unit with the femur doesn't achieve anything.",
+                "You bang on the chamber with the titanium femur. Nothing"
+                " much happens.",
+                "Hitting the cryo unit with the femur doesn't achieve"
+                " anything.",
                 "You hit the chamber with the femur. Nothing happens.",
                 ]), soundfile="clang2.ogg")
 
@@ -335,18 +345,24 @@ class CryoRoomDoor(Door):
     def interact_with_titanium_leg(self, item):
         if self.get_data('door') == "ajar":
             self.open_door()
-            return Result("You wedge the titanium femur into the chain and twist. With a satisfying *snap*, the chain breaks and the door opens.", soundfile='break.ogg')
+            return Result("You wedge the titanium femur into the chain and"
+                    " twist. With a satisfying *snap*, the chain breaks and"
+                    " the door opens.", soundfile='break.ogg')
         elif self.get_data('door') == "shut":
-            text = "You bang on the door with the titanium femur. It makes a clanging sound."
+            text = "You bang on the door with the titanium femur. It makes a"
+            " clanging sound."
             return Result(text, soundfile='clang.ogg')
         else:
-            return Result("You wave the femur in the doorway. Nothing happens.")
+            return Result("You wave the femur in the doorway. Nothing"
+                    " happens.")
 
     def interact_without(self):
         if self.get_data('door') == "shut":
             self.half_open_door()
         if self.get_data('door') != "open":
-            return Result("It moves slightly and then stops. A chain on the other side is preventing it from opening completely.", soundfile='chain.ogg')
+            return Result("It moves slightly and then stops. A chain on the"
+                    " other side is preventing it from opening completely.",
+                    soundfile='chain.ogg')
         else:
             self.state.set_current_scene('map')
             return None
@@ -408,9 +424,11 @@ class TitaniumLegThing(Thing):
 
     def interact_without(self):
         self.state.add_inventory_item('titanium_leg')
-        self.state.current_scene.things['cryo.unit.1'].set_data('contains_titanium_leg', False)
+        self.state.current_scene.things['cryo.unit.1'].set_data(
+                'contains_titanium_leg', False)
         self.scene.remove_thing(self)
-        return Result("The skeletal occupant of this cryo unit has an artificial femur made of titanium. You take it.")
+        return Result("The skeletal occupant of this cryo unit has an"
+                " artificial femur made of titanium. You take it.")
 
     def get_description(self):
         return "This femur looks synthetic."
