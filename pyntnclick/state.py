@@ -504,8 +504,8 @@ class Item(InteractiveMixin):
 
     def _cache_inventory_image(self):
         if not self.inventory_image:
-            self.inventory_image = self.state.resource.get_image(
-                    'items', self.INVENTORY_IMAGE)
+            self.inventory_image = self.state.gd.resource.get_image(
+                    ('items', self.INVENTORY_IMAGE))
 
     def set_state(self, state):
         assert self.state is None
