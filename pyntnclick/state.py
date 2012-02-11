@@ -9,7 +9,6 @@ from pygame.rect import Rect
 from pygame.color import Color
 
 from pyntnclick import constants
-from pyntnclick.sound import get_sound
 
 
 class Result(object):
@@ -18,18 +17,20 @@ class Result(object):
     def __init__(self, message=None, soundfile=None, detail_view=None,
                  style=None, close_detail=False, end_game=False):
         self.message = message
-        self.sound = None
-        if soundfile:
-            self.sound = get_sound(soundfile)
+        self.soundfile = soundfile
         self.detail_view = detail_view
         self.style = style
         self.close_detail = close_detail
         self.end_game = end_game
 
+    def play_sound(self, scene_widget):
+        if self.soundfile:
+            sound = scene_widget.state.gd.sound.get_sound(self.soundfile)
+            sound.play()
+
     def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
-        if self.sound:
-            self.sound.play()
+        self.play_sound(scene_widget)
         if self.message:
             scene_widget.show_message(self.message, self.style)
         if self.detail_view:
