@@ -25,7 +25,7 @@ class Resources(object):
         self.resource_module = resource_module
         self.language = language
         self._image_cache = {}
-        self._mutated_image_cache = {}
+        self._transformed_image_cache = {}
 
     def get_resource_path(self, *resource_path_fragments):
         """Find the resource in one of a number of different places.
@@ -58,16 +58,16 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def get_image(self, image_name_fragments, mutators=(), basedir='images'):
+    def get_image(self, image_name_fragments, transforms=(), basedir='images'):
         """Load an image and optionally apply mutators.
 
         The `image_name_fragments` parameter may be either a string or a list
         of strings. The latter is a convenience for things that compose an
         image name out of several fragments.
 
-        The `mutators` param may contain mutators, which modify an image
-        in-place to apply various effects. TODO: Implement mutators somewhere,
-        so this becomes useful.
+        The `transforms` param may contain transforms, which modify an image
+        in-place to apply various effects. TODO: Implement transforms
+        somewhere, so this becomes useful.
 
         The `basedir` param defaults to 'images', but may be overriden to load
         images from other places. ('icons', for example.)
@@ -78,10 +78,10 @@ class Resources(object):
             image_name_fragments = [image_name_fragments]
         image_path = self.get_resource_path(basedir, *image_name_fragments)
 
-        key = (image_path, mutators)
-        if key in self._mutated_image_cache:
+        key = (image_path, transforms)
+        if key in self._transformed_image_cache:
             # We already have this cached, so shortcut the whole process.
-            return self._mutated_image_cache[key]
+            return self._transformed_image_cache[key]
 
         if image_path not in self._image_cache:
             image = pygame.image.load(image_path)
@@ -91,8 +91,8 @@ class Resources(object):
         image = self._image_cache[image_path]
 
         # Apply any mutators we're given.
-        for mutator in mutators:
-            image = mutator(image)
-        self._mutated_image_cache[key] = image
+        for transform in transforms:
+            image = transform(image)
+        self._transformed_image_cache[key] = image
 
         return image
