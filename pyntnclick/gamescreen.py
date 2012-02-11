@@ -64,7 +64,7 @@ class InventoryView(Widget):
 
 class StateWidget(Widget):
 
-    def __init__(self, screen):
+    def __init__(self, rect):
         Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.screen = screen
         self.game = screen.game
@@ -241,12 +241,6 @@ class GameScreen(Screen):
         self.add(self.toolbar)
 
         self.running = True
-
-    def enter_screen(self):
-        CursorWidget.enter_screen(self)
-
-    def leave_screen(self):
-        CursorWidget.leave_screen(self)
 
     # albow callback:
     def main_menu_cmd(self):
