@@ -25,19 +25,6 @@ from pyntnclick.sound import no_sound, disable_sound
 from pyntnclick import state, data
 
 
-def parse_args(args):
-    parser = OptionParser()
-    parser.add_option("--no-sound", action="store_false", default=True,
-            dest="sound", help="disable sound")
-    if DEBUG:
-        parser.add_option("--scene", type="str", default=None,
-            dest="scene", help="initial scene")
-        parser.add_option("--no-rects", action="store_false", default=True,
-            dest="rects", help="disable debugging rects")
-    opts, _ = parser.parse_args(args or [])
-    return opts
-
-
 class MainShell(Shell):
     def __init__(self, display, initial_state):
         Shell.__init__(self, display)
@@ -80,8 +67,20 @@ class GameDescription(object):
         initial_state.set_do_enter_leave()
         return initial_state
 
+    def option_parser(self):
+        parser = OptionParser()
+        parser.add_option("--no-sound", action="store_false", default=True,
+                dest="sound", help="disable sound")
+        if DEBUG:
+            parser.add_option("--scene", type="str", default=None,
+                dest="scene", help="initial scene")
+            parser.add_option("--no-rects", action="store_false", default=True,
+                dest="rects", help="disable debugging rects")
+        return parser
+
     def main(self):
-        opts = parse_args(sys.argv)
+        parser = self.option_parser()
+        opts, _ = parser.parse_args(sys.argv)
         pygame.display.init()
         pygame.font.init()
         if opts.sound:
