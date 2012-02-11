@@ -1,6 +1,6 @@
-from mamba.widgets.base import Box
-from mamba.widgets.toollist import ToolListWidget
-from mamba.widgets.text import TextWidget, TextButton
+from pyntnclick.widgets.base import Box
+from pyntnclick.widgets.toollist import ToolListWidget
+from pyntnclick.widgets.text import TextWidget, TextButton
 
 
 class ListBox(Box):

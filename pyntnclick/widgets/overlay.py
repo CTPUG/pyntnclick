@@ -1,4 +1,4 @@
-from mamba.widgets.base import Button
+from pyntnclick.widgets.base import Button
 
 
 class OverlayOnFocusButton(Button):

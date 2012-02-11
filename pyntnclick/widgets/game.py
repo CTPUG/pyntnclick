@@ -4,9 +4,9 @@ from pygame.rect import Rect
 from pygame.locals import (KEYDOWN, K_LEFT, K_RIGHT, K_DOWN, K_UP, K_p,
                            K_SPACE, K_PAUSE)
 
-from mamba.constants import UP, DOWN, LEFT, RIGHT
-from mamba.widgets.base import Widget
-from mamba.engine import FlipArrowsEvent
+from pyntnclick.constants import UP, DOWN, LEFT, RIGHT
+from pyntnclick.widgets.base import Widget
+from pyntnclick.engine import FlipArrowsEvent
 
 
 class GameWidget(Widget):

@@ -5,8 +5,8 @@ from pygame.locals import (KEYDOWN, K_DOWN, K_LEFT, K_RETURN, K_RIGHT, K_UP,
                            K_KP_ENTER, MOUSEBUTTONDOWN, MOUSEBUTTONUP,
                            MOUSEMOTION, SRCALPHA, USEREVENT)
 
-from mamba.constants import UP, DOWN, LEFT, RIGHT
-from mamba.engine import UserEvent
+from pyntnclick.constants import UP, DOWN, LEFT, RIGHT
+from pyntnclick.engine import UserEvent
 
 
 class Widget(object):

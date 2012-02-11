@@ -1,6 +1,6 @@
-from mamba.constants import FONT_SIZE
-from mamba.widgets.base import Box
-from mamba.widgets.text import TextWidget, TextButton
+from pyntnclick.constants import FONT_SIZE
+from pyntnclick.widgets.base import Box
+from pyntnclick.widgets.text import TextWidget, TextButton
 
 
 class MessageBox(Box):

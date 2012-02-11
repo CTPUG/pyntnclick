@@ -1,7 +1,7 @@
 from pygame.constants import KEYUP, K_1, K_PAGEDOWN, K_PAGEUP
 
-from mamba.widgets.base import Container
-from mamba.widgets.text import TextButton
+from pyntntclick.widgets.base import Container
+from pyntntclick.widgets.text import TextButton
 
 
 class ToolListWidget(Container):

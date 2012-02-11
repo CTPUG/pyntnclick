@@ -2,10 +2,10 @@ import pygame
 from pygame.constants import (SRCALPHA, KEYDOWN, K_ESCAPE, K_RETURN, K_UP,
         K_DOWN, K_SPACE, K_KP_ENTER)
 
-from mamba.constants import COLOR, FONT_SIZE, FOCUS_COLOR, DELETE_KEYS
-from mamba.widgets.base import Widget, Button
-from mamba.data import filepath
-from mamba.constants import DEFAULT_FONT
+from pyntnclick.constants import COLOR, FONT_SIZE, FOCUS_COLOR, DELETE_KEYS
+from pyntnclick.widgets.base import Widget, Button
+from pyntnclick.data import filepath
+from pyntnclick.constants import DEFAULT_FONT
 
 
 class TextWidget(Widget):
