@@ -20,7 +20,7 @@ import zipfile
 if len(sys.argv) != 2:
     print '''Usage: python %s <release filename-version>
 
-eg. python %s my_cool_game-1.0'''%(sys.argv[0], sys.argv[0])
+eg. python %s my_cool_game-1.0''' % (sys.argv[0], sys.argv[0])
     sys.exit()
 
 base = sys.argv[1]
@@ -36,6 +36,7 @@ for name in 'README.txt run_game.py'.split():
     package.write(name, os.path.join(base, name))
 package.write('run_game.py', os.path.join(base, 'run_game.pyw'))
 
+
 # utility for adding subdirectories
 def add_files(generator):
     for dirpath, dirnames, filenames in generator:
@@ -44,10 +45,13 @@ def add_files(generator):
                 dirnames.remove(name)
 
         for name in filenames:
-            if name.startswith('.'): continue
+            if name.startswith('.'):
+                continue
             suffix = os.path.splitext(name)[1]
-            if suffix in ('.pyc', '.pyo'): continue
-            if name[0] == '.': continue
+            if suffix in ('.pyc', '.pyo'):
+                continue
+            if name[0] == '.':
+                continue
             filename = os.path.join(dirpath, name)
             package.write(filename, os.path.join(base, filename))
 

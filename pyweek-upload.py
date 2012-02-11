@@ -3,7 +3,14 @@ Upload script specifically engineered for the PyWeek challenge.
 
 Handles authentication and gives upload progress feedback.
 '''
-import sys, os, httplib, cStringIO, socket, time, getopt
+import cStringIO
+import getopt
+import httplib
+import os
+import socket
+import sys
+import time
+
 
 class Upload:
     def __init__(self, filename):
@@ -13,6 +20,7 @@ boundary = '--------------GHSKFJDLGDS7543FJKLFHRE75642756743254'
 sep_boundary = '\n--' + boundary
 end_boundary = sep_boundary + '--'
 
+
 def mimeEncode(data, sep_boundary=sep_boundary, end_boundary=end_boundary):
     '''Take the mapping of data and construct the body of a
     multipart/form-data message with it using the indicated boundaries.
@@ -20,16 +28,17 @@ def mimeEncode(data, sep_boundary=sep_boundary, end_boundary=end_boundary):
     ret = cStringIO.StringIO()
     for key, value in data.items():
         # handle multiple entries for the same name
-        if type(value) != type([]): value = [value]
+        if type(value) != type([]):
+            value = [value]
         for value in value:
             ret.write(sep_boundary)
             if isinstance(value, Upload):
-                ret.write('\nContent-Disposition: form-data; name="%s"'%key)
+                ret.write('\nContent-Disposition: form-data; name="%s"' % key)
                 filename = os.path.basename(value.filename)
-                ret.write('; filename="%s"\n\n'%filename)
+                ret.write('; filename="%s"\n\n' % filename)
                 value = open(os.path.join(value.filename), "rb").read()
             else:
-                ret.write('\nContent-Disposition: form-data; name="%s"'%key)
+                ret.write('\nContent-Disposition: form-data; name="%s"' % key)
                 ret.write("\n\n")
                 value = str(value)
             ret.write(str(value))
@@ -38,11 +47,12 @@ def mimeEncode(data, sep_boundary=sep_boundary, end_boundary=end_boundary):
     ret.write(end_boundary)
     return ret.getvalue()
 
+
 class Progress:
     def __init__(self, info, data):
         self.info = info
         self.tosend = len(data)
-        self.total = self.tosend/1024
+        self.total = self.tosend / 1024
         self.data = cStringIO.StringIO(data)
         self.start = self.now = time.time()
         self.sent = 0
@@ -51,12 +61,13 @@ class Progress:
         self.steptimes = []
         self.display()
 
-    def __iter__(self): return self
+    def __iter__(self):
+        return self
 
     def next(self):
         self.num += 1
         if self.sent >= self.tosend:
-            print self.info, 'done', ' '*(75-len(self.info)-6)
+            print self.info, 'done', ' ' * (75 - len(self.info) - 6)
             sys.stdout.flush()
             raise StopIteration
 
@@ -78,7 +89,7 @@ class Progress:
             self.steptimes.pop()
         steptime = sum(self.steptimes) / len(self.steptimes)
         self.now = now
-        eta = steptime * ((self.total - self.num)/self.stepsize)
+        eta = steptime * ((self.total - self.num) / self.stepsize)
 
         # tell it like it is (or might be)
         if now - self.start > 3:
@@ -87,16 +98,17 @@ class Progress:
             M = M % 60
             S = eta % 60
             if self.total:
-                s = '%s %2d%% (ETA %02d:%02d:%02d)'%(self.info,
+                s = '%s %2d%% (ETA %02d:%02d:%02d)' % (self.info,
                     self.num * 100. / self.total, H, M, S)
             else:
-                s = '%s 0%% (ETA %02d:%02d:%02d)'%(self.info, H, M, S)
+                s = '%s 0%% (ETA %02d:%02d:%02d)' % (self.info, H, M, S)
         elif self.total:
-            s = '%s %2d%%'%(self.info, self.num * 100. / self.total)
+            s = '%s %2d%%' % (self.info, self.num * 100. / self.total)
         else:
-            s = '%s %d done'%(self.info, self.num)
-        sys.stdout.write(s + ' '*(75-len(s)) + '\r')
+            s = '%s %d done' % (self.info, self.num)
+        sys.stdout.write(s + ' ' * (75-len(s)) + '\r')
         sys.stdout.flush()
+
 
 class progressHTTPConnection(httplib.HTTPConnection):
     def progress_send(self, str):
@@ -116,11 +128,14 @@ class progressHTTPConnection(httplib.HTTPConnection):
                     raise
                 p.display()
 
+
 class progressHTTP(httplib.HTTP):
     _connection_class = progressHTTPConnection
+
     def _setup(self, conn):
         httplib.HTTP._setup(self, conn)
         self.progress_send = self._conn.progress_send
+
 
 def http_request(data, server, port, url):
     h = progressHTTP(server, port)
@@ -141,7 +156,9 @@ def http_request(data, server, port, url):
     f.close()
 
     print '%s %s'%(errcode, errmsg)
-    if response: print response
+    if response:
+        print response
+
 
 def usage():
     print '''This program is to be used to upload files to the PyWeek system.
@@ -178,15 +195,24 @@ if __name__ == '__main__':
     optional = {}
     url = None
     for opt, arg in optlist:
-        if opt == '-u': data['user'] = arg
-        elif opt == '-p': data['password'] = arg
-        elif opt == '-s': optional['is_screenshot'] = 'yes'
-        elif opt == '-f': optional['is_final'] = 'yes'
-        elif opt == '-d': data['description'] = arg
-        elif opt == '-c': data['content_file'] = Upload(arg)
-        elif opt == '-e': url = '/e/%s/oup/'%arg
-        elif opt == '-h': host = arg
-        elif opt == '-P': port = int(arg)
+        if opt == '-u':
+            data['user'] = arg
+        elif opt == '-p':
+            data['password'] = arg
+        elif opt == '-s':
+            optional['is_screenshot'] = 'yes'
+        elif opt == '-f':
+            optional['is_final'] = 'yes'
+        elif opt == '-d':
+            data['description'] = arg
+        elif opt == '-c':
+            data['content_file'] = Upload(arg)
+        elif opt == '-e':
+            url = '/e/%s/oup/'%arg
+        elif opt == '-h':
+            host = arg
+        elif opt == '-P':
+            port = int(arg)
 
     if len(data) < 4 or url is None:
         print 'Required argument missing'
