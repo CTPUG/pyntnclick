@@ -550,8 +550,14 @@ def make_button(text, action, ypos):
 class RectApp(RootWidget):
     """Handle the app stuff for the rect drawer"""
 
-    def __init__(self, display):
+    def __init__(self, display, get_initial_state, scene, detail):
         super(RectApp, self).__init__(display)
+        pygame.key.set_repeat(200, 100)
+        state = get_initial_state()
+        state.set_current_scene(scene)
+        state.set_current_detail(detail)
+        state.do_check = None
+
         self.image = AppImage(state)
         self.add(self.image)
         mode_label = ModeLabel(self.image)
@@ -629,44 +635,9 @@ class RectApp(RootWidget):
         self.image.animate()
 
 
-def list_scenes(state):
-    """List the scenes in the state"""
-    print 'Available scenes are : '
-    for scene in state.scenes:
-        print '    ', scene
-    print 'Available details are : '
-    for detail in state.detail_views:
-        print '    ', detail
-
-if __name__ == "__main__":
+def make_rect_display():
     pygame.display.init()
     pygame.font.init()
-    display = pygame.display.set_mode((constants.screen[0]
+    return pygame.display.set_mode((constants.screen[0]
                                        + constants.menu_width,
                                       constants.screen[1]))
-    state = state.initial_state()
-    if len(sys.argv) < 2:
-        print 'Please provide a scene name or scene and detail names'
-        list_scenes(state)
-        sys.exit(0)
-    # enable key repeating
-    pygame.key.set_repeat(200, 100)
-    if len(sys.argv) < 3:
-        try:
-            state.set_current_scene(sys.argv[1])
-            state.do_check = None
-        except KeyError:
-            print 'Invalid scene name'
-            list_scenes(state)
-            sys.exit(1)
-    else:
-        try:
-            state.set_current_scene(sys.argv[1])
-            state.set_current_detail(sys.argv[2])
-            state.do_check = None
-        except KeyError:
-            print 'Invalid scene or detail name'
-            list_scenes(state)
-            sys.exit(1)
-    app = RectApp(display)
-    app.run()

@@ -24,6 +24,9 @@ from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state
 
+from pyntnclick.tools.rect_drawer import RectApp, make_rect_display
+from pyntnclick.tools.utils import list_scenes
+
 
 class MainShell(Shell):
     def __init__(self, display, game_description):
@@ -86,6 +89,15 @@ class GameDescription(object):
                 dest="scene", help="initial scene")
             parser.add_option("--no-rects", action="store_false", default=True,
                 dest="rects", help="disable debugging rects")
+            parser.add_option("--rect-drawer", action="store_true",
+                    default=False, dest="rect_drawer",
+                    help="Launch the rect drawing helper tool. Specify the"
+                    " scene with --scene")
+            parser.add_option("--list-scenes", action="store_true",
+                    default=False, dest='list_scenes', help="List all scenes"
+                    " that can be used with --scene and exit.")
+            parser.add_option("--detail", type="str", default=None,
+                    dest="detail", help="Detailed view for rect_drawer")
         return parser
 
     def main(self):
@@ -102,12 +114,32 @@ class GameDescription(object):
                 # debug the specified scene
                 self._initial_scene = opts.scene
             self._debug_rects = opts.rects
-        display = pygame.display.set_mode(self.constants.screen,
-                                          SWSURFACE)
-        pygame.display.set_icon(self.resource.get_image(
-                'suspended_sentence24x24.png', basedir='icons'))
-        pygame.display.set_caption("Suspended Sentence")
-        shell = MainShell(display, self)
+        if opts.list_scenes:
+            # FIXME: Horrible hack to avoid image loading issues for
+            # now
+            display = pygame.display.set_mode(self.constants.screen,
+                                              SWSURFACE)
+            list_scenes(self.initial_state)
+            sys.exit(0)
+        if opts.rect_drawer:
+            if opts.scene is None:
+                print 'Need to supply a scene to use the rect drawer'
+                sys.exit(1)
+            display = make_rect_display()
+            try:
+                shell = RectApp(display, self.initial_state, opts.scene,
+                        opts.detail)
+            except KeyError:
+                print 'Invalid scene: %s' % opts.scene
+                sys.exit(1)
+        else:
+            display = pygame.display.set_mode(self.constants.screen,
+                                              SWSURFACE)
+            pygame.display.set_icon(self.resource.get_image(
+                    'suspended_sentence24x24.png', basedir='icons'))
+            pygame.display.set_caption("Suspended Sentence")
+
+            shell = MainShell(display, self)
         try:
             shell.run()
         except KeyboardInterrupt:
