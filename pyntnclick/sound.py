@@ -29,22 +29,22 @@ class PlayList(object):
     def __init__(self, pieces, random, repeat):
         self._pieces = pieces
         self._random = random
-        self._repeate = repeat
+        self._repeat = repeat
 
     def get_next(self):
         # Get the next piece
-        if self.pieces:
+        if self._pieces:
             if self._random:
-                if not self._repeat or len(self._items) < 3:
-                    i = randrange(0, len(self.items))
+                if not self._repeat or len(self._pieces) < 3:
+                    i = randrange(0, len(self._pieces))
                 else:
                     # Ignore the last entry, since we possibly just played it
-                    i = randrange(0, len(self.items) - 1)
+                    i = randrange(0, len(self._pieces) - 1)
             else:
                 i = 0
-            result = self.items.pop(i)
+            result = self._pieces.pop(i)
             if self._repeat:
-                self.items.push(result)
+                self._pieces.append(result)
             return result
         return None
 
@@ -148,7 +148,7 @@ class Sound(object):
 
     def change_playlist(self, new_playlist):
         if self.sound_enabled:
-            music.stop_music()
+            music.stop()
             self._current_playlist = new_playlist
             self.start_next_music()
 
