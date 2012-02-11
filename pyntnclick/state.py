@@ -54,19 +54,6 @@ def handle_result(result, scene_widget):
                     res.process(scene_widget)
 
 
-def initial_state_creator(initial_scene, scene_list, debug_rects=False):
-    def initial_state():
-        """Load the initial state."""
-        state = GameState()
-        state.set_debug_rects(debug_rects)
-        for scene in scene_list:
-            state.load_scenes(scene)
-        state.set_current_scene(initial_scene)
-        state.set_do_enter_leave()
-        return state
-    return initial_state
-
-
 class GameState(object):
     """Complete game state.
 

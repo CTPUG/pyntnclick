@@ -48,31 +48,61 @@ class MainShell(Shell):
         self.show_screen(self.menu_screen)
 
 
-def main(initial_scene, scene_list, debug_rects=False):
-    opts = parse_args(sys.argv)
-    pygame.display.init()
-    pygame.font.init()
-    if opts.sound:
+class GameDescriptionError(Exception):
+    """Raised when an GameDescription is invalid."""
+
+
+class GameDescription(object):
+
+    # initial scene for start of game (unless overridden by debug)
+    INITIAL_SCENE = None
+
+    # list of game scenes
+    SCENE_LIST = None
+
+    def __init__(self):
+        if self.INITIAL_SCENE is None:
+            raise GameDescriptionError("A game must have an initial scene.")
+        if not self.SCENE_LIST:
+            raise GameDescriptionError("A game must have a non-empty list"
+                                       " of scenes.")
+        self._initial_scene = self.INITIAL_SCENE
+        self._scene_list = self.SCENE_LIST
+        self._debug_rects = False
+
+    def initial_state(self):
+        """Create a copy of the initial game state."""
+        initial_state = state.GameState()
+        initial_state.set_debug_rects(self._debug_rects)
+        for scene in self._scene_list:
+            initial_state.load_scenes(scene)
+        initial_state.set_current_scene(self._initial_scene)
+        initial_state.set_do_enter_leave()
+        return initial_state
+
+    def main(self):
+        opts = parse_args(sys.argv)
+        pygame.display.init()
+        pygame.font.init()
+        if opts.sound:
+            try:
+                pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
+            except pygame.error, exc:
+                no_sound(exc)
+        else:
+            # Ensure get_sound returns nothing, so everything else just works
+            disable_sound()
+        if DEBUG:
+            if opts.scene is not None:
+                # debug the specified scene
+                self._initial_scene = opts.scene
+            self._debug_rects = opts.rects
+        display = pygame.display.set_mode(SCREEN, SWSURFACE)
+        pygame.display.set_icon(pygame.image.load(
+            data.filepath('icons/suspended_sentence24x24.png')))
+        pygame.display.set_caption("Suspended Sentence")
+        shell = MainShell(display, self.initial_state)
         try:
-            pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
-        except pygame.error, exc:
-            no_sound(exc)
-    else:
-        # Ensure get_sound returns nothing, so everything else just works
-        disable_sound()
-    if DEBUG:
-        if opts.scene is not None:
-            # debug the specified scene
-            initial_scene = opts.scene
-        debug_rects = opts.rects
-    initial_state = state.initial_state_creator(initial_scene, scene_list,
-                                                debug_rects)
-    display = pygame.display.set_mode(SCREEN, SWSURFACE)
-    pygame.display.set_icon(pygame.image.load(
-        data.filepath('icons/suspended_sentence24x24.png')))
-    pygame.display.set_caption("Suspended Sentence")
-    shell = MainShell(display, initial_state)
-    try:
-        shell.run()
-    except KeyboardInterrupt:
-        pass
+            shell.run()
+        except KeyboardInterrupt:
+            pass
