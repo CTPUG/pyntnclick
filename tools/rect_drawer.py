@@ -471,8 +471,8 @@ class AppImage(Widget):
                 # Find current interacts in this thing
                 cur_interact = cand.current_interact
                 j = cand.interacts.values().index(cur_interact)
-                if j + 1< len(cand.interacts):
-                    next_name = cand.interacts.keys()[j+1]
+                if j + 1 < len(cand.interacts):
+                    next_name = cand.interacts.keys()[j + 1]
                 else:
                     next_name = cand.interacts.keys()[0]
                 if cand.interacts[next_name] != cur_interact:

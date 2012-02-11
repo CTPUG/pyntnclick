@@ -106,7 +106,7 @@ class Progress:
             s = '%s %2d%%' % (self.info, self.num * 100. / self.total)
         else:
             s = '%s %d done' % (self.info, self.num)
-        sys.stdout.write(s + ' ' * (75-len(s)) + '\r')
+        sys.stdout.write(s + ' ' * (75 - len(s)) + '\r')
         sys.stdout.flush()
 
 
@@ -142,7 +142,7 @@ def http_request(data, server, port, url):
 
     data = mimeEncode(data)
     h.putrequest('POST', url)
-    h.putheader('Content-type', 'multipart/form-data; boundary=%s'%boundary)
+    h.putheader('Content-type', 'multipart/form-data; boundary=%s' % boundary)
     h.putheader('Content-length', str(len(data)))
     h.putheader('Host', server)
     h.endheaders()
@@ -155,7 +155,7 @@ def http_request(data, server, port, url):
     response = f.read().strip()
     f.close()
 
-    print '%s %s'%(errcode, errmsg)
+    print '%s %s' % (errcode, errmsg)
     if response:
         print response
 
@@ -208,7 +208,7 @@ if __name__ == '__main__':
         elif opt == '-c':
             data['content_file'] = Upload(arg)
         elif opt == '-e':
-            url = '/e/%s/oup/'%arg
+            url = '/e/%s/oup/' % arg
         elif opt == '-h':
             host = arg
         elif opt == '-P':
@@ -221,4 +221,3 @@ if __name__ == '__main__':
 
     data.update(optional)
     http_request(data, host, port, url)
-
