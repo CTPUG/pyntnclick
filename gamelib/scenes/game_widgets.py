@@ -1,7 +1,7 @@
 """Generic, game specific widgets"""
 
 
-from gamelib.state import Thing, Result
+from pyntnclick.state import Thing, Result
 
 
 class Door(Thing):

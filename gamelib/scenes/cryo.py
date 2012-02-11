@@ -5,9 +5,9 @@ import random
 from albow.music import change_playlist, get_music, PlayList
 from albow.resource import get_image
 
-from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, CloneableItem, Thing, Result
-from gamelib.scenewidgets import (InteractNoImage, InteractRectUnion,
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
+from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
                                   InteractImage, InteractAnimated,
                                   GenericDescThing)
 

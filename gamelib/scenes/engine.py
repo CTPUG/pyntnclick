@@ -1,9 +1,9 @@
 """Engine room where things need to be repaired."""
 
 from albow.resource import get_image
-from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result
-from gamelib.scenewidgets import (InteractNoImage, InteractRectUnion,
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.state import Scene, Item, Thing, Result
+from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
                                   InteractImage, InteractAnimated,
                                   GenericDescThing)
 

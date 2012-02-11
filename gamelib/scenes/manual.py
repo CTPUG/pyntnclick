@@ -2,9 +2,9 @@
 
 from albow.music import change_playlist
 
-from gamelib.state import Scene, Thing
-from gamelib.sound import get_current_playlist
-from gamelib.scenewidgets import InteractNoImage, InteractImage
+from pyntnclick.state import Scene, Thing
+from pyntnclick.sound import get_current_playlist
+from pyntnclick.scenewidgets import InteractNoImage, InteractImage
 
 
 # classes related the computer detail

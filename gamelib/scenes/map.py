@@ -7,8 +7,8 @@
    Many parts of the ship are derelict and inaccessible.
    """
 
-from gamelib.state import Scene, Thing, Result
-from gamelib.scenewidgets import InteractRectUnion
+from pyntnclick.state import Scene, Thing, Result
+from pyntnclick.scenewidgets import InteractRectUnion
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import make_jim_dialog

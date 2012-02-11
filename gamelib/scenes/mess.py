@@ -2,11 +2,11 @@
 
 from random import randint
 
-from gamelib.state import Scene, Item, CloneableItem, Thing, Result
-from gamelib.cursor import CursorSprite
-from gamelib.sound import get_sound
-from gamelib import constants
-from gamelib.scenewidgets import (InteractNoImage, InteractImage,
+from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.sound import get_sound
+from pyntnclick import constants
+from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractImageRect, InteractAnimated,
                                   GenericDescThing)
 

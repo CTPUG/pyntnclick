@@ -1,8 +1,8 @@
 """Crew quarters."""
 
-from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result
-from gamelib.scenewidgets import (InteractNoImage, InteractImage,
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.state import Scene, Item, Thing, Result
+from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractAnimated, GenericDescThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID

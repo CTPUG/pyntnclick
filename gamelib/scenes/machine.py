@@ -1,8 +1,8 @@
 """Machine room where tools and machines are found."""
 
-from gamelib.state import Scene, Item, Thing, Result
-from gamelib.cursor import CursorSprite
-from gamelib.scenewidgets import (InteractNoImage, InteractImage,
+from pyntnclick.state import Scene, Item, Thing, Result
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractAnimated, GenericDescThing)
 
 from gamelib.scenes.game_widgets import Door
