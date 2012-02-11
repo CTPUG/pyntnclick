@@ -10,8 +10,8 @@ from pyntnclick.state import Thing
 from pyntnclick.widgets import BoomLabel
 
 # XXX: Needs a way to get at resource:
-from pyntinclick.resource import Resource
-get_image = Resource().get_image
+from pyntnclick.resources import Resources
+get_image = Resources("Resources").get_image
 
 
 class Interact(object):
