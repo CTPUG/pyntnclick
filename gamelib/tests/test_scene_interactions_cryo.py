@@ -97,7 +97,8 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
 
         self.assertNotEquals(None, self.interact_thing('cryo.pipe.left'))
         self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.top'))
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.bottom'))
+        self.assertNotEquals(None,
+                             self.interact_thing('cryo.pipe.right.bottom'))
 
         self.assert_game_data('fixed', True, 'cryo.pipe.left')
         self.assert_game_data('fixed', True, 'cryo.pipe.right.top')
@@ -129,9 +130,12 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.assert_item_exists('cryo_pipe.1', False)
         self.assert_item_exists('cryo_pipe.2', False)
 
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.top', 'machete'))
-        self.assertNotEquals(None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
+        self.assertNotEquals(
+            None, self.interact_thing('cryo.pipe.left', 'machete'))
+        self.assertNotEquals(
+            None, self.interact_thing('cryo.pipe.right.top', 'machete'))
+        self.assertNotEquals(
+            None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
 
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
         self.assert_game_data('fixed', False, 'cryo.pipe.right.top')
@@ -151,9 +155,12 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         self.set_game_data('fixed', False, 'cryo.pipe.right.top')
         self.set_game_data('fixed', False, 'cryo.pipe.right.bottom')
 
-        self.assertEquals(None, self.interact_thing('cryo.pipe.left', 'machete'))
-        self.assertEquals(None, self.interact_thing('cryo.pipe.right.top', 'machete'))
-        self.assertEquals(None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
+        self.assertEquals(
+            None, self.interact_thing('cryo.pipe.left', 'machete'))
+        self.assertEquals(
+            None, self.interact_thing('cryo.pipe.right.top', 'machete'))
+        self.assertEquals(
+            None, self.interact_thing('cryo.pipe.right.bottom', 'machete'))
 
         self.assert_game_data('fixed', False, 'cryo.pipe.left')
         self.assert_game_data('fixed', False, 'cryo.pipe.right.top')

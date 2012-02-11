@@ -179,7 +179,8 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.1')
         self.assert_inventory_item('empty_can.1', False)
-        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.assert_game_data(
+            'contents', set(['tube', 'can']), 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
         self.assert_game_data('contents', set(), 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_one')
@@ -190,7 +191,8 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.2')
         self.assert_inventory_item('empty_can.2', False)
-        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.assert_game_data(
+            'contents', set(['tube', 'can']), 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
         self.assert_game_data('contents', set(), 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_one', False)
@@ -202,7 +204,8 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.0')
         self.assert_inventory_item('empty_can.0', False)
-        self.assert_game_data('contents', set(['tube', 'can']), 'machine.welder.slot')
+        self.assert_game_data(
+            'contents', set(['tube', 'can']), 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
         self.assert_game_data('contents', set(), 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_two', False)
@@ -248,7 +251,8 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Fill the cryofluid receptacles.
         self.assert_game_data('filled', False, 'engine.cryo_containers')
-        self.interact_thing('engine.cryo_container_receptacle', 'full_detergent_bottle')
+        self.interact_thing(
+            'engine.cryo_container_receptacle', 'full_detergent_bottle')
         self.assert_game_data('filled', True, 'engine.cryo_containers')
         self.assert_inventory_item('full_detergent_bottle', False)
 
@@ -300,4 +304,3 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Go somewhere interesting.
         self.interact_thing('bridge_comp.nav_line2')
-

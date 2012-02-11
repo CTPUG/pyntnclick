@@ -8,6 +8,7 @@ from gamelib import state
 # really want in the tests.
 import albow.resource
 
+
 def get_image_unoptimized(*names, **kw):
     kw.setdefault('optimize', False)
     return albow.resource._get_image(names, **kw)
@@ -88,4 +89,3 @@ class GameLogicTestCase(unittest.TestCase):
 
     def close_detail(self):
         self.state.set_current_detail(None)
-
