@@ -20,8 +20,8 @@ from pyntnclick.menu import MenuScreen
 from pyntnclick.gamescreen import GameScreen
 from pyntnclick.endscreen import EndScreen
 from pyntnclick.constants import (
-    SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG)
-from pyntnclick.sound import no_sound, disable_sound
+    SCREEN, FRAME_RATE)
+from pyntnclick.sound import Sound
 from pyntnclick import state, data
 
 
@@ -57,8 +57,8 @@ class GameDescription(object):
         self._scene_list = self.SCENE_LIST
         self._debug_rects = False
         # TODO: make these real objects
-        self.sound = object()
         self.resource = object()
+        self.sound = Sound(self.resource)
 
     def initial_state(self):
         """Create a copy of the initial game state."""
@@ -87,13 +87,9 @@ class GameDescription(object):
         pygame.display.init()
         pygame.font.init()
         if opts.sound:
-            try:
-                pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
-            except pygame.error, exc:
-                no_sound(exc)
+            self.sound.enable_sound()
         else:
-            # Ensure get_sound returns nothing, so everything else just works
-            disable_sound()
+            self.sound.disable_sound()
         if DEBUG:
             if opts.scene is not None:
                 # debug the specified scene
