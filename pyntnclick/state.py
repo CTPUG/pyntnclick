@@ -105,13 +105,17 @@ class Game(object):
         item.set_game(self)
         self.items[item.name] = item
 
-    def load_scenes(self, modname):
+    def load_scenes(self, modname, engine):
         mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
         for scene_cls in mod.SCENES:
-            self.add_scene(scene_cls(self))
+            scene = scene_cls(self)
+            self.add_scene(scene)
+            engine.add_screen(scene.name, scene)
         if hasattr(mod, 'DETAIL_VIEWS'):
             for scene_cls in mod.DETAIL_VIEWS:
-                self.add_detail_view(scene_cls(self))
+                scene = scene_cls(self)
+                self.add_detail_view(scene)
+                engine.add_screen(scene.name, scene)
 
     def set_current_scene(self, name):
         old_scene = self.current_scene

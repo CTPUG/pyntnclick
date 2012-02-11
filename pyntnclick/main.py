@@ -40,11 +40,12 @@ class GameDescription(object):
     SCENE_LIST = None
 
     # starting menu
-    MENU_SCREEN = DefMenuScreen
+    SPECIAL_SCREENS = {
+            'menu': DefMenuScreen,
+            'end': DefEndScreen,
+            }
 
-    # game over screen
-    END_SCREEN = DefEndScreen
-
+    START_SCREEN = 'menu'
 
     # resource module
     RESOURCE_MODULE = "Resources"
@@ -69,7 +70,7 @@ class GameDescription(object):
         initial_state = state.Game(self)
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
-            initial_state.load_scenes(scene)
+            initial_state.load_scenes(scene, self.engine)
         initial_state.set_current_scene(self._initial_scene)
         initial_state.set_do_enter_leave()
         return initial_state
@@ -137,8 +138,9 @@ class GameDescription(object):
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
             display = make_rect_display()
+            # FIXME: Remove Albow from here
             try:
-                engine = RectApp(display, self.initial_state, opts.scene,
+                self.engine = RectApp(display, self.initial_state, opts.scene,
                         opts.detail)
             except KeyError:
                 print 'Invalid scene: %s' % opts.scene
@@ -149,10 +151,14 @@ class GameDescription(object):
                     'suspended_sentence24x24.png', basedir='icons'))
             pygame.display.set_caption("Suspended Sentence")
 
-            engine = Engine(self)
+            self.engine = Engine(self)
+            # Initialize the special screens in the engine
+            for name, cls in self.SPECIAL_SCENES.iteritems():
+                screen = cls(self)
+                self.engine.add_screen(name, screen)
             # Should we allow the menu not to be the opening screen?
-            engine.set_screen(self.MENU_SCREEN(self))
+            self.engine.set_screen(self.START_SCREEN)
         try:
-            engine.run()
+            self.engine.run()
         except KeyboardInterrupt:
             pass

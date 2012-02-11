@@ -10,8 +10,11 @@ class SuspendedSentence(GameDescription):
 
     INITIAL_SCENE = scenes.INITIAL_SCENE
     SCENE_LIST = scenes.SCENE_LIST
-    MENU_SCREEN = MenuScreen
-    END_SCREEN = EndScreen
+    SPECIAL_SCENES = {
+            'menu': MenuScreen,
+            'end': EndScreen,
+            }
+    START_SCREEN = 'menu'
 
 
 def main():

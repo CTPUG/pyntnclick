@@ -11,13 +11,17 @@ class Engine(object):
     def __init__(self, game_description):
         self._screen = None
         self._game_description = game_description
+        self.screens = {}
 
-    def set_screen(self, screen):
+    def set_screen(self, screen_name):
         if self._screen is not None:
             self._screen.on_exit()
-        self._screen = screen
+        self._screen = self.screens.get(screen_name, None)
         if self._screen is not None:
             self._screen.on_enter()
+
+    def add_screen(self, name, screen):
+        self.screens[name] = screen
 
     def run(self):
         """Game loop."""
@@ -31,7 +35,7 @@ class Engine(object):
                 if ev.type == QUIT:
                     return
                 elif ScreenChangeEvent.matches(ev):
-                    self.set_screen(ev.screen)
+                    self.set_screen(ev.screen_name)
                 else:
                     self._screen.dispatch(ev)
             surface = pygame.display.get_surface()
@@ -87,8 +91,8 @@ class Screen(object):
         self.container.add(dialog)
         dialog.grab_focus()
 
-    def change_screen(self, new_screen):
-        ScreenChangeEvent.post(new_screen)
+    def change_screen(self, new_screen_name):
+        ScreenChangeEvent.post(new_screen_name)
 
 
 class UserEvent(object):
@@ -113,5 +117,5 @@ class ScreenChangeEvent(UserEvent):
     TYPE = "SCREEN_CHANGE"
 
     @classmethod
-    def post(cls, screen):
-        super(ScreenChangeEvent, cls).post(screen=screen)
+    def post(cls, screen_name):
+        super(ScreenChangeEvent, cls).post(screen_name=screen_name)

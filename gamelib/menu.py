@@ -27,8 +27,7 @@ class MenuScreen(Screen):
         self.surface.blit(self._background, self.surface.get_rect())
 
     def start(self, ev, widget):
-        from gamelib.endscreen import EndScreen
-        self.change_screen(EndScreen(self.game_description))
+        self.change_screen('end')
 
     def check_running(self):
         return self.shell.game_screen.running

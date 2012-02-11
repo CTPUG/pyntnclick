@@ -24,8 +24,7 @@ class EndScreen(Screen):
         self.surface.blit(self._background, self.surface.get_rect())
 
     def main_menu(self, ev, widget):
-        from gamelib.menu import MenuScreen
-        self.change_screen(MenuScreen(self.game_description))
+        self.change_screen('menu')
 
     def quit(self, ev, widget):
         pygame.event.post(pygame.event.Event(QUIT))
