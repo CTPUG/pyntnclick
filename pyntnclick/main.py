@@ -16,9 +16,7 @@ import pygame
 from pygame.locals import SWSURFACE
 from albow.shell import Shell
 
-from pyntnclick.menu import MenuScreen
-from pyntnclick.gamescreen import GameScreen
-from pyntnclick.endscreen import EndScreen
+from pyntnclick.gamescreen import GameScreen, DefMenuScreen, DefEndScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
@@ -29,11 +27,18 @@ from pyntnclick.tools.utils import list_scenes
 
 
 class MainShell(Shell):
-    def __init__(self, display, game_description):
+    # Should we allow the menu not to be the opening screen?
+    def __init__(self, display, game_description, menu_screen, end_screen):
         Shell.__init__(self, display)
-        self.menu_screen = MenuScreen(self, game_description)
+        if menu_screen:
+            self.menu_screen = menu_screen(self, game_description)
+        else:
+            self.menu_screen = DefMenuScreen(self, game_description)
         self.game_screen = GameScreen(self, game_description)
-        self.end_screen = EndScreen(self, game_description)
+        if end_screen:
+            self.end_screen = end_screen(self, game_description)
+        else:
+            self.end_screen = DefEndScreen(self, game_description)
         self.set_timer(game_description.constants.frame_rate)
         self.show_screen(self.menu_screen)
 
@@ -49,6 +54,13 @@ class GameDescription(object):
 
     # list of game scenes
     SCENE_LIST = None
+
+    # starting menu
+    MENU_SCREEN = None
+
+    # game over screen
+    END_SCREEN = None
+
 
     # resource module
     RESOURCE_MODULE = "Resources"
@@ -154,7 +166,8 @@ class GameDescription(object):
                     'suspended_sentence24x24.png', basedir='icons'))
             pygame.display.set_caption("Suspended Sentence")
 
-            shell = MainShell(display, self)
+            shell = MainShell(display, self, self.MENU_SCREEN,
+                    self.END_SCREEN)
         try:
             shell.run()
         except KeyboardInterrupt:

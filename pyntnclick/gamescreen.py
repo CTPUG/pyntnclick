@@ -267,3 +267,29 @@ class GameScreen(Screen, CursorWidget):
     def begin_frame(self):
         if self.running:
             self.state_widget.animate()
+
+
+class DefEndScreen(Screen):
+    """A placeholder 'Game Over' screen so people can get started easily"""
+
+    def __init__(self, shell, game_description):
+        Screen.__init__(self, shell)
+
+        self.background = game_description.resource.get_image(
+                ('pyntnclick', 'end.png'))
+
+    def draw(self, surface):
+        surface.blit(self.background, (0, 0))
+
+
+class DefMenuScreen(Screen):
+    """A placeholder Start screen so people can get started easily"""
+
+    def __init__(self, shell, game_description):
+        Screen.__init__(self, shell)
+
+        self.background = game_description.resource.get_image(
+                ('pyntnclick', 'start.png'))
+
+    def draw(self, surface):
+        surface.blit(self.background, (0, 0))

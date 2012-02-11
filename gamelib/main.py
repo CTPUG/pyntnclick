@@ -1,5 +1,8 @@
 import scenes
 
+from menu import MenuScreen
+from endscreen import EndScreen
+
 from pyntnclick.main import GameDescription
 
 
@@ -7,6 +10,8 @@ class SuspendedSentence(GameDescription):
 
     INITIAL_SCENE = scenes.INITIAL_SCENE
     SCENE_LIST = scenes.SCENE_LIST
+    MENU_SCREEN = MenuScreen
+    END_SCREEN = EndScreen
 
 
 def main():
