@@ -75,7 +75,8 @@ class BoomLabel(albow.controls.Label):
 class BoomButton(BoomLabel):
 
     def __init__(self, text, action, screen):
-        super(BoomButton, self).__init__(text, font=get_font(20, 'Vera.ttf'), margin=4)
+        super(BoomButton, self).__init__(text, font=get_font(20, 'Vera.ttf'),
+                margin=4)
         self.bg_color = (0, 0, 0)
         self._frame_color = Color(50, 50, 50)
         self.action = action
@@ -94,7 +95,7 @@ class BoomButton(BoomLabel):
         w = 2
         top, bottom, left, right = r.top, r.bottom, r.left, r.right
         draw_lines(surface, self._frame_color, False, [
-            (left, bottom), (left, top), (right-w, top), (right-w, bottom)
+            (left, bottom), (left, top), (right - w, top), (right - w, bottom)
             ], w)
 
 
@@ -187,6 +188,7 @@ class PopupMenu(albow.menu.Menu, CursorWidget):
             # A menu item needs to be invoked
             self.invoke_item(item)
 
+
 class BoomImageButton(albow.controls.Image):
     """The fancy image button for the screens"""
 
@@ -211,4 +213,3 @@ class BoomImageButton(albow.controls.Image):
         if self.enable:
             return self.enable()
         return True
-
