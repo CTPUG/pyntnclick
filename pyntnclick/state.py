@@ -62,7 +62,9 @@ class GameState(object):
     * items
     * scenes
     """
-    def __init__(self):
+    def __init__(self, gd):
+        # game description
+        self.gd = gd
         # map of scene name -> Scene object
         self.scenes = {}
         # map of detail view name -> DetailView object
@@ -238,6 +240,8 @@ class Scene(StatefulGizmo):
         self.name = self.NAME if self.NAME is not None else self.FOLDER
         # link back to state object
         self.state = state
+        self.sound = state.gd.sound
+        self.resource = state.gd.resource
         # map of thing names -> Thing objects
         self.things = {}
         self._background = None

@@ -56,10 +56,13 @@ class GameDescription(object):
         self._initial_scene = self.INITIAL_SCENE
         self._scene_list = self.SCENE_LIST
         self._debug_rects = False
+        # TODO: make these real objects
+        self.sound = object()
+        self.resource = object()
 
     def initial_state(self):
         """Create a copy of the initial game state."""
-        initial_state = state.GameState()
+        initial_state = state.GameState(self)
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
             initial_state.load_scenes(scene)
