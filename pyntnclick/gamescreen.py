@@ -203,11 +203,11 @@ class ToolBar(Widget):
         Row.draw(self, surface)
 
 
-class GameScreen(Screen, CursorWidget):
-    def __init__(self, game_description):
-        CursorWidget.__init__(self, self)
+class GameScreen(Screen):
+
+    def setup(self):
         self.running = False
-        self.create_initial_state = game_description.initial_state
+        self.create_initial_state = self.game_description.initial_state
 
     def _clear_all(self):
         for widget in self.subwidgets[:]:
