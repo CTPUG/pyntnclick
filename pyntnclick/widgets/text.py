@@ -1,30 +1,35 @@
 import pygame
 from pygame.constants import SRCALPHA
 
-from pyntnclick.constants import COLOR, FONT_SIZE, FOCUS_COLOR, DELETE_KEYS
 from pyntnclick.widgets.base import Widget, Button
-from pyntnclick.data import filepath
-from pyntnclick.constants import DEFAULT_FONT
+
+# XXX: Needs a way to get at resource:
+from pyntnclick.resources import Resources
+get_font = Resources("Resources").get_font
 
 
 class TextWidget(Widget):
     fontcache = {}
 
-    def __init__(self, rect, text, fontsize=FONT_SIZE, color=COLOR):
+    def __init__(self, rect, text, fontname=None, fontsize=None, color=None):
         super(TextWidget, self).__init__(rect)
         self.text = text
-        self.fontsize = fontsize
-        self.color = color
+        if fontname is None:
+            self.fontname = 'Vera.ttf'  # FIXME: Hardcoded...
+        else:
+            self.fontname = fontname
+        if fontsize is None:
+            self.fontsize = 24  # FIXME: Hardcoded...
+        else:
+            self.fontsize = fontsize
+        if color is None:
+            self.color = 'red'  # FIXME: Hardcoded...
+        else:
+            self.color = color
         self.prepare()
 
     def prepare(self):
-        self.fontname = DEFAULT_FONT
-        font = (self.fontname, self.fontsize)
-        if font not in TextWidget.fontcache:
-            fontfn = filepath('fonts/' + self.fontname)
-            TextWidget.fontcache[font] = pygame.font.Font(fontfn,
-                    self.fontsize)
-        self.font = TextWidget.fontcache[font]
+        self.font = get_font(self.fontname, self.fontsize)
         if not isinstance(self.color, pygame.Color):
             self.color = pygame.Color(self.color)
         self.surface = self.font.render(self.text, True, self.color)

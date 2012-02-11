@@ -25,6 +25,7 @@ class Resources(object):
         self.resource_module = resource_module
         self.language = language
         self._image_cache = {}
+        self._font_cache = {}
         self._transformed_image_cache = {}
 
     def get_resource_path(self, *resource_path_fragments):
@@ -96,3 +97,13 @@ class Resources(object):
         self._transformed_image_cache[key] = image
 
         return image
+
+    def get_font(self, file_name, font_size, basedir=None):
+        """Load a a font, cached if possible."""
+        if basedir is None:
+            basedir = 'fonts'
+        key = (basedir, file_name, font_size)
+        if key not in self._font_cache:
+            fontfn = self.get_resource_path(basedir, file_name)
+            self._font_cache[key] = pygame.font.Font(fontfn, font_size)
+        return self._font_cache[key]
