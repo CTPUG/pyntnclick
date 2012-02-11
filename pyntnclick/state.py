@@ -2,10 +2,17 @@
 
 import copy
 
-from albow.utils import frame_rect
 from widgets import BoomLabel
 from pygame.rect import Rect
 from pygame.color import Color
+
+
+def frame_rect(surface, color, rect, thick = 1):
+    # FIXME: Stolen from albow
+    surface.fill(color, (rect.left, rect.top, rect.width, thick))
+    surface.fill(color, (rect.left, rect.bottom - thick, rect.width, thick))
+    surface.fill(color, (rect.left, rect.top, thick, rect.height))
+    surface.fill(color, (rect.right - thick, rect.top, thick, rect.height))
 
 
 class Result(object):

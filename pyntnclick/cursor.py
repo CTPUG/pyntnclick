@@ -2,8 +2,6 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Sprite Cursor
 
-from albow.resource import get_image
-from albow.widget import Widget
 from pygame.sprite import Sprite, RenderUpdates
 from pygame.rect import Rect
 import pygame
@@ -11,9 +9,14 @@ import pygame.color
 import pygame.cursors
 import pygame.mouse
 
+from pyntnclick.widgets.base import Widget
+
 # XXX: Need a way to get at the constants
 from pyntnclick.constants import GameConstants
 SCENE_SIZE = GameConstants().scene_size
+# XXX: Needs a way to get at resource:
+from pyntnclick.resources import Resources
+get_image = Resources("Resources").get_image
 
 
 class CursorSprite(Sprite):

@@ -1,7 +1,5 @@
 """The inside of the maintenance manual."""
 
-from albow.music import change_playlist
-
 from pyntnclick.state import Scene, Thing
 from pyntnclick.scenewidgets import InteractNoImage, InteractImage
 
@@ -113,10 +111,10 @@ class ManualDetail(Scene):
 
     def enter(self):
         self._scene_playlist = self.sound.get_current_playlist()
-        change_playlist(None)
+        self.sound.change_playlist(None)
 
     def leave(self):
-        change_playlist(self._scene_playlist)
+        self.sound.change_playlist(self._scene_playlist)
 
 
 SCENES = []

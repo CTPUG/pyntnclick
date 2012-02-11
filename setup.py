@@ -56,7 +56,7 @@ setup(
           ],
           'includes': [
               # pygame
-              'pygame', 'albow',
+              'pygame',
           ],
           'excludes': [
               'numpy',
@@ -81,7 +81,7 @@ setup(
 #           'dist_dir': 'dist/suspended-sentence-%s' % version.VERSION_STR,
 #           'bdist_base': 'build/bdist',
           'packages': [
-              'logging', 'encodings', 'pygame', 'albow', 'gamelib',
+              'logging', 'encodings', 'pygame', 'gamelib',
               'Resources',
           ],
           'excludes': ['numpy'],

@@ -4,16 +4,23 @@
 import sys
 import os.path
 
-script_path = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
-sys.path.append(script_path)
+# XXX: Threw away albow
+#from albow.root import RootWidget
+#from albow.utils import frame_rect
+#from albow.widget import Widget
+#from albow.controls import Button, Image
+#from albow.palette_view import PaletteView
+#from albow.file_dialogs import request_old_filename
+#from albow.resource import get_font
+RootWidget = object
+frame_rect = None
+Widget = object
+Button = object
+Image = object
+PaletteView = object
+request_old_filename = None
+get_font = None
 
-from albow.root import RootWidget
-from albow.utils import frame_rect
-from albow.widget import Widget
-from albow.controls import Button, Image
-from albow.palette_view import PaletteView
-from albow.file_dialogs import request_old_filename
-from albow.resource import get_font
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
                            BLEND_RGBA_MIN, SRCALPHA)

@@ -7,22 +7,23 @@
 
 import textwrap
 
-import albow.controls
-import albow.menu
-from albow.resource import get_font, get_image
 from pygame.color import Color
 from pygame.rect import Rect
 from pygame.draw import lines as draw_lines
 from pygame import mouse
 
+from pyntnclick.widgets.base import Widget
 from pyntnclick.cursor import CursorWidget
 
 # XXX: Need a way to get at the constants.
 from pyntnclick.constants import GameConstants
 BUTTON_SIZE = GameConstants().button_size
+# XXX: Needs a way to get at resource:
+from pyntnclick.resources import Resources
+get_image = Resources("Resources").get_image
 
 
-class BoomLabel(albow.controls.Label):
+class BoomLabel(Widget):  # WAS: albow.controls.Label):
 
     trim_line_top = 0
 
@@ -146,7 +147,7 @@ class MessageDialog(BoomLabel, CursorWidget):
         return False
 
 
-class HandButton(albow.controls.Image):
+class HandButton(Widget):  # WAS: albow.controls.Image):
     """The fancy hand button for the widget"""
 
     def __init__(self, action):
@@ -159,7 +160,7 @@ class HandButton(albow.controls.Image):
         self.action()
 
 
-class PopupMenuButton(albow.controls.Button):
+class PopupMenuButton(Widget):  # WAS: albow.controls.Button):
 
     def __init__(self, text, action):
         albow.controls.Button.__init__(self, text, action)
@@ -169,7 +170,7 @@ class PopupMenuButton(albow.controls.Button):
         self.margin = (BUTTON_SIZE - self.font.get_linesize()) / 2
 
 
-class PopupMenu(albow.menu.Menu, CursorWidget):
+class PopupMenu(Widget):  # WAS: albow.menu.Menu, CursorWidget):
 
     def __init__(self, screen):
         CursorWidget.__init__(self, screen)
@@ -192,7 +193,7 @@ class PopupMenu(albow.menu.Menu, CursorWidget):
             self.invoke_item(item)
 
 
-class BoomImageButton(albow.controls.Image):
+class BoomImageButton(Widget):  # WAS: albow.controls.Image):
     """The fancy image button for the screens"""
 
     FOLDER = None
