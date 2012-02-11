@@ -87,6 +87,9 @@ class Screen(object):
         self.container.add(dialog)
         dialog.grab_focus()
 
+    def change_screen(self, new_screen):
+        ScreenChangeEvent.post(new_screen)
+
 
 class UserEvent(object):
     """A user event type allowing subclassing,
