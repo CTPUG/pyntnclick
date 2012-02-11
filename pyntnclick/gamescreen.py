@@ -4,6 +4,7 @@
 
 from pygame import Rect, mouse
 from pygame.color import Color
+from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION
 
 from pyntnclick.cursor import CursorWidget
 from pyntnclick.engine import Screen
@@ -68,6 +69,8 @@ class StateWidget(Widget):
         self.screen = screen
         self.game = screen.game
         self.detail = DetailWindow(rect, screen)
+        self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
+        self.add_callback(MOUSEMOTION, self.mouse_move)
 
     def draw(self, surface):
         self.animate()
@@ -77,13 +80,10 @@ class StateWidget(Widget):
         else:
             self.game.current_scene.draw(surface, self)
 
-    def mouse_down(self, event):
-        self.mouse_move(event)
+    def mouse_down(self, event, widget):
+        self.mouse_move(event, widget)
         if event.button != 1:  # We have a right/middle click
             self.game.cancel_doodah(self.screen)
-        elif self.subwidgets:
-            self.clear_detail()
-            self._mouse_move(event.pos)
         else:
             result = self.game.interact(event.pos)
             handle_result(result, self)
@@ -97,10 +97,8 @@ class StateWidget(Widget):
         result = self.game.check_enter_leave(self.screen)
         handle_result(result, self)
 
-    def mouse_move(self, event):
+    def mouse_move(self, event, widget):
         self.game.highlight_override = False
-        if not self.subwidgets:
-            self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
         self.game.highlight_override = False
