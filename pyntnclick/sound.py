@@ -111,6 +111,10 @@ class Sound(object):
     def change_playlist(self, new_playlist):
         albow.music.change_playlist(new_playlist)
 
+    def get_current_playlist():
+        if albow.music.music_enabled and albow.music.current_playlist:
+            return albow.music.current_playlist
+
 
 def start_next_music():
     """Start playing the next item from the current playlist immediately."""
@@ -123,10 +127,6 @@ def start_next_music():
             albow.music.next_change_delay = albow.music.change_delay
         albow.music.current_music = next_music
 
-
-def get_current_playlist():
-    if albow.music.music_enabled and albow.music.current_playlist:
-        return albow.music.current_playlist
 
 # Monkey patch
 albow.music.start_next_music = start_next_music
