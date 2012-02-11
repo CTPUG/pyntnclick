@@ -3,10 +3,6 @@ from pygame.constants import SRCALPHA
 
 from pyntnclick.widgets.base import Widget, Button
 
-# XXX: Needs a way to get at resource:
-from pyntnclick.resources import Resources
-get_font = Resources("Resources").get_font
-
 
 class TextWidget(Widget):
     fontcache = {}
@@ -29,7 +25,7 @@ class TextWidget(Widget):
         self.prepare()
 
     def prepare(self):
-        self.font = get_font(self.fontname, self.fontsize)
+        self.font = self.resource.get_font(self.fontname, self.fontsize)
         if not isinstance(self.color, pygame.Color):
             self.color = pygame.Color(self.color)
         self.surface = self.font.render(self.text, True, self.color)
