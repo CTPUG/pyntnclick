@@ -18,7 +18,6 @@ except ImportError, e:
     pygame_Sound = None
     music = None
 
-from pyntnclick.constants import FREQ, BITSIZE, CHANNELS, BUFFER
 from pyntnclick.resources import ResourceNotFound
 
 import albow.music
@@ -61,13 +60,16 @@ class Sound(object):
         self.sound_cache = {}
         self._resource_finder = resource_finder
 
-    def enable_sound(self):
+    def enable_sound(self, constants):
         """Attempt to initialise the sound system"""
         if pygame_Sound is None:
             self.disable_sound(pygame_import_error)
             return
         try:
-            pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
+            pygame.mixer.init(constants.snd_freq,
+                              constants.snd_bitsize,
+                              constants.snd_channels,
+                              constants.snd_buffer)
             self.sound_enabled = True
         except pygame.error, exc:
             self.disable_sound(exc)

@@ -11,7 +11,9 @@ import pygame.color
 import pygame.cursors
 import pygame.mouse
 
-from pyntnclick.constants import SCENE_SIZE
+# XXX: Need a way to get at the constants
+from pyntnclick.constants import GameConstants
+SCENE_SIZE = GameConstants().scene_size
 
 
 class CursorSprite(Sprite):

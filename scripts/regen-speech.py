@@ -10,11 +10,11 @@ from gamelib import speech
 from albow.resource import resource_path
 
 from pygame.locals import SWSURFACE
-from gamelib.constants import SCREEN
+from gamelib.constants import GameConstants
 
 # We need this stuff set up so we can load images and whatnot.
 pygame.display.init()
-pygame.display.set_mode(SCREEN, SWSURFACE)
+pygame.display.set_mode(GameConstants().screen, SWSURFACE)
 
 
 def espeak(text, filename, voice="en-sc"):

@@ -8,8 +8,6 @@ from widgets import BoomLabel
 from pygame.rect import Rect
 from pygame.color import Color
 
-from pyntnclick import constants
-
 
 class Result(object):
     """Result of interacting with a thing"""
@@ -183,12 +181,12 @@ class GameState(object):
     def check_enter_leave(self, screen):
         if not self.do_check:
             return None
-        if self.do_check == constants.LEAVE:
-            self.do_check = constants.ENTER
+        if self.do_check == self.gd.constants.leave:
+            self.do_check = self.gd.constants.enter
             if self.previous_scene:
                 return self.previous_scene.leave()
             return None
-        elif self.do_check == constants.ENTER:
+        elif self.do_check == self.gd.constants.enter:
             self.do_check = None
             # Fix descriptions, etc.
             if self.old_pos:
@@ -198,7 +196,7 @@ class GameState(object):
 
     def set_do_enter_leave(self):
         """Flag that we need to run the enter loop"""
-        self.do_check = constants.LEAVE
+        self.do_check = self.gd.constants.leave
 
 
 class StatefulGizmo(object):

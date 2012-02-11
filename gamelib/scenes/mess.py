@@ -4,7 +4,6 @@ from random import randint
 
 from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
 from pyntnclick.cursor import CursorSprite
-from pyntnclick import constants
 from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
                                   InteractImageRect, InteractAnimated,
                                   GenericDescThing)
@@ -271,7 +270,7 @@ class Boomslang(Thing):
             else:
                 self.set_data('anim_pos', self.current_interact._anim_pos)
             return True
-        if randint(0, 30 * constants.FRAME_RATE) == 0:
+        if randint(0, 30 * self.state.gd.constants.frame_rate) == 0:
             self.set_interact('snake')
             self.set_data('anim_pos', 0)
             hiss.play()

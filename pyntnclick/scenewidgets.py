@@ -8,8 +8,11 @@ from pygame.surface import Surface
 from albow.resource import get_image
 
 from pyntnclick.state import Thing
-from pyntnclick.constants import DEBUG
 from pyntnclick.widgets import BoomLabel
+
+# XXX: Need a way to get at the constants.
+from pyntnclick.constants import GameConstants
+DEBUG = GameConstants().debug
 
 
 class Interact(object):

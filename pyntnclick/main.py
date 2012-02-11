@@ -19,20 +19,19 @@ from albow.shell import Shell
 from pyntnclick.menu import MenuScreen
 from pyntnclick.gamescreen import GameScreen
 from pyntnclick.endscreen import EndScreen
-from pyntnclick.constants import (
-    SCREEN, FRAME_RATE, DEBUG)
+from pyntnclick.constants import GameConstants
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state
 
 
 class MainShell(Shell):
-    def __init__(self, display, initial_state):
+    def __init__(self, display, initial_state, frame_rate):
         Shell.__init__(self, display)
         self.menu_screen = MenuScreen(self)
         self.game_screen = GameScreen(self, initial_state)
         self.end_screen = EndScreen(self)
-        self.set_timer(FRAME_RATE)
+        self.set_timer(frame_rate)
         self.show_screen(self.menu_screen)
 
 
@@ -63,6 +62,7 @@ class GameDescription(object):
         self._debug_rects = False
         self.resource = Resources(self._resource_module)
         self.sound = Sound(self.resource)
+        self.constants = self.game_constants()
 
     def initial_state(self):
         """Create a copy of the initial game state."""
@@ -74,11 +74,14 @@ class GameDescription(object):
         initial_state.set_do_enter_leave()
         return initial_state
 
+    def game_constants(self):
+        return GameConstants()
+
     def option_parser(self):
         parser = OptionParser()
         parser.add_option("--no-sound", action="store_false", default=True,
                 dest="sound", help="disable sound")
-        if DEBUG:
+        if self.constants.debug:
             parser.add_option("--scene", type="str", default=None,
                 dest="scene", help="initial scene")
             parser.add_option("--no-rects", action="store_false", default=True,
@@ -91,20 +94,22 @@ class GameDescription(object):
         pygame.display.init()
         pygame.font.init()
         if opts.sound:
-            self.sound.enable_sound()
+            self.sound.enable_sound(self.constants)
         else:
             self.sound.disable_sound()
-        if DEBUG:
+        if self.constants.debug:
             if opts.scene is not None:
                 # debug the specified scene
                 self._initial_scene = opts.scene
             self._debug_rects = opts.rects
-        display = pygame.display.set_mode(SCREEN, SWSURFACE)
+        display = pygame.display.set_mode(self.constants.screen,
+                                          SWSURFACE)
         pygame.display.set_icon(pygame.image.load(
             self.resource.get_resource_path('icons/suspended_sentence24x24'
                                             '.png')))
         pygame.display.set_caption("Suspended Sentence")
-        shell = MainShell(display, self.initial_state)
+        shell = MainShell(display, self.initial_state,
+                          self.constants.frame_rate)
         try:
             shell.run()
         except KeyboardInterrupt:

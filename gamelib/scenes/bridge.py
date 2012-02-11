@@ -9,10 +9,13 @@ from albow.resource import get_image
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
-from pyntnclick.constants import DEBUG
 from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
                                   InteractImage, InteractAnimated,
                                   GenericDescThing)
+
+# XXX: Need a way to get at the constants.
+from pyntnclick.constants import GameConstants
+DEBUG = GameConstants().debug
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog

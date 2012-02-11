@@ -2,17 +2,18 @@
 # copyright boomslang team (see COPYRIGHT file for details)
 
 
-SCREEN = (800, 600)
-FREQ = 44100   # same as audio CD
-BITSIZE = -16  # unsigned 16 bit
-CHANNELS = 2   # 1 == mono, 2 == stereo
-BUFFER = 1024  # audio buffer size in no. of samples
+class GameConstants(object):
+    screen = (800, 600)
+    snd_freq = 44100
+    snd_bitsize = -16
+    snd_channels = 2
+    snd_buffer = 1024  # no. of samples
 
-BUTTON_SIZE = 50
-SCENE_SIZE = (SCREEN[0], SCREEN[1] - BUTTON_SIZE)
-# Animation frame rate
-FRAME_RATE = 25
+    button_size = 50
+    scene_size = (screen[0], screen[1] - button_size)
+    frame_rate = 25
+    debug = False
 
-DEBUG = False
-
-ENTER, LEAVE = 1, 2
+    # User event IDs:
+    enter = 1
+    leave = 2

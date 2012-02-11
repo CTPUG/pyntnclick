@@ -19,16 +19,20 @@ from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            BLEND_RGBA_MIN, SRCALPHA)
 import pygame
 
-from pyntnclick import constants
-constants.DEBUG = True
-MENU_WIDTH = 200
-MENU_BUTTON_HEIGHT = 25
-ZOOM = 4
-ZOOM_STEP = 100
-
+import pyntnclick.constants
 from pyntnclick import state
 state.DEBUG_RECTS = True
 from pyntnclick.widgets import BoomLabel
+
+
+class RectDrawerConstants(pyntnclick.constants.GameConstants):
+    debug = True
+    menu_width = 200
+    menu_button_height = 25
+    zoom = 4
+    zoom_step = 100
+
+constants = RectDrawerConstants()
 
 
 class AppPalette(PaletteView):
@@ -72,8 +76,8 @@ class AppImage(Widget):
     def __init__(self, state):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
-                                                        constants.SCREEN[0],
-                                                        constants.SCREEN[1]))
+                                                        constants.screen[0],
+                                                        constants.screen[1]))
         self.mode = 'draw'
         self.rects = []
         self.images = []
@@ -241,11 +245,11 @@ class AppImage(Widget):
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
             zoomed = pygame.transform.scale(base_surface,
-                                            (ZOOM * constants.SCREEN[0],
-                                             ZOOM * constants.SCREEN[1]))
+                            (constants.zoom * constants.screen[0],
+                             constants.zoom * constants.screen[1]))
             area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1],
-                                    self.zoom_offset[0] + constants.SCREEN[0],
-                                    self.zoom_offset[1] + constants.SCREEN[1])
+                                    self.zoom_offset[0] + constants.screen[0],
+                                    self.zoom_offset[1] + constants.screen[1])
             surface.blit(zoomed, (0, 0), area)
         else:
             self.do_unzoomed_draw(surface)
@@ -294,13 +298,13 @@ class AppImage(Widget):
                     self.draw_sub_image(self.current_image, surface,
                                         cropped_rect)
         if self.draw_toolbar:
-            tb_surf = surface.subsurface(0, constants.SCREEN[1]
-                                            - constants.BUTTON_SIZE,
-                                         constants.SCREEN[0],
-                                         constants.BUTTON_SIZE).convert_alpha()
+            tb_surf = surface.subsurface(0, constants.screen[1]
+                                            - constants.button_size,
+                                         constants.screen[0],
+                                         constants.button_size).convert_alpha()
             tb_surf.fill(pygame.color.Color(127, 0, 0, 191))
-            surface.blit(tb_surf, (0, constants.SCREEN[1]
-                                      - constants.BUTTON_SIZE))
+            surface.blit(tb_surf, (0, constants.screen[1]
+                                      - constants.button_size))
 
     def _make_dict(self):
         d = {}
@@ -337,8 +341,8 @@ class AppImage(Widget):
             self.place_image_menu.enabled = True
             # ensure we're off screen to start
             self.current_image.rect = image_data.get_rect() \
-                    .move(constants.SCREEN[0] + MENU_WIDTH,
-                          constants.SCREEN[1])
+                    .move(constants.screen[0] + constants.menu_width,
+                          constants.screen[1])
         except pygame.error, e:
             print 'Unable to load image %s' % e
 
@@ -354,8 +358,8 @@ class AppImage(Widget):
 
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
-            pos = ((mouse_pos[0] + self.zoom_offset[0]) / ZOOM,
-                   (mouse_pos[1] + self.zoom_offset[1]) / ZOOM)
+            pos = ((mouse_pos[0] + self.zoom_offset[0]) / constants.zoom,
+                   (mouse_pos[1] + self.zoom_offset[1]) / constants.zoom)
         else:
             pos = mouse_pos
         return pos
@@ -365,22 +369,23 @@ class AppImage(Widget):
             offset[0] = 0
         if offset[1] < 0:
             offset[1] = 0
-        if offset[0] > ZOOM * constants.SCREEN[0] - constants.SCREEN[0]:
-            offset[0] = ZOOM * constants.SCREEN[0] - constants.SCREEN[0]
-        if offset[1] > ZOOM * constants.SCREEN[1] - constants.SCREEN[1]:
-            offset[1] = ZOOM * constants.SCREEN[1] - constants.SCREEN[1]
+        width, height = constants.screen
+        if offset[0] > constants.zoom * width - width:
+            offset[0] = constants.zoom * width - width
+        if offset[1] > constants.zoom * height - height:
+            offset[1] = constants.zoom * height - height
 
     def _make_zoom_offset(self, pos):
-        zoom_pos = (pos[0] * ZOOM, pos[1] * ZOOM)
-        offset = [zoom_pos[0] - constants.SCREEN[0] / 2,
-                zoom_pos[1] - constants.SCREEN[1] / 2]
+        zoom_pos = (pos[0] * constants.zoom, pos[1] * constants.zoom)
+        offset = [zoom_pos[0] - constants.screen[0] / 2,
+                zoom_pos[1] - constants.screen[1] / 2]
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
 
     def _move_zoom(self, x, y):
         offset = list(self.zoom_offset)
-        offset[0] += ZOOM_STEP * x
-        offset[1] += ZOOM_STEP * y
+        offset[0] += constants.zoom_step * x
+        offset[1] += constants.zoom_step * y
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
 
@@ -536,7 +541,8 @@ class ModeLabel(BoomLabel):
 def make_button(text, action, ypos):
     button = Button(text, action=action, font=get_font(15, 'VeraBd.ttf'))
     button.align = 'l'
-    button.rect = pygame.rect.Rect(0, 0, MENU_WIDTH, MENU_BUTTON_HEIGHT)
+    button.rect = pygame.rect.Rect(0, 0, constants.menu_width,
+                                   constants.menu_button_height)
     button.rect.move_ip(805, ypos)
     return button
 
@@ -608,7 +614,7 @@ class RectApp(RootWidget):
         y += toggle_zoom.get_rect().h
         quit_but = make_button("Quit", self.quit, 570)
         self.add(quit_but)
-        self.set_timer(constants.FRAME_RATE)
+        self.set_timer(constants.frame_rate)
 
     def key_down(self, event):
         # Dispatch to image widget
@@ -635,8 +641,9 @@ def list_scenes(state):
 if __name__ == "__main__":
     pygame.display.init()
     pygame.font.init()
-    display = pygame.display.set_mode((constants.SCREEN[0] + MENU_WIDTH,
-                                      constants.SCREEN[1]))
+    display = pygame.display.set_mode((constants.screen[0]
+                                       + constants.menu_width,
+                                      constants.screen[1]))
     state = state.initial_state()
     if len(sys.argv) < 2:
         print 'Please provide a scene name or scene and detail names'

@@ -15,8 +15,11 @@ from pygame.rect import Rect
 from pygame.draw import lines as draw_lines
 from pygame import mouse
 
-from pyntnclick.constants import BUTTON_SIZE
 from pyntnclick.cursor import CursorWidget
+
+# XXX: Need a way to get at the constants.
+from pyntnclick.constants import GameConstants
+BUTTON_SIZE = GameConstants().button_size
 
 
 class BoomLabel(albow.controls.Label):

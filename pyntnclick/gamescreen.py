@@ -9,11 +9,18 @@ from albow.screen import Screen
 from pygame import Rect, mouse
 from pygame.color import Color
 
-from pyntnclick.constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
 from pyntnclick.cursor import CursorWidget
 from pyntnclick.state import handle_result
 from pyntnclick.widgets import (
     MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
+
+# XXX: Need a way to get at the constants.
+from pyntnclick.constants import GameConstants
+constants = GameConstants()
+SCREEN = constants.screen
+BUTTON_SIZE = constants.button_size
+SCENE_SIZE = constants.scene_size
+LEAVE = constants.leave
 
 
 class InventoryView(PaletteView):
