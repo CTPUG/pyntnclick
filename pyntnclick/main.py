@@ -16,7 +16,7 @@ import pygame
 from pygame.locals import SWSURFACE
 
 from pyntnclick.engine import Engine
-from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen
+from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen, GameScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
@@ -39,10 +39,10 @@ class GameDescription(object):
     SCENE_LIST = None
 
     # starting menu
-    SPECIAL_SCREENS = {
-            'menu': DefMenuScreen,
-            'end': DefEndScreen,
-            }
+    SCREENS = {
+        'menu': DefMenuScreen,
+        'end': DefEndScreen,
+        }
 
     START_SCREEN = 'menu'
 
@@ -55,10 +55,15 @@ class GameDescription(object):
         if not self.SCENE_LIST:
             raise GameDescriptionError("A game must have a non-empty list"
                                        " of scenes.")
+        if 'game' in self.SCREENS:
+            raise GameDescriptionError("The 'game' screen is reserved for the"
+                                       " game itself.")
         self._initial_scene = self.INITIAL_SCENE
         self._scene_list = self.SCENE_LIST
         self._resource_module = self.RESOURCE_MODULE
         self._debug_rects = False
+        self._screens = self.SCREENS.copy()
+        self._screens['game'] = GameScreen
         self.resource = Resources(self._resource_module)
         self.sound = Sound(self.resource)
         self.constants = self.game_constants()
@@ -152,7 +157,7 @@ class GameDescription(object):
 
             self.engine = Engine(self)
             # Initialize the special screens in the engine
-            for name, cls in self.SPECIAL_SCREENS.iteritems():
+            for name, cls in self._screens.iteritems():
                 screen = cls(self)
                 self.engine.add_screen(name, screen)
             # Should we allow the menu not to be the opening screen?

@@ -204,9 +204,8 @@ class ToolBar(Widget):
 
 
 class GameScreen(Screen, CursorWidget):
-    def __init__(self, shell, game_description):
+    def __init__(self, game_description):
         CursorWidget.__init__(self, self)
-        Screen.__init__(self, shell)
         self.running = False
         self.create_initial_state = game_description.initial_state
 

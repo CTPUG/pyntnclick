@@ -10,7 +10,7 @@ class SuspendedSentence(GameDescription):
 
     INITIAL_SCENE = scenes.INITIAL_SCENE
     SCENE_LIST = scenes.SCENE_LIST
-    SPECIAL_SCREENS = {
+    SCREENS = {
             'menu': MenuScreen,
             'end': EndScreen,
             }
