@@ -14,10 +14,9 @@ from optparse import OptionParser
 
 import pygame
 from pygame.locals import SWSURFACE
-from albow.shell import Shell
 
 from pyntnclick.engine import Engine
-from pyntnclick.gamescreen import GameScreen, DefMenuScreen, DefEndScreen
+from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound

@@ -14,10 +14,5 @@ cp -r COPYING README.txt run_game.py setup.py docs tools gamelib Resources ${BUI
 
 cd build
 
-# Add albow to our game
-unzip ../deps/Albow-2.1.0.zip > /dev/null
-mv Albow-2.1.0/albow ${GAME_NAME}
-rm -rf Albow-2.1.0
-
 tar czf ../dist/${TARBALL_NAME} ${GAME_NAME}
 

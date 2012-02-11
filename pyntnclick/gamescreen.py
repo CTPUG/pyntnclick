@@ -2,15 +2,13 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from albow.controls import Widget
-from albow.layout import Row
-from albow.palette_view import PaletteView
 from pygame import Rect, mouse
 from pygame.color import Color
 
 from pyntnclick.cursor import CursorWidget
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
+from pyntnclick.widgets.base import Widget
 from pyntnclick.widgets import (
     MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
 
@@ -23,14 +21,13 @@ SCENE_SIZE = constants.scene_size
 LEAVE = constants.leave
 
 
-class InventoryView(PaletteView):
+class InventoryView(Widget):
+    # TODO: Make this work again
 
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, screen):
-        PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6,
-                             scrolling=True)
+    def __init__(self, rect):
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
@@ -195,11 +192,10 @@ class DetailWindow(Widget):
         self.invalidate()
 
 
-class ToolBar(Row):
+class ToolBar(Widget):
     def __init__(self, items):
         for item in items:
             item.height = BUTTON_SIZE
-        Row.__init__(self, items, spacing=0, width=SCREEN[0])
         self.bg_color = (31, 31, 31)
 
     def draw(self, surface):

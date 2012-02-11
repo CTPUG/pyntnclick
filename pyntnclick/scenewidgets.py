@@ -5,10 +5,13 @@ from pygame import Rect
 from pygame.color import Color
 from pygame.colordict import THECOLORS
 from pygame.surface import Surface
-from albow.resource import get_image
 
 from pyntnclick.state import Thing
 from pyntnclick.widgets import BoomLabel
+
+# XXX: Needs a way to get at resource:
+from pyntinclick.resource import Resource
+get_image = Resource().get_image
 
 
 class Interact(object):
