@@ -13,6 +13,7 @@ import albow.music
 
 sound_cache = {}
 
+
 def get_sound(*names):
     if sound_cache is None:
         return dummy_sound
@@ -43,10 +44,12 @@ def no_sound(e):
     sound_cache = None
     albow.music.music_enabled = False
 
+
 def disable_sound():
     global sound_cache
     sound_cache = None
     albow.music.music_enabled = False
+
 
 def missing_sound(e, name):
     print "albow.resource.get_sound: %s: %s" % (name, e)
@@ -62,6 +65,7 @@ def start_next_music():
             music.play()
             albow.music.next_change_delay = albow.music.change_delay
         albow.music.current_music = next_music
+
 
 def get_current_playlist():
     if albow.music.music_enabled and albow.music.current_playlist:
