@@ -150,7 +150,6 @@ class HandButton(albow.controls.Image):
     """The fancy hand button for the widget"""
 
     def __init__(self, action):
-        # FIXME: Yes, please.
         this_image = get_image('items', 'hand.png')
         albow.controls.Image.__init__(self, image=this_image)
         self.action = action
