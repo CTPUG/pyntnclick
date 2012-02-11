@@ -43,7 +43,7 @@ class Resources(object):
         resource_name = '/'.join(resource_path_fragments)
         resource_name = os.path.join(*resource_name.split('/'))
         for path in self.get_paths(resource_name):
-            if os.path.exists(path):
+            if os.path.isfile(path):
                 return path
         raise ResourceNotFound(resource_name)
 
