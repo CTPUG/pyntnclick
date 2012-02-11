@@ -489,8 +489,7 @@ class CryoCompDetail(Scene):
     BACKGROUND_FIXED = "comp_info_detail_fixed.png"
     NAME = "cryo_comp_detail"
 
-    def __init__(self, state):
-        super(CryoCompDetail, self).__init__(state)
+    def setup(self):
         self._background_fixed = self.get_image(
             self.FOLDER, self.BACKGROUND_FIXED)
 
