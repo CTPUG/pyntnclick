@@ -5,11 +5,11 @@
 from albow.controls import Widget
 from albow.layout import Row
 from albow.palette_view import PaletteView
-from albow.screen import Screen
 from pygame import Rect, mouse
 from pygame.color import Color
 
 from pyntnclick.cursor import CursorWidget
+from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
 from pyntnclick.widgets import (
     MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
@@ -272,11 +272,8 @@ class GameScreen(Screen, CursorWidget):
 class DefEndScreen(Screen):
     """A placeholder 'Game Over' screen so people can get started easily"""
 
-    def __init__(self, shell, game_description):
-        Screen.__init__(self, shell)
-
-        self.background = game_description.resource.get_image(
-                ('pyntnclick', 'end.png'))
+    def setup(self):
+        self.background = self.resource.get_image(('pyntnclick', 'end.png'))
 
     def draw(self, surface):
         surface.blit(self.background, (0, 0))
@@ -285,11 +282,8 @@ class DefEndScreen(Screen):
 class DefMenuScreen(Screen):
     """A placeholder Start screen so people can get started easily"""
 
-    def __init__(self, shell, game_description):
-        Screen.__init__(self, shell)
-
-        self.background = game_description.resource.get_image(
-                ('pyntnclick', 'start.png'))
+    def setup(self):
+        self.background = self.resource.get_image(('pyntnclick', 'start.png'))
 
     def draw(self, surface):
         surface.blit(self.background, (0, 0))

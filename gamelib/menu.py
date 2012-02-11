@@ -2,34 +2,30 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from albow.screen import Screen
+from pyntnclick.engine import Screen
+from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
-from pyntnclick.widgets import BoomImageButton
-
-
-class SplashButton(BoomImageButton):
-
-    FOLDER = 'splash'
+import pygame.event
+from pygame.locals import QUIT
 
 
 class MenuScreen(Screen):
-    def __init__(self, shell, game_description):
-        Screen.__init__(self, shell)
-        self._background = game_description.resource.get_image(
-                ('splash', 'splash.png'))
-        self._start_button = SplashButton('play.png', 16, 523, self.start)
-        self._resume_button = SplashButton('resume.png', 256, 523, self.resume,
-                                           enable=self.check_running)
-        self._quit_button = SplashButton('quit.png', 580, 523, shell.quit)
-        self.add(self._start_button)
-        self.add(self._resume_button)
-        self.add(self._quit_button)
+    def setup(self):
+        self._background = self.resource.get_image(('splash', 'splash.png'))
 
-    def draw(self, surface):
-        surface.blit(self._background, (0, 0))
-        self._start_button.draw(surface)
-        self._resume_button.draw(surface)
-        self._quit_button.draw(surface)
+        self.add_image_button((16, 523), ('splash', 'play.png'), self.start)
+        # FIXME: Only show this when check_running:
+        self.add_image_button((256, 523), ('splash', 'resume.png'), self.resume)
+        self.add_image_button((580, 523), ('splash', 'quit.png'), self.quit)
+
+    def add_image_button(self, rect, image_name, callback):
+        image = self.resource.get_image(image_name)
+        widget = ImageButtonWidget(rect, image)
+        widget.add_callback('clicked', callback)
+        self.container.add(widget)
+
+    def draw_background(self):
+        self.surface.blit(self._background, self.surface.get_rect())
 
     def start(self):
         self.shell.game_screen.start_game()
@@ -41,3 +37,6 @@ class MenuScreen(Screen):
     def resume(self):
         if self.shell.game_screen.running:
             self.shell.show_screen(self.shell.game_screen)
+
+    def quit(self):
+        pygame.event.Event(QUIT)

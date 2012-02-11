@@ -31,14 +31,61 @@ class Engine(object):
                 if ev.type == QUIT:
                     return
                 elif ScreenChangeEvent.matches(ev):
-                    self.set_habitat(ev.habitat)
+                    self.set_screen(ev.screen)
                 else:
                     self._screen.dispatch(ev)
             surface = pygame.display.get_surface()
-            self._habitat.draw(surface)
+            self._screen.draw(surface)
             flip()
             self._fps = 1000.0 / clock.tick(
-                    self.game_description.constants.fps)
+                    self._game_description.constants.frame_rate)
+
+
+class Screen(object):
+    """A top level object for the screen being displayed"""
+
+    def __init__(self, game_description):
+        # Avoid import loop
+        from pyntnclick.widgets.base import Container
+
+        self.game_description = game_description
+        self.resource = game_description.resource
+
+        self.surface_size = game_description.constants.screen
+        self.surface = None
+        self.container = Container(pygame.Rect((0, 0), self.surface_size))
+        self.setup()
+
+    def on_enter(self):
+        """Called when this becomes the current screen."""
+        # Create the surface here as flipping between editor and
+        # other things kills pygame.display
+        self.surface = pygame.Surface(self.surface_size)
+
+    def on_exit(self):
+        """Called when this stops being the current screen."""
+        self.surface = None
+
+    def setup(self):
+        """Override for initialization"""
+        pass
+
+    def dispatch(self, ev):
+        self.container.event(ev)
+
+    def draw_background(self):
+        self.surface.fill(pygame.Color('gray'))
+
+    def draw(self, surface):
+        if self.surface:
+            self.draw_background()
+            self.container.draw(self.surface)
+            surface.blit(self.surface, self.surface.get_rect())
+
+    def display_dialog(self, dialog):
+        self.container.paused = True
+        self.container.add(dialog)
+        dialog.grab_focus()
 
 
 class UserEvent(object):

@@ -16,6 +16,7 @@ import pygame
 from pygame.locals import SWSURFACE
 from albow.shell import Shell
 
+from pyntnclick.engine import Engine
 from pyntnclick.gamescreen import GameScreen, DefMenuScreen, DefEndScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
 from pyntnclick.resources import Resources
@@ -24,23 +25,6 @@ from pyntnclick import state
 
 from pyntnclick.tools.rect_drawer import RectApp, make_rect_display
 from pyntnclick.tools.utils import list_scenes
-
-
-class MainShell(Shell):
-    # Should we allow the menu not to be the opening screen?
-    def __init__(self, display, game_description, menu_screen, end_screen):
-        Shell.__init__(self, display)
-        if menu_screen:
-            self.menu_screen = menu_screen(self, game_description)
-        else:
-            self.menu_screen = DefMenuScreen(self, game_description)
-        self.game_screen = GameScreen(self, game_description)
-        if end_screen:
-            self.end_screen = end_screen(self, game_description)
-        else:
-            self.end_screen = DefEndScreen(self, game_description)
-        self.set_timer(game_description.constants.frame_rate)
-        self.show_screen(self.menu_screen)
 
 
 class GameDescriptionError(Exception):
@@ -56,10 +40,10 @@ class GameDescription(object):
     SCENE_LIST = None
 
     # starting menu
-    MENU_SCREEN = None
+    MENU_SCREEN = DefMenuScreen
 
     # game over screen
-    END_SCREEN = None
+    END_SCREEN = DefEndScreen
 
 
     # resource module
@@ -154,21 +138,21 @@ class GameDescription(object):
                 sys.exit(1)
             display = make_rect_display()
             try:
-                shell = RectApp(display, self.initial_state, opts.scene,
+                engine = RectApp(display, self.initial_state, opts.scene,
                         opts.detail)
             except KeyError:
                 print 'Invalid scene: %s' % opts.scene
                 sys.exit(1)
         else:
-            display = pygame.display.set_mode(self.constants.screen,
-                                              SWSURFACE)
+            pygame.display.set_mode(self.constants.screen, SWSURFACE)
             pygame.display.set_icon(self.resource.get_image(
                     'suspended_sentence24x24.png', basedir='icons'))
             pygame.display.set_caption("Suspended Sentence")
 
-            shell = MainShell(display, self, self.MENU_SCREEN,
-                    self.END_SCREEN)
+            engine = Engine(self)
+            # Should we allow the menu not to be the opening screen?
+            engine.set_screen(self.MENU_SCREEN(self))
         try:
-            shell.run()
+            engine.run()
         except KeyboardInterrupt:
             pass
