@@ -96,7 +96,7 @@ class Sound(object):
         if sound is None:
             try:
                 sound = pygame_Sound(path)
-            except pygame.error, e:
+            except pygame.error:
                 print "Sound file not found: %s" % soundfile
                 sound = DummySound()
             self.sound_cache[path] = sound
@@ -106,7 +106,7 @@ class Sound(object):
         return albow.music.PlayList(pieces, random, repeat)
 
     def get_music(self, name, prefix):
-        return albow.music.get_music(name, prefix)
+        return albow.music.get_music(name, prefix=prefix)
 
     def change_playlist(self, new_playlist):
         albow.music.change_playlist(new_playlist)

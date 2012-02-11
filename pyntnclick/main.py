@@ -23,7 +23,7 @@ from pyntnclick.constants import (
     SCREEN, FRAME_RATE, DEBUG)
 from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
-from pyntnclick import state, data
+from pyntnclick import state
 
 
 class MainShell(Shell):
@@ -101,7 +101,8 @@ class GameDescription(object):
             self._debug_rects = opts.rects
         display = pygame.display.set_mode(SCREEN, SWSURFACE)
         pygame.display.set_icon(pygame.image.load(
-            data.filepath('icons/suspended_sentence24x24.png')))
+            self.resource.get_resource_path('icons/suspended_sentence24x24'
+                                            '.png')))
         pygame.display.set_caption("Suspended Sentence")
         shell = MainShell(display, self.initial_state)
         try:
