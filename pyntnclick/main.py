@@ -114,14 +114,14 @@ class GameDescription(object):
                 # debug the specified scene
                 self._initial_scene = opts.scene
             self._debug_rects = opts.rects
-        if opts.list_scenes:
+        if self.constants.debug and opts.list_scenes:
             # FIXME: Horrible hack to avoid image loading issues for
             # now
             display = pygame.display.set_mode(self.constants.screen,
                                               SWSURFACE)
             list_scenes(self.initial_state)
             sys.exit(0)
-        if opts.rect_drawer:
+        if self.constants.debug and opts.rect_drawer:
             if opts.scene is None:
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
