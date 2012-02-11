@@ -8,9 +8,10 @@ from widgets import BoomLabel
 from pygame.rect import Rect
 from pygame.color import Color
 
-import constants
-from scenes import SCENE_LIST, INITIAL_SCENE
-from sound import get_sound
+from pyntnclick import constants
+from pyntnclick.sound import get_sound
+
+from gamelib.scenes import SCENE_LIST, INITIAL_SCENE
 
 # override the initial scene to for debugging
 DEBUG_SCENE = None

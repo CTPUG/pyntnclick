@@ -7,9 +7,9 @@ from pygame.colordict import THECOLORS
 from pygame.surface import Surface
 from albow.resource import get_image
 
-from gamelib.state import Thing
-from gamelib.constants import DEBUG
-from gamelib.widgets import BoomLabel
+from pyntnclick.state import Thing
+from pyntnclick.constants import DEBUG
+from pyntnclick.widgets import BoomLabel
 
 
 class Interact(object):

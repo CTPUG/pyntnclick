@@ -4,7 +4,7 @@
 
 import re
 
-from sound import get_sound
+from pyntnclick.sound import get_sound
 
 
 # cache of string -> sound object mappings

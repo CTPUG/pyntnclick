@@ -11,7 +11,7 @@ import pygame.color
 import pygame.cursors
 import pygame.mouse
 
-from gamelib.constants import SCENE_SIZE
+from pyntnclick.constants import SCENE_SIZE
 
 
 class CursorSprite(Sprite):

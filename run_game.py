@@ -1,4 +1,4 @@
 #! /usr/bin/env python
 
-from gamelib import main
+from pyntnclick import main
 main.main()

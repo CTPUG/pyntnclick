@@ -5,7 +5,7 @@
 from albow.screen import Screen
 from albow.resource import get_image
 
-from gamelib.widgets import BoomImageButton
+from pyntnclick.widgets import BoomImageButton
 
 
 class SplashButton(BoomImageButton):

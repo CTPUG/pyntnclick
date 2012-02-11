@@ -9,11 +9,11 @@ from albow.screen import Screen
 from pygame import Rect, mouse
 from pygame.color import Color
 
-from constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
-from cursor import CursorWidget
-from state import initial_state, handle_result
-from widgets import (MessageDialog, BoomButton, HandButton, PopupMenu,
-                     PopupMenuButton)
+from pyntnclick.constants import SCREEN, BUTTON_SIZE, SCENE_SIZE, LEAVE
+from pyntnclick.cursor import CursorWidget
+from pyntnclick.state import initial_state, handle_result
+from pyntnclick.widgets import (
+    MessageDialog, BoomButton, HandButton, PopupMenu, PopupMenuButton)
 
 
 class InventoryView(PaletteView):

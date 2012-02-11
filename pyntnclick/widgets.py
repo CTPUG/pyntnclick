@@ -13,8 +13,8 @@ from pygame.rect import Rect
 from pygame.draw import lines as draw_lines
 from pygame import mouse
 
-from constants import BUTTON_SIZE
-from cursor import CursorWidget
+from pyntnclick.constants import BUTTON_SIZE
+from pyntnclick.cursor import CursorWidget
 
 
 class BoomLabel(albow.controls.Label):

@@ -16,14 +16,13 @@ import pygame
 from pygame.locals import SWSURFACE
 from albow.shell import Shell
 
-from menu import MenuScreen
-from gamescreen import GameScreen
-from endscreen import EndScreen
-from constants import (
+from pyntnclick.menu import MenuScreen
+from pyntnclick.gamescreen import GameScreen
+from pyntnclick.endscreen import EndScreen
+from pyntnclick.constants import (
     SCREEN, FRAME_RATE, FREQ, BITSIZE, CHANNELS, BUFFER, DEBUG)
-from sound import no_sound, disable_sound
-import state
-import data
+from pyntnclick.sound import no_sound, disable_sound
+from pyntnclick import state, data
 
 
 def parse_args(args):
