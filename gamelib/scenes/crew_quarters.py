@@ -66,7 +66,7 @@ class Safe(Thing):
         if self.get_data('is_cracked'):
             if self.get_data('has_tape'):
                 self.set_data('has_tape', False)
-                self.state.add_inventory_item('duct_tape')
+                self.game.add_inventory_item('duct_tape')
                 self.set_interact('empty_safe')
                 return Result("Duct tape. It'll stick to everything except "
                               "ducts, apparently.")
@@ -90,7 +90,7 @@ class Safe(Thing):
                           " committing a felony violation. This will go onto"
                           " your permanent record, and your sentence may be"
                           " extended by up to twenty years."
-                          % PLAYER_ID, self.state))
+                          % PLAYER_ID, self.game))
 
     def get_description(self):
         return "Ah, a vintage Knoxx & Co. model QR3. Quaint, but" \
@@ -119,7 +119,7 @@ class FishbowlThing(Thing):
                     " fish and a kilogram or so of sand?")
         self.set_interact('fish_no_bowl')
         self.set_data('has_bowl', False)
-        self.state.add_inventory_item('fishbowl')
+        self.game.add_inventory_item('fishbowl')
         return Result("The fishbowl is useful, but its contents aren't.")
 
     def get_description(self):
@@ -140,8 +140,8 @@ class Fishbowl(Item):
 
     def interact_with_duct_tape(self, item):
         helmet = FishbowlHelmet('helmet')
-        self.state.add_item(helmet)
-        self.state.replace_inventory_item(self.name, helmet.name)
+        self.game.add_item(helmet)
+        self.game.replace_inventory_item(self.name, helmet.name)
         return Result("You duct tape the edges of the helmet. The seal is"
                 " crude, but it will serve as a workable helmet if needed.")
 
@@ -187,7 +187,7 @@ class PosterThing(Thing):
     INITIAL = 'poster'
 
     def interact_without(self):
-        self.state.add_inventory_item('escher_poster')
+        self.game.add_inventory_item('escher_poster')
         self.scene.remove_thing(self)
         return Result("This poster will go nicely on your bedroom wall.")
 

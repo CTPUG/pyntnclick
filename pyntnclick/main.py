@@ -66,7 +66,7 @@ class GameDescription(object):
 
     def initial_state(self):
         """Create a copy of the initial game state."""
-        initial_state = state.GameState(self)
+        initial_state = state.Game(self)
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
             initial_state.load_scenes(scene)

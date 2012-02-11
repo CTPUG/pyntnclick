@@ -120,7 +120,7 @@ class LaserWelderSlot(Thing):
         contents = self.get_data('contents')
         if "can" in contents:
             return Result("There is already a can in the welder.")
-        self.state.remove_inventory_item(item.name)
+        self.game.remove_inventory_item(item.name)
         contents.add("can")
         self.update_contents()
         return Result("You carefully place the can in the laser welder.")
@@ -129,7 +129,7 @@ class LaserWelderSlot(Thing):
         contents = self.get_data('contents')
         if "tube" in contents:
             return Result("There is already a tube fragment in the welder.")
-        self.state.remove_inventory_item(item.name)
+        self.game.remove_inventory_item(item.name)
         contents.add("tube")
         self.update_contents()
         return Result("You carefully place the tube fragments in the"
@@ -180,25 +180,25 @@ class LaserWelderButton(Thing):
         else:
             welder_slot.set_data("contents", set())
             welder_slot.update_contents()
-            if self.state.items["cryo_pipes_one"] in self.state.inventory:
-                self.state.replace_inventory_item("cryo_pipes_one",
+            if self.game.items["cryo_pipes_one"] in self.game.inventory:
+                self.game.replace_inventory_item("cryo_pipes_one",
                                                   "cryo_pipes_two")
                 return Result("With high-precision spitzensparken, you weld"
                               " together a second pipe. You bundle the two"
                               " pipes together.",
                         soundfile='laser.ogg')
-            elif self.state.items["cryo_pipes_two"] in self.state.inventory:
-                self.state.replace_inventory_item("cryo_pipes_two",
+            elif self.game.items["cryo_pipes_two"] in self.game.inventory:
+                self.game.replace_inventory_item("cryo_pipes_two",
                                                   "cryo_pipes_three")
                 return Result("With high-precision spitzensparken, you create"
                               " yet another pipe. You store it with the other"
                               " two.",
                         soundfile='laser.ogg')
-            elif self.state.items["cryo_pipes_three"] in self.state.inventory:
+            elif self.game.items["cryo_pipes_three"] in self.game.inventory:
                 # just for safety
                 return None
             else:
-                self.state.add_inventory_item("cryo_pipes_one")
+                self.game.add_inventory_item("cryo_pipes_one")
                 return Result("With high-precision spitzensparken, the can and"
                               " tube are welded into a whole greater than the"
                               " sum of the parts.",
@@ -260,7 +260,7 @@ class Grinder(Thing):
                       " approach is in order?")
 
     def interact_with_titanium_leg(self, item):
-        self.state.replace_inventory_item(item.name, 'machete')
+        self.game.replace_inventory_item(item.name, 'machete')
         return Result("After much delicate grinding and a few close calls with"
                       " various body parts, the titanium femur now resembles"
                       " a machete more than a bone. Nice and sharp, too.",
@@ -289,7 +289,7 @@ class ManualThing(Thing):
 
     def interact_without(self):
         self.scene.remove_thing(self)
-        self.state.add_inventory_item("manual")
+        self.game.add_inventory_item("manual")
         return Result("Ah! The ship's instruction manual. You'd feel better"
                       " if the previous owner wasn't lying next to it with a"
                       " gaping hole in his rib cage.")

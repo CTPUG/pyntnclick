@@ -92,7 +92,7 @@ class BoomButton(BoomLabel):
         self.screen.state_widget.mouse_move(event)
 
     def mouse_move(self, event):
-        self.screen.state.highlight_override = True
+        self.screen.game.highlight_override = True
 
     def draw(self, surface):
         super(BoomButton, self).draw(surface)

@@ -13,7 +13,7 @@ class PageBase(Thing):
     "Displays manual pages"
 
     def get_page_thing(self):
-        return self.state.current_detail.things['manual.page']
+        return self.game.current_detail.things['manual.page']
 
     def get_page(self):
         return self.get_page_thing().get_data('page')

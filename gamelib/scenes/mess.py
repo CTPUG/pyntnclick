@@ -63,8 +63,8 @@ class BaseCan(CloneableItem):
 
     def interact_with_canopener(self, item):
         empty = EmptyCan('empty_can')
-        self.state.add_item(empty)
-        self.state.replace_inventory_item(self.name, empty.name)
+        self.game.add_item(empty)
+        self.game.replace_inventory_item(self.name, empty.name)
         return Result("You open both ends of the can, discarding the"
                       " hideous contents.")
 
@@ -91,8 +91,8 @@ class FullCan(BaseCan):
 
     def interact_with_titanium_leg(self, item):
         dented = DentedCan("dented_can")
-        self.state.add_item(dented)
-        self.state.replace_inventory_item(self.name, dented.name)
+        self.game.add_item(dented)
+        self.game.replace_inventory_item(self.name, dented.name)
         return Result("You club the can with the femur. The can gets dented,"
                       " but doesn't open.", soundfile="can_hit.ogg")
 
@@ -130,8 +130,8 @@ class CansOnShelf(Thing):
         starting_cans = self.get_data('cans_available')
         if starting_cans > 0:
             can = FullCan("full_can")
-            self.state.add_item(can)
-            self.state.add_inventory_item(can.name)
+            self.game.add_item(can)
+            self.game.add_inventory_item(can.name)
             self.set_data('cans_available', starting_cans - 1)
             self.set_interact('%icans' % (starting_cans - 1))
             if starting_cans == 1:
@@ -199,7 +199,7 @@ class Tubes(Thing):
         if self.get_data("status") == "blocked":
             return Result("It would get lost in the fronds.")
         else:
-            self.state.remove_inventory_item(item.name)
+            self.game.remove_inventory_item(item.name)
             self.set_data('status', 'replaced')
             self.set_interact("replaced")
             self.scene.set_data('life support status', 'replaced')
@@ -260,7 +260,7 @@ class Boomslang(Thing):
         return False
 
     def animate(self):
-        hiss = self.state.gd.sound.get_sound(self.HISS)
+        hiss = self.game.gd.sound.get_sound(self.HISS)
         if self.get_data('anim_pos') > -1:
             self.current_interact.animate()
             if self.get_data('anim_pos') > self.current_interact._anim_pos:
@@ -269,7 +269,7 @@ class Boomslang(Thing):
             else:
                 self.set_data('anim_pos', self.current_interact._anim_pos)
             return True
-        if randint(0, 30 * self.state.gd.constants.frame_rate) == 0:
+        if randint(0, 30 * self.game.gd.constants.frame_rate) == 0:
             self.set_interact('snake')
             self.set_data('anim_pos', 0)
             hiss.play()
@@ -297,7 +297,7 @@ class DetergentThing(Thing):
             return Result("The remaining bottles leak.")
         self.set_data('taken', True)
         self.set_interact('taken')
-        self.state.add_inventory_item('detergent_bottle')
+        self.game.add_inventory_item('detergent_bottle')
         return Result("You pick up an empty dishwashing liquid bottle. You"
                       " can't find any sponges.")
 

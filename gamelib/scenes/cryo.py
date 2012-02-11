@@ -139,7 +139,7 @@ class Cryo(Scene):
                     "the ship. Your behaviour during this time will "
                     "be noted on your record and will be relayed to "
                     "prison officials when we reach the destination. "
-                    "Please report to the bridge." % PLAYER_ID, self.state)
+                    "Please report to the bridge." % PLAYER_ID, self.game)
 
     def leave(self):
         # Stop music
@@ -159,18 +159,18 @@ class CryoPipeBase(Thing):
         if self.get_data('fixed'):
             self.set_data('fixed', False)
             pipe = TubeFragment('tube_fragment')
-            self.state.add_item(pipe)
-            self.state.add_inventory_item(pipe.name)
+            self.game.add_item(pipe)
+            self.game.add_inventory_item(pipe.name)
             self.set_interact("chopped")
             responses = [Result("It takes more effort than one would expect,"
                 " but eventually the pipe is separated from the wall.",
                 soundfile="chop-chop.ogg")]
-            if self.state.current_scene.get_data('vandalism_warn'):
-                self.state.current_scene.set_data('vandalism_warn', False)
+            if self.game.current_scene.get_data('vandalism_warn'):
+                self.game.current_scene.set_data('vandalism_warn', False)
                 responses.append(make_jim_dialog(
                     ("Prisoner %s. Vandalism is an offence punishable by a "
                      "minimum of an additional 6 months to your sentence."
-                    ) % PLAYER_ID, self.state))
+                    ) % PLAYER_ID, self.game))
             return responses
 
     def is_interactive(self, tool=None):
@@ -361,7 +361,7 @@ class CryoRoomDoor(Door):
                     " other side is preventing it from opening completely.",
                     soundfile='chain.ogg')
         else:
-            self.state.set_current_scene('map')
+            self.game.set_current_scene('map')
             return None
 
     def interact_default(self, item):
@@ -420,8 +420,8 @@ class TitaniumLegThing(Thing):
     INITIAL = "leg"
 
     def interact_without(self):
-        self.state.add_inventory_item('titanium_leg')
-        self.state.current_scene.things['cryo.unit.1'].set_data(
+        self.game.add_inventory_item('titanium_leg')
+        self.game.current_scene.things['cryo.unit.1'].set_data(
                 'contains_titanium_leg', False)
         self.scene.remove_thing(self)
         return Result("The skeletal occupant of this cryo unit has an"
@@ -477,8 +477,8 @@ class CryoPools(Thing):
 
     def interact_with_detergent_bottle(self, item):
         full = FullBottle('full_detergent_bottle')
-        self.state.add_item(full)
-        self.state.replace_inventory_item(item.name, full.name)
+        self.game.add_item(full)
+        self.game.replace_inventory_item(item.name, full.name)
         return Result("You scoop up some coolant and fill the bottle.")
 
 
@@ -494,7 +494,7 @@ class CryoCompDetail(Scene):
             self.FOLDER, self.BACKGROUND_FIXED)
 
     def draw_background(self, surface):
-        if self.state.scenes['engine'].get_data('engine online'):
+        if self.game.scenes['engine'].get_data('engine online'):
             surface.blit(self._background_fixed, self.OFFSET, None)
         else:
             surface.blit(self._background, self.OFFSET, None)

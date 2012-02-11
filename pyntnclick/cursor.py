@@ -81,7 +81,7 @@ class CursorWidget(Widget):
         self.draw_cursor(self.get_root().surface)
 
     def draw_cursor(self, surface):
-        self.set_cursor(self.screen.state.tool)
+        self.set_cursor(self.screen.game.tool)
         self.cursor.set_highlight(self.cursor_highlight())
         if self.cursor is not None:
             self._cursor_group.update()
@@ -110,9 +110,9 @@ class CursorWidget(Widget):
     def cursor_highlight(self):
         if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
             return False
-        if self.screen.state.highlight_override:
+        if self.screen.game.highlight_override:
             return True
-        current_thing = self.screen.state.current_thing
+        current_thing = self.screen.game.current_thing
         if current_thing:
             return current_thing.is_interactive()
         return False

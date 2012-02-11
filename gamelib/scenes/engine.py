@@ -131,7 +131,7 @@ class Engine(Scene):
             return make_jim_dialog("The engines are now operational. You have"
                                    "done a satisfactory job, Prisoner %s."
                                    % PLAYER_ID,
-                                   self.state)
+                                   self.game)
 
     def enter(self):
         if self.get_data('greet'):
@@ -176,7 +176,7 @@ class CanOpenerThing(Thing):
         return "A can opener. Looks like you won't be starving"
 
     def interact_without(self):
-        self.state.add_inventory_item('canopener')
+        self.game.add_inventory_item('canopener')
         self.scene.remove_thing(self)
         return Result("You pick up the can opener. It looks brand new; "
                       "the vacuum has kept it in perfect condition.")
@@ -237,7 +237,7 @@ class SuperconductorSocket(Thing):
             self.set_interact('fixed')
             self.set_data('present', True)
             self.set_data('working', True)
-            self.state.remove_inventory_item(item.name)
+            self.game.remove_inventory_item(item.name)
             results = [Result("The chair's superconductor looks over-specced "
                               "for this job, but it should work.")]
             results.append(self.scene.engine_online_check())
@@ -294,7 +294,7 @@ class CryoContainerReceptacle(Thing):
         if not self.scene.things['engine.cracked_pipe'].get_data('fixed'):
             return Result("Pouring the precious cryo fluid into a"
                     " container connected to a cracked pipe would be a waste.")
-        self.state.remove_inventory_item(item.name)
+        self.game.remove_inventory_item(item.name)
         self.scene.things['engine.cryo_containers'].set_data('filled', True)
         self.scene.things['engine.cryo_containers'].set_interact('full')
         results = [Result("You fill the reservoirs. "
@@ -542,7 +542,7 @@ class EngineCompDetail(Scene):
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET
-        engine = self.state.scenes['engine']
+        engine = self.game.scenes['engine']
         if not engine.things['engine.cracked_pipe'].get_data('fixed'):
             image = self._alert_messages['cryo leaking']
             surface.blit(image, (xpos, ypos))

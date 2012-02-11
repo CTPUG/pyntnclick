@@ -22,7 +22,7 @@ class Result(object):
 
     def play_sound(self, scene_widget):
         if self.soundfile:
-            sound = scene_widget.state.gd.sound.get_sound(self.soundfile)
+            sound = scene_widget.game.gd.sound.get_sound(self.soundfile)
             sound.play()
 
     def process(self, scene_widget):
@@ -52,7 +52,7 @@ def handle_result(result, scene_widget):
                     res.process(scene_widget)
 
 
-class GameState(object):
+class Game(object):
     """Complete game state.
 
     Game state consists of:
@@ -73,6 +73,8 @@ class GameState(object):
         self.inventory = []
         # currently selected tool (item)
         self.tool = None
+        # Global game data
+        self.data = {}
         # current scene
         self.current_scene = None
         # current detail view
@@ -92,15 +94,15 @@ class GameState(object):
         self.debug_rects = value
 
     def add_scene(self, scene):
-        scene.set_state(self)
+        scene.set_game(self)
         self.scenes[scene.name] = scene
 
     def add_detail_view(self, detail_view):
-        detail_view.set_state(self)
+        detail_view.set_game(self)
         self.detail_views[detail_view.name] = detail_view
 
     def add_item(self, item):
-        item.set_state(self)
+        item.set_game(self)
         self.items[item.name] = item
 
     def load_scenes(self, modname):
@@ -205,14 +207,14 @@ class GameDeveloperGizmo(object):
 
     def __init__(self):
         """Set """
-        self.state = None
+        self.game = None
         self.gd = None
         self.resource = None
         self.sound = None
 
-    def set_state(self, state):
-        self.state = state
-        self.gd = state.gd
+    def set_game(self, game):
+        self.game = game
+        self.gd = game.gd
         self.resource = self.gd.resource
         self.sound = self.gd.sound
         self.setup()
@@ -230,20 +232,31 @@ class StatefulGizmo(GameDeveloperGizmo):
 
     # initial data (optional, defaults to none)
     INITIAL_DATA = None
+    STATE_KEY = None
 
     def __init__(self):
         GameDeveloperGizmo.__init__(self)
-        self.data = {}
-        if self.INITIAL_DATA:
-            # deep copy of INITIAL_DATA allows lists, sets and
-            # other mutable types to safely be used in INITIAL_DATA
-            self.data.update(copy.deepcopy(self.INITIAL_DATA))
+        self.state_key = self.STATE_KEY
+        self.state = None  # set this with set_state if required
+
+    def set_state(self, state):
+        """Set the state object and initialize if needed"""
+        self.state = state
+        if self.state_key not in self.state:
+            self.state[self.state_key] = {}
+            if self.INITIAL_DATA:
+                # deep copy of INITIAL_DATA allows lists, sets and
+                # other mutable types to safely be used in INITIAL_DATA
+                self.state[self.state_key].update(
+                        copy.deepcopy(self.INITIAL_DATA))
 
     def set_data(self, key, value):
-        self.data[key] = value
+        if self.state:
+            self.state[self.state_key][key] = value
 
     def get_data(self, key):
-        return self.data.get(key, None)
+        if self.state:
+            return self.state[self.state_key].get(key, None)
 
 
 class Scene(StatefulGizmo):
@@ -265,27 +278,32 @@ class Scene(StatefulGizmo):
         StatefulGizmo.__init__(self)
         # scene name
         self.name = self.NAME if self.NAME is not None else self.FOLDER
+        self.state_key = self.name
         # map of thing names -> Thing objects
         self.things = {}
         self._background = None
 
+    def set_game(self, game):
+        super(Scene, self).set_game(game)
+        self.set_state(game.data)
+
     def add_item(self, item):
-        self.state.add_item(item)
+        self.game.add_item(item)
 
     def add_thing(self, thing):
         self.things[thing.name] = thing
-        thing.set_state(self.state)
+        thing.set_game(self.game)
         thing.set_scene(self)
 
     def remove_thing(self, thing):
         del self.things[thing.name]
-        if thing is self.state.current_thing:
-            self.state.current_thing.leave()
-            self.state.current_thing = None
+        if thing is self.game.current_thing:
+            self.game.current_thing.leave()
+            self.game.current_thing = None
 
     def _get_description(self):
-        text = (self.state.current_thing and
-                self.state.current_thing.get_description())
+        text = (self.game.current_thing and
+                self.game.current_thing.get_description())
         if text is None:
             return None
         label = BoomLabel(text)
@@ -332,8 +350,8 @@ class Scene(StatefulGizmo):
 
         Returns a Result object to provide feedback to the player.
         """
-        if self.state.current_thing is not None:
-            return self.state.current_thing.interact(item)
+        if self.game.current_thing is not None:
+            return self.game.current_thing.interact(item)
 
     def animate(self):
         """Animate all the things in the scene.
@@ -352,14 +370,14 @@ class Scene(StatefulGizmo):
         return None
 
     def update_current_thing(self, pos):
-        if self.state.current_thing is not None:
-            if not self.state.current_thing.contains(pos):
-                self.state.current_thing.leave()
-                self.state.current_thing = None
+        if self.game.current_thing is not None:
+            if not self.game.current_thing.contains(pos):
+                self.game.current_thing.leave()
+                self.game.current_thing = None
         for thing in self.things.itervalues():
             if thing.contains(pos):
-                thing.enter(self.state.tool)
-                self.state.current_thing = thing
+                thing.enter(self.game.tool)
+                self.game.current_thing = thing
                 break
 
     def mouse_move(self, pos):
@@ -430,6 +448,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.name = self.NAME
         # folder for resource (None is overridden by scene folder)
         self.folder = self.FOLDER
+        self.state_key = self.NAME
         # interacts
         self.interacts = self.INTERACTS
         # these are set by set_scene
@@ -453,7 +472,8 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.scene = scene
         if self.folder is None:
             self.folder = scene.FOLDER
-        self.state = scene.state
+        self.game = scene.game
+        self.set_state(self.game.data)
         for interact in self.interacts.itervalues():
             interact.set_thing(self)
         self.set_interact(self.INITIAL)
@@ -495,7 +515,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
             self.current_interact.rect = old_rect.move(self.scene.OFFSET)
         self.current_interact.draw(surface)
         self.current_interact.rect = old_rect
-        if self.state.debug_rects and self._interact_hilight_color:
+        if self.game.debug_rects and self._interact_hilight_color:
             if hasattr(self.rect, 'collidepoint'):
                 frame_rect(surface, self._interact_hilight_color,
                         self.rect.inflate(1, 1), 1)

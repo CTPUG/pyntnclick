@@ -40,13 +40,13 @@ class Map(Scene):
                 "Under the terms of the emergency conscription "
                 "act, I have downloaded the ship's schematics to your "
                 "neural implant to help you navigate around the ship.",
-                self.state)
+                self.game)
             if ai1:
                 return ai1, make_jim_dialog("Prisoner %s, you are a "
                 "class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
                 "of an additional 3 years on your sentence." % PLAYER_ID,
-                self.state)
+                self.game)
 
 
 class DoorThing(Thing):
@@ -56,8 +56,8 @@ class DoorThing(Thing):
 
     def interact(self, _item):
         """Go to destination."""
-        if self.DEST in self.state.scenes:
-            self.state.set_current_scene(self.DEST)
+        if self.DEST in self.game.scenes:
+            self.game.set_current_scene(self.DEST)
 
 
 class ToCryo(DoorThing):
@@ -124,7 +124,7 @@ class ToEngine(DoorThing):
     INITIAL = 'door'
 
     def interact(self, item):
-        if not self.state.is_in_inventory('helmet'):
+        if not self.game.is_in_inventory('helmet'):
             return Result('The airlock refuses to open. The automated'
                     ' voice says: "Hull breach beyond this door. Personnel'
                     ' must be equipped for vacuum before entry."')

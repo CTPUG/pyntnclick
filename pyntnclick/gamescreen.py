@@ -32,37 +32,37 @@ class InventoryView(PaletteView):
         PaletteView.__init__(self, (BUTTON_SIZE, BUTTON_SIZE), 1, 6,
                              scrolling=True)
         self.screen = screen
-        self.state = screen.state
+        self.game = screen.game
         self.state_widget = screen.state_widget
 
     def num_items(self):
-        return len(self.state.inventory)
+        return len(self.game.inventory)
 
     def draw_item(self, surface, item_no, rect):
-        item_image = self.state.inventory[item_no].get_inventory_image()
+        item_image = self.game.inventory[item_no].get_inventory_image()
         surface.blit(item_image, rect, None)
 
     def click_item(self, item_no, event):
-        item = self.state.inventory[item_no]
+        item = self.game.inventory[item_no]
         if self.item_is_selected(item_no):
             self.unselect()
-        elif item.is_interactive(self.state.tool):
-            result = item.interact(self.state.tool)
+        elif item.is_interactive(self.game.tool):
+            result = item.interact(self.game.tool)
             handle_result(result, self.state_widget)
         else:
-            self.state.set_tool(self.state.inventory[item_no])
+            self.game.set_tool(self.game.inventory[item_no])
 
     def mouse_down(self, event):
         if event.button != 1:
-            self.state.cancel_doodah(self.screen)
+            self.game.cancel_doodah(self.screen)
         else:
             PaletteView.mouse_down(self, event)
 
     def item_is_selected(self, item_no):
-        return self.state.tool is self.state.inventory[item_no]
+        return self.game.tool is self.game.inventory[item_no]
 
     def unselect(self):
-        self.state.set_tool(None)
+        self.game.set_tool(None)
 
 
 class StateWidget(Widget):
@@ -70,45 +70,45 @@ class StateWidget(Widget):
     def __init__(self, screen):
         Widget.__init__(self, Rect(0, 0, SCENE_SIZE[0], SCENE_SIZE[1]))
         self.screen = screen
-        self.state = screen.state
+        self.game = screen.game
         self.detail = DetailWindow(screen)
 
     def draw(self, surface):
-        if self.state.previous_scene and self.state.do_check == LEAVE:
+        if self.game.previous_scene and self.game.do_check == LEAVE:
             # We still need to handle leave events, so still display the scene
-            self.state.previous_scene.draw(surface, self)
+            self.game.previous_scene.draw(surface, self)
         else:
-            self.state.current_scene.draw(surface, self)
+            self.game.current_scene.draw(surface, self)
 
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1:  # We have a right/middle click
-            self.state.cancel_doodah(self.screen)
+            self.game.cancel_doodah(self.screen)
         elif self.subwidgets:
             self.clear_detail()
             self._mouse_move(event.pos)
         else:
-            result = self.state.interact(event.pos)
+            result = self.game.interact(event.pos)
             handle_result(result, self)
 
     def animate(self):
-        if self.state.animate():
+        if self.game.animate():
             # queue a redraw
             self.invalidate()
         # We do this here so we can get enter and leave events regardless
         # of what happens
-        result = self.state.check_enter_leave(self.screen)
+        result = self.game.check_enter_leave(self.screen)
         handle_result(result, self)
 
     def mouse_move(self, event):
-        self.state.highlight_override = False
+        self.game.highlight_override = False
         if not self.subwidgets:
             self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.highlight_override = False
-        self.state.current_scene.mouse_move(pos)
-        self.state.old_pos = pos
+        self.game.highlight_override = False
+        self.game.current_scene.mouse_move(pos)
+        self.game.old_pos = pos
 
     def show_message(self, message, style=None):
         # Display the message as a modal dialog
@@ -123,17 +123,17 @@ class StateWidget(Widget):
 
     def show_detail(self, detail):
         self.clear_detail()
-        detail_obj = self.state.set_current_detail(detail)
+        detail_obj = self.game.set_current_detail(detail)
         self.detail.set_image_rect(Rect((0, 0), detail_obj.get_detail_size()))
         self.add_centered(self.detail)
-        self.state.do_enter_detail()
+        self.game.do_enter_detail()
 
     def clear_detail(self):
         """Hide the detail view"""
-        if self.state.current_detail is not None:
+        if self.game.current_detail is not None:
             self.remove(self.detail)
-            self.state.do_leave_detail()
-            self.state.set_current_detail(None)
+            self.game.do_leave_detail()
+            self.game.set_current_detail(None)
             self._mouse_move(mouse.get_pos())
 
     def end_game(self):
@@ -146,7 +146,7 @@ class DetailWindow(Widget):
         Widget.__init__(self)
         self.image_rect = None
         self.screen = screen
-        self.state = screen.state
+        self.game = screen.game
         self.border_width = 5
         self.border_color = (0, 0, 0)
         # parent only gets set when we get added to the scene
@@ -171,15 +171,15 @@ class DetailWindow(Widget):
         overlay = scene_surface.convert_alpha()
         overlay.fill(Color(0, 0, 0, 191))
         scene_surface.blit(overlay, (0, 0))
-        self.state.current_detail.draw(
+        self.game.current_detail.draw(
             surface.subsurface(self.image_rect), self)
 
     def mouse_down(self, event):
         self.mouse_move(event)
         if event.button != 1:  # We have a right/middle click
-            self.state.cancel_doodah(self.screen)
+            self.game.cancel_doodah(self.screen)
         else:
-            result = self.state.interact_detail(
+            result = self.game.interact_detail(
                 self.global_to_local(event.pos))
             handle_result(result, self)
 
@@ -187,8 +187,8 @@ class DetailWindow(Widget):
         self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
-        self.state.highlight_override = False
-        self.state.current_detail.mouse_move(self.global_to_local(pos))
+        self.game.highlight_override = False
+        self.game.current_detail.mouse_move(self.global_to_local(pos))
 
     def show_message(self, message, style=None):
         self.parent.show_message(message, style)
@@ -220,7 +220,7 @@ class GameScreen(Screen, CursorWidget):
 
     def start_game(self):
         self._clear_all()
-        self.state = self.create_initial_state()
+        self.game = self.create_initial_state()
         self.state_widget = StateWidget(self)
         self.add(self.state_widget)
 

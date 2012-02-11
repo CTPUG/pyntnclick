@@ -162,7 +162,7 @@ class MassageChair(Thing):
     INITIAL = 'chair'
 
     def get_description(self):
-        return self.state.current_scene.things['bridge.massagechair_base'] \
+        return self.game.current_scene.things['bridge.massagechair_base'] \
                    .get_description()
 
     def is_interactive(self, tool=None):
@@ -191,7 +191,7 @@ class StethoscopeThing(Thing):
         return "A stethoscope hangs from the neck of the skeleton."
 
     def interact_without(self):
-        self.state.add_inventory_item('stethoscope')
+        self.game.add_inventory_item('stethoscope')
         self.scene.remove_thing(self)
         # Fill in the doctor's rect
         self.scene.doctor.rect.append(self.rect)
@@ -214,8 +214,8 @@ class Superconductor(Item):
 
     def interact_with_duct_tape(self, item):
         taped_superconductor = TapedSuperconductor('taped_superconductor')
-        self.state.add_item(taped_superconductor)
-        self.state.replace_inventory_item(self.name, taped_superconductor.name)
+        self.game.add_item(taped_superconductor)
+        self.game.replace_inventory_item(self.name, taped_superconductor.name)
         return Result("You rip off a piece of duct tape and stick it on the"
                       " superconductor. It almost sticks to itself, but you"
                       " successfully avoid disaster.")
@@ -233,15 +233,15 @@ class SuperconductorThing(Thing):
     INITIAL = 'superconductor'
 
     def interact_without(self):
-        self.state.add_inventory_item('superconductor')
-        self.state.current_scene.things['bridge.massagechair_base'] \
+        self.game.add_inventory_item('superconductor')
+        self.game.current_scene.things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
         return (Result("The superconductor module unclips easily."),
                 make_jim_dialog(("Prisoner %s. That chair you've destroyed"
                                  " was property of the ship's captain. "
                                  "You will surely be punished."
-                                 % PLAYER_ID), self.state))
+                                 % PLAYER_ID), self.game))
 
 
 class StarField(Thing):
@@ -360,7 +360,7 @@ class JimPanel(Thing):
             return (Result('You feel a shock from the panel.'),
                     make_jim_dialog("Prisoner %s. Please step away from the"
                                     " panel. You are not an authorized"
-                                    " technician." % PLAYER_ID, self.state))
+                                    " technician." % PLAYER_ID, self.game))
 
 
 class ChairDetail(Scene):
@@ -388,11 +388,11 @@ class LogTab(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'log'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') != 'log'
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'log')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -408,12 +408,12 @@ class AlertTab(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return (self.state.detail_views[self.COMPUTER].get_data('tab')
+        return (self.game.detail_views[self.COMPUTER].get_data('tab')
                 != 'alert')
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'alert')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -429,11 +429,11 @@ class NavTab(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'nav'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') != 'nav'
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'nav')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'nav')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -456,19 +456,19 @@ class DestNavPageLine(Thing):
         self.set_interact('line')
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'nav'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') == 'nav'
 
     def interact_without(self):
-        if self.state.scenes['bridge'].get_data('ai status') == 'online':
+        if self.game.scenes['bridge'].get_data('ai status') == 'online':
             return make_jim_dialog("You are not authorized to change the"
-                                   " destination.", self.state)
+                                   " destination.", self.game)
         if not self.ai_blocked:
             return Result("There's no good reason to choose to go to the"
                           " penal colony.")
-        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
+        if self.game.scenes['bridge'].get_data('ai status') == 'looping':
             return Result("You could change the destination, but when JIM"
                           " recovers, it'll just get reset.")
-        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
+        if self.game.scenes['bridge'].get_data('ai status') == 'dead':
             return Result("You change the destination.",
                           soundfile="beep550.ogg", end_game=True)
 
@@ -485,14 +485,14 @@ class CompUpButton(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        tab = self.game.detail_views[self.COMPUTER].get_data('tab')
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
         return tab == 'log' and page > 0
 
     def interact_without(self):
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        self.state.detail_views[self.COMPUTER].set_data('log page', page - 1)
-        self.state.detail_views[self.COMPUTER].set_background()
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        self.game.detail_views[self.COMPUTER].set_data('log page', page - 1)
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -508,15 +508,15 @@ class CompDownButton(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        max_page = self.state.detail_views[self.COMPUTER].get_data('max page')
+        tab = self.game.detail_views[self.COMPUTER].get_data('tab')
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        max_page = self.game.detail_views[self.COMPUTER].get_data('max page')
         return tab == 'log' and (page + 1) < max_page
 
     def interact_without(self):
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        self.state.detail_views[self.COMPUTER].set_data('log page', page + 1)
-        self.state.detail_views[self.COMPUTER].set_background()
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        self.game.detail_views[self.COMPUTER].set_data('log page', page + 1)
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -618,9 +618,9 @@ class BridgeCompDetail(Scene):
                 thing.scene = None
 
     def _get_nav_page(self):
-        if not self.state.scenes['engine'].get_data('engine online'):
+        if not self.game.scenes['engine'].get_data('engine online'):
             return self._nav_messages['engine offline']
-        elif (not self.state.scenes['mess'].get_data('life support status')
+        elif (not self.game.scenes['mess'].get_data('life support status')
               == 'fixed'):
             return self._nav_messages['life support']
         else:
@@ -631,24 +631,24 @@ class BridgeCompDetail(Scene):
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET
-        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
+        if self.game.scenes['bridge'].get_data('ai status') == 'looping':
             surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
             ypos += (self._alert_messages['ai looping'].get_size()[1]
                      + self.ALERT_SPACING)
-        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
+        if self.game.scenes['bridge'].get_data('ai status') == 'dead':
             surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
             ypos += (self._alert_messages['ai offline'].get_size()[1]
                      + self.ALERT_SPACING)
-        if not self.state.scenes['engine'].get_data('engine online'):
+        if not self.game.scenes['engine'].get_data('engine online'):
             surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
             ypos += (self._alert_messages['engine offline'].get_size()[1]
                      + self.ALERT_SPACING)
-        if (self.state.scenes['mess'].get_data('life support status')
+        if (self.game.scenes['mess'].get_data('life support status')
             == 'broken'):
             surface.blit(self._alert_messages['life support'], (xpos, ypos))
             ypos += (self._alert_messages['life support'].get_size()[1]
                      + self.ALERT_SPACING)
-        if (self.state.scenes['mess'].get_data('life support status')
+        if (self.game.scenes['mess'].get_data('life support status')
             == 'replaced'):
             surface.blit(self._alert_messages['life support partial'],
                          (xpos, ypos))
