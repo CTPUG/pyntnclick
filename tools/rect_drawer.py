@@ -19,16 +19,16 @@ from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            BLEND_RGBA_MIN, SRCALPHA)
 import pygame
 
-from gamelib import constants
+from pyntnclick import constants
 constants.DEBUG = True
 MENU_WIDTH = 200
 MENU_BUTTON_HEIGHT = 25
 ZOOM = 4
 ZOOM_STEP = 100
 
-from gamelib import state
+from pyntnclick import state
 state.DEBUG_RECTS = True
-from gamelib.widgets import BoomLabel
+from pyntnclick.widgets import BoomLabel
 
 
 class AppPalette(PaletteView):
