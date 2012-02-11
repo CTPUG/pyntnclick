@@ -36,8 +36,8 @@ class Resources(object):
             paths.append(resource_filename(module, resource_path))
         return paths
 
-    def load_image(self, image_name, mutators=()):
-        image_path = self.get_resource_path('images', image_name)
+    def load_image(self, image_name, mutators=(), basedir='images'):
+        image_path = self.get_resource_path(basedir, image_name)
 
         if image_path not in self._image_cache:
             image = pygame.image.load(image_path)

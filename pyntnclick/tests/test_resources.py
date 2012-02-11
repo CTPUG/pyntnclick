@@ -51,3 +51,14 @@ class ResourcesTestCase(TestCase):
     def test_load_image(self):
         image = self.res.load_image('pyntnclick/hand.png')
         self.assertTrue(isinstance(image, Surface))
+
+    def test_load_image_different_basedir(self):
+        image = self.res.load_image('hand.png', basedir='images/pyntnclick')
+        self.assertTrue(isinstance(image, Surface))
+
+    def test_load_missing(self):
+        try:
+            self.res.load_image('should_not_exist')
+            self.fail('Expected ResourceNotFound error.')
+        except ResourceNotFound, e:
+            self.assertEqual('images/should_not_exist', e.args[0])
