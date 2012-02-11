@@ -39,4 +39,4 @@ class MenuScreen(Screen):
             self.shell.show_screen(self.shell.game_screen)
 
     def quit(self, ev, widget):
-        pygame.event.Event(QUIT)
+        pygame.event.post(pygame.event.Event(QUIT))
