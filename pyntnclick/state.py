@@ -2,7 +2,6 @@
 
 import copy
 
-from albow.resource import get_image
 from albow.utils import frame_rect
 from widgets import BoomLabel
 from pygame.rect import Rect
@@ -281,7 +280,8 @@ class Scene(StatefulGizmo):
 
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
-            self._background = get_image(self.FOLDER, self.BACKGROUND)
+            self._background = self.state.gd.resource.load_image(
+                    (self.FOLDER, self.BACKGROUND))
 
     def draw_background(self, surface):
         self._cache_background()
@@ -504,7 +504,8 @@ class Item(InteractiveMixin):
 
     def _cache_inventory_image(self):
         if not self.inventory_image:
-            self.inventory_image = get_image('items', self.INVENTORY_IMAGE)
+            self.inventory_image = self.state.resource.load_image(
+                    'items', self.INVENTORY_IMAGE)
 
     def set_state(self, state):
         assert self.state is None

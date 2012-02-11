@@ -3,7 +3,6 @@
 # Victory screen for the game
 
 from albow.screen import Screen
-from albow.resource import get_image
 
 from pyntnclick.widgets import BoomImageButton
 
@@ -16,7 +15,8 @@ class EndImageButton(BoomImageButton):
 class EndScreen(Screen):
     def __init__(self, shell, game_description):
         Screen.__init__(self, shell)
-        self.background = get_image('won', 'won.png')
+        self.background = game_description.resource.load_image(
+                ('won', 'won.png'))
         self._menu_button = EndImageButton('menu.png', 26, 500,
                 action=self.main_menu)
         self._quit_button = EndImageButton('quit.png', 250, 500,

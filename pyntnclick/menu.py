@@ -3,7 +3,6 @@
 # Main menu for the game
 
 from albow.screen import Screen
-from albow.resource import get_image
 
 from pyntnclick.widgets import BoomImageButton
 
@@ -16,7 +15,8 @@ class SplashButton(BoomImageButton):
 class MenuScreen(Screen):
     def __init__(self, shell, game_description):
         Screen.__init__(self, shell)
-        self._background = get_image('splash', 'splash.png')
+        self._background = game_description.resource.load_image(
+                ('splash', 'splash.png'))
         self._start_button = SplashButton('play.png', 16, 523, self.start)
         self._resume_button = SplashButton('resume.png', 256, 523, self.resume,
                                            enable=self.check_running)
