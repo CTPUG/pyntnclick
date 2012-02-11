@@ -1,6 +1,8 @@
 # widgets.py
 # Copyright Boomslang team, 2010 (see COPYING File)
 
+# XXX: This should be deleted when albow is gone
+
 """Custom Albow widgets"""
 
 import textwrap
