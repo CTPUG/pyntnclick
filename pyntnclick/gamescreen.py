@@ -222,7 +222,9 @@ class GameScreen(Screen):
 
     def start_game(self):
         self._clear_all()
-        rect = Rect((0, 0) + self.surface_size)
+        toolbar_height = self.game_description.constants.button_size
+        rect = Rect(0, 0, self.surface_size[0],
+                    self.surface_size[1] - toolbar_height)
         self.game = self.create_initial_state()
         self.state_widget = StateWidget(rect, self)
         self.container.add(self.state_widget)
