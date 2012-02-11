@@ -27,6 +27,7 @@ class MenuScreen(Screen):
         self.surface.blit(self._background, self.surface.get_rect())
 
     def start(self, ev, widget):
+        self.screen_event('game', 'restart')
         self.change_screen('game')
 
     def check_running(self):

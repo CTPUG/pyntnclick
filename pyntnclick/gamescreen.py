@@ -215,6 +215,10 @@ class GameScreen(Screen):
         for widget in self.container.children[:]:
             self.container.remove(widget)
 
+    def process_event(self, event_name, data):
+        if event_name == 'restart':
+            self.start_game()
+
     def start_game(self):
         self._clear_all()
         self.game = self.create_initial_state()

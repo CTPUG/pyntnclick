@@ -36,6 +36,9 @@ class Engine(object):
                     return
                 elif ScreenChangeEvent.matches(ev):
                     self.set_screen(ev.screen_name)
+                elif ScreenEvent.matches(ev):
+                    self.screens[ev.screen_name].process_event(ev.event_name,
+                                                               ev.data)
                 else:
                     self._screen.dispatch(ev)
             surface = pygame.display.get_surface()
@@ -94,6 +97,12 @@ class Screen(object):
     def change_screen(self, new_screen_name):
         ScreenChangeEvent.post(new_screen_name)
 
+    def screen_event(self, screen_name, event_name, data=None):
+        ScreenEvent.post(screen_name, event_name, data)
+
+    def process_event(self, event_name, data):
+        pass
+
 
 class UserEvent(object):
     """A user event type allowing subclassing,
@@ -119,3 +128,13 @@ class ScreenChangeEvent(UserEvent):
     @classmethod
     def post(cls, screen_name):
         super(ScreenChangeEvent, cls).post(screen_name=screen_name)
+
+
+class ScreenEvent(UserEvent):
+
+    TYPE = "SCREEN_EVENT"
+
+    @classmethod
+    def post(cls, screen_name, event_name, data):
+        super(ScreenEvent, cls).post(screen_name=screen_name,
+                                     event_name=event_name, data=data)
