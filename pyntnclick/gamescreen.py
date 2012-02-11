@@ -89,9 +89,9 @@ class StateWidget(Widget):
             handle_result(result, self)
 
     def animate(self):
-        if self.game.animate():
+        # XXX: if self.game.animate():
             # queue a redraw
-            self.invalidate()
+        #    self.invalidate()
         # We do this here so we can get enter and leave events regardless
         # of what happens
         result = self.game.check_enter_leave(self.screen)
@@ -112,12 +112,12 @@ class StateWidget(Widget):
         print message
         # XXX: MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
-        self.invalidate()
+        # XXX: self.invalidate()
         # The cursor could have gone anywhere
-        if self.subwidgets:
-            self.subwidgets[0]._mouse_move(mouse.get_pos())
-        else:
-            self._mouse_move(mouse.get_pos())
+        # XXX: if self.subwidgets:
+        #    self.subwidgets[0]._mouse_move(mouse.get_pos())
+        # else:
+        #    self._mouse_move(mouse.get_pos())
 
     def show_detail(self, detail):
         self.clear_detail()
