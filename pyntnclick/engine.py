@@ -16,7 +16,7 @@ class Engine(object):
     def set_screen(self, screen_name):
         if self._screen is not None:
             self._screen.on_exit()
-        self._screen = self.screens.get(screen_name, None)
+        self._screen = self.screens[screen_name]
         if self._screen is not None:
             self._screen.on_enter()
 

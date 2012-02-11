@@ -70,7 +70,7 @@ class GameDescription(object):
         initial_state = state.Game(self)
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
-            initial_state.load_scenes(scene, self.engine)
+            initial_state.load_scenes(scene)
         initial_state.set_current_scene(self._initial_scene)
         initial_state.set_do_enter_leave()
         return initial_state
@@ -153,7 +153,7 @@ class GameDescription(object):
 
             self.engine = Engine(self)
             # Initialize the special screens in the engine
-            for name, cls in self.SPECIAL_SCENES.iteritems():
+            for name, cls in self.SPECIAL_SCREENS.iteritems():
                 screen = cls(self)
                 self.engine.add_screen(name, screen)
             # Should we allow the menu not to be the opening screen?
