@@ -5,6 +5,8 @@ import copy
 from widgets.text import LabelWidget
 from pygame.color import Color
 
+from pyntnclick.engine import ScreenEvent
+
 
 def frame_rect(surface, color, rect, thick=1):
     # FIXME: Stolen from albow
@@ -169,8 +171,12 @@ class Game(object):
             self.current_detail = self.detail_views[name]
             return self.current_detail
 
+    def _update_inventory(self):
+        ScreenEvent.post('game', 'inventory', None)
+
     def add_inventory_item(self, name):
         self.inventory.append(self.items[name])
+        self._update_inventory()
 
     def is_in_inventory(self, name):
         if name in self.items:
@@ -182,6 +188,7 @@ class Game(object):
         # Unselect tool if it's removed
         if self.tool == self.items[name]:
             self.set_tool(None)
+        self._update_inventory()
 
     def replace_inventory_item(self, old_item_name, new_item_name):
         """Try to replace an item in the inventory with a new one"""
@@ -192,6 +199,7 @@ class Game(object):
                 self.set_tool(self.items[new_item_name])
         except ValueError:
             return False
+        self._update_inventory()
         return True
 
     def set_tool(self, item):

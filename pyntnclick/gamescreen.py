@@ -105,9 +105,11 @@ class InventoryView(Container):
 
     def up_callback(self, event, widget):
         self.inv_offset = max(self.inv_offset - len(self.slots), 0)
+        self.update_slots()
 
     def down_callback(self, event, widget):
         self.inv_offset += len(self.slots)
+        self.update_slots()
 
     def update_slots(self):
         items = (self.slot_items + [None] * len(self.slots))[:len(self.slots)]
@@ -126,19 +128,11 @@ class InventoryView(Container):
             self.down_button.enable()
 
     def draw(self, surface):
-        self.update_slots()
         super(InventoryView, self).draw(surface)
 
     @property
     def slot_items(self):
         return self.game.inventory[self.inv_offset:][:len(self.slots)]
-
-    def draw_updown(self, surface):
-        rect = Rect((self.rect.width - self.updown_width, 0),
-                    (self.updown_width, self.rect.height))
-        s = Surface(rect.size)
-        s.fill(Color("blue"))
-        surface.blit(s, rect)
 
     def mouse_down(self, event, widget):
         if event.button != 1:
@@ -360,6 +354,8 @@ class GameScreen(CursorScreen):
     def process_event(self, event_name, data):
         if event_name == 'restart':
             self.start_game()
+        elif event_name == 'inventory':
+            self.inventory.update_slots()
 
     def start_game(self):
         self._clear_all()
