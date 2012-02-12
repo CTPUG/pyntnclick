@@ -9,7 +9,7 @@ import pygame.color
 import pygame.cursors
 import pygame.mouse
 
-from pyntnclick.widgets.base import Widget
+from pyntnclick.engine import Screen
 
 # XXX: Need a way to get at the constants
 from pyntnclick.constants import GameConstants
@@ -62,53 +62,39 @@ class CursorSprite(Sprite):
 HAND = CursorSprite('hand.png', 12, 0)
 
 
-class CursorWidget(Widget):
-    """Mix-in widget to ensure that mouse_move is propogated to parents"""
+class CursorScreen(Screen):
+    """A Screen with custom cursors"""
 
-    cursor = HAND
-    _cursor_group = RenderUpdates()
-    _loaded_cursor = None
+    def setup(self):
+        self._cursor_group = RenderUpdates()
+        self._loaded_cursor = None
+        self.set_cursor(None)
 
-    def __init__(self, screen, *args, **kwargs):
-        Widget.__init__(self, *args, **kwargs)
-        self.screen = screen
-
-    def enter_screen(self):
+    def on_enter(self):
+        super(CursorScreen, self).on_enter()
         pygame.mouse.set_visible(0)
 
-    def leave_screen(self):
+    def on_exit(self):
+        super(CursorScreen, self).on_exit()
         pygame.mouse.set_visible(1)
 
-    def draw_all(self, surface):
-        Widget.draw_all(self, surface)
-        self.draw_cursor(self.get_root().surface)
+    def draw(self, surface):
+        super(CursorScreen, self).draw(surface)
+        self.set_cursor(self.game.tool)
+        #XXX: self.cursor.set_highlight(self.cursor_highlight())
+        self._cursor_group.update()
+        self._cursor_group.draw(surface)
 
-    def draw_cursor(self, surface):
-        self.set_cursor(self.screen.game.tool)
-        self.cursor.set_highlight(self.cursor_highlight())
-        if self.cursor is not None:
-            self._cursor_group.update()
-            self._cursor_group.draw(surface)
-
-    def mouse_delta(self, event):
-        self.invalidate()
-
-    @classmethod
-    def set_cursor(cls, item):
+    def set_cursor(self, item):
         if item is None or item.CURSOR is None:
-            cls.cursor = HAND
+            cursor = HAND
         else:
-            cls.cursor = item.CURSOR
-        if cls.cursor != cls._loaded_cursor:
-            cls._loaded_cursor = cls.cursor
-            if cls.cursor is None:
-                pygame.mouse.set_visible(1)
-                cls._cursor_group.empty()
-            else:
-                pygame.mouse.set_visible(0)
-                cls.cursor.load()
-                cls._cursor_group.empty()
-                cls._cursor_group.add(cls.cursor)
+            cursor = item.CURSOR
+        if cursor != self._loaded_cursor:
+            self._loaded_cursor = cursor
+            self._loaded_cursor.load()
+            self._cursor_group.empty()
+            self._cursor_group.add(self._loaded_cursor)
 
     def cursor_highlight(self):
         if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):

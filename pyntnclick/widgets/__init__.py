@@ -13,7 +13,6 @@ from pygame.draw import lines as draw_lines
 from pygame import mouse
 
 from pyntnclick.widgets.base import Widget
-from pyntnclick.cursor import CursorWidget
 
 # XXX: Need a way to get at the constants.
 from pyntnclick.constants import GameConstants
@@ -105,7 +104,7 @@ class BoomButton(BoomLabel):
             ], w)
 
 
-class MessageDialog(BoomLabel, CursorWidget):
+class MessageDialog(Widget):  # WAS: BoomLabel, CursorWidget):
 
     def __init__(self, screen, text, wrap_width, style=None, **kwds):
         CursorWidget.__init__(self, screen)

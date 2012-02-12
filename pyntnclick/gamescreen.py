@@ -2,11 +2,11 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from pygame import Rect, mouse, Surface
+from pygame import Rect, Surface
 from pygame.color import Color
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
-from pyntnclick.cursor import CursorWidget
+from pyntnclick.cursor import CursorScreen
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
 from pyntnclick.widgets.base import Widget, Container
@@ -268,9 +268,10 @@ class ToolBar(Container):
         self.inventory.unselect()
 
 
-class GameScreen(Screen):
+class GameScreen(CursorScreen):
 
     def setup(self):
+        super(GameScreen, self).setup()
         self.running = False
         self.create_initial_state = self.gd.initial_state
         self.container.add_callback(KEYDOWN, self.key_pressed)
