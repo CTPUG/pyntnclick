@@ -1,9 +1,6 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
-import sys
-import os.path
-
 # XXX: Threw away albow
 #from albow.root import RootWidget
 #from albow.utils import frame_rect
@@ -677,6 +674,5 @@ class RectAppOld(RootWidget):
 def make_rect_display():
     pygame.display.init()
     pygame.font.init()
-    return pygame.display.set_mode((constants.screen[0]
-                                       + constants.menu_width,
-                                      constants.screen[1]))
+    pygame.display.set_mode((constants.screen[0]
+        + constants.menu_width, constants.screen[1]))

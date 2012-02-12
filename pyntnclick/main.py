@@ -136,7 +136,7 @@ class GameDescription(object):
         if self.constants.debug and opts.list_scenes:
             # FIXME: Horrible hack to avoid image loading issues for
             # now
-            display = pygame.display.set_mode(self.constants.screen,
+            pygame.display.set_mode(self.constants.screen,
                                               SWSURFACE)
             list_scenes(self.initial_state)
             sys.exit(0)
@@ -144,7 +144,7 @@ class GameDescription(object):
             if opts.scene is None:
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
-            display = make_rect_display()
+            make_rect_display()
             # FIXME: Remove Albow from here
             try:
                 self.engine = RectEngine(self, self.initial_state, opts.scene,
