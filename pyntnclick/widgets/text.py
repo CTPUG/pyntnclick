@@ -86,10 +86,13 @@ class TextButton(Button, TextWidget):
         self.rect.height = max(self.rect.height, height)
         self.surface = pygame.Surface(self.rect.size, SRCALPHA)
         self.surface.fill(0)
-        self.surface.blit(text, text.get_rect().move(self.padding,
-                                                     self.padding))
-        pygame.draw.rect(self.surface, color, self.surface.get_rect(),
-                         self.border)
+        offset = (
+            (self.rect.width - width) / 2 + self.padding,
+            (self.rect.height - height) / 2 + self.padding)
+        self.surface.blit(text, text.get_rect().move(offset))
+        if self.border:
+            pygame.draw.rect(self.surface, color, self.surface.get_rect(),
+                             self.border)
 
     def draw(self, surface):
         super(TextButton, self).draw(surface)

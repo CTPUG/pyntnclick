@@ -242,24 +242,26 @@ class ToolBar(Container):
         self.bg_color = (31, 31, 31)
         self.left = self.rect.left
 
-        # TODO: Menu button
-        # XXX: self.popup_menu = PopupMenu(self)
-        # XXX: self.menubutton = PopupMenuButton('Menu',
-        #        action=self.popup_menu.show_menu)
+        self.menu_button = self.add_tool(
+            0, TextButton, gd, "Menu", fontname="VeraBd.ttf", color="red",
+            padding=2, border=0)
+        self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 
         hand_image = gd.resource.get_image('items', 'hand.png')
         self.hand_button = self.add_tool(
-            hand_image.get_width(), ImageButtonWidget, gd, hand_image)
-        self.hand_button.add_callback(MOUSEBUTTONDOWN, self.hand_pressed)
+            None, ImageButtonWidget, gd, hand_image)
+        self.hand_button.add_callback(MOUSEBUTTONDOWN, self.hand_callback)
 
         self.inventory = self.add_tool(
             self.rect.width - self.left, InventoryView, gd, screen)
 
     def add_tool(self, width, cls, *args, **kw):
-        rect = Rect((self.left, self.rect.top), (width, self.rect.height))
+        rect = (self.left, self.rect.top)
+        if width is not None:
+            rect = Rect(rect, (width, self.rect.height))
         tool = cls(rect, *args, **kw)
         self.add(tool)
-        self.left += width
+        self.left += tool.rect.width
         return tool
 
     def draw(self, surface):
@@ -268,8 +270,11 @@ class ToolBar(Container):
         surface.blit(bg, self.rect)
         super(ToolBar, self).draw(surface)
 
-    def hand_pressed(self, event, widget):
+    def hand_callback(self, event, widget):
         self.inventory.unselect()
+
+    def menu_callback(self, event, widget):
+        self.screen.change_screen('menu')
 
 
 class GameScreen(CursorScreen):
@@ -312,14 +317,6 @@ class GameScreen(CursorScreen):
     def key_pressed(self, event, widget):
         if event.key == K_ESCAPE:
             self.change_screen('menu')
-
-    # albow callback:
-    def main_menu_cmd(self):
-        self.shell.show_screen(self.shell.menu_screen)
-
-    # albow callback:
-    def quit_cmd(self):
-        self.shell.quit()
 
 
 class DefEndScreen(Screen):
