@@ -26,6 +26,8 @@ class GameConstants(object):
     debug = _get_debug()
 
     font = 'Vera.ttf'
+    bold_font = 'VeraBd.ttf'
+    mono_font = 'Monospace.ttf'
     font_size = 16
     text_color = 'black'
     label_padding = 10

@@ -85,7 +85,7 @@ class AppImage(Container):
         self.current_image = None
         self.place_image_menu = None
         self.close_button = LabelWidget(pygame.Rect((0, 0), (200, 100)),
-                gd, 'Close', fontname='Vera.ttf', fontsize=20)
+                gd, 'Close', fontname=constants.bold_font, fontsize=20)
         self.close_button.fg_color = (0, 0, 0)
         self.close_button.bg_color = (0, 0, 0)
         self.draw_rects = True
@@ -528,7 +528,7 @@ class ModeLabel(LabelWidget):
     def __init__(self, rect, gd, app_image):
         self.app_image = app_image
         super(ModeLabel, self).__init__(rect,
-                gd, 'Mode : ', fontname='VeraBd.ttf',
+                gd, 'Mode : ', fontname=constants.bold_font,
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
 
     def draw_all(self, surface):
@@ -540,7 +540,7 @@ def make_button(text, gd, action, ypos):
     rect = pygame.rect.Rect(0, 0, constants.menu_width,
             constants.menu_button_height)
     rect.move_ip(805, ypos)
-    button = TextButton(rect, gd, text, fontname='Vera.ttf', fontsize=12,
+    button = TextButton(rect, gd, text, fontname=constants.font, fontsize=12,
             color=pygame.color.Color(255, 255, 0), border=1, padding=3)
     button.add_callback('clicked', action)
     return button

@@ -257,8 +257,8 @@ class ToolBar(Container):
         self.left = self.rect.left
 
         self.menu_button = self.add_tool(
-            0, TextButton, gd, "Menu", fontname="VeraBd.ttf", color="red",
-            padding=2, border=0)
+            0, TextButton, gd, "Menu", fontname=gd.constants.bold_font,
+            color="red", padding=2, border=0)
         self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 
         hand_image = gd.resource.get_image('items', 'hand.png')
