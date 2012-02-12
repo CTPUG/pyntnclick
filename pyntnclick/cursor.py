@@ -44,7 +44,7 @@ class CursorSprite(Sprite):
 
     def set_highlight(self, enable):
         if enable != self.highlighted:
-            self.load()
+            # Do we need this? self.load()
             self.highlighted = enable
             self.image = self.plain_image.copy()
             if enable:
@@ -74,7 +74,7 @@ class CursorScreen(Screen):
     def draw(self, surface):
         super(CursorScreen, self).draw(surface)
         self.set_cursor(self.game.tool)
-        #XXX: self.cursor.set_highlight(self.cursor_highlight())
+        self._loaded_cursor.set_highlight(self.cursor_highlight())
         self._cursor_group.update()
         self._cursor_group.draw(surface)
 
@@ -92,9 +92,10 @@ class CursorScreen(Screen):
     def cursor_highlight(self):
         #XXX: if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
         #XXX:     return False
-        if self.screen.game.highlight_override:
+        if self.game.highlight_override:
+            # TODO: What is this?
             return True
-        current_thing = self.screen.game.current_thing
+        current_thing = self.game.current_thing
         if current_thing:
             return current_thing.is_interactive()
         return False
