@@ -28,11 +28,13 @@ class InventoryView(Widget):
     sel_width = 2
 
     def __init__(self, gd, screen):
-        super(InventoryView, self).__init__(Rect((0, 0) + screen.surface_size),
-                gd)
+        rect = Rect((0, screen.surface_size[1] - gd.constants.button_size),
+                    (screen.surface_size[0], gd.constants.button_size))
+        super(InventoryView, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
+        self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
 
     def num_items(self):
         return len(self.game.inventory)
@@ -51,11 +53,10 @@ class InventoryView(Widget):
         else:
             self.game.set_tool(self.game.inventory[item_no])
 
-    def mouse_down(self, event):
+    def mouse_down(self, event, widget):
         if event.button != 1:
-            self.game.cancel_doodah(self.screen)
-        else:
-            PaletteView.mouse_down(self, event)
+            return self.game.cancel_doodah(self.screen)
+        print "CLICKED!", self.game.inventory, event
 
     def item_is_selected(self, item_no):
         return self.game.tool is self.game.inventory[item_no]
@@ -251,6 +252,7 @@ class GameScreen(Screen):
         # XXX: self.handbutton = HandButton(action=self.hand_pressed)
 
         self.inventory = InventoryView(self.gd, self)
+        self.container.add(self.inventory)
 
         # XXX: self.toolbar = ToolBar([
         #        self.menubutton,
