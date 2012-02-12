@@ -3,7 +3,6 @@
 import copy
 
 from widgets.text import LabelWidget
-from pygame.rect import Rect
 from pygame.color import Color
 
 
@@ -336,27 +335,19 @@ class Scene(StatefulGizmo):
             self.game.current_thing.leave()
             self.game.current_thing = None
 
-    def _get_description(self):
+    def _get_description(self, dest_rect):
         text = (self.game.current_thing and
                 self.game.current_thing.get_description())
         if text is None:
             return None
-        label = LabelWidget((10, 10), self.gd, text)
-        #label.set_margin(5)
-        #label.border_width = 1
-        #label.border_color = (0, 0, 0)
-        #label.bg_color = Color(210, 210, 210, 255)
-        #label.fg_color = (0, 0, 0)
+        label = LabelWidget((0, 10), self.gd, text)
+        label.rect.left += (dest_rect.width - label.rect.width) / 2
         return label
 
     def draw_description(self, surface):
-        description = self._get_description()
+        description = self._get_description(surface.get_rect())
         if description is not None:
             description.draw(surface)
-            #x, y, w, h = description.rect
-            #sub = screen.get_root().surface.subsurface(
-            #    Rect(400 - w / 2, 5, w, h))
-            #description.draw_all(sub)
 
     def _cache_background(self):
         if self.BACKGROUND and not self._background:
