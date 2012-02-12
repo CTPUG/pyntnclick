@@ -217,8 +217,10 @@ class Game(object):
     def cancel_doodah(self, screen):
         if self.tool:
             self.set_tool(None)
-        elif self.current_detail:
-            screen.state_widget.clear_detail()
+        # XXX: Needs to be tweaked to work with the new
+        # scene stuff
+        #elif self.current_detail:
+        #    screen.state_widget.clear_detail()
 
     def do_enter_detail(self):
         if self.current_detail:
