@@ -86,6 +86,12 @@ class StateWidget(Container):
         #    self.game.previous_scene.draw(surface, self)
         #else:
         #    self.game.current_scene.draw(surface, self)
+        # We draw descriptions here, so we do the right thing
+        # with detail views
+        if self.game.current_detail:
+            self.game.current_detail.draw_description(surface)
+        else:
+            self.game.current_scene.draw_description(surface)
 
     def mouse_down(self, event, widget):
         if self.game.current_detail:

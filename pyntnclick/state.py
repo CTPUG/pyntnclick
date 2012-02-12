@@ -323,7 +323,7 @@ class Scene(StatefulGizmo):
         #label.fg_color = (0, 0, 0)
         return label
 
-    def draw_description(self, surface, screen):
+    def draw_description(self, surface):
         description = self._get_description()
         if description is not None:
             description.draw(surface)
@@ -351,7 +351,6 @@ class Scene(StatefulGizmo):
     def draw(self, surface, screen):
         self.draw_background(surface)
         self.draw_things(surface)
-        self.draw_description(surface, screen)
 
     def interact(self, item, pos):
         """Interact with a particular position.
