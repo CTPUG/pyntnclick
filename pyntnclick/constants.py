@@ -28,7 +28,11 @@ class GameConstants(object):
     font = 'Vera.ttf'
     font_size = 16
     text_color = 'black'
-    label_bg_color = (180, 180, 180, 180)
+    label_padding = 10
+    label_border = 3
+    label_bg_color = (180, 180, 180, 220)
+    label_border_color = (0, 0, 0, 255)
+    disabled_color = (0x66, 0x66, 0x66, 255)
 
     # User event IDs:
     enter = 1
