@@ -2,19 +2,15 @@
 # interactive regions in Suspended Sentence
 
 # XXX: Threw away albow
-#from albow.root import RootWidget
 #from albow.utils import frame_rect
 #from albow.widget import Widget
 #from albow.controls import Button, Image
 #from albow.palette_view import PaletteView
 #from albow.file_dialogs import request_old_filename
 #from albow.resource import get_font
-RootWidget = object
 frame_rect = None
-Widget = object
 Button = object
 Image = object
-PaletteView = object
 request_old_filename = None
 get_font = None
 
@@ -24,9 +20,7 @@ from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
 import pygame
 
 import pyntnclick.constants
-from pyntnclick import state
-state.DEBUG_RECTS = True
-from pyntnclick.widgets import BoomLabel
+from pyntnclick.widgets.text import LabelWidget, TextButton
 from pyntnclick.widgets.base import Container
 
 
@@ -40,7 +34,7 @@ class RectDrawerConstants(pyntnclick.constants.GameConstants):
 constants = RectDrawerConstants()
 
 
-class AppPalette(PaletteView):
+class AppPalette(object):
 
     sel_width = 5
 
@@ -53,9 +47,9 @@ class AppPalette(PaletteView):
 
     def __init__(self, app_image):
         self.image = app_image
-        super(AppPalette, self).__init__((35, 35), 4, 5, margin=2)
-        self.selection = 0
-        self.image.rect_color = pygame.color.Color(self.colors[self.selection])
+        #super(AppPalette, self).__init__((35, 35), 4, 5, margin=2)
+        #self.selection = 0
+        #self.image.rect_color = pygame.color.Color(self.colors[self.selection])
 
     def num_items(self):
         return len(self.colors)
@@ -73,16 +67,15 @@ class AppPalette(PaletteView):
         return self.selection == item_no
 
 
-class AppImage(Widget):
+class AppImage(Container):
 
     rect_thick = 3
     draw_thick = 1
 
-    def __init__(self, state):
+    def __init__(self, gd, state):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
-                                                        constants.screen[0],
-                                                        constants.screen[1]))
+            constants.screen[0], constants.screen[1]), gd)
         self.mode = 'draw'
         self.rects = []
         self.images = []
@@ -91,7 +84,8 @@ class AppImage(Widget):
         self.rect_color = pygame.color.Color('white')
         self.current_image = None
         self.place_image_menu = None
-        self.close_button = BoomLabel('Close', font=get_font(20, 'Vera.ttf'))
+        self.close_button = LabelWidget(pygame.Rect((0, 0), (200, 100)),
+                gd, 'Close', fontname='Vera.ttf', fontsize=20)
         self.close_button.fg_color = (0, 0, 0)
         self.close_button.bg_color = (0, 0, 0)
         self.draw_rects = True
@@ -529,14 +523,13 @@ class AppImage(Widget):
                 self.invalidate()
 
 
-class ModeLabel(BoomLabel):
+class ModeLabel(LabelWidget):
 
-    def __init__(self, app_image):
+    def __init__(self, rect, gd, app_image):
         self.app_image = app_image
-        super(ModeLabel, self).__init__('Mode : ', 200,
-                font=get_font(15, 'VeraBd.ttf'),
-                fg_color=pygame.color.Color(128, 0, 255))
-        self.rect.move_ip(805, 0)
+        super(ModeLabel, self).__init__(rect,
+                gd, 'Mode : ', fontname='VeraBd.ttf',
+                fontsize=15, color=pygame.color.Color(128, 0, 255))
 
     def draw_all(self, surface):
         self.set_text('Mode : %s' % self.app_image.mode)
@@ -556,6 +549,14 @@ class RectApp(Container):
     """The actual rect drawer main app"""
     def __init__(self, rect, gd):
         super(RectApp, self).__init__(rect, gd)
+
+        state = gd.initial_state()
+
+        self.image = AppImage(gd, state)
+        self.add(self.image)
+        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 100)),
+                self.gd, self.image)
+        self.add(mode_label)
 
 
 class RectEngine(object):
@@ -583,7 +584,7 @@ class RectEngine(object):
             clock.tick(self._gd.constants.frame_rate)
 
 
-class RectAppOld(RootWidget):
+class RectAppOld(object):
     """Handle the app stuff for the rect drawer"""
 
     def __init__(self, display, get_initial_state, scene, detail):
@@ -594,9 +595,8 @@ class RectAppOld(RootWidget):
         state.set_current_detail(detail)
         state.do_check = None
 
-        self.image = AppImage(state)
-        self.add(self.image)
-        mode_label = ModeLabel(self.image)
+        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 100)),
+                self.gd, self.image)
         self.add(mode_label)
         y = mode_label.get_rect().h
         draw = make_button('Draw Rect', self.image.draw_mode, y)
