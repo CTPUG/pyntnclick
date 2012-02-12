@@ -170,8 +170,7 @@ class StateWidget(Container):
             #self._mouse_move(mouse.get_pos())
 
     def end_game(self):
-        self.screen.running = False
-        self.screen.shell.show_screen(self.screen.shell.end_screen)
+        self.screen.change_screen('end')
 
 
 class DetailWindow(Container):
