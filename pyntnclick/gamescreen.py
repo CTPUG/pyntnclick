@@ -125,8 +125,11 @@ class StateWidget(Container):
     def show_detail(self, detail):
         self.clear_detail()
         detail_obj = self.game.set_current_detail(detail)
-        self.detail.set_image_rect(Rect((0, 0), detail_obj.get_detail_size()))
         self.add(self.detail)
+        detail_rect = Rect((0, 0), detail_obj.get_detail_size())
+        # Centre the widget
+        detail_rect.center = self.rect.center
+        self.detail.set_image_rect(detail_rect)
         self.game.do_enter_detail()
 
     def clear_detail(self):
@@ -165,7 +168,6 @@ class DetailWindow(Container):
     def set_image_rect(self, rect):
         bw = self.border_width
         self.image_rect = rect
-        self.image_rect.topleft = (bw, bw)
         self.rect = rect.inflate(bw * 2, bw * 2)
         self.close.rect.midbottom = rect.midbottom
 
