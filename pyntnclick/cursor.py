@@ -11,13 +11,6 @@ import pygame.mouse
 
 from pyntnclick.engine import Screen
 
-# XXX: Need a way to get at the constants
-from pyntnclick.constants import GameConstants
-SCENE_SIZE = GameConstants().scene_size
-# XXX: Needs a way to get at resource:
-from pyntnclick.resources import Resources
-get_image = Resources("Resources").get_image
-
 
 class CursorSprite(Sprite):
     "A Sprite that follows the Cursor"
@@ -29,9 +22,9 @@ class CursorSprite(Sprite):
         self.pointer_y = y
         self.highlighted = False
 
-    def load(self):
+    def load(self, resources):
         if not hasattr(self, 'plain_image'):
-            self.plain_image = get_image('items', self.filename)
+            self.plain_image = resources.get_image('items', self.filename)
             self.image = self.plain_image
             self.rect = self.image.get_rect()
 
@@ -92,13 +85,13 @@ class CursorScreen(Screen):
             cursor = item.CURSOR
         if cursor != self._loaded_cursor:
             self._loaded_cursor = cursor
-            self._loaded_cursor.load()
+            self._loaded_cursor.load(self.gd.resource)
             self._cursor_group.empty()
             self._cursor_group.add(self._loaded_cursor)
 
     def cursor_highlight(self):
-        if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
-            return False
+        #XXX: if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
+        #XXX:     return False
         if self.screen.game.highlight_override:
             return True
         current_thing = self.screen.game.current_thing
