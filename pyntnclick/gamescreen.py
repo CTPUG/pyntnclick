@@ -143,6 +143,9 @@ class InventoryView(Container):
 
 
 class SceneWidget(Container):
+    DETAIL_BORDER = 4
+    DETAIL_BORDER_COLOR = Color("black")
+
     def __init__(self, rect, gd, scene, screen, is_detail=False):
         super(SceneWidget, self).__init__(rect, gd)
         self.scene = scene
@@ -162,6 +165,10 @@ class SceneWidget(Container):
         self.scene.draw(surface.subsurface(self.rect))
         self.scene.draw_description(surface)
         super(SceneWidget, self).draw(surface)
+        if self.is_detail:
+            border = self.rect.inflate(self.DETAIL_BORDER, self.DETAIL_BORDER)
+            pygame.draw.rect(
+                surface, self.DETAIL_BORDER_COLOR, border, self.DETAIL_BORDER)
 
     def queue_widget(self, widget):
         self._message_queue.append(widget)
