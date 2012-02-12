@@ -11,7 +11,7 @@ from pyntnclick.cursor import CursorScreen
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
 from pyntnclick.widgets.base import Container, ModalStackContainer
-from pyntnclick.widgets.text import TextButton, LabelWidget
+from pyntnclick.widgets.text import TextButton, ModalWrappedTextLabel
 from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 # XXX: Need a way to get at the constants.
@@ -151,6 +151,7 @@ class StateWidget(Container):
         self.detail = DetailWindow(rect, gd, screen)
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEMOTION, self.mouse_move)
+        self._message_queue = []
 
     def draw(self, surface):
         self.game.current_scene.draw(surface, self)
@@ -170,6 +171,9 @@ class StateWidget(Container):
         else:
             self.game.current_scene.draw_description(surface)
 
+    def queue_widget(self, widget):
+        self._message_queue.append(widget)
+
     def mouse_down(self, event, widget):
         if self.game.current_detail:
             return self.detail.mouse_down(event, widget)
@@ -188,6 +192,11 @@ class StateWidget(Container):
         # of what happens
         result = self.game.check_enter_leave(self.screen)
         handle_result(result, self)
+        if self._message_queue:
+            # Only add a message if we're at the top
+            if self.screen.modal_magic.is_top(self.screen.inner_container):
+                widget = self._message_queue.pop(0)
+                self.screen.modal_magic.add(widget)
         if self.game.current_detail:
             self.game.current_detail.animate()
         else:
@@ -200,10 +209,8 @@ class StateWidget(Container):
         self.game.current_scene.mouse_move(event.pos)
         self.game.old_pos = event.pos
 
-    def show_message(self, message, style=None):
+    def show_message(self, message):
         # Display the message as a modal dialog
-        # self.screen.modal_magic.add(LabelWidget((50, 50), self.gd, message))
-        print message
         # XXX: MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
         # XXX: self.invalidate()
@@ -212,6 +219,13 @@ class StateWidget(Container):
         #    self.subwidgets[0]._mouse_move(mouse.get_pos())
         # else:
         #    self._mouse_move(mouse.get_pos())
+        rect = Rect((0, 0), (1, 1))
+        widget = ModalWrappedTextLabel(rect, self.gd, message,
+                max_width=self.gd.constants.screen[0] - 100)
+        widget.rect.center = self.rect.center
+        # We abuse animate so we can queue multiple results
+        # according
+        self.queue_widget(widget)
 
     def show_detail(self, detail):
         self.clear_detail()
@@ -286,10 +300,9 @@ class DetailWindow(Container):
         self.game.highlight_override = False
         self.game.current_detail.mouse_move(self.global_to_local(pos))
 
-    def show_message(self, message, style=None):
-        # self.parent.show_message(message, style)
+    def show_message(self, message):
+        self.parent.show_message(message)
         # self.invalidate()
-        print message
 
 
 class ToolBar(Container):

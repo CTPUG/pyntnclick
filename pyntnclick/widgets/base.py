@@ -139,6 +139,11 @@ class ModalStackContainer(Container):
         if super(Container, self).event(ev):
             return True
 
+    def is_top(self, widget):
+        if self.children:
+            return self.children[-1] is widget
+        return False
+
     def draw(self, surface):
         obscure = pygame.Surface(self.rect.size, SRCALPHA)
         obscure.fill(self.obscure_color)

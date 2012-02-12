@@ -37,7 +37,7 @@ class Result(object):
         """Helper function to do the right thing with a result object"""
         self.play_sound(scene_widget)
         if self.message:
-            scene_widget.show_message(self.message, self.style)
+            scene_widget.show_message(self.message)
         if self.detail_view:
             scene_widget.show_detail(self.detail_view)
         if (self.close_detail
