@@ -346,8 +346,8 @@ class CryoRoomDoor(Door):
                     " twist. With a satisfying *snap*, the chain breaks and"
                     " the door opens.", soundfile='break.ogg')
         elif self.get_data('door') == "shut":
-            text = "You bang on the door with the titanium femur. It makes a"
-            " clanging sound."
+            text = ("You bang on the door with the titanium femur. It makes a"
+                    " clanging sound.")
             return Result(text, soundfile='clang.ogg')
         else:
             return Result("You wave the femur in the doorway. Nothing"
