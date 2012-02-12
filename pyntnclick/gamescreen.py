@@ -25,11 +25,9 @@ class InventorySlot(ImageButtonWidget):
     SELECTED_COLOR = Color("yellow")
     SELECTED_WIDTH = 2
 
-    def __init__(self, rect, gd, game, state_widget):
+    def __init__(self, rect, gd):
         self.item = None
         super(InventorySlot, self).__init__(rect, gd, None)
-        self.game = game
-        self.state_widget = state_widget
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
 
     def set_item(self, item):
@@ -44,18 +42,18 @@ class InventorySlot(ImageButtonWidget):
 
     @property
     def selected(self):
-        return self.game.tool is self.item
+        return self.parent.game.tool is self.item
 
     def mouse_down(self, event, widget):
-        if event.button != 1:
+        if event.button != 1 or not self.item:
             return
         if self.selected:
-            self.game.set_tool(None)
-        elif self.item.is_interactive(self.game.tool):
-            result = self.item.interact(self.game.tool)
-            handle_result(result, self.state_widget)
+            self.parent.select(None)
+        elif self.item.is_interactive(self.parent.game.tool):
+            result = self.item.interact(self.parent.game.tool)
+            handle_result(result, self.parent.state_widget)
         else:
-            self.game.set_tool(self.item)
+            self.parent.select(self.item)
 
 
 class InventoryView(Container):
@@ -79,7 +77,7 @@ class InventoryView(Container):
     def make_slot(self, slot):
         rect = Rect((self.rect.left + slot * self.bsize, self.rect.top),
                     (self.bsize, self.rect.height))
-        return InventorySlot(rect, self.gd, self.game, self.state_widget)
+        return InventorySlot(rect, self.gd)
 
     def update_slots(self):
         items = (self.slot_items + [None] * len(self.slots))[:len(self.slots)]
@@ -104,6 +102,9 @@ class InventoryView(Container):
     def mouse_down(self, event, widget):
         if event.button != 1:
             self.game.cancel_doodah(self.screen)
+
+    def select(self, tool):
+        self.game.set_tool(tool)
 
 
 class StateWidget(Container):
@@ -296,7 +297,7 @@ class ToolBar(Container):
         super(ToolBar, self).draw(surface)
 
     def hand_callback(self, event, widget):
-        self.inventory.unselect()
+        self.inventory.select(None)
 
     def menu_callback(self, event, widget):
         self.screen.change_screen('menu')
