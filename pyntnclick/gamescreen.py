@@ -265,6 +265,7 @@ class DetailWindow(Container):
 
     def close_but(self, ev, widget):
         self.parent.clear_detail()
+        return True
 
     def end_game(self):
         self.parent.end_game()
