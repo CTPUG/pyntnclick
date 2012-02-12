@@ -4,7 +4,7 @@
 
 from pygame import Rect, mouse, Surface
 from pygame.color import Color
-from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION
+from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
 from pyntnclick.cursor import CursorWidget
 from pyntnclick.engine import Screen
@@ -248,6 +248,7 @@ class GameScreen(Screen):
     def setup(self):
         self.running = False
         self.create_initial_state = self.gd.initial_state
+        self.container.add_callback(KEYDOWN, self.key_pressed)
 
     def _clear_all(self):
         for widget in self.container.children[:]:
@@ -284,6 +285,10 @@ class GameScreen(Screen):
         # self.container.add(self.toolbar)
 
         self.running = True
+
+    def key_pressed(self, event, widget):
+        if event.key == K_ESCAPE:
+            self.change_screen('menu')
 
     # albow callback:
     def main_menu_cmd(self):
