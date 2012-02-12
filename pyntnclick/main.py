@@ -22,7 +22,7 @@ from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state
 
-from pyntnclick.tools.rect_drawer import RectApp, make_rect_display
+from pyntnclick.tools.rect_drawer import RectEngine, make_rect_display
 from pyntnclick.tools.utils import list_scenes
 
 
@@ -144,7 +144,7 @@ class GameDescription(object):
             display = make_rect_display()
             # FIXME: Remove Albow from here
             try:
-                self.engine = RectApp(display, self.initial_state, opts.scene,
+                self.engine = RectEngine(self, self.initial_state, opts.scene,
                         opts.detail)
             except KeyError:
                 print 'Invalid scene: %s' % opts.scene

@@ -23,13 +23,14 @@ get_font = None
 
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
-                           BLEND_RGBA_MIN, SRCALPHA)
+                           BLEND_RGBA_MIN, SRCALPHA, QUIT)
 import pygame
 
 import pyntnclick.constants
 from pyntnclick import state
 state.DEBUG_RECTS = True
 from pyntnclick.widgets import BoomLabel
+from pyntnclick.widgets.base import Container
 
 
 class RectDrawerConstants(pyntnclick.constants.GameConstants):
@@ -554,7 +555,38 @@ def make_button(text, action, ypos):
     return button
 
 
-class RectApp(RootWidget):
+class RectApp(Container):
+    """The actual rect drawer main app"""
+    def __init__(self, rect, gd):
+        super(RectApp, self).__init__(rect, gd)
+
+
+class RectEngine(object):
+    """Engine for the rect drawer."""
+
+    def __init__(self, gd, get_initial_state, scene, detail):
+        self.state = None
+        self._gd = gd
+        rect = pygame.display.get_surface().get_rect()
+        self.app = RectApp(rect, self._gd)
+
+    def run(self):
+        """App loop"""
+        clock = pygame.time.Clock()
+        while True:
+            events = pygame.event.get()
+            for ev in events:
+                if ev.type == QUIT:
+                    return
+                else:
+                    self.app.event(ev)
+            surface = pygame.display.get_surface()
+            self.app.draw(surface)
+            pygame.display.flip()
+            clock.tick(self._gd.constants.frame_rate)
+
+
+class RectAppOld(RootWidget):
     """Handle the app stuff for the rect drawer"""
 
     def __init__(self, display, get_initial_state, scene, detail):
