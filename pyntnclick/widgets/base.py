@@ -57,6 +57,10 @@ class Widget(object):
             if hasattr(self, 'prepare'):
                 self.prepare()
 
+    def global_to_local(self, pos):
+        x, y = pos
+        return (x - self.rect.left, y - self.rect.top)
+
 
 class Button(Widget):
 

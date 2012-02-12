@@ -2,7 +2,7 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from pygame import Rect, mouse
+from pygame import Rect, mouse, Surface
 from pygame.color import Color
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION
 
@@ -28,13 +28,27 @@ class InventoryView(Widget):
     sel_width = 2
 
     def __init__(self, gd, screen):
-        rect = Rect((0, screen.surface_size[1] - gd.constants.button_size),
-                    (screen.surface_size[0], gd.constants.button_size))
+        self.bsize = gd.constants.button_size
+        rect = Rect((2 * self.bsize, screen.surface_size[1] - self.bsize),
+                    (screen.surface_size[0] - 2 * self.bsize, self.bsize))
         super(InventoryView, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
+        self.update_surface()
+
+    def update_surface(self):
+        self.surface = Surface(self.rect.size)
+        self.surface.fill(Color(0, 0, 0))
+        for item_no in range(self.num_items()):
+            self.draw_item(self.surface, item_no,
+                           Rect((item_no * self.bsize, 0),
+                                (self.bsize, self.bsize)))
+
+    def draw(self, surface):
+        self.update_surface()
+        surface.blit(self.surface, self.rect)
 
     def num_items(self):
         return len(self.game.inventory)
@@ -45,6 +59,7 @@ class InventoryView(Widget):
 
     def click_item(self, item_no, event):
         item = self.game.inventory[item_no]
+        print "Using:", item
         if self.item_is_selected(item_no):
             self.unselect()
         elif item.is_interactive(self.game.tool):
@@ -56,7 +71,12 @@ class InventoryView(Widget):
     def mouse_down(self, event, widget):
         if event.button != 1:
             return self.game.cancel_doodah(self.screen)
-        print "CLICKED!", self.game.inventory, event
+        x, y = self.global_to_local(event.pos)
+        item_no = x / self.bsize
+        if item_no < self.num_items():
+            self.click_item(item_no, event)
+        else:
+            print "No item."
 
     def item_is_selected(self, item_no):
         return self.game.tool is self.game.inventory[item_no]
@@ -209,10 +229,6 @@ class DetailWindow(Container):
         # self.parent.show_message(message, style)
         # self.invalidate()
         print message
-
-    def global_to_local(self, pos):
-        x, y = pos
-        return (x - self.rect.left, y - self.rect.top)
 
 
 class ToolBar(Widget):
