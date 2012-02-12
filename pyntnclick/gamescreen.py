@@ -106,6 +106,8 @@ class StateWidget(Container):
         handle_result(result, self)
 
     def mouse_move(self, event, widget):
+        if self.game.current_detail:
+            return self.detail.mouse_move(event, widget)
         self.game.highlight_override = False
         self.game.current_scene.mouse_move(event.pos)
         self.game.old_pos = event.pos
@@ -181,7 +183,7 @@ class DetailWindow(Container):
         super(DetailWindow, self).draw(surface)
 
     def mouse_down(self, event, widget):
-        self.mouse_move(event)
+        self.mouse_move(event, widget)
         if event.button != 1:  # We have a right/middle click
             self.game.cancel_doodah(self.screen)
         else:
@@ -189,7 +191,7 @@ class DetailWindow(Container):
                 self.global_to_local(event.pos))
             handle_result(result, self)
 
-    def mouse_move(self, event):
+    def mouse_move(self, event, widget):
         self._mouse_move(event.pos)
 
     def _mouse_move(self, pos):
