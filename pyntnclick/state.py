@@ -7,7 +7,7 @@ from pygame.rect import Rect
 from pygame.color import Color
 
 
-def frame_rect(surface, color, rect, thick = 1):
+def frame_rect(surface, color, rect, thick=1):
     # FIXME: Stolen from albow
     surface.fill(color, (rect.left, rect.top, rect.width, thick))
     surface.fill(color, (rect.left, rect.bottom - thick, rect.width, thick))
@@ -59,6 +59,35 @@ def handle_result(result, scene_widget):
                     res.process(scene_widget)
 
 
+class GameState(dict):
+    """This holds the serializable game state.
+
+       Games wanting to do fancier stuff with the state should
+       sub-class this and feed the subclass into
+       GameDescription via the custom_data parameter."""
+
+    def get_all_gizmo_data(self, state_key):
+        """Get all state for a gizmo - returns a dict"""
+        return self[state_key]
+
+    def get_data(self, state_key, data_key):
+        """Get a single entry"""
+        return self[state_key].get(data_key, None)
+
+    def set_data(self, state_key, data_key, value):
+        """Set a single value"""
+        self[state_key][data_key] = value
+
+    def initialize_state(self, state_key, initial_data):
+        """Initialize a gizmo entry"""
+        if state_key not in self:
+            self[state_key] = {}
+            if initial_data:
+                # deep copy of INITIAL_DATA allows lists, sets and
+                # other mutable types to safely be used in INITIAL_DATA
+                self[state_key].update(copy.deepcopy(initial_data))
+
+
 class Game(object):
     """Complete game state.
 
@@ -81,7 +110,7 @@ class Game(object):
         # currently selected tool (item)
         self.tool = None
         # Global game data
-        self.data = {}
+        self.data = GameState()
         # current scene
         self.current_scene = None
         # current detail view
@@ -96,6 +125,9 @@ class Game(object):
         self.highlight_override = False
         # debug rects
         self.debug_rects = False
+
+    def set_custom_data(self, data_object):
+        self.data = data_object
 
     def set_debug_rects(self, value=True):
         self.debug_rects = value
@@ -251,21 +283,15 @@ class StatefulGizmo(GameDeveloperGizmo):
     def set_state(self, state):
         """Set the state object and initialize if needed"""
         self.state = state
-        if self.state_key not in self.state:
-            self.state[self.state_key] = {}
-            if self.INITIAL_DATA:
-                # deep copy of INITIAL_DATA allows lists, sets and
-                # other mutable types to safely be used in INITIAL_DATA
-                self.state[self.state_key].update(
-                        copy.deepcopy(self.INITIAL_DATA))
+        self.state.initialize_state(self.state_key, self.INITIAL_DATA)
 
     def set_data(self, key, value):
         if self.state:
-            self.state[self.state_key][key] = value
+            self.state.set_data(self.state_key, key, value)
 
     def get_data(self, key):
         if self.state:
-            return self.state[self.state_key].get(key, None)
+            return self.state.get_data(self.state_key, key)
 
 
 class Scene(StatefulGizmo):

@@ -330,19 +330,21 @@ class JimPanel(Thing):
             return "The sign reads 'Warning: Authorized Techinicians Only'."
 
     def interact_without(self):
-        if self.scene.get_data('ai status') == 'online':
+        ai_status = self.state.get_jim_state()
+        if ai_status == 'online':
             return self.interact_default(None)
         elif self.scene.get_data('ai panel') == 'closed':
             return Result("You are unable to open the panel with your"
                           " bare hands.")
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
-            self.scene.set_data('ai status', 'dead')
+            self.state.break_ai()
             self.set_interact('broken')
             return Result("You unplug various important-looking wires.")
 
     def interact_with_machete(self, item):
-        if self.scene.get_data('ai status') == 'online':
+        ai_status = self.state.get_jim_state()
+        if ai_status == 'online':
             return self.interact_default(item)
         elif self.scene.get_data('ai panel') == 'closed':
             self.scene.set_data('ai panel', 'open')
@@ -350,13 +352,13 @@ class JimPanel(Thing):
             return Result("Using the machete, you lever the panel off.")
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
-            self.scene.set_data('ai status', 'dead')
+            self.state.break_ai()
             self.set_interact('broken')
             return Result("You smash various delicate components with"
                           " the machete.")
 
     def interact_default(self, item):
-        if self.scene.get_data('ai status') == 'online':
+        if self.state.get_jim_state() == 'online':
             return (Result('You feel a shock from the panel.'),
                     make_jim_dialog("Prisoner %s. Please step away from the"
                                     " panel. You are not an authorized"

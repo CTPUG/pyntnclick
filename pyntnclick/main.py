@@ -49,7 +49,7 @@ class GameDescription(object):
     # resource module
     RESOURCE_MODULE = "Resources"
 
-    def __init__(self):
+    def __init__(self, custom_data_cls=None):
         if self.INITIAL_SCENE is None:
             raise GameDescriptionError("A game must have an initial scene.")
         if not self.SCENE_LIST:
@@ -62,6 +62,7 @@ class GameDescription(object):
         self._scene_list = self.SCENE_LIST
         self._resource_module = self.RESOURCE_MODULE
         self._debug_rects = False
+        self._custom_data_cls = custom_data_cls
         self._screens = self.SCREENS.copy()
         self._screens['game'] = GameScreen
         self.resource = Resources(self._resource_module)
@@ -72,6 +73,8 @@ class GameDescription(object):
     def initial_state(self):
         """Create a copy of the initial game state."""
         initial_state = state.Game(self)
+        if self._custom_data_cls:
+            initial_state.set_custom_data(self._custom_data_cls())
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
             initial_state.load_scenes(scene)

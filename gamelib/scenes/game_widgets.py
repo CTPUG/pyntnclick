@@ -28,9 +28,9 @@ class Door(Thing):
         return self.interact_without()
 
 
-def make_jim_dialog(mesg, state):
+def make_jim_dialog(mesg, game):
     "Utility helper function"
-    if state.scenes['bridge'].get_data('ai status') == 'online':
+    if game.data.get_jim_state() == 'online':
         return Result(mesg, style='JIM')
     else:
         return None
@@ -45,7 +45,7 @@ class BaseCamera(Thing):
     }
 
     def get_description(self):
-        status = self.game.scenes['bridge'].get_data('ai status')
+        status = self.state.get_jim_state()
         if status == 'online':
             return "A security camera watches over the room"
         elif status == 'looping':
@@ -55,19 +55,19 @@ class BaseCamera(Thing):
             return "The security camera is powered down"
 
     def is_interactive(self, tool=None):
-        return self.game.scenes['bridge'].get_data('ai status') == 'online'
+        return self.state.get_jim_state() == 'online'
 
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
-        if self.game.scenes['bridge'].get_data('ai status') == 'online':
+        if self.state.get_jim_state() == 'online':
             ai_response = make_jim_dialog("3D scene reconstruction failed."
                     " Critical error. Entering emergency shutdown.",
                     self.game)
-            self.game.scenes['bridge'].set_data('ai status', 'looping')
+            self.game.data.loop_ai()
             return ai_response
 
     def animate(self):
-        ai_status = self.game.scenes['bridge'].get_data('ai status')
+        ai_status = self.state.get_jim_state()
         if ai_status != self.get_data('status'):
             self.set_data('status', ai_status)
             self.set_interact(ai_status)
