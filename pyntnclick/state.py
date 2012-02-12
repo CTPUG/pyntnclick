@@ -164,6 +164,7 @@ class Game(object):
         if old_scene and old_scene != self.current_scene:
             self.previous_scene = old_scene
             self.set_do_enter_leave()
+        ScreenEvent.post('game', 'change_scene', name)
 
     def set_current_detail(self, name):
         self.current_thing = None
@@ -375,7 +376,7 @@ class Scene(StatefulGizmo):
         for thing in self.things.itervalues():
             thing.draw(surface)
 
-    def draw(self, surface, screen):
+    def draw(self, surface):
         self.draw_background(surface)
         self.draw_things(surface)
 

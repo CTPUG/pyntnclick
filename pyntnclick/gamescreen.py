@@ -51,7 +51,7 @@ class InventorySlot(ImageButtonWidget):
             self.parent.select(None)
         elif self.item.is_interactive(self.parent.game.tool):
             result = self.item.interact(self.parent.game.tool)
-            handle_result(result, self.parent.state_widget)
+            handle_result(result, self.parent.scene_widget)
         else:
             self.parent.select(self.item)
 
@@ -78,7 +78,7 @@ class InventoryView(Container):
         super(InventoryView, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
-        self.state_widget = screen.state_widget
+        self.scene_widget = screen.scene_widget
 
         slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
         self.slots = [self.add(self.make_slot(i)) for i in range(slots)]
@@ -142,46 +142,37 @@ class InventoryView(Container):
         self.game.set_tool(tool)
 
 
-class StateWidget(Container):
-
-    def __init__(self, rect, gd, screen):
-        super(StateWidget, self).__init__(rect, gd)
+class SceneWidget(Container):
+    def __init__(self, rect, gd, scene, screen, is_detail=False):
+        super(SceneWidget, self).__init__(rect, gd)
+        self.scene = scene
         self.screen = screen
         self.game = screen.game
-        self.detail = DetailWindow(rect, gd, screen)
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEMOTION, self.mouse_move)
         self._message_queue = []
+        self.is_detail = is_detail
+        if is_detail:
+            self.close_button = TextButton((0, 0), self.gd, "Close")
+            self.close_button.rect.midbottom = self.rect.midbottom
+            self.close_button.add_callback('clicked', self.close)
+            self.add(self.close_button)
 
     def draw(self, surface):
-        self.game.current_scene.draw(surface, self)
-        # Pass to container to draw children
-        super(StateWidget, self).draw(surface)
-        #self.animate()
-        # XXX: Work out if we still need this
-        # if self.game.previous_scene and self.game.do_check == LEAVE:
-        #    # We still need to handle leave events, so still display the scene
-        #    self.game.previous_scene.draw(surface, self)
-        #else:
-        #    self.game.current_scene.draw(surface, self)
-        # We draw descriptions here, so we do the right thing
-        # with detail views
-        if self.game.current_detail:
-            self.game.current_detail.draw_description(surface)
-        else:
-            self.game.current_scene.draw_description(surface)
+        self.scene.draw(surface.subsurface(self.rect))
+        self.scene.draw_description(surface)
+        super(SceneWidget, self).draw(surface)
 
     def queue_widget(self, widget):
         self._message_queue.append(widget)
 
     def mouse_down(self, event, widget):
-        if self.game.current_detail:
-            return self.detail.mouse_down(event, widget)
         self.mouse_move(event, widget)
         if event.button != 1:  # We have a right/middle click
             self.game.cancel_doodah(self.screen)
         else:
-            result = self.game.interact(event.pos)
+            pos = self.global_to_local(event.pos)
+            result = self.game.interact(pos)
             handle_result(result, self)
 
     def animate(self):
@@ -194,19 +185,14 @@ class StateWidget(Container):
         handle_result(result, self)
         if self._message_queue:
             # Only add a message if we're at the top
-            if self.screen.modal_magic.is_top(self.screen.inner_container):
+            if self.screen.screen_modal.is_top(self.screen.inner_container):
                 widget = self._message_queue.pop(0)
-                self.screen.modal_magic.add(widget)
-        if self.game.current_detail:
-            self.game.current_detail.animate()
-        else:
-            self.game.current_scene.animate()
+                self.screen.screen_modal.add(widget)
+        self.scene.animate()
 
     def mouse_move(self, event, widget):
-        if self.game.current_detail:
-            return self.detail.mouse_move(event, widget)
-        self.game.highlight_override = False
-        self.game.current_scene.mouse_move(event.pos)
+        pos = self.global_to_local(event.pos)
+        self.scene.mouse_move(pos)
         self.game.old_pos = event.pos
 
     def show_message(self, message):
@@ -228,82 +214,13 @@ class StateWidget(Container):
         self.queue_widget(widget)
 
     def show_detail(self, detail):
-        self.clear_detail()
-        detail_obj = self.game.set_current_detail(detail)
-        self.add(self.detail)
-        detail_rect = Rect((0, 0), detail_obj.get_detail_size())
-        # Centre the widget
-        detail_rect.center = self.rect.center
-        self.detail.set_image_rect(detail_rect)
-        self.game.do_enter_detail()
+        self.screen.show_detail(detail)
 
-    def clear_detail(self):
-        """Hide the detail view"""
-        if self.game.current_detail is not None:
-            self.remove(self.detail)
-            self.game.do_leave_detail()
-            self.game.set_current_detail(None)
-            #self._mouse_move(mouse.get_pos())
+    def close(self, event, widget):
+        self.screen.close_detail(self)
 
     def end_game(self):
         self.screen.change_screen('end')
-
-
-class DetailWindow(Container):
-    def __init__(self, rect, gd, screen):
-        super(DetailWindow, self).__init__(rect, gd)
-        self.image_rect = None
-        self.screen = screen
-        self.game = screen.game
-        self.border_width = 5
-        self.border_color = (0, 0, 0)
-        # parent only gets set when we get added to the scene
-        self.close = TextButton(Rect(0, 0, 0, 0), self.gd,
-                text='Close')
-        self.close.add_callback('clicked', self.close_but)
-        self.add(self.close)
-
-    def close_but(self, ev, widget):
-        self.parent.clear_detail()
-        return True
-
-    def end_game(self):
-        self.parent.end_game()
-
-    def set_image_rect(self, rect):
-        bw = self.border_width
-        self.image_rect = rect
-        self.rect = rect.inflate(bw * 2, bw * 2)
-        self.close.rect.midbottom = rect.midbottom
-
-    def draw(self, surface):
-        # scene_surface = self.get_root().surface.subsurface(self.parent.rect)
-        # overlay = scene_surface.convert_alpha()
-        # overlay.fill(Color(0, 0, 0, 191))
-        # scene_surface.blit(overlay, (0, 0))
-        self.game.current_detail.draw(
-            surface.subsurface(self.image_rect), self)
-        super(DetailWindow, self).draw(surface)
-
-    def mouse_down(self, event, widget):
-        self.mouse_move(event, widget)
-        if event.button != 1:  # We have a right/middle click
-            self.game.cancel_doodah(self.screen)
-        else:
-            result = self.game.interact_detail(
-                self.global_to_local(event.pos))
-            handle_result(result, self)
-
-    def mouse_move(self, event, widget):
-        self._mouse_move(event.pos)
-
-    def _mouse_move(self, pos):
-        self.game.highlight_override = False
-        self.game.current_detail.mouse_move(self.global_to_local(pos))
-
-    def show_message(self, message):
-        self.parent.show_message(message)
-        # self.invalidate()
 
 
 class ToolBar(Container):
@@ -360,7 +277,7 @@ class GameScreen(CursorScreen):
         self.gd.running = False
         self.create_initial_state = self.gd.initial_state
         self.container.add_callback(KEYDOWN, self.key_pressed)
-        self.state_widget = None
+        self.scene_widget = None
 
     def _clear_all(self):
         for widget in self.container.children[:]:
@@ -371,30 +288,52 @@ class GameScreen(CursorScreen):
             self.start_game()
         elif event_name == 'inventory':
             self.inventory.update_slots()
+        elif event_name == 'change_scene':
+            self.change_scene(data)
 
     def start_game(self):
         self._clear_all()
-        self.modal_magic = self.container.add(
+        self.game = self.create_initial_state()
+
+        self.screen_modal = self.container.add(
             ModalStackContainer(self.container.rect.copy(), self.gd))
-        self.inner_container = self.modal_magic.add(
+        self.inner_container = self.screen_modal.add(
             Container(self.container.rect.copy(), self.gd))
+
         toolbar_height = self.gd.constants.button_size
         rect = Rect(0, 0, self.surface_size[0],
                     self.surface_size[1] - toolbar_height)
-        self.game = self.create_initial_state()
-        self.state_widget = StateWidget(rect, self.gd, self)
-        self.inner_container.add(self.state_widget)
 
-        self.toolbar = ToolBar((0, rect.height), self.gd, self)
+        self.scene_modal = self.inner_container.add(
+            ModalStackContainer(rect, self.gd))
+        self.change_scene(None)
+
+        self.toolbar = self.inner_container.add(
+            ToolBar((0, rect.height), self.gd, self))
         self.inventory = self.toolbar.inventory
-        self.inner_container.add(self.toolbar)
 
         self.gd.running = True
 
+    def change_scene(self, scene_name):
+        self.scene_modal.remove_all()
+        self.scene_widget = self.scene_modal.add(
+            SceneWidget(self.scene_modal.rect.copy(), self.gd,
+                        self.game.current_scene, self))
+
+    def show_detail(self, detail_name):
+        detail = self.game.set_current_detail(detail_name)
+        detail_rect = Rect((0, 0), detail.get_detail_size())
+        detail_rect.center = self.scene_modal.rect.center
+        self.scene_modal.add(
+            SceneWidget(detail_rect, self.gd, detail, self, is_detail=True))
+
+    def close_detail(self, detail):
+        self.scene_modal.remove(detail)
+
     def animate(self):
-        """Animate the state widget"""
-        if self.state_widget:
-            self.state_widget.animate()
+        """Animate the scene widgets"""
+        for scene_widget in self.scene_modal.children:
+            scene_widget.animate()
 
     def key_pressed(self, event, widget):
         if event.key == K_ESCAPE:

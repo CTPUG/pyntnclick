@@ -117,6 +117,10 @@ class Container(Widget):
         widget.parent = None
         self.children.remove(widget)
 
+    def remove_all(self):
+        for widget in reversed(self.children[:]):
+            self.remove(widget)
+
     def draw(self, surface):
         for child in self.children:
             child.draw(surface)
