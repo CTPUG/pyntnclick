@@ -111,6 +111,7 @@ class Container(Widget):
         widget.parent = self
         self.children.append(widget)
         self.rect = self.rect.union(widget.rect)
+        return widget
 
     def remove(self, widget):
         widget.parent = None
