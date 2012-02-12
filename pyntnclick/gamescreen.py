@@ -10,6 +10,7 @@ from pyntnclick.cursor import CursorWidget
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
 from pyntnclick.widgets.base import Widget, Container
+from pyntnclick.widgets.text import TextButton
 
 # XXX: Need a way to get at the constants.
 from pyntnclick.constants import GameConstants
@@ -27,7 +28,8 @@ class InventoryView(Widget):
     sel_width = 2
 
     def __init__(self, gd, screen):
-        Widget.__init__(self, Rect((0, 0) + screen.surface_size), gd)
+        super(InventoryView, self).__init__(Rect((0, 0) + screen.surface_size),
+                gd)
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
@@ -62,10 +64,10 @@ class InventoryView(Widget):
         self.game.set_tool(None)
 
 
-class StateWidget(Widget):
+class StateWidget(Container):
 
     def __init__(self, rect, gd, screen):
-        Widget.__init__(self, rect, gd)
+        super(StateWidget, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
         self.detail = DetailWindow(rect, gd, screen)
@@ -73,12 +75,16 @@ class StateWidget(Widget):
         self.add_callback(MOUSEMOTION, self.mouse_move)
 
     def draw(self, surface):
-        self.animate()
-        if self.game.previous_scene and self.game.do_check == LEAVE:
-            # We still need to handle leave events, so still display the scene
-            self.game.previous_scene.draw(surface, self)
-        else:
-            self.game.current_scene.draw(surface, self)
+        self.game.current_scene.draw(surface, self)
+        # Pass to container to draw children
+        super(StateWidget, self).draw(surface)
+        #self.animate()
+        # XXX: Work out if we still need this
+        # if self.game.previous_scene and self.game.do_check == LEAVE:
+        #    # We still need to handle leave events, so still display the scene
+        #    self.game.previous_scene.draw(surface, self)
+        #else:
+        #    self.game.current_scene.draw(surface, self)
 
     def mouse_down(self, event, widget):
         self.mouse_move(event, widget)
@@ -118,7 +124,7 @@ class StateWidget(Widget):
         self.clear_detail()
         detail_obj = self.game.set_current_detail(detail)
         self.detail.set_image_rect(Rect((0, 0), detail_obj.get_detail_size()))
-        self.add_centered(self.detail)
+        self.add(self.detail)
         self.game.do_enter_detail()
 
     def clear_detail(self):
@@ -127,7 +133,7 @@ class StateWidget(Widget):
             self.remove(self.detail)
             self.game.do_leave_detail()
             self.game.set_current_detail(None)
-            self._mouse_move(mouse.get_pos())
+            #self._mouse_move(mouse.get_pos())
 
     def end_game(self):
         self.screen.running = False
@@ -136,17 +142,19 @@ class StateWidget(Widget):
 
 class DetailWindow(Container):
     def __init__(self, rect, gd, screen):
-        Container.__init__(self, rect, gd)
+        super(DetailWindow, self).__init__(rect, gd)
         self.image_rect = None
         self.screen = screen
         self.game = screen.game
         self.border_width = 5
         self.border_color = (0, 0, 0)
         # parent only gets set when we get added to the scene
-        # XXX: self.close = BoomButton('Close', self.close_but, screen)
-        # self.add(self.close)
+        self.close = TextButton(Rect(0, 0, 0, 0), self.gd,
+                text='Close')
+        self.close.add_callback('clicked', self.close_but)
+        self.add(self.close)
 
-    def close_but(self):
+    def close_but(self, ev, widget):
         self.parent.clear_detail()
 
     def end_game(self):
@@ -156,16 +164,17 @@ class DetailWindow(Container):
         bw = self.border_width
         self.image_rect = rect
         self.image_rect.topleft = (bw, bw)
-        self.set_rect(rect.inflate(bw * 2, bw * 2))
+        self.rect = rect.inflate(bw * 2, bw * 2)
         self.close.rect.midbottom = rect.midbottom
 
     def draw(self, surface):
-        scene_surface = self.get_root().surface.subsurface(self.parent.rect)
-        overlay = scene_surface.convert_alpha()
-        overlay.fill(Color(0, 0, 0, 191))
-        scene_surface.blit(overlay, (0, 0))
+        # scene_surface = self.get_root().surface.subsurface(self.parent.rect)
+        # overlay = scene_surface.convert_alpha()
+        # overlay.fill(Color(0, 0, 0, 191))
+        # scene_surface.blit(overlay, (0, 0))
         self.game.current_detail.draw(
             surface.subsurface(self.image_rect), self)
+        super(DetailWindow, self).draw(surface)
 
     def mouse_down(self, event):
         self.mouse_move(event)
@@ -191,7 +200,7 @@ class DetailWindow(Container):
 class ToolBar(Widget):
     def __init__(self, items):
         # XXX: ?o!
-        Widget.__init__(self, Rect(0, 0, 100, 100))
+        super(ToolBar, self).__init__(Rect(0, 0, 100, 100))
         for item in items:
             item.height = BUTTON_SIZE
         self.bg_color = (31, 31, 31)
