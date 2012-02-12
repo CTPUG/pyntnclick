@@ -29,32 +29,38 @@ class InventoryView(Widget):
     def __init__(self, rect, gd, screen):
         self.bsize = gd.constants.button_size
         super(InventoryView, self).__init__(rect, gd)
-        self.inv_slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
-        self.updown_width = self.rect.width - self.inv_slots * self.bsize
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
+
+        self.inv_slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
+        self.updown_width = self.rect.width - self.inv_slots * self.bsize
+        self.inv_offset = 0
+
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.update_surface()
 
     def update_surface(self):
         self.surface = Surface(self.rect.size)
-        for item_no in range(self.num_items()):
-            self.draw_item(self.surface, item_no,
-                           Rect((item_no * self.bsize, 0),
-                                (self.bsize, self.bsize)))
+        for slot in range(self.inv_slots):
+            self.draw_slot_item(
+                self.surface, slot)
         self.draw_updown(self.surface)
 
     def draw(self, surface):
         self.update_surface()
         surface.blit(self.surface, self.rect)
 
-    def num_items(self):
-        return len(self.game.inventory)
+    @property
+    def slot_items(self):
+        return self.game.inventory[self.inv_offset:][:self.inv_slots]
 
-    def draw_item(self, surface, item_no, rect):
-        item_image = self.game.inventory[item_no].get_inventory_image()
-        surface.blit(item_image, rect, None)
+    def draw_slot_item(self, surface, slot):
+        if slot >= len(self.slot_items):
+            return
+        item = self.slot_items[slot]
+        rect = Rect((slot * self.bsize, 0), (self.bsize, self.bsize))
+        surface.blit(item.get_inventory_image(), rect, None)
 
     def draw_updown(self, surface):
         rect = Rect((self.rect.width - self.updown_width, 0),
@@ -63,26 +69,27 @@ class InventoryView(Widget):
         s.fill(Color("blue"))
         surface.blit(s, rect)
 
-    def click_item(self, item_no, event):
-        item = self.game.inventory[item_no]
-        if self.item_is_selected(item_no):
+    def click_slot(self, slot, event):
+        if slot >= len(self.slot_items):
+            return
+        item = self.slot_items[slot]
+        if self.item_is_selected(item):
             self.unselect()
         elif item.is_interactive(self.game.tool):
             result = item.interact(self.game.tool)
             handle_result(result, self.state_widget)
         else:
-            self.game.set_tool(self.game.inventory[item_no])
+            self.game.set_tool(item)
 
     def mouse_down(self, event, widget):
         if event.button != 1:
             return self.game.cancel_doodah(self.screen)
         x, y = self.global_to_local(event.pos)
-        item_no = x / self.bsize
-        if item_no < self.num_items():
-            self.click_item(item_no, event)
+        slot = x / self.bsize
+        self.click_slot(slot, event)
 
-    def item_is_selected(self, item_no):
-        return self.game.tool is self.game.inventory[item_no]
+    def item_is_selected(self, item):
+        return self.game.tool is item
 
     def unselect(self):
         self.game.set_tool(None)
