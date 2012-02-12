@@ -2,7 +2,7 @@
 
 import copy
 
-from widgets.text import TextWidget
+from widgets.text import LabelWidget
 from pygame.rect import Rect
 from pygame.color import Color
 
@@ -315,7 +315,7 @@ class Scene(StatefulGizmo):
                 self.game.current_thing.get_description())
         if text is None:
             return None
-        label = TextWidget((10, 10), self.gd, text)
+        label = LabelWidget((10, 10), self.gd, text)
         #label.set_margin(5)
         #label.border_width = 1
         #label.border_color = (0, 0, 0)

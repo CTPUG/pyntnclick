@@ -5,21 +5,21 @@ from pyntnclick.widgets.base import Widget, Button
 
 
 class TextWidget(Widget):
-    fontcache = {}
-
-    def __init__(self, rect, gd, text, fontname=None, fontsize=None, color=None):
+    def __init__(self, rect, gd, text, fontname=None, fontsize=None,
+                 color=None):
         super(TextWidget, self).__init__(rect, gd)
         self.text = text
+        constants = self.gd.constants
         if fontname is None:
-            self.fontname = 'Vera.ttf'  # FIXME: Hardcoded...
+            self.fontname = constants.font
         else:
             self.fontname = fontname
         if fontsize is None:
-            self.fontsize = 24  # FIXME: Hardcoded...
+            self.fontsize = constants.font_size
         else:
             self.fontsize = fontsize
         if color is None:
-            self.color = 'red'  # FIXME: Hardcoded...
+            self.color = constants.text_color
         else:
             self.color = color
         self.prepare()
@@ -33,6 +33,33 @@ class TextWidget(Widget):
         width, height = self.surface.get_rect().size
         self.rect.width = max(self.rect.width, width)
         self.rect.height = max(self.rect.height, height)
+
+    def draw(self, surface):
+        surface.blit(self.surface, self.rect)
+
+
+class LabelWidget(TextWidget):
+    def __init__(self, rect, gd, text, fontname=None, fontsize=None,
+                 color=None, bg_color=None):
+        constants = gd.constants
+        if bg_color is None:
+            self.bg_color = constants.label_bg_color
+        else:
+            self.bg_color = bg_color
+        super(LabelWidget, self).__init__(rect, gd, text, fontname, fontsize,
+                                          color)
+
+    def prepare(self):
+        super(LabelWidget, self).prepare()
+        self.rect.width += 20
+        self.rect.height += 20
+        new_surface = pygame.Surface(self.rect.size)
+        new_surface = new_surface.convert_alpha()
+        if not isinstance(self.bg_color, pygame.Color):
+            self.bg_color = pygame.Color(*self.bg_color)
+        new_surface.fill(self.bg_color)
+        new_surface.blit(self.surface, self.surface.get_rect().move((10, 10)))
+        self.surface = new_surface
 
     def draw(self, surface):
         surface.blit(self.surface, self.rect)

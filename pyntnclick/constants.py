@@ -25,6 +25,11 @@ class GameConstants(object):
     frame_rate = 25
     debug = _get_debug()
 
+    font = 'Vera.ttf'
+    font_size = 16
+    text_color = 'black'
+    label_bg_color = (180, 180, 180, 180)
+
     # User event IDs:
     enter = 1
     leave = 2
