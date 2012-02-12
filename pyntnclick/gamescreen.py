@@ -87,6 +87,8 @@ class StateWidget(Container):
         #    self.game.current_scene.draw(surface, self)
 
     def mouse_down(self, event, widget):
+        if self.game.current_detail:
+            return self.detail.mouse_down(event, widget)
         self.mouse_move(event, widget)
         if event.button != 1:  # We have a right/middle click
             self.game.cancel_doodah(self.screen)
@@ -176,7 +178,7 @@ class DetailWindow(Container):
             surface.subsurface(self.image_rect), self)
         super(DetailWindow, self).draw(surface)
 
-    def mouse_down(self, event):
+    def mouse_down(self, event, widget):
         self.mouse_move(event)
         if event.button != 1:  # We have a right/middle click
             self.game.cancel_doodah(self.screen)
@@ -193,8 +195,13 @@ class DetailWindow(Container):
         self.game.current_detail.mouse_move(self.global_to_local(pos))
 
     def show_message(self, message, style=None):
-        self.parent.show_message(message, style)
-        self.invalidate()
+        # self.parent.show_message(message, style)
+        # self.invalidate()
+        print message
+
+    def global_to_local(self, pos):
+        x, y = pos
+        return (x - self.rect.left, y - self.rect.top)
 
 
 class ToolBar(Widget):
