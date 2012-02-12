@@ -7,7 +7,7 @@ from pygame.colordict import THECOLORS
 from pygame.surface import Surface
 
 from pyntnclick.state import Thing
-from pyntnclick.widgets import BoomLabel
+from pyntnclick.widgets.text import LabelWidget
 
 # XXX: Needs a way to get at resource:
 from pyntnclick.resources import Resources
@@ -44,12 +44,12 @@ class InteractText(Interact):
     def __init__(self, x, y, text, bg_color=None):
         if bg_color is None:
             bg_color = (127, 127, 127)
-        label = BoomLabel(text)
-        label.set_margin(5)
-        label.border_width = 1
-        label.border_color = (0, 0, 0)
-        label.bg_color = bg_color
-        label.fg_color = (0, 0, 0)
+        label = LabelWidget((0, 0), text)
+        # label.set_margin(5)
+        # label.border_width = 1
+        # label.border_color = (0, 0, 0)
+        # label.bg_color = bg_color
+        # label.fg_color = (0, 0, 0)
         image = Surface(label.size)
         rect = Rect((x, y), label.size)
         label.draw_all(image)
