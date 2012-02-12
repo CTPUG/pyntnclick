@@ -21,7 +21,7 @@ LEAVE = constants.leave
 
 
 class InventoryView(Widget):
-    # TODO: Make this work again
+    MIN_UPDOWN_WIDTH = 16
 
     sel_color = Color("yellow")
     sel_width = 2
@@ -29,6 +29,8 @@ class InventoryView(Widget):
     def __init__(self, rect, gd, screen):
         self.bsize = gd.constants.button_size
         super(InventoryView, self).__init__(rect, gd)
+        self.inv_slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
+        self.updown_width = self.rect.width - self.inv_slots * self.bsize
         self.screen = screen
         self.game = screen.game
         self.state_widget = screen.state_widget
@@ -41,6 +43,7 @@ class InventoryView(Widget):
             self.draw_item(self.surface, item_no,
                            Rect((item_no * self.bsize, 0),
                                 (self.bsize, self.bsize)))
+        self.draw_updown(self.surface)
 
     def draw(self, surface):
         self.update_surface()
@@ -53,9 +56,15 @@ class InventoryView(Widget):
         item_image = self.game.inventory[item_no].get_inventory_image()
         surface.blit(item_image, rect, None)
 
+    def draw_updown(self, surface):
+        rect = Rect((self.rect.width - self.updown_width, 0),
+                    (self.updown_width, self.rect.height))
+        s = Surface(rect.size)
+        s.fill(Color("blue"))
+        surface.blit(s, rect)
+
     def click_item(self, item_no, event):
         item = self.game.inventory[item_no]
-        print "Using:", item
         if self.item_is_selected(item_no):
             self.unselect()
         elif item.is_interactive(self.game.tool):
@@ -71,8 +80,6 @@ class InventoryView(Widget):
         item_no = x / self.bsize
         if item_no < self.num_items():
             self.click_item(item_no, event)
-        else:
-            print "No item."
 
     def item_is_selected(self, item_no):
         return self.game.tool is self.game.inventory[item_no]
