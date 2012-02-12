@@ -127,6 +127,10 @@ class StateWidget(Container):
         # of what happens
         result = self.game.check_enter_leave(self.screen)
         handle_result(result, self)
+        if self.game.current_detail:
+            self.game.current_detail.animate()
+        else:
+            self.game.current_scene.animate()
 
     def mouse_move(self, event, widget):
         if self.game.current_detail:
@@ -275,6 +279,7 @@ class GameScreen(CursorScreen):
         self.running = False
         self.create_initial_state = self.gd.initial_state
         self.container.add_callback(KEYDOWN, self.key_pressed)
+        self.state_widget = None
 
     def _clear_all(self):
         for widget in self.container.children[:]:
@@ -298,6 +303,11 @@ class GameScreen(CursorScreen):
         self.container.add(self.toolbar)
 
         self.running = True
+
+    def animate(self):
+        """Animate the state widget"""
+        if self.state_widget:
+            self.state_widget.animate()
 
     def key_pressed(self, event, widget):
         if event.key == K_ESCAPE:

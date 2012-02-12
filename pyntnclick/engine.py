@@ -48,6 +48,8 @@ class Engine(object):
                                                                ev.data)
                 else:
                     self._screen.dispatch(ev)
+            # Ping the screen / scene
+            self._screen.animate()
             surface = pygame.display.get_surface()
             self._screen.draw(surface)
             flip()
@@ -87,6 +89,12 @@ class Screen(object):
 
     def dispatch(self, ev):
         self.container.event(ev)
+
+    def animate(self):
+        """Called every tick - used for peroidic events, etc.
+
+           Interested classes are expected to override this"""
+        pass
 
     def draw_background(self):
         self.surface.fill(pygame.Color('gray'))
