@@ -10,8 +10,8 @@ from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 from pyntnclick.cursor import CursorScreen
 from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
-from pyntnclick.widgets.base import Container
-from pyntnclick.widgets.text import TextButton
+from pyntnclick.widgets.base import Container, ModalStackContainer
+from pyntnclick.widgets.text import TextButton, LabelWidget
 from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 # XXX: Need a way to get at the constants.
@@ -202,6 +202,7 @@ class StateWidget(Container):
 
     def show_message(self, message, style=None):
         # Display the message as a modal dialog
+        # self.screen.modal_magic.add(LabelWidget((50, 50), self.gd, message))
         print message
         # XXX: MessageDialog(self.screen, message, 60, style=style).present()
         # queue a redraw to show updated state
@@ -359,16 +360,20 @@ class GameScreen(CursorScreen):
 
     def start_game(self):
         self._clear_all()
+        self.modal_magic = self.container.add(
+            ModalStackContainer(self.container.rect.copy(), self.gd))
+        self.inner_container = self.modal_magic.add(
+            Container(self.container.rect.copy(), self.gd))
         toolbar_height = self.gd.constants.button_size
         rect = Rect(0, 0, self.surface_size[0],
                     self.surface_size[1] - toolbar_height)
         self.game = self.create_initial_state()
         self.state_widget = StateWidget(rect, self.gd, self)
-        self.container.add(self.state_widget)
+        self.inner_container.add(self.state_widget)
 
         self.toolbar = ToolBar((0, rect.height), self.gd, self)
         self.inventory = self.toolbar.inventory
-        self.container.add(self.toolbar)
+        self.inner_container.add(self.toolbar)
 
         self.gd.running = True
 

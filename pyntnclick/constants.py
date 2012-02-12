@@ -38,6 +38,8 @@ class GameConstants(object):
     button_bg_color = (0x66, 0x66, 0x66, 0xFF)
     button_disabled_color = (0x66, 0x66, 0x66, 0xFF)
 
+    modal_obscure_color = (0, 0, 0, 0xB0)
+
     # User event IDs:
     enter = 1
     leave = 2

@@ -122,6 +122,31 @@ class Container(Widget):
             child.draw(surface)
 
 
+class ModalStackContainer(Container):
+
+    def __init__(self, rect, gd, obscure_color=None):
+        super(ModalStackContainer, self).__init__(rect, gd)
+        if obscure_color is None:
+            obscure_color = gd.constants.modal_obscure_color
+        self.obscure_color = convert_color(obscure_color)
+
+    def event(self, ev):
+        """Only the topmost child gets events.
+        """
+        if self.children[-1].event(ev):
+            return True
+
+        if super(Container, self).event(ev):
+            return True
+
+    def draw(self, surface):
+        obscure = pygame.Surface(self.rect.size, SRCALPHA)
+        obscure.fill(self.obscure_color)
+        for child in self.children:
+            surface.blit(obscure, self.rect)
+            child.draw(surface)
+
+
 class GridContainer(Container):
     """Hacky container that only supports grids, won't work with Container
     children, or modal children.
