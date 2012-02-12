@@ -151,3 +151,12 @@ class Box(Container):
         background.fill(pygame.Color('gray'))
         surface.blit(background, self.rect)
         super(Box, self).draw(surface)
+
+
+def convert_color(color):
+    """Give me a pygame Color, dammit"""
+    if isinstance(color, pygame.Color):
+        return color
+    if isinstance(color, basestring):
+        return pygame.Color(color)
+    return pygame.Color(*color)

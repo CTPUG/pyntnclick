@@ -31,8 +31,10 @@ class GameConstants(object):
     label_padding = 10
     label_border = 3
     label_bg_color = (180, 180, 180, 220)
-    label_border_color = (0, 0, 0, 255)
-    disabled_color = (0x66, 0x66, 0x66, 255)
+    label_border_color = (0, 0, 0, 0xFF)
+    button_color = (0xFF, 0xFF, 0xFF, 0xFF)
+    button_bg_color = (0x66, 0x66, 0x66, 0xFF)
+    button_disabled_color = (0x66, 0x66, 0x66, 0xFF)
 
     # User event IDs:
     enter = 1

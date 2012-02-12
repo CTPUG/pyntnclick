@@ -1,7 +1,7 @@
 import pygame
 from pygame.constants import SRCALPHA
 
-from pyntnclick.widgets.base import Widget, Button
+from pyntnclick.widgets.base import Widget, Button, convert_color
 
 
 class TextWidget(Widget):
@@ -10,24 +10,14 @@ class TextWidget(Widget):
         super(TextWidget, self).__init__(rect, gd)
         self.text = text
         constants = self.gd.constants
-        if fontname is None:
-            self.fontname = constants.font
-        else:
-            self.fontname = fontname
-        if fontsize is None:
-            self.fontsize = constants.font_size
-        else:
-            self.fontsize = fontsize
-        if color is None:
-            self.color = constants.text_color
-        else:
-            self.color = color
+        self.fontname = fontname or constants.font
+        self.fontsize = fontsize or constants.font_size
+        self.color = color or constants.text_color
         self.prepare()
 
     def prepare(self):
         self.font = self.resource.get_font(self.fontname, self.fontsize)
-        if not isinstance(self.color, pygame.Color):
-            self.color = pygame.Color(self.color)
+        self.color = convert_color(self.color)
         self.surface = self.font.render(self.text, True, self.color)
         self.text_rect = self.surface.get_rect()
         width, height = self.surface.get_rect().size
@@ -43,13 +33,10 @@ class LabelWidget(TextWidget):
         constants = gd.constants
         self.padding = kwargs.pop('padding', constants.label_padding)
         self.border = kwargs.pop('border', constants.label_border)
-        self.bg_color = kwargs.pop('bg_color', constants.label_bg_color)
-        if not isinstance(self.bg_color, pygame.Color):
-            self.bg_color = pygame.Color(*self.bg_color)
-        self.border_color = kwargs.pop('border_color',
-                                       constants.label_border_color)
-        if not isinstance(self.border_color, pygame.Color):
-            self.border_color = pygame.Color(*self.border_color)
+        self.bg_color = convert_color(
+                kwargs.pop('bg_color', constants.label_bg_color))
+        self.border_color = convert_color(
+                kwargs.pop('border_color', constants.label_border_color))
         super(LabelWidget, self).__init__(rect, gd, *args, **kwargs)
 
     def prepare(self):
@@ -76,10 +63,14 @@ class TextButton(Button, TextWidget):
         constants = gd.constants
         self.padding = kwargs.pop('padding', constants.label_padding)
         self.border = kwargs.pop('border', constants.label_border)
-        self.disabled_color = kwargs.pop('disabled_color',
-                                         constants.disabled_color)
-        if not isinstance(self.disabled_color, pygame.Color):
-            self.disabled_color = pygame.Color(*self.disabled_color)
+
+        kwargs['color'] = convert_color(
+                kwargs.pop('color', constants.button_color))
+        self.disabled_color = convert_color(
+                kwargs.pop('disabled_color', constants.button_disabled_color))
+        self.bg_color = convert_color(
+                kwargs.pop('bg_color', constants.button_bg_color))
+
         super(TextButton, self).__init__(rect, gd, *args, **kwargs)
 
     def prepare(self):
@@ -93,11 +84,12 @@ class TextButton(Button, TextWidget):
         self.rect.width = max(self.rect.width, width)
         self.rect.height = max(self.rect.height, height)
         self.surface = pygame.Surface(self.rect.size, SRCALPHA)
-        self.surface.fill(0)
+        self.surface.fill(self.bg_color)
         offset = (
             (self.rect.width - width) / 2 + self.padding,
             (self.rect.height - height) / 2 + self.padding)
         self.surface.blit(text, text.get_rect().move(offset))
+
         if self.border:
             pygame.draw.rect(self.surface, color, self.surface.get_rect(),
                              self.border)
