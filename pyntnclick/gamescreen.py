@@ -11,13 +11,12 @@ from pyntnclick.engine import Screen
 from pyntnclick.state import handle_result
 from pyntnclick.widgets.base import Widget, Container
 from pyntnclick.widgets.text import TextButton
+from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 # XXX: Need a way to get at the constants.
 from pyntnclick.constants import GameConstants
 constants = GameConstants()
 SCREEN = constants.screen
-BUTTON_SIZE = constants.button_size
-SCENE_SIZE = constants.scene_size
 LEAVE = constants.leave
 
 
@@ -27,10 +26,8 @@ class InventoryView(Widget):
     sel_color = Color("yellow")
     sel_width = 2
 
-    def __init__(self, gd, screen):
+    def __init__(self, rect, gd, screen):
         self.bsize = gd.constants.button_size
-        rect = Rect((2 * self.bsize, screen.surface_size[1] - self.bsize),
-                    (screen.surface_size[0] - 2 * self.bsize, self.bsize))
         super(InventoryView, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
@@ -40,7 +37,6 @@ class InventoryView(Widget):
 
     def update_surface(self):
         self.surface = Surface(self.rect.size)
-        self.surface.fill(Color(0, 0, 0))
         for item_no in range(self.num_items()):
             self.draw_item(self.surface, item_no,
                            Rect((item_no * self.bsize, 0),
@@ -230,17 +226,46 @@ class DetailWindow(Container):
         print message
 
 
-class ToolBar(Widget):
-    def __init__(self, items):
-        # XXX: ?o!
-        super(ToolBar, self).__init__(Rect(0, 0, 100, 100))
-        for item in items:
-            item.height = BUTTON_SIZE
+class ToolBar(Container):
+    def __init__(self, rect, gd, screen):
+        self.screen = screen
+        button_size = gd.constants.button_size
+
+        if not isinstance(rect, Rect):
+            rect = Rect(rect, (gd.constants.scene_size[0], button_size))
+        super(ToolBar, self).__init__(rect, gd)
+
         self.bg_color = (31, 31, 31)
+        self.left = self.rect.left
+
+        # TODO: Menu button
+        # XXX: self.popup_menu = PopupMenu(self)
+        # XXX: self.menubutton = PopupMenuButton('Menu',
+        #        action=self.popup_menu.show_menu)
+
+        hand_image = gd.resource.get_image('items', 'hand.png')
+        self.hand_button = self.add_tool(
+            hand_image.get_width(), ImageButtonWidget, gd, hand_image)
+        self.hand_button.add_callback(MOUSEBUTTONDOWN, self.hand_pressed)
+
+        self.inventory = self.add_tool(
+            self.rect.width - self.left, InventoryView, gd, screen)
+
+    def add_tool(self, width, cls, *args, **kw):
+        rect = Rect((self.left, self.rect.top), (width, self.rect.height))
+        tool = cls(rect, *args, **kw)
+        self.add(tool)
+        self.left += width
+        return tool
 
     def draw(self, surface):
-        surface.fill(self.bg_color)
-        # Row.draw(self, surface)
+        bg = Surface(self.rect.size)
+        bg.fill(self.bg_color)
+        surface.blit(bg, self.rect)
+        super(ToolBar, self).draw(surface)
+
+    def hand_pressed(self, event, widget):
+        self.inventory.unselect()
 
 
 class GameScreen(Screen):
@@ -267,22 +292,9 @@ class GameScreen(Screen):
         self.state_widget = StateWidget(rect, self.gd, self)
         self.container.add(self.state_widget)
 
-        # XXX: self.popup_menu = PopupMenu(self)
-        # XXX: self.menubutton = PopupMenuButton('Menu',
-        #        action=self.popup_menu.show_menu)
-
-        # XXX: self.handbutton = HandButton(action=self.hand_pressed)
-
-        self.inventory = InventoryView(self.gd, self)
-        self.container.add(self.inventory)
-
-        # XXX: self.toolbar = ToolBar([
-        #        self.menubutton,
-        #        self.handbutton,
-        #        self.inventory,
-        #        ])
-        # XXX: self.toolbar.bottomleft = self.bottomleft
-        # self.container.add(self.toolbar)
+        self.toolbar = ToolBar((0, rect.height), self.gd, self)
+        self.inventory = self.toolbar.inventory
+        self.container.add(self.toolbar)
 
         self.running = True
 
@@ -297,9 +309,6 @@ class GameScreen(Screen):
     # albow callback:
     def quit_cmd(self):
         self.shell.quit()
-
-    def hand_pressed(self):
-        self.inventory.unselect()
 
 
 class DefEndScreen(Screen):
