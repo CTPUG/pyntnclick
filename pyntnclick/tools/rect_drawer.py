@@ -536,12 +536,13 @@ class ModeLabel(LabelWidget):
         super(ModeLabel, self).draw_all(surface)
 
 
-def make_button(text, action, ypos):
-    button = Button(text, action=action, font=get_font(15, 'VeraBd.ttf'))
-    button.align = 'l'
-    button.rect = pygame.rect.Rect(0, 0, constants.menu_width,
-                                   constants.menu_button_height)
-    button.rect.move_ip(805, ypos)
+def make_button(text, gd, action, ypos):
+    rect = pygame.rect.Rect(0, 0, constants.menu_width,
+            constants.menu_button_height)
+    rect.move_ip(805, ypos)
+    button = TextButton(rect, gd, text, fontname='Vera.ttf', fontsize=12,
+            color=pygame.color.Color(255, 255, 0), border=1, padding=3)
+    button.add_callback('clicked', action)
     return button
 
 
@@ -554,9 +555,72 @@ class RectApp(Container):
 
         self.image = AppImage(gd, state)
         self.add(self.image)
-        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 100)),
+        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 25)),
                 self.gd, self.image)
         self.add(mode_label)
+        y = mode_label.rect.height
+        draw = make_button('Draw Rect', gd, self.image.draw_mode, y)
+        self.add(draw)
+        y += draw.rect.height
+        load_image = make_button("Load image", gd, self.image.image_load, y)
+        self.add(load_image)
+        y += load_image.rect.height
+        add_image = make_button("Place/Move images", gd,
+                self.image.image_mode, y)
+        add_image.enabled = False
+        self.add(add_image)
+        self.image.place_image_menu = add_image
+        y += add_image.rect.height
+        cycle = make_button("Cycle interacts", gd, self.image.cycle_mode, y)
+        self.add(cycle)
+        y += cycle.rect.height
+        delete = make_button("Delete Objects", gd, self.image.del_mode, y)
+        self.add(delete)
+        y += delete.rect.height
+        #palette = AppPalette(self.image)
+        #palette.rect.move_ip(810, y)
+        #self.add(palette)
+        #y += palette.rect.height
+        print_rects = make_button("Print objects", gd,
+                self.image.print_objs, y)
+        self.add(print_rects)
+        y += print_rects.rect.height
+        toggle_things = make_button("Show Things (t)", gd,
+                self.image.toggle_things, y)
+        self.add(toggle_things)
+        y += toggle_things.rect.height
+        toggle_thing_rects = make_button("Show Thing Rects (r)", gd,
+                self.image.toggle_thing_rects, y)
+        self.add(toggle_thing_rects)
+        y += toggle_thing_rects.rect.height
+        toggle_images = make_button("Show Images (i)", gd,
+                self.image.toggle_images, y)
+        self.add(toggle_images)
+        y += toggle_images.rect.height
+        trans_images = make_button("Opaque Images (o)", gd,
+                self.image.toggle_trans_images, y)
+        self.add(trans_images)
+        y += trans_images.rect.height
+        toggle_rects = make_button("Show Drawn Rects (d)", gd,
+                self.image.toggle_rects, y)
+        self.add(toggle_rects)
+        y += toggle_rects.rect.height
+        toggle_toolbar = make_button("Show Toolbar (b)", gd,
+                self.image.toggle_toolbar, y)
+        self.add(toggle_toolbar)
+        y += toggle_toolbar.rect.height
+        toggle_anim = make_button("Show Animations (a)", gd,
+                self.image.toggle_anim, y)
+        self.add(toggle_anim)
+        y += toggle_anim.rect.height
+        toggle_zoom = make_button("Zoom (z)", gd, self.image.toggle_zoom, y)
+        self.add(toggle_zoom)
+        y += toggle_zoom.rect.height
+        quit_but = make_button("Quit", gd, self.quit, 570)
+        self.add(quit_but)
+
+    def quit(self, ev, widget):
+        pygame.event.post(pygame.event.Event(QUIT))
 
 
 class RectEngine(object):
@@ -595,67 +659,6 @@ class RectAppOld(object):
         state.set_current_detail(detail)
         state.do_check = None
 
-        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 100)),
-                self.gd, self.image)
-        self.add(mode_label)
-        y = mode_label.get_rect().h
-        draw = make_button('Draw Rect', self.image.draw_mode, y)
-        self.add(draw)
-        y += draw.get_rect().h
-        load_image = make_button("Load image", self.image.image_load, y)
-        self.add(load_image)
-        y += load_image.get_rect().h
-        add_image = make_button("Place/Move images", self.image.image_mode, y)
-        add_image.enabled = False
-        self.add(add_image)
-        self.image.place_image_menu = add_image
-        y += add_image.get_rect().h
-        cycle = make_button("Cycle interacts", self.image.cycle_mode, y)
-        self.add(cycle)
-        y += cycle.get_rect().h
-        delete = make_button('Delete Objects', self.image.del_mode, y)
-        self.add(delete)
-        y += delete.get_rect().h
-        palette = AppPalette(self.image)
-        palette.rect.move_ip(810, y)
-        self.add(palette)
-        y += palette.get_rect().h
-        print_rects = make_button("Print objects", self.image.print_objs, y)
-        self.add(print_rects)
-        y += print_rects.get_rect().h
-        toggle_things = make_button("Show Things (t)",
-                                    self.image.toggle_things, y)
-        self.add(toggle_things)
-        y += toggle_things.get_rect().h
-        toggle_thing_rects = make_button("Show Thing Rects (r)",
-                                         self.image.toggle_thing_rects, y)
-        self.add(toggle_thing_rects)
-        y += toggle_thing_rects.get_rect().h
-        toggle_images = make_button("Show Images (i)",
-                                    self.image.toggle_images, y)
-        self.add(toggle_images)
-        y += toggle_images.get_rect().h
-        trans_images = make_button("Opaque Images (o)",
-                                   self.image.toggle_trans_images, y)
-        self.add(trans_images)
-        y += trans_images.get_rect().h
-        toggle_rects = make_button("Show Drawn Rects (d)",
-                                   self.image.toggle_rects, y)
-        self.add(toggle_rects)
-        y += toggle_rects.get_rect().h
-        toggle_toolbar = make_button("Show Toolbar (b)",
-                                     self.image.toggle_toolbar, y)
-        self.add(toggle_toolbar)
-        y += toggle_toolbar.get_rect().h
-        toggle_anim = make_button("Show Animations (a)",
-                                  self.image.toggle_anim, y)
-        self.add(toggle_anim)
-        y += toggle_anim.get_rect().h
-        toggle_zoom = make_button("Zoom (z)", self.image.toggle_zoom, y)
-        self.add(toggle_zoom)
-        y += toggle_zoom.get_rect().h
-        quit_but = make_button("Quit", self.quit, 570)
-        self.add(quit_but)
         self.set_timer(constants.frame_rate)
 
     def key_down(self, event):
