@@ -182,10 +182,10 @@ class AppImage(Container):
             print
             print
 
-    def toggle_things(self):
+    def toggle_things(self, ev, widget):
         self.draw_things = not self.draw_things
 
-    def toggle_thing_rects(self):
+    def toggle_thing_rects(self, ev, widget):
         self.draw_thing_rects = not self.draw_thing_rects
         scene = self._get_scene()
         for thing in scene.things.itervalues():
@@ -196,29 +196,29 @@ class AppImage(Container):
             else:
                 thing._interact_hilight_color = thing.old_colour
 
-    def toggle_images(self):
+    def toggle_images(self, ev, widget):
         self.draw_images = not self.draw_images
 
-    def toggle_trans_images(self):
+    def toggle_trans_images(self, ev, widget):
         self.trans_images = not self.trans_images
         self.invalidate()
 
-    def toggle_rects(self):
+    def toggle_rects(self, ev, widget):
         self.draw_rects = not self.draw_rects
 
-    def toggle_toolbar(self):
+    def toggle_toolbar(self, ev, widget):
         self.draw_toolbar = not self.draw_toolbar
 
-    def toggle_zoom(self):
+    def toggle_zoom(self, ev, widget):
         self.zoom_display = not self.zoom_display
 
-    def toggle_anim(self):
+    def toggle_anim(self, ev, widget):
         self.draw_anim = not self.draw_anim
 
-    def draw_mode(self):
+    def draw_mode(self, ev, widget):
         self.mode = 'draw'
 
-    def del_mode(self):
+    def del_mode(self, ev, widget):
         self.mode = 'del'
         self.start_pos = None
         self.end_pos = None
@@ -345,14 +345,14 @@ class AppImage(Container):
         except pygame.error, e:
             print 'Unable to load image %s' % e
 
-    def image_mode(self):
+    def image_mode(self, ev, widget):
         self.mode = 'image'
         self.start_pos = None
         self.end_pos = None
         # So we do the right thing for off screen images
         self.old_mouse_pos = None
 
-    def cycle_mode(self):
+    def cycle_mode(self, ev, widget):
         self.mode = 'cycle'
 
     def _conv_pos(self, mouse_pos):
@@ -428,21 +428,21 @@ class AppImage(Container):
                 self._move_zoom(0, 1)
 
         if e.key == K_o:
-            self.toggle_trans_images()
+            self.toggle_trans_images(None, None)
         elif e.key == K_t:
-            self.toggle_things()
+            self.toggle_things(None, None)
         elif e.key == K_r:
-            self.toggle_thing_rects()
+            self.toggle_thing_rects(None, None)
         elif e.key == K_i:
-            self.toggle_images()
+            self.toggle_images(None, None)
         elif e.key == K_d:
-            self.toggle_rects()
+            self.toggle_rects(None, None)
         elif e.key == K_b:
-            self.toggle_toolbar()
+            self.toggle_toolbar(None, None)
         elif e.key == K_z:
-            self.toggle_zoom()
+            self.toggle_zoom(None, None)
         elif e.key == K_a:
-            self.toggle_anim()
+            self.toggle_anim(None, None)
 
     def mouse_down(self, e):
         pos = self._conv_pos(e.pos)
