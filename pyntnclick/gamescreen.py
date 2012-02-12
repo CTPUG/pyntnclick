@@ -56,6 +56,20 @@ class InventorySlot(ImageButtonWidget):
             self.parent.select(self.item)
 
 
+class UpDownButton(TextButton):
+    # TextButton for now.
+    def __init__(self, rect, gd):
+        super(UpDownButton, self).__init__(rect, gd, self.TEXT, padding=3)
+
+
+class UpButton(UpDownButton):
+    TEXT = 'UP'
+
+
+class DownButton(UpDownButton):
+    TEXT = 'DN'
+
+
 class InventoryView(Container):
     MIN_UPDOWN_WIDTH = 16
 
@@ -68,8 +82,18 @@ class InventoryView(Container):
 
         slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
         self.slots = [self.add(self.make_slot(i)) for i in range(slots)]
-        self.updown_width = self.rect.width - slots * self.bsize
         self.inv_offset = 0
+
+        self.updown_width = self.rect.width - slots * self.bsize
+        ud_left = self.rect.right - self.updown_width
+        self.up_button = self.add(UpButton(Rect(
+                    (ud_left, self.rect.top),
+                    (self.updown_width, self.rect.height / 2)), gd))
+        self.up_button.add_callback(MOUSEBUTTONDOWN, self.up_callback)
+        self.down_button = self.add(DownButton(Rect(
+                    (ud_left, self.rect.top + self.rect.height / 2),
+                    (self.updown_width, self.rect.height / 2)), gd))
+        self.down_button.add_callback(MOUSEBUTTONDOWN, self.down_callback)
 
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.update_slots()
@@ -79,10 +103,27 @@ class InventoryView(Container):
                     (self.bsize, self.rect.height))
         return InventorySlot(rect, self.gd)
 
+    def up_callback(self, event, widget):
+        self.inv_offset = max(self.inv_offset - len(self.slots), 0)
+
+    def down_callback(self, event, widget):
+        self.inv_offset += len(self.slots)
+
     def update_slots(self):
         items = (self.slot_items + [None] * len(self.slots))[:len(self.slots)]
         for item, slot in zip(items, self.slots):
             slot.set_item(item)
+
+        if self.inv_offset <= 0:
+            self.up_button.disable()
+        else:
+            self.up_button.enable()
+
+        max_slot = (self.inv_offset + len(self.slots))
+        if max_slot >= len(self.game.inventory):
+            self.down_button.disable()
+        else:
+            self.down_button.enable()
 
     def draw(self, surface):
         self.update_slots()
@@ -270,7 +311,7 @@ class ToolBar(Container):
 
         self.menu_button = self.add_tool(
             0, TextButton, gd, "Menu", fontname=gd.constants.bold_font,
-            color="red", padding=2, border=0)
+            color="red", padding=1, border=0, bg_color="black")
         self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 
         hand_image = gd.resource.get_image('items', 'hand.png')
