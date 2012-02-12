@@ -3,6 +3,8 @@
 
 from pyntnclick.state import Thing, Result
 
+from gamelib.custom_widgets import JimLabel
+
 
 class Door(Thing):
     """A door somewhere"""
@@ -31,7 +33,7 @@ class Door(Thing):
 def make_jim_dialog(mesg, game):
     "Utility helper function"
     if game.data.get_jim_state() == 'online':
-        return Result(mesg, style='JIM')
+        return Result(widget=JimLabel(game.gd, mesg))
     else:
         return None
 

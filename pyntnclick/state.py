@@ -20,11 +20,11 @@ class Result(object):
     """Result of interacting with a thing"""
 
     def __init__(self, message=None, soundfile=None, detail_view=None,
-                 style=None, close_detail=False, end_game=False):
+                 widget=None, close_detail=False, end_game=False):
         self.message = message
         self.soundfile = soundfile
         self.detail_view = detail_view
-        self.style = style
+        self.widget = widget
         self.close_detail = close_detail
         self.end_game = end_game
 
@@ -36,6 +36,8 @@ class Result(object):
     def process(self, scene_widget):
         """Helper function to do the right thing with a result object"""
         self.play_sound(scene_widget)
+        if self.widget:
+            scene_widget.queue_widget(self.widget)
         if self.message:
             scene_widget.show_message(self.message)
         if self.detail_view:
