@@ -11,6 +11,9 @@ class ImageButtonWidget(Button):
             rect = pygame.Rect(rect, image.get_size())
         super(ImageButtonWidget, self).__init__(rect, gd)
         self.image = image
+        self.visible = True
 
     def draw(self, surface):
-        surface.blit(self.image, self.rect)
+        self.disabled = not self.visible
+        if self.visible:
+            surface.blit(self.image, self.rect)

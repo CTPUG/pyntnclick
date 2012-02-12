@@ -69,6 +69,7 @@ class GameDescription(object):
         self.sound = Sound(self.resource)
         self.constants = self.game_constants()
         self.debug_options = []
+        self.running = False
 
     def initial_state(self):
         """Create a copy of the initial game state."""

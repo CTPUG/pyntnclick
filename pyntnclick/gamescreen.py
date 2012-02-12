@@ -306,7 +306,7 @@ class GameScreen(CursorScreen):
 
     def setup(self):
         super(GameScreen, self).setup()
-        self.running = False
+        self.gd.running = False
         self.create_initial_state = self.gd.initial_state
         self.container.add_callback(KEYDOWN, self.key_pressed)
         self.state_widget = None
@@ -332,7 +332,7 @@ class GameScreen(CursorScreen):
         self.inventory = self.toolbar.inventory
         self.container.add(self.toolbar)
 
-        self.running = True
+        self.gd.running = True
 
     def animate(self):
         """Animate the state widget"""
