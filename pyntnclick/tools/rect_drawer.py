@@ -256,7 +256,7 @@ class AppImage(Container):
     def do_unzoomed_draw(self, surface):
         if self.state.current_detail:
             if self.draw_things:
-                self.state.current_detail.draw(surface, None)
+                self.state.current_detail.draw(surface)
             else:
                 self.state.current_detail.draw_background(surface)
             # We duplicate Albow's draw logic here, so we zoom the close
@@ -271,7 +271,7 @@ class AppImage(Container):
                 print 'Error, failed to draw close button', e
         else:
             if self.draw_things:
-                self.state.current_scene.draw(surface, None)
+                self.state.current_scene.draw(surface)
             else:
                 self.state.current_scene.draw_background(surface)
         if self.mode == 'draw' and self.start_pos and self.draw_rects:
