@@ -1,13 +1,17 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
-frame_rect = None
+def frame_rect(*args):
+    pass
+
 Image = object
 request_old_filename = None
 
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
-                           BLEND_RGBA_MIN, SRCALPHA, QUIT)
+                           BLEND_RGBA_MIN, SRCALPHA, QUIT,
+                           MOUSEBUTTONDOWN, MOUSEMOTION,
+                           MOUSEBUTTONUP)
 import pygame
 
 import pyntnclick.constants
@@ -98,6 +102,9 @@ class AppImage(Container):
             self.offset = (-self.state.current_scene.OFFSET[0],
                            -self.state.current_scene.OFFSET[1])
         self.find_existing_intersects()
+        self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
+        self.add_callback(MOUSEBUTTONUP, self.mouse_down)
+        self.add_callback(MOUSEMOTION, self.mouse_move)
 
     def _get_scene(self):
         if self.state.current_detail:
@@ -304,7 +311,7 @@ class AppImage(Container):
             d[col].append(rect)
         return d
 
-    def print_objs(self):
+    def print_objs(self, ev, widget):
         d = self._make_dict()
         self.find_intersecting_rects(d)
         for (num, col) in enumerate(d):
@@ -379,8 +386,8 @@ class AppImage(Container):
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
 
-    def do_mouse_move(self, e):
-        pos = self._conv_pos(e.pos)
+    def do_mouse_move(self, ev, widget):
+        pos = self._conv_pos(ev.pos)
         if not self.zoom_display:
             # Construct zoom offset from mouse pos
             self._make_zoom_offset(e.pos)
@@ -435,8 +442,8 @@ class AppImage(Container):
         elif e.key == K_a:
             self.toggle_anim(None, None)
 
-    def mouse_down(self, e):
-        pos = self._conv_pos(e.pos)
+    def mouse_down(self, ev, widget):
+        pos = self._conv_pos(ev.pos)
         if self.mode == 'del':
             cand = None
             # Images are drawn above rectangles, so search those first
@@ -494,7 +501,7 @@ class AppImage(Container):
                     self.old_mouse_pos = pos
                     self.invalidate()
 
-    def mouse_up(self, e):
+    def mouse_up(self, ev, widget):
         if self.mode == 'draw':
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -503,10 +510,13 @@ class AppImage(Container):
             self.rects.append((self.rect_color, rect))
             self.start_pos = self.end_pos = None
 
-    def mouse_drag(self, e):
+    def mouse_move(self, ev, widget):
+        # We're only interested in this if left mouse button is down
+        if ev.buttons[0] != 1:
+            return False
         if self.mode == 'draw':
-            self.end_pos = self._conv_pos(e.pos)
-            self.invalidate()
+            self.end_pos = self._conv_pos(ev.pos)
+            return True
 
     def animate(self):
         if self.draw_anim:
