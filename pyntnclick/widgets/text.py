@@ -131,34 +131,31 @@ class WrappedTextLabel(LabelWidget):
         self.rect.width = max(self.rect.width, width)
         self.rect.height = max(self.rect.height, height)
 
-        self.rect.width += 2 * self.padding
-        self.rect.height += 2 * self.padding
-        new_surface = pygame.Surface(self.rect.size)
-        new_surface = new_surface.convert_alpha()
-        new_surface.fill(self.bg_color)
-        new_surface.blit(self.surface, self.surface.get_rect().move(
-                (self.padding, self.padding)))
         if self.border:
-            pygame.draw.rect(new_surface, self.border_color,
-                             new_surface.get_rect(),
+            pygame.draw.rect(self.surface, self.border_color,
+                             self.surface.get_rect(),
                              self.border)
-        self.surface = new_surface
 
     def _render(self):
         surfaces = []
         width = 0
         height = 0
         for line in self._text_lines:
-            line_surf = self.font.render(line, True, self.color,
-                    self.bg_color)
+            line_surf = self.font.render(line, True, self.color)
             surfaces.append(line_surf)
             width = max(line_surf.get_rect().width, width)
             height += line_surf.get_rect().height
+
+        width += 2 * self.padding
+        height += 2 * self.padding
+
         self.surface = pygame.Surface((width, height))
+        self.surface = self.surface.convert_alpha()
         self.surface.fill(self.bg_color)
-        height = 0
+        height = self.padding
         for line_surf in surfaces:
-            rect = pygame.Rect((0, height), (line_surf.get_rect().size))
+            rect = pygame.Rect((self.padding, height),
+                               (line_surf.get_rect().size))
             self.surface.blit(line_surf, rect)
             height += line_surf.get_rect().height
 
