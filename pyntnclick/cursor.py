@@ -44,7 +44,7 @@ class CursorSprite(Sprite):
 
     def set_highlight(self, enable):
         if enable != self.highlighted:
-            # Do we need this? self.load()
+            #XXX: Do we need this? self.load()
             self.highlighted = enable
             self.image = self.plain_image.copy()
             if enable:
@@ -92,9 +92,8 @@ class CursorScreen(Screen):
     def cursor_highlight(self):
         #XXX: if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
         #XXX:     return False
-        if self.game.highlight_override:
-            # TODO: What is this?
-            return True
+        #XXX: if self.game.highlight_override:
+        #XXX:     return True
         current_thing = self.game.current_thing
         if current_thing:
             return current_thing.is_interactive()
