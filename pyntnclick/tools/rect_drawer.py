@@ -1,18 +1,9 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
-# XXX: Threw away albow
-#from albow.utils import frame_rect
-#from albow.widget import Widget
-#from albow.controls import Button, Image
-#from albow.palette_view import PaletteView
-#from albow.file_dialogs import request_old_filename
-#from albow.resource import get_font
 frame_rect = None
-Button = object
 Image = object
 request_old_filename = None
-get_font = None
 
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
@@ -519,8 +510,7 @@ class AppImage(Container):
 
     def animate(self):
         if self.draw_anim:
-            if self.state.animate():
-                self.invalidate()
+            self.state.animate()
 
 
 class ModeLabel(LabelWidget):
@@ -552,6 +542,14 @@ class RectApp(Container):
         super(RectApp, self).__init__(rect, gd)
 
         state = gd.initial_state()
+        gd.sound.disable_sound()  # No sound here
+
+        # Handle any setup that needs to happen
+        # We start in leave, so do this twice
+        # FIXME: Screen parameter to check_enter_leave
+        # should go away
+        state.check_enter_leave(None)
+        state.check_enter_leave(None)
 
         self.image = AppImage(gd, state)
         self.add(self.image)
@@ -622,6 +620,9 @@ class RectApp(Container):
     def quit(self, ev, widget):
         pygame.event.post(pygame.event.Event(QUIT))
 
+    def animate(self):
+        self.image.animate()
+
 
 class RectEngine(object):
     """Engine for the rect drawer."""
@@ -642,36 +643,11 @@ class RectEngine(object):
                     return
                 else:
                     self.app.event(ev)
+            self.app.animate()
             surface = pygame.display.get_surface()
             self.app.draw(surface)
             pygame.display.flip()
             clock.tick(self._gd.constants.frame_rate)
-
-
-class RectAppOld(object):
-    """Handle the app stuff for the rect drawer"""
-
-    def __init__(self, display, get_initial_state, scene, detail):
-        super(RectApp, self).__init__(display)
-        pygame.key.set_repeat(200, 100)
-        state = get_initial_state()
-        state.set_current_scene(scene)
-        state.set_current_detail(detail)
-        state.do_check = None
-
-        self.set_timer(constants.frame_rate)
-
-    def key_down(self, event):
-        # Dispatch to image widget
-        self.image.key_down(event)
-
-    def mouse_delta(self, event):
-        # We propogate mouse move from here to draw region, so images move
-        # off-screen
-        self.image.do_mouse_move(event)
-
-    def begin_frame(self):
-        self.image.animate()
 
 
 def make_rect_display():
