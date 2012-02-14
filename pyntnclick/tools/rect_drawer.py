@@ -525,9 +525,13 @@ class ModeLabel(LabelWidget):
                 gd, 'Mode : ', fontname=constants.bold_font,
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
 
-    def draw_all(self, surface):
-        self.set_text('Mode : %s' % self.app_image.mode)
-        super(ModeLabel, self).draw_all(surface)
+
+    def draw(self, surface):
+        text = 'Mode : %s' % self.app_image.mode
+        if self.text != text:
+            self.text = text
+            self.prepare()
+        super(ModeLabel, self).draw(surface)
 
 
 def make_button(text, gd, action, ypos):
