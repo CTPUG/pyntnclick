@@ -80,8 +80,7 @@ class GameDescription(object):
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
             initial_state.load_scenes(scene)
-        initial_state.set_current_scene(self._initial_scene)
-        initial_state.set_do_enter_leave()
+        initial_state.change_scene(self._initial_scene)
         return initial_state
 
     def game_constants(self):

@@ -3,7 +3,6 @@
 # Sprite Cursor
 
 from pygame.sprite import Sprite, RenderUpdates
-from pygame.rect import Rect
 import pygame
 import pygame.color
 import pygame.cursors
@@ -90,11 +89,4 @@ class CursorScreen(Screen):
             self._cursor_group.add(self._loaded_cursor)
 
     def cursor_highlight(self):
-        #XXX: if not Rect((0, 0), SCENE_SIZE).collidepoint(pygame.mouse.get_pos()):
-        #XXX:     return False
-        #XXX: if self.game.highlight_override:
-        #XXX:     return True
-        current_thing = self.game.current_thing
-        if current_thing:
-            return current_thing.is_interactive()
-        return False
+        return self.container.mouseover_widget.highlight_cursor

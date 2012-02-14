@@ -361,7 +361,7 @@ class CryoRoomDoor(Door):
                     " other side is preventing it from opening completely.",
                     soundfile='chain.ogg')
         else:
-            self.game.set_current_scene('map')
+            self.game.change_scene('map')
             return None
 
     def interact_default(self, item):

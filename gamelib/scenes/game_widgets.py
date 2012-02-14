@@ -21,7 +21,7 @@ class Door(Thing):
 
     def interact_without(self):
         """Go to map."""
-        self.game.set_current_scene("map")
+        self.game.change_scene("map")
 
     def get_description(self):
         return 'An open doorway leads to the rest of the ship.'

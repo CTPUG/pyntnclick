@@ -78,7 +78,6 @@ class InventoryView(Container):
         super(InventoryView, self).__init__(rect, gd)
         self.screen = screen
         self.game = screen.game
-        self.scene_widget = screen.scene_widget
 
         slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
         self.slots = [self.add(self.make_slot(i)) for i in range(slots)]
@@ -148,6 +147,7 @@ class SceneWidget(Container):
 
     def __init__(self, rect, gd, scene, screen, is_detail=False):
         super(SceneWidget, self).__init__(rect, gd)
+        self.name = scene.NAME
         self.scene = scene
         self.screen = screen
         self.game = screen.game
@@ -163,12 +163,18 @@ class SceneWidget(Container):
 
     def draw(self, surface):
         self.scene.draw(surface.subsurface(self.rect))
-        self.scene.draw_description(surface)
+        if self.parent.is_top(self):
+            self.scene.draw_description(surface)
         super(SceneWidget, self).draw(surface)
         if self.is_detail:
             border = self.rect.inflate(self.DETAIL_BORDER, self.DETAIL_BORDER)
             pygame.draw.rect(
                 surface, self.DETAIL_BORDER_COLOR, border, self.DETAIL_BORDER)
+
+    @property
+    def highlight_cursor(self):
+        return (self.scene.current_thing
+                and self.scene.current_thing.is_interactive())
 
     def queue_widget(self, widget):
         self._message_queue.append(widget)
@@ -179,7 +185,7 @@ class SceneWidget(Container):
             self.game.cancel_doodah(self.screen)
         else:
             pos = self.global_to_local(event.pos)
-            result = self.game.interact(pos)
+            result = self.scene.interact(self.game.tool, pos)
             handle_result(result, self)
 
     def animate(self):
@@ -188,8 +194,8 @@ class SceneWidget(Container):
         #    self.invalidate()
         # We do this here so we can get enter and leave events regardless
         # of what happens
-        result = self.game.check_enter_leave(self.screen)
-        handle_result(result, self)
+        # result = self.game.check_enter_leave(self.screen)
+        # handle_result(result, self)
         if self._message_queue:
             # Only add a message if we're at the top
             if self.screen.screen_modal.is_top(self.screen.inner_container):
@@ -220,14 +226,8 @@ class SceneWidget(Container):
         # according
         self.queue_widget(widget)
 
-    def show_detail(self, detail):
-        self.screen.show_detail(detail)
-
     def close(self, event, widget):
         self.screen.close_detail(self)
-
-    def end_game(self):
-        self.screen.change_screen('end')
 
 
 class ToolBar(Container):
@@ -284,21 +284,15 @@ class GameScreen(CursorScreen):
         self.gd.running = False
         self.create_initial_state = self.gd.initial_state
         self.container.add_callback(KEYDOWN, self.key_pressed)
-        self.scene_widget = None
 
     def _clear_all(self):
         for widget in self.container.children[:]:
             self.container.remove(widget)
 
     def process_event(self, event_name, data):
-        if event_name == 'restart':
-            self.start_game()
-        elif event_name == 'inventory':
-            self.inventory.update_slots()
-        elif event_name == 'change_scene':
-            self.change_scene(data)
+        getattr(self, 'game_event_%s' % event_name, lambda d: None)(data)
 
-    def start_game(self):
+    def game_event_restart(self, data):
         self._clear_all()
         self.game = self.create_initial_state()
 
@@ -313,29 +307,48 @@ class GameScreen(CursorScreen):
 
         self.scene_modal = self.inner_container.add(
             ModalStackContainer(rect, self.gd))
-        self.change_scene(None)
-
         self.toolbar = self.inner_container.add(
             ToolBar((0, rect.height), self.gd, self))
         self.inventory = self.toolbar.inventory
 
+        self.game.change_scene
         self.gd.running = True
 
+    def game_event_inventory(self, data):
+        self.inventory.update_slots()
+
+    def game_event_change_scene(self, data):
+        scene_name = data['name']
+        if data['detail']:
+            self.show_detail(scene_name)
+        else:
+            self.change_scene(scene_name)
+
     def change_scene(self, scene_name):
-        self.scene_modal.remove_all()
-        self.scene_widget = self.scene_modal.add(
-            SceneWidget(self.scene_modal.rect.copy(), self.gd,
-                        self.game.current_scene, self))
+        for scene_widget in reversed(self.scene_modal.children[:]):
+            self.scene_modal.remove(scene_widget)
+            scene_widget.scene.leave()
+        scene = self.game.scenes[scene_name]
+        self.game.current_scene = scene
+        self._add_scene(scene)
 
     def show_detail(self, detail_name):
-        detail = self.game.set_current_detail(detail_name)
-        detail_rect = Rect((0, 0), detail.get_detail_size())
-        detail_rect.center = self.scene_modal.rect.center
-        self.scene_modal.add(
-            SceneWidget(detail_rect, self.gd, detail, self, is_detail=True))
+        self._add_scene(self.game.detail_views[detail_name], True)
+
+    def _add_scene(self, scene, detail=False):
+        rect = self.scene_modal.rect.copy()
+        if detail:
+            rect = Rect((0, 0), scene.get_detail_size())
+            rect.center = self.scene_modal.rect.center
+
+        scene_widget = self.scene_modal.add(
+            SceneWidget(rect, self.gd, scene, self, detail))
+
+        handle_result(scene.enter(), scene_widget)
 
     def close_detail(self, detail):
         self.scene_modal.remove(detail)
+        detail.scene.leave()
 
     def animate(self):
         """Animate the scene widgets"""

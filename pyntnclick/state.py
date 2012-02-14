@@ -41,11 +41,7 @@ class Result(object):
         if self.message:
             scene_widget.show_message(self.message)
         if self.detail_view:
-            scene_widget.show_detail(self.detail_view)
-        if (self.close_detail
-            and hasattr(scene_widget, 'parent')
-            and hasattr(scene_widget.parent, 'clear_detail')):
-            scene_widget.parent.clear_detail()
+            scene_widget.game.show_detail(self.detail_view)
         if self.end_game:
             scene_widget.end_game()
 
@@ -116,16 +112,6 @@ class Game(object):
         self.data = GameState()
         # current scene
         self.current_scene = None
-        # current detail view
-        self.current_detail = None
-        # scene we came from, for enter and leave processing
-        self.previous_scene = None
-        # scene transion helpers
-        self.do_check = None
-        self.old_pos = None
-        # current thing
-        self.current_thing = None
-        self.highlight_override = False
         # debug rects
         self.debug_rects = False
 
@@ -157,22 +143,13 @@ class Game(object):
                 scene = scene_cls(self)
                 self.add_detail_view(scene)
 
-    def set_current_scene(self, name):
-        old_scene = self.current_scene
-        self.current_scene = self.scenes[name]
-        self.current_thing = None
-        if old_scene and old_scene != self.current_scene:
-            self.previous_scene = old_scene
-            self.set_do_enter_leave()
-        ScreenEvent.post('game', 'change_scene', name)
+    def change_scene(self, name):
+        ScreenEvent.post('game', 'change_scene',
+                         {'name': name, 'detail': False})
 
-    def set_current_detail(self, name):
-        self.current_thing = None
-        if name is None:
-            self.current_detail = None
-        else:
-            self.current_detail = self.detail_views[name]
-            return self.current_detail
+    def show_detail(self, name):
+        ScreenEvent.post('game', 'change_scene',
+                         {'name': name, 'detail': True})
 
     def _update_inventory(self):
         ScreenEvent.post('game', 'inventory', None)
@@ -208,12 +185,6 @@ class Game(object):
     def set_tool(self, item):
         self.tool = item
 
-    def interact(self, pos):
-        return self.current_scene.interact(self.tool, pos)
-
-    def interact_detail(self, pos):
-        return self.current_detail.interact(self.tool, pos)
-
     def cancel_doodah(self, screen):
         if self.tool:
             self.set_tool(None)
@@ -222,37 +193,9 @@ class Game(object):
         #elif self.current_detail:
         #    screen.state_widget.clear_detail()
 
-    def do_enter_detail(self):
-        if self.current_detail:
-            self.current_detail.enter()
-
-    def do_leave_detail(self):
-        if self.current_detail:
-            self.current_detail.leave()
-
     def animate(self):
         if not self.do_check:
             return self.current_scene.animate()
-
-    def check_enter_leave(self, screen):
-        if not self.do_check:
-            return None
-        if self.do_check == self.gd.constants.leave:
-            self.do_check = self.gd.constants.enter
-            if self.previous_scene:
-                return self.previous_scene.leave()
-            return None
-        elif self.do_check == self.gd.constants.enter:
-            self.do_check = None
-            # Fix descriptions, etc.
-            if self.old_pos:
-                self.current_scene.update_current_thing(self.old_pos)
-            return self.current_scene.enter()
-        raise RuntimeError('invalid do_check value %s' % self.do_check)
-
-    def set_do_enter_leave(self):
-        """Flag that we need to run the enter loop"""
-        self.do_check = self.gd.constants.leave
 
 
 class GameDeveloperGizmo(object):
@@ -328,6 +271,7 @@ class Scene(StatefulGizmo):
         self.state_key = self.name
         # map of thing names -> Thing objects
         self.things = {}
+        self.current_thing = None
         self._background = None
 
     def set_game(self, game):
@@ -344,13 +288,13 @@ class Scene(StatefulGizmo):
 
     def remove_thing(self, thing):
         del self.things[thing.name]
-        if thing is self.game.current_thing:
-            self.game.current_thing.leave()
-            self.game.current_thing = None
+        if thing is self.current_thing:
+            self.current_thing.leave()
+            self.current_thing = None
 
     def _get_description(self, dest_rect):
-        text = (self.game.current_thing and
-                self.game.current_thing.get_description())
+        text = (self.current_thing and
+                self.current_thing.get_description())
         if text is None:
             return None
         label = LabelWidget((0, 10), self.gd, text)
@@ -389,8 +333,8 @@ class Scene(StatefulGizmo):
 
         Returns a Result object to provide feedback to the player.
         """
-        if self.game.current_thing is not None:
-            return self.game.current_thing.interact(item)
+        if self.current_thing is not None:
+            return self.current_thing.interact(item)
 
     def animate(self):
         """Animate all the things in the scene.
@@ -409,14 +353,14 @@ class Scene(StatefulGizmo):
         return None
 
     def update_current_thing(self, pos):
-        if self.game.current_thing is not None:
-            if not self.game.current_thing.contains(pos):
-                self.game.current_thing.leave()
-                self.game.current_thing = None
+        if self.current_thing is not None:
+            if not self.current_thing.contains(pos):
+                self.current_thing.leave()
+                self.current_thing = None
         for thing in self.things.itervalues():
             if thing.contains(pos):
                 thing.enter(self.game.tool)
-                self.game.current_thing = thing
+                self.current_thing = thing
                 break
 
     def mouse_move(self, pos):

@@ -9,6 +9,8 @@ from pyntnclick.engine import UserEvent
 
 class Widget(object):
 
+    highlight_cursor = False
+
     def __init__(self, rect, gd):
         if not isinstance(rect, pygame.Rect):
             rect = pygame.Rect(rect, (0, 0))
@@ -19,6 +21,8 @@ class Widget(object):
         self.parent = None
         self.disabled = False
         self.callbacks = collections.defaultdict(list)
+        # To track which widget the mouse is over
+        self.mouseover_widget = self
 
     def add_callback(self, eventtype, callback, *args):
         self.callbacks[eventtype].append((callback, args))
@@ -64,6 +68,8 @@ class Widget(object):
 
 class Button(Widget):
 
+    highlight_cursor = True
+
     def event(self, ev):
         if super(Button, self).event(ev):
             return True
@@ -93,10 +99,13 @@ class Container(Widget):
         """Push an event down through the tree, and fire our own event as a
         last resort
         """
+        self.mouseover_widget = self
         if ev.type in (MOUSEMOTION, MOUSEBUTTONUP, MOUSEBUTTONDOWN):
             for child in self.children[:]:
                 if child.rect.collidepoint(ev.pos):
-                    if child.event(ev):
+                    result = child.event(ev)
+                    self.mouseover_widget = child.mouseover_widget
+                    if result:
                         return True
 
         else:
@@ -137,6 +146,7 @@ class ModalStackContainer(Container):
     def event(self, ev):
         """Only the topmost child gets events.
         """
+        self.mouseover_widget = self.children[-1].mouseover_widget
         if self.children[-1].event(ev):
             return True
 

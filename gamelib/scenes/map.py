@@ -57,7 +57,7 @@ class DoorThing(Thing):
     def interact(self, _item):
         """Go to destination."""
         if self.DEST in self.game.scenes:
-            self.game.set_current_scene(self.DEST)
+            self.game.change_scene(self.DEST)
 
 
 class ToCryo(DoorThing):

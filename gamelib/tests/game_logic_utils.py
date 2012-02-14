@@ -21,7 +21,7 @@ class GameLogicTestCase(unittest.TestCase):
 
     def setUp(self):
         self.state = state.initial_state()
-        self.state.set_current_scene(self.CURRENT_SCENE)
+        self.state.change_scene(self.CURRENT_SCENE)
 
     def tearDown(self):
         for item in self.state.items.values():
