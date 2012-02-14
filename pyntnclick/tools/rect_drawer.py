@@ -8,7 +8,7 @@ from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
                            BLEND_RGBA_MIN, SRCALPHA, QUIT,
                            MOUSEBUTTONDOWN, MOUSEMOTION,
-                           MOUSEBUTTONUP)
+                           MOUSEBUTTONUP, KEYDOWN)
 import pygame
 
 import pyntnclick.constants
@@ -109,6 +109,7 @@ class AppImage(Container):
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEBUTTONUP, self.mouse_up)
         self.add_callback(MOUSEMOTION, self.mouse_move)
+        self.add_callback(KEYDOWN, self.key_down)
 
     def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
@@ -397,43 +398,43 @@ class AppImage(Container):
             self.invalidate()
             self.old_mouse_pos = pos
 
-    def key_down(self, e):
+    def key_down(self, ev, widget):
         if self.mode == 'image' and self.current_image:
             # Move the image by 1 pixel
             cur_pos = self.current_image.rect.center
-            if e.key == K_LEFT:
+            if ev.key == K_LEFT:
                 self.current_image.rect.center = (cur_pos[0] - 1, cur_pos[1])
-            elif e.key == K_RIGHT:
+            elif ev.key == K_RIGHT:
                 self.current_image.rect.center = (cur_pos[0] + 1, cur_pos[1])
-            elif e.key == K_UP:
+            elif ev.key == K_UP:
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] - 1)
-            elif e.key == K_DOWN:
+            elif ev.key == K_DOWN:
                 self.current_image.rect.center = (cur_pos[0], cur_pos[1] + 1)
         elif self.zoom_display:
-            if e.key == K_LEFT:
+            if ev.key == K_LEFT:
                 self._move_zoom(-1, 0)
-            elif e.key == K_RIGHT:
+            elif ev.key == K_RIGHT:
                 self._move_zoom(1, 0)
-            elif e.key == K_UP:
+            elif ev.key == K_UP:
                 self._move_zoom(0, -1)
-            elif e.key == K_DOWN:
+            elif ev.key == K_DOWN:
                 self._move_zoom(0, 1)
 
-        if e.key == K_o:
+        if ev.key == K_o:
             self.toggle_trans_images(None, None)
-        elif e.key == K_t:
+        elif ev.key == K_t:
             self.toggle_things(None, None)
-        elif e.key == K_r:
+        elif ev.key == K_r:
             self.toggle_thing_rects(None, None)
-        elif e.key == K_i:
+        elif ev.key == K_i:
             self.toggle_images(None, None)
-        elif e.key == K_d:
+        elif ev.key == K_d:
             self.toggle_rects(None, None)
-        elif e.key == K_b:
+        elif ev.key == K_b:
             self.toggle_toolbar(None, None)
-        elif e.key == K_z:
+        elif ev.key == K_z:
             self.toggle_zoom(None, None)
-        elif e.key == K_a:
+        elif ev.key == K_a:
             self.toggle_anim(None, None)
 
     def mouse_down(self, ev, widget):
