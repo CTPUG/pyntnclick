@@ -351,7 +351,8 @@ class GameScreen(CursorScreen):
             if hasattr(resultset, 'process'):
                 resultset = [resultset]
             for result in resultset:
-                result.process(self)
+                if result:
+                    result.process(self)
 
 
 class DefEndScreen(Screen):
