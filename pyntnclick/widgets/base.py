@@ -143,20 +143,27 @@ class ModalStackContainer(Container):
             obscure_color = gd.constants.modal_obscure_color
         self.obscure_color = convert_color(obscure_color)
 
+    @property
+    def top(self):
+        if self.children:
+            return self.children[-1]
+        return None
+
     def event(self, ev):
         """Only the topmost child gets events.
         """
-        self.mouseover_widget = self.children[-1].mouseover_widget
-        if self.children[-1].event(ev):
-            return True
+        self.mouseover_widget = self
+        if self.top:
+            self.mouseover_widget = self.top.mouseover_widget
+            if self.top.event(ev):
+                return True
 
+        # We skip Container's event() method and hop straight to its parent's.
         if super(Container, self).event(ev):
             return True
 
     def is_top(self, widget):
-        if self.children:
-            return self.children[-1] is widget
-        return False
+        return self.top is widget
 
     def draw(self, surface):
         obscure = pygame.Surface(self.rect.size, SRCALPHA)
@@ -205,3 +212,20 @@ def convert_color(color):
     if isinstance(color, basestring):
         return pygame.Color(color)
     return pygame.Color(*color)
+
+
+class ModalWrapper(Container):
+    "A wrapper around a widget that removes itself when a mouse click occurs"
+
+    def __init__(self, widget, close_callback=None):
+        super(ModalWrapper, self).__init__(widget.rect, widget.gd)
+        self.close_callback = close_callback
+        self.add(widget)
+        widget.add_callback(MOUSEBUTTONDOWN, self.close)
+
+    def close(self, ev, widget):
+        if self.parent:
+            self.parent.remove(self)
+            if self.close_callback:
+                self.close_callback()
+            return True

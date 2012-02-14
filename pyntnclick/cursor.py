@@ -42,6 +42,7 @@ class CursorSprite(Sprite):
         self.rect.top = pos[1] - self.pointer_y
 
     def set_highlight(self, enable):
+        # XXX: Use image transforms and such here.
         if enable != self.highlighted:
             #XXX: Do we need this? self.load()
             self.highlighted = enable

@@ -28,34 +28,22 @@ class Result(object):
         self.close_detail = close_detail
         self.end_game = end_game
 
-    def play_sound(self, scene_widget):
+    def play_sound(self, screen):
         if self.soundfile:
-            sound = scene_widget.game.gd.sound.get_sound(self.soundfile)
+            sound = screen.gd.sound.get_sound(self.soundfile)
             sound.play()
 
-    def process(self, scene_widget):
+    def process(self, screen):
         """Helper function to do the right thing with a result object"""
-        self.play_sound(scene_widget)
+        self.play_sound(screen)
         if self.widget:
-            scene_widget.queue_widget(self.widget)
+            screen.queue_widget(self.widget)
         if self.message:
-            scene_widget.show_message(self.message)
+            screen.show_message(self.message)
         if self.detail_view:
-            scene_widget.game.show_detail(self.detail_view)
+            screen.game.show_detail(self.detail_view)
         if self.end_game:
-            scene_widget.end_game()
-
-
-def handle_result(result, scene_widget):
-    """Handle dealing with result or result sequences"""
-    if result:
-        if hasattr(result, 'process'):
-            result.process(scene_widget)
-        else:
-            for res in result:
-                if res:
-                    # List may contain None's
-                    res.process(scene_widget)
+            screen.end_game()
 
 
 class GameState(dict):
@@ -188,6 +176,7 @@ class Game(object):
     def cancel_doodah(self, screen):
         if self.tool:
             self.set_tool(None)
+        
         # XXX: Needs to be tweaked to work with the new
         # scene stuff
         #elif self.current_detail:

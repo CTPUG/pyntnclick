@@ -1,10 +1,10 @@
 """Custom widgets for Suspened Sentence"""
 
 import pygame
-from pyntnclick.widgets.text import ModalWrappedTextLabel
+from pyntnclick.widgets.text import WrappedTextLabel
 
 
-class JimLabel(ModalWrappedTextLabel):
+class JimLabel(WrappedTextLabel):
     """Custom widget for JIM's speech"""
 
     def __init__(self, gd, mesg):

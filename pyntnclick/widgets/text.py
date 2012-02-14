@@ -2,7 +2,6 @@ from textwrap import wrap
 
 import pygame
 from pygame.constants import SRCALPHA
-from pygame.locals import MOUSEBUTTONDOWN
 
 from pyntnclick.widgets.base import Widget, Button, convert_color
 
@@ -158,16 +157,3 @@ class WrappedTextLabel(LabelWidget):
                                (line_surf.get_rect().size))
             self.surface.blit(line_surf, rect)
             height += line_surf.get_rect().height
-
-
-class ModalWrappedTextLabel(WrappedTextLabel):
-    """A WrappedTextLabel that removes itself when a mouse
-       click occurs"""
-    def __init__(self, rect, gd, *args, **kwargs):
-        super(ModalWrappedTextLabel, self).__init__(rect, gd, *args, **kwargs)
-        self.add_callback(MOUSEBUTTONDOWN, self.close)
-
-    def close(self, ev, widget):
-        if self.parent:
-            self.parent.remove(self)
-            return True

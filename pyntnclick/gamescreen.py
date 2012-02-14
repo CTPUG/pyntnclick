@@ -9,9 +9,9 @@ from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
 from pyntnclick.cursor import CursorScreen
 from pyntnclick.engine import Screen
-from pyntnclick.state import handle_result
-from pyntnclick.widgets.base import Container, ModalStackContainer
-from pyntnclick.widgets.text import TextButton, ModalWrappedTextLabel
+from pyntnclick.widgets.base import (
+    Container, ModalStackContainer, ModalWrapper)
+from pyntnclick.widgets.text import TextButton, WrappedTextLabel
 from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 # XXX: Need a way to get at the constants.
@@ -51,7 +51,7 @@ class InventorySlot(ImageButtonWidget):
             self.parent.select(None)
         elif self.item.is_interactive(self.parent.game.tool):
             result = self.item.interact(self.parent.game.tool)
-            handle_result(result, self.parent.scene_widget)
+            self.parent.screen.handle_result(result)
         else:
             self.parent.select(self.item)
 
@@ -126,9 +126,6 @@ class InventoryView(Container):
         else:
             self.down_button.enable()
 
-    def draw(self, surface):
-        super(InventoryView, self).draw(surface)
-
     @property
     def slot_items(self):
         return self.game.inventory[self.inv_offset:][:len(self.slots)]
@@ -153,7 +150,6 @@ class SceneWidget(Container):
         self.game = screen.game
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEMOTION, self.mouse_move)
-        self._message_queue = []
         self.is_detail = is_detail
         if is_detail:
             self.close_button = TextButton((0, 0), self.gd, "Close")
@@ -163,21 +159,18 @@ class SceneWidget(Container):
 
     def draw(self, surface):
         self.scene.draw(surface.subsurface(self.rect))
-        if self.parent.is_top(self):
-            self.scene.draw_description(surface)
-        super(SceneWidget, self).draw(surface)
         if self.is_detail:
             border = self.rect.inflate(self.DETAIL_BORDER, self.DETAIL_BORDER)
             pygame.draw.rect(
                 surface, self.DETAIL_BORDER_COLOR, border, self.DETAIL_BORDER)
+        if self.parent.is_top(self):
+            self.scene.draw_description(surface)
+        super(SceneWidget, self).draw(surface)
 
     @property
     def highlight_cursor(self):
         return (self.scene.current_thing
                 and self.scene.current_thing.is_interactive())
-
-    def queue_widget(self, widget):
-        self._message_queue.append(widget)
 
     def mouse_down(self, event, widget):
         self.mouse_move(event, widget)
@@ -186,45 +179,15 @@ class SceneWidget(Container):
         else:
             pos = self.global_to_local(event.pos)
             result = self.scene.interact(self.game.tool, pos)
-            handle_result(result, self)
+            self.screen.handle_result(result)
 
     def animate(self):
-        # XXX: if self.game.animate():
-            # queue a redraw
-        #    self.invalidate()
-        # We do this here so we can get enter and leave events regardless
-        # of what happens
-        # result = self.game.check_enter_leave(self.screen)
-        # handle_result(result, self)
-        if self._message_queue:
-            # Only add a message if we're at the top
-            if self.screen.screen_modal.is_top(self.screen.inner_container):
-                widget = self._message_queue.pop(0)
-                self.screen.screen_modal.add(widget)
         self.scene.animate()
 
     def mouse_move(self, event, widget):
         pos = self.global_to_local(event.pos)
         self.scene.mouse_move(pos)
         self.game.old_pos = event.pos
-
-    def show_message(self, message):
-        # Display the message as a modal dialog
-        # XXX: MessageDialog(self.screen, message, 60, style=style).present()
-        # queue a redraw to show updated state
-        # XXX: self.invalidate()
-        # The cursor could have gone anywhere
-        # XXX: if self.subwidgets:
-        #    self.subwidgets[0]._mouse_move(mouse.get_pos())
-        # else:
-        #    self._mouse_move(mouse.get_pos())
-        rect = Rect((0, 0), (1, 1))
-        widget = ModalWrappedTextLabel(rect, self.gd, message,
-                max_width=self.gd.constants.screen[0] - 100)
-        widget.rect.center = self.rect.center
-        # We abuse animate so we can queue multiple results
-        # according
-        self.queue_widget(widget)
 
     def close(self, event, widget):
         self.screen.close_detail(self)
@@ -286,6 +249,7 @@ class GameScreen(CursorScreen):
         self.container.add_callback(KEYDOWN, self.key_pressed)
 
     def _clear_all(self):
+        self._message_queue = []
         for widget in self.container.children[:]:
             self.container.remove(widget)
 
@@ -341,14 +305,14 @@ class GameScreen(CursorScreen):
             rect = Rect((0, 0), scene.get_detail_size())
             rect.center = self.scene_modal.rect.center
 
-        scene_widget = self.scene_modal.add(
-            SceneWidget(rect, self.gd, scene, self, detail))
+        self.scene_modal.add(SceneWidget(rect, self.gd, scene, self, detail))
+        self.handle_result(scene.enter())
 
-        handle_result(scene.enter(), scene_widget)
-
-    def close_detail(self, detail):
+    def close_detail(self, detail=None):
+        if detail is None:
+            detail = self.scene_modal.top
         self.scene_modal.remove(detail)
-        detail.scene.leave()
+        self.handle_result(detail.scene.leave())
 
     def animate(self):
         """Animate the scene widgets"""
@@ -358,6 +322,36 @@ class GameScreen(CursorScreen):
     def key_pressed(self, event, widget):
         if event.key == K_ESCAPE:
             self.change_screen('menu')
+
+    def end_game(self):
+        self.change_screen('end')
+
+    def show_queued_widget(self):
+        if self._message_queue:
+            # Only add a message if there isn't already one up
+            if self.screen_modal.is_top(self.inner_container):
+                widget = self._message_queue.pop(0)
+                self.screen_modal.add(
+                    ModalWrapper(widget, self.show_queued_widget))
+
+    def queue_widget(self, widget):
+        self._message_queue.append(widget)
+        self.show_queued_widget()
+
+    def show_message(self, message):
+        rect = Rect((0, 0), (1, 1))
+        max_width = self.gd.constants.screen[0] - 100
+        widget = WrappedTextLabel(rect, self.gd, message, max_width=max_width)
+        widget.rect.center = self.container.rect.center
+        self.queue_widget(widget)
+
+    def handle_result(self, resultset):
+        """Handle dealing with result or result sequences"""
+        if resultset:
+            if hasattr(resultset, 'process'):
+                resultset = [resultset]
+            for result in resultset:
+                result.process(self)
 
 
 class DefEndScreen(Screen):
