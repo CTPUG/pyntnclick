@@ -69,11 +69,13 @@ class AppImage(Container):
     rect_thick = 3
     draw_thick = 1
 
-    def __init__(self, gd, state):
+    def __init__(self, gd, state, scene, detail):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
             constants.screen[0], constants.screen[1]), gd)
         self.mode = 'draw'
+        self._scene = scene
+        self._detail = detail
         self.rects = []
         self.images = []
         self.start_pos = None
@@ -94,28 +96,23 @@ class AppImage(Container):
         self.zoom_display = False
         self.draw_anim = False
         self.zoom_offset = (600, 600)
-        if self.state.current_detail:
-            w, h = self.state.current_detail.get_detail_size()
+        self.clear_display = False
+        if self._detail:
+            w, h = self._scene.get_detail_size()
             rect = pygame.rect.Rect(0, 0, w, h)
             self.close_button.rect.midbottom = rect.midbottom
             self.offset = (0, 0)
         else:
-            self.offset = (-self.state.current_scene.OFFSET[0],
-                           -self.state.current_scene.OFFSET[1])
+            self.offset = (-self._scene.OFFSET[0],
+                           -self._scene.OFFSET[1])
         self.find_existing_intersects()
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.add_callback(MOUSEBUTTONUP, self.mouse_up)
         self.add_callback(MOUSEMOTION, self.mouse_move)
 
-    def _get_scene(self):
-        if self.state.current_detail:
-            return self.state.current_detail
-        else:
-            return self.state.current_scene
-
     def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
-        scene = self._get_scene()
+        scene = self._scene
         # Pylint hates this function
         for thing in scene.things.itervalues():
             for interact_name in thing.interacts:
@@ -147,7 +144,7 @@ class AppImage(Container):
     def find_intersecting_rects(self, d):
         """Find if any rect collections intersect"""
         # I loath N^X brute search algorithm's, but whatever, hey
-        scene = self._get_scene()
+        scene = self._scene
         for (num, col) in enumerate(d):
             rect_list = d[col]
             for thing in scene.things.itervalues():
@@ -186,7 +183,7 @@ class AppImage(Container):
 
     def toggle_thing_rects(self, ev, widget):
         self.draw_thing_rects = not self.draw_thing_rects
-        scene = self._get_scene()
+        scene = self._scene
         for thing in scene.things.itervalues():
             if not self.draw_thing_rects:
                 if not hasattr(thing, 'old_colour'):
@@ -210,6 +207,7 @@ class AppImage(Container):
 
     def toggle_zoom(self, ev, widget):
         self.zoom_display = not self.zoom_display
+        self.invalidate()
 
     def toggle_anim(self, ev, widget):
         self.draw_anim = not self.draw_anim
@@ -238,7 +236,14 @@ class AppImage(Container):
             surf.blit(imsurf, r, None)
         surface.blit(surf, cropped_rect)
 
+    def invalidate(self):
+        self.clear_display = True
+
     def draw(self, surface):
+        if self.clear_display:
+            surface.fill(pygame.color.Color(0, 0, 0))
+            self.clear_display = False
+
         if self.zoom_display:
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
@@ -253,19 +258,14 @@ class AppImage(Container):
             self.do_unzoomed_draw(surface)
 
     def do_unzoomed_draw(self, surface):
-        if self.state.current_detail:
-            if self.draw_things:
-                self.state.current_detail.draw(surface)
-            else:
-                self.state.current_detail.draw_background(surface)
-            # We duplicate Albow's draw logic here, so we zoom the close
+        if self.draw_things:
+            self._scene.draw(surface)
+        else:
+            self._scene.draw_background(surface)
+        if self._detail:
+            # We duplicate draw logic here, so we zoom the close
             # button correctly
             self.close_button.draw(surface)
-        else:
-            if self.draw_things:
-                self.state.current_scene.draw(surface)
-            else:
-                self.state.current_scene.draw_background(surface)
         if self.mode == 'draw' and self.start_pos and self.draw_rects:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -457,7 +457,7 @@ class AppImage(Container):
                 self.rects.remove(cand)
                 self.invalidate()
         elif self.mode == 'cycle':
-            scene = self._get_scene()
+            scene = self._scene
             cand = None
             for thing in scene.things.itervalues():
                 if thing.contains(pos):
@@ -547,24 +547,18 @@ class RectApp(Container):
 
         try:
             state = gd.initial_state()
+            scene = state.scenes[gd._initial_scene]
         except KeyError:
             raise RectDrawerError('Invalid scene: %s' % gd._initial_scene)
         gd.sound.disable_sound()  # No sound here
 
         if detail:
             try:
-                state.set_current_detail(detail)
+                scene = state.detail_views[detail]
             except KeyError:
                 raise RectDrawerError('Invalid detail: %s' % detail)
 
-        # Handle any setup that needs to happen
-        # We start in leave, so do this twice
-        # FIXME: Screen parameter to check_enter_leave
-        # should go away
-        state.check_enter_leave(None)
-        state.check_enter_leave(None)
-
-        self.image = AppImage(gd, state)
+        self.image = AppImage(gd, state, scene, detail is not None)
         self.add(self.image)
         mode_label = ModeLabel(pygame.Rect((805, 0), (200, 25)),
                 self.gd, self.image)
