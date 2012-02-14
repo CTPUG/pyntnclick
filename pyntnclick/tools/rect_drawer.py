@@ -17,6 +17,10 @@ from pyntnclick.widgets.base import Container
 from pyntnclick.tools.utils import draw_rect_image
 
 
+class RectDrawerError(Exception):
+    """Raised when initilaization failed"""
+
+
 class RectDrawerConstants(pyntnclick.constants.GameConstants):
     debug = True
     menu_width = 200
@@ -77,8 +81,7 @@ class AppImage(Container):
         self.rect_color = pygame.color.Color('white')
         self.current_image = None
         self.place_image_menu = None
-        self.close_button = LabelWidget(pygame.Rect((0, 0), (200, 100)),
-                gd, 'Close', fontname=constants.bold_font, fontsize=20)
+        self.close_button = LabelWidget((0, 0), gd, 'Close')
         self.close_button.fg_color = (0, 0, 0)
         self.close_button.bg_color = (0, 0, 0)
         self.draw_rects = True
@@ -257,14 +260,7 @@ class AppImage(Container):
                 self.state.current_detail.draw_background(surface)
             # We duplicate Albow's draw logic here, so we zoom the close
             # button correctly
-            r = self.close_button.get_rect()
-            surf_rect = surface.get_rect()
-            sub_rect = surf_rect.clip(r)
-            try:
-                sub = surface.subsurface(sub_rect)
-                self.close_button.draw_all(sub)
-            except ValueError, e:
-                print 'Error, failed to draw close button', e
+            self.close_button.draw(surface)
         else:
             if self.draw_things:
                 self.state.current_scene.draw(surface)
@@ -388,7 +384,7 @@ class AppImage(Container):
         pos = self._conv_pos(ev.pos)
         if not self.zoom_display:
             # Construct zoom offset from mouse pos
-            self._make_zoom_offset(e.pos)
+            self._make_zoom_offset(ev.pos)
         if self.mode == 'image' and self.current_image:
             if self.old_mouse_pos:
                 delta = (pos[0] - self.old_mouse_pos[0],
@@ -489,7 +485,7 @@ class AppImage(Container):
             else:
                 cand = None
                 for image in self.images:
-                    if image.rect.collidepoint(e.pos):
+                    if image.rect.collidepoint(ev.pos):
                         cand = image
                         break
                 if cand:
@@ -546,11 +542,20 @@ def make_button(text, gd, action, ypos):
 
 class RectApp(Container):
     """The actual rect drawer main app"""
-    def __init__(self, rect, gd):
+    def __init__(self, rect, gd, detail):
         super(RectApp, self).__init__(rect, gd)
 
-        state = gd.initial_state()
+        try:
+            state = gd.initial_state()
+        except KeyError:
+            raise RectDrawerError('Invalid scene: %s' % gd._initial_scene)
         gd.sound.disable_sound()  # No sound here
+
+        if detail:
+            try:
+                state.set_current_detail(detail)
+            except KeyError:
+                raise RectDrawerError('Invalid detail: %s' % detail)
 
         # Handle any setup that needs to happen
         # We start in leave, so do this twice
@@ -635,11 +640,11 @@ class RectApp(Container):
 class RectEngine(object):
     """Engine for the rect drawer."""
 
-    def __init__(self, gd, get_initial_state, scene, detail):
+    def __init__(self, gd, detail):
         self.state = None
         self._gd = gd
         rect = pygame.display.get_surface().get_rect()
-        self.app = RectApp(rect, self._gd)
+        self.app = RectApp(rect, self._gd, detail)
 
     def run(self):
         """App loop"""

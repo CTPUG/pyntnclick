@@ -22,7 +22,8 @@ from pyntnclick.resources import Resources
 from pyntnclick.sound import Sound
 from pyntnclick import state
 
-from pyntnclick.tools.rect_drawer import RectEngine, make_rect_display
+from pyntnclick.tools.rect_drawer import (RectEngine, RectDrawerError,
+        make_rect_display)
 from pyntnclick.tools.utils import list_scenes
 
 
@@ -148,10 +149,9 @@ class GameDescription(object):
             make_rect_display()
             # FIXME: Remove Albow from here
             try:
-                self.engine = RectEngine(self, self.initial_state, opts.scene,
-                        opts.detail)
-            except KeyError:
-                print 'Invalid scene: %s' % opts.scene
+                self.engine = RectEngine(self, opts.detail)
+            except RectDrawerError, e:
+                print 'RectDrawer failed with: %s' % e
                 sys.exit(1)
         else:
             pygame.display.set_mode(self.constants.screen, SWSURFACE)
