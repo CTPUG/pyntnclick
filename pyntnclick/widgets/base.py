@@ -24,6 +24,9 @@ class Widget(object):
         # To track which widget the mouse is over
         self.mouseover_widget = self
 
+    def set_parent(self, parent):
+        self.parent = parent
+
     def add_callback(self, eventtype, callback, *args):
         self.callbacks[eventtype].append((callback, args))
 
@@ -117,13 +120,13 @@ class Container(Widget):
             return True
 
     def add(self, widget):
-        widget.parent = self
+        widget.set_parent(self)
         self.children.append(widget)
         self.rect = self.rect.union(widget.rect)
         return widget
 
     def remove(self, widget):
-        widget.parent = None
+        widget.set_parent(None)
         self.children.remove(widget)
 
     def remove_all(self):
@@ -221,7 +224,13 @@ class ModalWrapper(Container):
         super(ModalWrapper, self).__init__(widget.rect, widget.gd)
         self.close_callback = close_callback
         self.add(widget)
+        self.add_callback(MOUSEBUTTONDOWN, self.close)
         widget.add_callback(MOUSEBUTTONDOWN, self.close)
+
+    def set_parent(self, parent):
+        super(ModalWrapper, self).set_parent(parent)
+        if parent:
+            self.rect = self.parent.rect
 
     def close(self, ev, widget):
         if self.parent:
