@@ -323,7 +323,9 @@ class AppImage(Container):
             print
         print
 
-    def image_load(self):
+    def image_load(self, ev, widget):
+        # XXX: Needs file choose widget
+        return
         image_path = ('%s/Resources/images/%s'
                       % (script_path, self.state.current_scene.FOLDER))
         imagename = request_old_filename(directory=image_path)
