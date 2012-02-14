@@ -13,7 +13,7 @@ import pygame
 
 import pyntnclick.constants
 from pyntnclick.widgets.text import LabelWidget, TextButton
-from pyntnclick.widgets.base import Container
+from pyntnclick.widgets.base import Container, Button
 from pyntnclick.tools.utils import draw_rect_image
 
 
@@ -31,9 +31,42 @@ class RectDrawerConstants(pyntnclick.constants.GameConstants):
 constants = RectDrawerConstants()
 
 
-class AppPalette(object):
+class ColourButton(Button):
+    """Button for selecting a colour"""
 
-    sel_width = 5
+    sel_colour = pygame.color.Color(255, 255, 255)
+    unsel_colour = pygame.color.Color(128, 128, 128)
+
+    padding = 2
+    border = 3
+
+    def __init__(self, rect, gd, colour, palette):
+        super(ColourButton, self).__init__(rect, gd)
+        self._colour = pygame.color.Color(colour)
+        self._button_rect = self.rect.inflate(-self.padding, -self.padding)
+        self._colour_rect = self._button_rect.inflate(-self.border,
+                -self.border)
+        self.selected = False
+        self._palette = palette
+        self.add_callback('clicked', self.fix_selection)
+
+    def fix_selection(self, ev, widget):
+        self._palette.cur_selection.selected = False
+        self.selected = True
+        self._palette.cur_selection = self
+
+    def draw(self, surface):
+        surface.fill(pygame.color.Color(0, 0, 0), self.rect)
+        if self.selected:
+            surface.fill(self.sel_colour, self._button_rect)
+        else:
+            surface.fill(self.unsel_colour, self._button_rect)
+        surface.fill(self._colour, self._colour_rect)
+
+
+class AppPalette(Container):
+
+    but_size = 35
 
     colors = [
             'red', 'maroon1', 'palevioletred1', 'moccasin', 'orange',
@@ -42,26 +75,33 @@ class AppPalette(object):
             'green', 'palegreen1', 'darkgreen', 'aquamarine', 'darkolivegreen',
             ]
 
-    def __init__(self, app_image):
+    def __init__(self, rect, gd, app_image):
         self.image = app_image
-        #super(AppPalette, self).__init__((35, 35), 4, 5, margin=2)
-        #self.selection = 0
-        #self.image.rect_color = pygame.color.Color(self.colors[self.selection])
+        super(AppPalette, self).__init__(rect, gd)
+        self.selection = 0
+        self.image.rect_color = pygame.color.Color(self.colors[self.selection])
 
-    def num_items(self):
-        return len(self.colors)
+        x = rect.left
+        y = rect.top
+        for num, col in enumerate(self.colors):
+            if (x - rect.left + self.but_size) >= rect.width:
+                x = rect.left
+                y += self.but_size
+            button = ColourButton(
+                    pygame.Rect((x, y), (self.but_size, self.but_size)),
+                    gd, col, self)
+            x += self.but_size
+            if num == 0:
+                self.cur_selection = button
+                button.fix_selection(None, None)
+            button.add_callback('clicked', self.click_item, num)
+            self.add(button)
+        # Fix height
+        self.rect.height = y + self.but_size - self.rect.top
 
-    def draw_item(self, surface, item_no, rect):
-        d = -2 * self.sel_width
-        r = rect.inflate(d, d)
-        surface.fill(pygame.color.Color(self.colors[item_no]), r)
-
-    def click_item(self, item_no, event):
-        self.selection = item_no
-        self.image.rect_color = pygame.color.Color(self.colors[item_no])
-
-    def item_is_selected(self, item_no):
-        return self.selection == item_no
+    def click_item(self, ev, widget, number):
+        self.selection = number
+        self.image.rect_color = pygame.color.Color(self.colors[number])
 
 
 class AppImage(Container):
@@ -528,7 +568,6 @@ class ModeLabel(LabelWidget):
                 gd, 'Mode : ', fontname=constants.bold_font,
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
 
-
     def draw(self, surface):
         text = 'Mode : %s' % self.app_image.mode
         if self.text != text:
@@ -589,10 +628,9 @@ class RectApp(Container):
         delete = make_button("Delete Objects", gd, self.image.del_mode, y)
         self.add(delete)
         y += delete.rect.height
-        #palette = AppPalette(self.image)
-        #palette.rect.move_ip(810, y)
-        #self.add(palette)
-        #y += palette.rect.height
+        palette = AppPalette(pygame.Rect((810, y), (200, 0)), gd, self.image)
+        self.add(palette)
+        y += palette.rect.height
         print_rects = make_button("Print objects", gd,
                 self.image.print_objs, y)
         self.add(print_rects)
