@@ -1,9 +1,6 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
-def frame_rect(*args):
-    pass
-
 Image = object
 request_old_filename = None
 
@@ -17,6 +14,7 @@ import pygame
 import pyntnclick.constants
 from pyntnclick.widgets.text import LabelWidget, TextButton
 from pyntnclick.widgets.base import Container
+from pyntnclick.tools.utils import draw_rect_image
 
 
 class RectDrawerConstants(pyntnclick.constants.GameConstants):
@@ -103,7 +101,7 @@ class AppImage(Container):
                            -self.state.current_scene.OFFSET[1])
         self.find_existing_intersects()
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
-        self.add_callback(MOUSEBUTTONUP, self.mouse_down)
+        self.add_callback(MOUSEBUTTONUP, self.mouse_up)
         self.add_callback(MOUSEMOTION, self.mouse_move)
 
     def _get_scene(self):
@@ -277,10 +275,10 @@ class AppImage(Container):
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
             rect.normalize()
-            frame_rect(surface, self.rect_color, rect, self.draw_thick)
+            draw_rect_image(surface, self.rect_color, rect, self.draw_thick)
         if self.draw_rects:
             for (col, rect) in self.rects:
-                frame_rect(surface, col, rect, self.rect_thick)
+                draw_rect_image(surface, col, rect, self.rect_thick)
         if self.draw_images:
             for image in self.images:
                 if image.rect.colliderect(surface.get_rect()):
