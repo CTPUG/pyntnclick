@@ -132,7 +132,7 @@ class InventoryView(Container):
 
     def mouse_down(self, event, widget):
         if event.button != 1:
-            self.game.cancel_doodah(self.screen)
+            self.game.set_tool(None)
 
     def select(self, tool):
         self.game.set_tool(tool)
@@ -175,7 +175,10 @@ class SceneWidget(Container):
     def mouse_down(self, event, widget):
         self.mouse_move(event, widget)
         if event.button != 1:  # We have a right/middle click
-            self.game.cancel_doodah(self.screen)
+            if self.game.tool:
+                self.game.set_tool(None)
+            elif self.is_detail:
+                self.close(event, widget)
         else:
             pos = self.global_to_local(event.pos)
             result = self.scene.interact(self.game.tool, pos)
@@ -275,7 +278,6 @@ class GameScreen(CursorScreen):
             ToolBar((0, rect.height), self.gd, self))
         self.inventory = self.toolbar.inventory
 
-        self.game.change_scene
         self.gd.running = True
 
     def game_event_inventory(self, data):

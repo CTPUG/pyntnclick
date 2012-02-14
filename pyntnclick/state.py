@@ -173,15 +173,6 @@ class Game(object):
     def set_tool(self, item):
         self.tool = item
 
-    def cancel_doodah(self, screen):
-        if self.tool:
-            self.set_tool(None)
-        
-        # XXX: Needs to be tweaked to work with the new
-        # scene stuff
-        #elif self.current_detail:
-        #    screen.state_widget.clear_detail()
-
     def animate(self):
         if not self.do_check:
             return self.current_scene.animate()
