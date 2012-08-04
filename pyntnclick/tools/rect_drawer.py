@@ -2,7 +2,6 @@
 # interactive regions in Suspended Sentence
 
 Image = object
-request_old_filename = None
 
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
@@ -14,6 +13,7 @@ import pygame
 import pyntnclick.constants
 from pyntnclick.widgets.text import LabelWidget, TextButton
 from pyntnclick.widgets.base import Container, Button
+from pyntnclick.widgets.filechooser import FileChooser
 from pyntnclick.tools.utils import draw_rect_image
 
 
@@ -109,12 +109,13 @@ class AppImage(Container):
     rect_thick = 3
     draw_thick = 1
 
-    def __init__(self, gd, state, scene, detail):
+    def __init__(self, parent, gd, state, scene, detail):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
             constants.screen[0], constants.screen[1]), gd)
         self.mode = 'draw'
         self._scene = scene
+        self._parent = parent
         self._detail = detail
         self.rects = []
         self.images = []
@@ -364,21 +365,20 @@ class AppImage(Container):
         print
 
     def image_load(self, ev, widget):
-        # XXX: Needs file choose widget
-        return
-        image_path = ('%s/Resources/images/%s'
-                      % (script_path, self.state.current_scene.FOLDER))
-        imagename = request_old_filename(directory=image_path)
-        try:
-            image_data = pygame.image.load(imagename)
-            self.current_image = Image(image_data)
-            self.place_image_menu.enabled = True
-            # ensure we're off screen to start
-            self.current_image.rect = image_data.get_rect() \
-                    .move(constants.screen[0] + constants.menu_width,
-                          constants.screen[1])
-        except pygame.error, e:
-            print 'Unable to load image %s' % e
+        image_path = '.'
+        filechooser = FileChooser((0, 0), self.gd, image_path)
+        self._parent.add(filechooser)
+        self._parent.modal = True
+        #try:
+        #    image_data = pygame.image.load(imagename)
+        #    self.current_image = Image(image_data)
+        #    self.place_image_menu.enabled = True
+        #    # ensure we're off screen to start
+        #    self.current_image.rect = image_data.get_rect() \
+        #            .move(constants.screen[0] + constants.menu_width,
+        #                  constants.screen[1])
+        #except pygame.error, e:
+        #    print 'Unable to load image %s' % e
 
     def image_mode(self, ev, widget):
         self.mode = 'image'
@@ -604,7 +604,7 @@ class RectApp(Container):
             except KeyError:
                 raise RectDrawerError('Invalid detail: %s' % detail)
 
-        self.image = AppImage(gd, state, scene, detail is not None)
+        self.image = AppImage(self, gd, state, scene, detail is not None)
         self.add(self.image)
         mode_label = ModeLabel(pygame.Rect((805, 0), (200, 25)),
                 self.gd, self.image)
