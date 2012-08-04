@@ -63,11 +63,11 @@ class UpDownButton(TextButton):
 
 
 class UpButton(UpDownButton):
-    TEXT = 'UP'
+    TEXT = u'\N{UPWARDS ARROW}UP'
 
 
 class DownButton(UpDownButton):
-    TEXT = 'DN'
+    TEXT = u'\N{DOWNWARDS ARROW}DN'
 
 
 class InventoryView(Container):
