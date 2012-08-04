@@ -289,8 +289,8 @@ class AppImage(Container):
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
             zoomed = pygame.transform.scale(base_surface,
-                            (constants.zoom * constants.screen[0],
-                             constants.zoom * constants.screen[1]))
+                            (constants.zoom * base_surface.get_width(),
+                             constants.zoom * base_surface.get_height()))
             area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1],
                                     self.zoom_offset[0] + constants.screen[0],
                                     self.zoom_offset[1] + constants.screen[1])
