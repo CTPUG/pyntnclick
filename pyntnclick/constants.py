@@ -25,9 +25,9 @@ class GameConstants(object):
     frame_rate = 25
     debug = _get_debug()
 
-    font = 'Vera.ttf'
-    bold_font = 'VeraBd.ttf'
-    mono_font = 'Monospace.ttf'
+    font = 'DejaVuSans.ttf'
+    bold_font = 'DejaVuSans-Bold.ttf'
+    mono_font = 'DejaVuSans-Mono.ttf'
     font_size = 16
     text_color = 'black'
     label_padding = 10
