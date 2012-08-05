@@ -553,7 +553,7 @@ class AppImage(Container):
 
     def animate(self):
         if self.draw_anim:
-            self.state.animate()
+            self._scene.animate()
 
 
 class ModeLabel(LabelWidget):
