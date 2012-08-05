@@ -1,18 +1,17 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
-Image = object
-
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
                            BLEND_RGBA_MIN, SRCALPHA, QUIT,
                            MOUSEBUTTONDOWN, MOUSEMOTION,
                            MOUSEBUTTONUP, KEYDOWN)
 import pygame
+import os
 
 import pyntnclick.constants
 from pyntnclick.widgets.text import LabelWidget, TextButton
-from pyntnclick.widgets.base import Container, Button
+from pyntnclick.widgets.base import Container, Button, Image
 from pyntnclick.widgets.filechooser import FileChooser
 from pyntnclick.tools.utils import draw_rect_image
 
@@ -268,7 +267,7 @@ class AppImage(Container):
         surf = pygame.surface.Surface((cropped_rect.w, cropped_rect.h),
                                       SRCALPHA).convert_alpha()
         frame = surf.get_rect()
-        imsurf = image.get_image().convert_alpha()
+        imsurf = image.image.convert_alpha()
         r = imsurf.get_rect()
         r.topleft = frame.topleft
         if self.trans_images:
@@ -365,20 +364,21 @@ class AppImage(Container):
         print
 
     def image_load(self, ev, widget):
-        image_path = '.'
-        filechooser = FileChooser((0, 0), self.gd, image_path)
+        filechooser = FileChooser((0, 0), self.gd, os.curdir,
+                self.do_load_image)
         self._parent.add(filechooser)
-        self._parent.modal = True
-        #try:
-        #    image_data = pygame.image.load(imagename)
-        #    self.current_image = Image(image_data)
-        #    self.place_image_menu.enabled = True
-        #    # ensure we're off screen to start
-        #    self.current_image.rect = image_data.get_rect() \
-        #            .move(constants.screen[0] + constants.menu_width,
-        #                  constants.screen[1])
-        #except pygame.error, e:
-        #    print 'Unable to load image %s' % e
+
+    def do_load_image(self, filename):
+        try:
+            self.current_image = Image((0, 0), self.gd,
+                    pygame.image.load(filename))
+            self.place_image_menu.enabled = True
+            self.current_image.rect = self.current_image.rect.move(
+                    constants.screen[0] + constants.menu_width,
+                    constants.screen[1])
+            self.image_mode(None, None)
+        except pygame.error, e:
+            print 'Unable to load image %s (reason %s)' % (filename, e)
 
     def image_mode(self, ev, widget):
         self.mode = 'image'
@@ -422,23 +422,6 @@ class AppImage(Container):
         offset[1] += constants.zoom_step * y
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
-
-    def do_mouse_move(self, ev, widget):
-        pos = self._conv_pos(ev.pos)
-        if not self.zoom_display:
-            # Construct zoom offset from mouse pos
-            self._make_zoom_offset(ev.pos)
-        if self.mode == 'image' and self.current_image:
-            if self.old_mouse_pos:
-                delta = (pos[0] - self.old_mouse_pos[0],
-                         pos[1] - self.old_mouse_pos[1])
-                self.current_image.rect.center = (
-                        self.current_image.rect.center[0] + delta[0],
-                        self.current_image.rect.center[1] + delta[1])
-            else:
-                self.current_image.rect.center = pos
-            self.invalidate()
-            self.old_mouse_pos = pos
 
     def key_down(self, ev, widget):
         if self.mode == 'image' and self.current_image:
@@ -548,12 +531,25 @@ class AppImage(Container):
             self.start_pos = self.end_pos = None
 
     def mouse_move(self, ev, widget):
-        # We're only interested in this if left mouse button is down
-        if ev.buttons[0] != 1:
-            return False
-        if self.mode == 'draw':
+        # We're only interested in this if left mouse button is down or we've
+        # got and image
+        if self.mode == 'image' and self.current_image:
+            pos = self._conv_pos(ev.pos)
+            if self.old_mouse_pos:
+                delta = (pos[0] - self.old_mouse_pos[0],
+                         pos[1] - self.old_mouse_pos[1])
+                self.current_image.rect.center = (
+                        self.current_image.rect.center[0] + delta[0],
+                        self.current_image.rect.center[1] + delta[1])
+            else:
+                self.current_image.rect.center = pos
+            self.invalidate()
+            self.old_mouse_pos = pos
+            return True
+        elif ev.buttons[0] == 1 and self.mode == 'draw':
             self.end_pos = self._conv_pos(ev.pos)
             return True
+        return False
 
     def animate(self):
         if self.draw_anim:

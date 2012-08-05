@@ -9,10 +9,12 @@ from pyntnclick.widgets.text import TextButton, LabelWidget
 
 class FileChooser(Box):
 
-    def __init__(self, rect, gd, curdir, page_length=12, padding=2):
+    def __init__(self, rect, gd, curdir, ok_callback,
+            page_length=12, padding=2):
         super(FileChooser, self).__init__(rect, gd)
         self.page_length = page_length
         self.page = 0
+        self.ok_callback = ok_callback
         self.curdir = os.path.realpath(os.path.normpath(curdir))
         self.selected = None
         self.padding = padding
@@ -136,11 +138,13 @@ class FileChooser(Box):
         if hasattr(self.parent, 'paused'):
             self.parent.paused = False
         self.parent.remove(self)
-        self.selected = None
         return True
 
     def ok(self, ev, widget):
         if hasattr(self.parent, 'paused'):
             self.parent.paused = False
         self.parent.remove(self)
+        if self.selected:
+            self.ok_callback(os.path.normpath(os.path.join(self.curdir,
+                self.selected)))
         return True
