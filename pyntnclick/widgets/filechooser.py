@@ -63,13 +63,14 @@ class FileChooser(Box):
         widget = LabelWidget((0, 0), self.gd, self.curdir[-30:], color='black')
         widget.rect.topleft = (left, top)
         self.add(widget)
-        upbut = TextButton((left + self.padding + widget.rect.width, top),
+        upbut = TextButton((left + 2 * self.padding + widget.rect.width, top),
                 self.gd, u'\N{LEFTWARDS ARROW WITH HOOK}Back one level')
         upbut.add_callback('clicked', self.change_dir, os.pardir)
         self.add(upbut)
         top += max(widget.rect.height, upbut.rect.height) + 4 * self.padding
         page_top = top
         page_left = left
+        top += self.padding
         for entry in entries[start_page:end_page]:
             if entry in self.dirs:
                 widget = self._dir_button(entry)
@@ -78,7 +79,7 @@ class FileChooser(Box):
             widget.rect.topleft = (left, top)
             self.add(widget)
             top += widget.rect.height + self.padding
-            page_left = max(page_left, left + widget.rect.width)
+            page_left = max(page_left, left + widget.rect.width + self.padding)
         # Add page list buttons
         if not self.prev_but:
             self.prev_but = TextButton((0, 0), self.gd, u'\N{UPWARDS ARROW}')
@@ -86,7 +87,7 @@ class FileChooser(Box):
         self.prev_but.rect.topleft = (page_left, page_top)
         if not self.next_but:
             self.next_but = TextButton((0, 0), self.gd, u'\N{DOWNWARDS ARROW}')
-            self.next_but.add_callback('clicked', self.change_page, -1)
+            self.next_but.add_callback('clicked', self.change_page, +1)
         page_top = max(top - self.next_but.rect.height,
                 self.prev_but.rect.bottom + self.padding)
         self.next_but.rect.topleft = (page_left, page_top)
@@ -94,13 +95,15 @@ class FileChooser(Box):
             self.prev_but.enable()
         else:
             self.prev_but.disable()
-        if end_page < len(entries):
+        if end_page + 1 < len(entries):
             self.next_but.enable()
         else:
             self.next_but.disable()
         self.add(self.next_but)
         self.add(self.prev_but)
         # Add OK and Cancel buttons
+        top = max(self.prev_but.rect.bottom + self.padding,
+                top + 2 * self.padding)
         ok_but = TextButton((left, top), self.gd, 'OK')
         ok_but.add_callback('clicked', self.ok)
         self.add(ok_but)
