@@ -238,3 +238,18 @@ class ModalWrapper(Container):
             if self.close_callback:
                 self.close_callback()
             return True
+
+
+class Image(Widget):
+    """Basic widget that draws an image, with an associated rect"""
+
+    def __init__(self, rect, gd, image):
+        super(Image, self).__init__(rect, gd)
+        self.image = image
+        self.rect.width = image.get_rect().width
+        self.rect.height = image.get_rect().height
+        self.visible = True
+
+    def draw(self, surface):
+        if self.visible:
+            surface.blit(self.image, self.rect)
