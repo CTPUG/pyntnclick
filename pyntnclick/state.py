@@ -173,10 +173,6 @@ class Game(object):
     def set_tool(self, item):
         self.tool = item
 
-    def animate(self):
-        if not self.do_check:
-            return self.current_scene.animate()
-
 
 class GameDeveloperGizmo(object):
     """Base class for objects game developers see."""
