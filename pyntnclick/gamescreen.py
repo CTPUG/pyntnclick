@@ -14,11 +14,6 @@ from pyntnclick.widgets.base import (
 from pyntnclick.widgets.text import TextButton, WrappedTextLabel
 from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
-# XXX: Need a way to get at the constants.
-from pyntnclick.constants import GameConstants
-constants = GameConstants()
-SCREEN = constants.screen
-LEAVE = constants.leave
 
 
 class InventorySlot(ImageButtonWidget):

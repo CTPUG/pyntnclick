@@ -40,6 +40,3 @@ class GameConstants(object):
 
     modal_obscure_color = (0, 0, 0, 0xB0)
 
-    # User event IDs:
-    enter = 1
-    leave = 2
