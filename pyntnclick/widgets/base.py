@@ -2,7 +2,8 @@ import collections
 
 import pygame
 from pygame.locals import (MOUSEBUTTONDOWN, MOUSEBUTTONUP,
-                           MOUSEMOTION, SRCALPHA, USEREVENT)
+                           MOUSEMOTION, SRCALPHA, USEREVENT,
+                           BLEND_RGBA_MIN)
 
 from pyntnclick.engine import UserEvent
 
@@ -253,3 +254,23 @@ class Image(Widget):
     def draw(self, surface):
         if self.visible:
             surface.blit(self.image, self.rect)
+
+
+class TranslucentImage(Image):
+    """Image that can also be translucent"""
+
+    def __init__(self, rect, gd, image):
+        super(TranslucentImage, self).__init__(rect, gd, image)
+        self.translucent = False
+        surf = pygame.surface.Surface((self.rect.width, self.rect.height),
+                SRCALPHA).convert_alpha()
+        surf.fill(pygame.color.Color(255, 255, 255, 96))
+        surf.blit(self.image, (0, 0), None, BLEND_RGBA_MIN)
+        self.trans_image = surf
+
+    def draw(self, surface):
+        if self.visible:
+            if self.translucent:
+                surface.blit(self.trans_image, self.rect)
+            else:
+                surface.blit(self.image, self.rect)

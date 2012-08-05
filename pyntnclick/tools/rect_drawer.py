@@ -3,15 +3,14 @@
 
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
-                           BLEND_RGBA_MIN, SRCALPHA, QUIT,
-                           MOUSEBUTTONDOWN, MOUSEMOTION,
+                           QUIT, MOUSEBUTTONDOWN, MOUSEMOTION,
                            MOUSEBUTTONUP, KEYDOWN)
 import pygame
 import os
 
 import pyntnclick.constants
 from pyntnclick.widgets.text import LabelWidget, TextButton
-from pyntnclick.widgets.base import Container, Button, Image
+from pyntnclick.widgets.base import Container, Button, TranslucentImage
 from pyntnclick.widgets.filechooser import FileChooser
 from pyntnclick.tools.utils import draw_rect_image
 
@@ -235,9 +234,18 @@ class AppImage(Container):
 
     def toggle_images(self, ev, widget):
         self.draw_images = not self.draw_images
+        for image in self.images:
+            image.visible = self.draw_images
+        if self.current_image:
+            self.current_image.visible = self.draw_images
+        self.invalidate()
 
     def toggle_trans_images(self, ev, widget):
         self.trans_images = not self.trans_images
+        for image in self.images:
+            image.translucent = self.trans_images
+        if self.current_image:
+            self.current_image.translucent = self.trans_images
         self.invalidate()
 
     def toggle_rects(self, ev, widget):
@@ -260,22 +268,6 @@ class AppImage(Container):
         self.mode = 'del'
         self.start_pos = None
         self.end_pos = None
-
-    def draw_sub_image(self, image, surface, cropped_rect):
-        """Tweaked image drawing to avoid albow's centring the image in the
-           subsurface"""
-        surf = pygame.surface.Surface((cropped_rect.w, cropped_rect.h),
-                                      SRCALPHA).convert_alpha()
-        frame = surf.get_rect()
-        imsurf = image.image.convert_alpha()
-        r = imsurf.get_rect()
-        r.topleft = frame.topleft
-        if self.trans_images:
-            surf.fill(pygame.color.Color(255, 255, 255, 96))
-            surf.blit(imsurf, r, None, BLEND_RGBA_MIN)
-        else:
-            surf.blit(imsurf, r, None)
-        surface.blit(surf, cropped_rect)
 
     def invalidate(self):
         self.clear_display = True
@@ -316,19 +308,10 @@ class AppImage(Container):
         if self.draw_rects:
             for (col, rect) in self.rects:
                 draw_rect_image(surface, col, rect, self.rect_thick)
-        if self.draw_images:
-            for image in self.images:
-                if image.rect.colliderect(surface.get_rect()):
-                    cropped_rect = image.rect.clip(surface.get_rect())
-                    self.draw_sub_image(image, surface, cropped_rect)
-                else:
-                    print 'image outside surface', image
-            if self.current_image and self.mode == 'image':
-                if self.current_image.rect.colliderect(surface.get_rect()):
-                    cropped_rect = self.current_image.rect.clip(
-                            surface.get_rect())
-                    self.draw_sub_image(self.current_image, surface,
-                                        cropped_rect)
+        for image in self.images:
+            image.draw(surface)
+        if self.current_image and self.mode == 'image':
+            self.current_image.draw(surface)
         if self.draw_toolbar:
             tb_surf = surface.subsurface(0, constants.screen[1]
                                             - constants.button_size,
@@ -370,8 +353,12 @@ class AppImage(Container):
 
     def do_load_image(self, filename):
         try:
-            self.current_image = Image((0, 0), self.gd,
+            self.current_image = TranslucentImage((0, 0), self.gd,
                     pygame.image.load(filename))
+            if not self.draw_images:
+                # Selecting an image makes image visible
+                self.toggle_images(None, None)
+            self.current_image.translucent = self.trans_images
             self.place_image_menu.enabled = True
             self.current_image.rect = self.current_image.rect.move(
                     constants.screen[0] + constants.menu_width,
