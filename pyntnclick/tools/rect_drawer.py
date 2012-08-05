@@ -511,7 +511,7 @@ class AppImage(Container):
             else:
                 cand = None
                 for image in self.images:
-                    if image.rect.collidepoint(ev.pos):
+                    if image.rect.collidepoint(pos):
                         cand = image
                         break
                 if cand:
