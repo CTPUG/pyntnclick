@@ -45,10 +45,11 @@ class FileChooser(Box):
         if entry == self.selected:
             # highlight
             widget = TextButton((0, 0), self.gd, entry,
-                    fontsize=10, border=2, border_color='yellow')
+                    fontsize=10, border=2, color='yellow')
         else:
-            widget = TextButton((0, 0), self.gd, entry, fontsize=10)
-        self.add_callback('clicked', self.change_selection, entry)
+            widget = TextButton((0, 0), self.gd, entry, border=0,
+                    fontsize=10)
+        widget.add_callback('clicked', self.change_selection, entry)
         return widget
 
     def fill_page(self):
@@ -129,6 +130,7 @@ class FileChooser(Box):
     def change_selection(self, ev, widget, entry):
         """Update selection"""
         self.selected = entry
+        self.fill_page()
 
     def cancel(self, ev, widget):
         if hasattr(self.parent, 'paused'):
