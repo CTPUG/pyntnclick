@@ -354,6 +354,7 @@ class AppImage(Container):
         else:
             self.filechooser.refresh()
         self.invalidate()
+        self._parent.paused = True
         self._parent.add(self.filechooser)
 
     def do_load_image(self, filename):
@@ -456,6 +457,9 @@ class AppImage(Container):
 
     def mouse_down(self, ev, widget):
         pos = self._conv_pos(ev.pos)
+        if self._parent.paused:
+            # Ignore this if the filechooser is active
+            return False
         if self.mode == 'del':
             cand = None
             # Images are drawn above rectangles, so search those first
@@ -514,6 +518,8 @@ class AppImage(Container):
                     self.invalidate()
 
     def mouse_up(self, ev, widget):
+        if self._parent.paused:
+            return False
         if self.mode == 'draw':
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
@@ -591,6 +597,8 @@ class RectApp(Container):
                 scene = state.detail_views[detail]
             except KeyError:
                 raise RectDrawerError('Invalid detail: %s' % detail)
+
+        self.paused = False
 
         self.image = AppImage(self, gd, state, scene, detail is not None)
         self.add(self.image)
