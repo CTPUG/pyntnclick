@@ -36,6 +36,12 @@ class FileChooser(Box):
             else:
                 self.files.append(entry)
 
+    def refresh(self):
+        self.page = 0
+        self.selected = None
+        self.get_lists()
+        self.fill_page()
+
     def _dir_button(self, entry):
         widget = TextButton((0, 0), self.gd, entry + '/',
                 fontname=self.gd.constants.bold_font,

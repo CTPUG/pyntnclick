@@ -136,6 +136,7 @@ class AppImage(Container):
         self.draw_anim = False
         self.zoom_offset = (600, 600)
         self.clear_display = False
+        self.filechooser = None
         if self._detail:
             w, h = self._scene.get_detail_size()
             rect = pygame.rect.Rect(0, 0, w, h)
@@ -347,9 +348,13 @@ class AppImage(Container):
         print
 
     def image_load(self, ev, widget):
-        filechooser = FileChooser((0, 0), self.gd, os.curdir,
-                self.do_load_image)
-        self._parent.add(filechooser)
+        if self.filechooser is None:
+            self.filechooser = FileChooser((0, 0), self.gd, os.curdir,
+                    self.do_load_image)
+        else:
+            self.filechooser.refresh()
+        self.invalidate()
+        self._parent.add(self.filechooser)
 
     def do_load_image(self, filename):
         try:
