@@ -1,8 +1,9 @@
+from pyntnclick.tests.game_logic_utils import GameLogicTestCase
+
 import gamelib.main
-import game_logic_utils
 
 
-class TestGameLogic(game_logic_utils.GameLogicTestCase):
+class TestGameLogic(GameLogicTestCase):
 
     GAME_DESCRIPTION_CLASS = gamelib.main.SuspendedSentence
     CURRENT_SCENE = 'cryo'
