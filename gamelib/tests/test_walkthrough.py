@@ -301,4 +301,5 @@ class TestWalkthrough(GameLogicTestCase):
         self.assert_game_data('tab', 'nav', detail='bridge_comp_detail')
 
         # Go somewhere interesting.
-        self.interact_thing('bridge_comp.nav_line2', detail='bridge_comp_detail')
+        self.interact_thing('bridge_comp.nav_line2',
+                detail='bridge_comp_detail')

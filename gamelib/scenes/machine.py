@@ -144,7 +144,7 @@ class LaserWelderSlot(Thing):
             msg = "The laser welder looks hungry, somehow."
             if "can" in contents:
                 msg += " It currently contains an empty can."
-            elif  "tube" in contents:
+            elif "tube" in contents:
                 msg += " It currently contains a tube fragment."
         elif len(contents) == 2:
             msg = "The laser welder looks expectant. "

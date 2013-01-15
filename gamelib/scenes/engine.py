@@ -123,8 +123,8 @@ class Engine(Scene):
         ))
 
     def engine_online_check(self):
-        if self.things['engine.cryo_containers'].get_data('filled') \
-                and  self.things['engine.superconductor'].get_data('working'):
+        if (self.things['engine.cryo_containers'].get_data('filled')
+                and self.things['engine.superconductor'].get_data('working')):
             self.set_data('engine online', True)
             self.remove_thing(self.things['engine.engines.8'])
             self.add_thing(Engines())

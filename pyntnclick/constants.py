@@ -39,4 +39,3 @@ class GameConstants(object):
     button_disabled_color = (0x66, 0x66, 0x66, 0xFF)
 
     modal_obscure_color = (0, 0, 0, 0xB0)
-
