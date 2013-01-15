@@ -23,8 +23,6 @@ class FileChooser(Box):
         self.modal = True
         self.prev_but = None
         self.next_but = None
-        self.get_lists()
-        self.fill_page()
 
     def get_lists(self):
         self.dirs = []
@@ -36,6 +34,10 @@ class FileChooser(Box):
             else:
                 self.files.append(entry)
 
+    def prepare(self):
+        super(FileChooser, self).prepare()
+        self.refresh()
+
     def refresh(self):
         self.page = 0
         self.selected = None
@@ -46,6 +48,7 @@ class FileChooser(Box):
         widget = TextButton((0, 0), self.gd, entry + '/',
                 fontname=self.gd.constants.bold_font,
                 fontsize=10)
+        widget.do_prepare()
         widget.add_callback('clicked', self.change_dir, entry)
         return widget
 
@@ -57,6 +60,7 @@ class FileChooser(Box):
         else:
             widget = TextButton((0, 0), self.gd, entry, border=0,
                     fontsize=10)
+        widget.do_prepare()
         widget.add_callback('clicked', self.change_selection, entry)
         return widget
 
@@ -70,10 +74,12 @@ class FileChooser(Box):
         left = self.rect.left + self.padding
         # Add current directory at the top
         widget = LabelWidget((0, 0), self.gd, self.curdir[-30:], color='black')
+        widget.do_prepare()
         widget.rect.topleft = (left, top)
         self.add(widget)
         upbut = TextButton((left + 2 * self.padding + widget.rect.width, top),
                 self.gd, u'\N{LEFTWARDS ARROW WITH HOOK}Back one level')
+        upbut.do_prepare()
         upbut.add_callback('clicked', self.change_dir, os.pardir)
         self.add(upbut)
         top += max(widget.rect.height, upbut.rect.height) + 4 * self.padding
@@ -92,10 +98,12 @@ class FileChooser(Box):
         # Add page list buttons
         if not self.prev_but:
             self.prev_but = TextButton((0, 0), self.gd, u'\N{UPWARDS ARROW}')
+            self.prev_but.do_prepare()
             self.prev_but.add_callback('clicked', self.change_page, -1)
         self.prev_but.rect.topleft = (page_left, page_top)
         if not self.next_but:
             self.next_but = TextButton((0, 0), self.gd, u'\N{DOWNWARDS ARROW}')
+            self.next_but.do_prepare()
             self.next_but.add_callback('clicked', self.change_page, +1)
         page_top = max(top - self.next_but.rect.height,
                 self.prev_but.rect.bottom + self.padding)
