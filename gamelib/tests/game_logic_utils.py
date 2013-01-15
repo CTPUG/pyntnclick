@@ -63,10 +63,6 @@ class GameLogicTestCase(unittest.TestCase):
     def assert_current_scene(self, scene):
         self.assertEquals(scene, self.state.current_scene.name)
 
-    def assert_current_detail(self, scene):
-        # TODO: Delete?
-        return
-
     def handle_result(self, result):
         if result is None:
             return None
@@ -93,7 +89,3 @@ class GameLogicTestCase(unittest.TestCase):
         target_obj = self.state.items[target_item]
         result = target_obj.interact(item_obj)
         return self.handle_result(result)
-
-    def close_detail(self):
-        # TODO: Delete?
-        return

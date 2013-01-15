@@ -25,12 +25,10 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Get the titanium leg.
         self.interact_thing('cryo.unit.1')
-        self.assert_current_detail('cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg')
         self.interact_thing('cryo.titanium_leg', detail='cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg', False)
         self.assert_inventory_item('titanium_leg')
-        self.close_detail()
 
         # Open the door the rest of the way.
         self.interact_thing('cryo.door', 'titanium_leg')
@@ -109,11 +107,9 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Get the superconductor.
         self.interact_thing('bridge.massagechair_base')
-        self.assert_current_detail('chair_detail')
         self.interact_thing('bridge.superconductor', detail='chair_detail')
         self.assert_inventory_item('superconductor')
         self.assert_detail_thing('bridge.superconductor', False)
-        self.close_detail()
 
         # Go to the crew quarters.
         self.move_to('crew_quarters')
@@ -298,7 +294,6 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
         # Bring up nav console.
         self.interact_thing('bridge.comp')
-        self.assert_current_detail('bridge_comp_detail')
         self.interact_thing('bridge_comp.nav_tab', detail='bridge_comp_detail')
         self.assert_game_data('tab', 'nav', detail='bridge_comp_detail')
 

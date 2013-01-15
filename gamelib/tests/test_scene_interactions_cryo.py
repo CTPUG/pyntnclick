@@ -77,7 +77,6 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
 
         self.assert_inventory_item('titanium_leg', True)
         self.assert_detail_thing('cryo.titanium_leg', False)
-        self.close_detail()
         self.assert_game_data('contains_titanium_leg', False, 'cryo.unit.1')
 
     def test_cryo_unit_detail(self):
