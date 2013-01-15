@@ -146,7 +146,6 @@ class GameDescription(object):
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
             make_rect_display()
-            # FIXME: Remove Albow from here
             try:
                 self.engine = RectEngine(self, opts.detail)
             except RectDrawerError, e:
