@@ -1,8 +1,10 @@
+import gamelib.main
 import game_logic_utils
 
 
 class TestGameLogic(game_logic_utils.GameLogicTestCase):
 
+    GAME_DESCRIPTION_CLASS = gamelib.main.SuspendedSentence
     CURRENT_SCENE = 'cryo'
 
     def test_cryo_door_closed_hand(self):

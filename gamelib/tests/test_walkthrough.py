@@ -1,8 +1,10 @@
+import gamelib.main
 import game_logic_utils
 
 
 class TestWalkthrough(game_logic_utils.GameLogicTestCase):
 
+    GAME_DESCRIPTION_CLASS = gamelib.main.SuspendedSentence
     CURRENT_SCENE = 'cryo'
 
     def move_to(self, target):

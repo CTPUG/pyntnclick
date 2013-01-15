@@ -2,7 +2,6 @@ import unittest
 
 import pygame.display
 
-import gamelib.main
 import pyntnclick.state
 
 # Disable alpha conversion which requires a screen
@@ -12,12 +11,13 @@ pyntnclick.resources.Resources.CONVERT_ALPHA = False
 
 class GameLogicTestCase(unittest.TestCase):
     CURRENT_SCENE = None
+    GAME_DESCRIPTION_CLASS = None
 
     def setUp(self):
         # Events require us to initialize the display
         pygame.display.init()
 
-        self.game_description = gamelib.main.SuspendedSentence()
+        self.game_description = self.GAME_DESCRIPTION_CLASS()
         self.state = self.game_description.initial_state()
         self.state.current_scene = self.state.scenes[self.CURRENT_SCENE]
 
