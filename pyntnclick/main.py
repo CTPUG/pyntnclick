@@ -154,9 +154,11 @@ class GameDescription(object):
                 sys.exit(1)
         else:
             pygame.display.set_mode(self.constants.screen, SWSURFACE)
-            pygame.display.set_icon(self.resource.get_image(
-                    'suspended_sentence24x24.png', basedir='icons'))
-            pygame.display.set_caption("Suspended Sentence")
+            if self.constants.icon:
+                pygame.display.set_icon(self.resource.get_image(
+                    self.constants.icon, basedir='icons'))
+            if self.constants.title:
+                pygame.display.set_caption(self.constants.title)
 
             self.engine = Engine(self)
             # Initialize the special screens in the engine

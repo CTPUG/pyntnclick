@@ -14,6 +14,10 @@ def _get_debug():
 
 
 class GameConstants(object):
+    title = None
+    # Icon for the main window, in the icons basedir
+    icon = None
+
     screen = (800, 600)
     snd_freq = 44100
     snd_bitsize = -16

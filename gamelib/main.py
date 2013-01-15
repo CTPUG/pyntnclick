@@ -1,5 +1,6 @@
 import scenes
 
+from constants import SSConstants
 from menu import MenuScreen
 from endscreen import EndScreen
 from ss_state import SSState
@@ -19,6 +20,9 @@ class SuspendedSentence(GameDescription):
 
     def __init__(self):
         super(SuspendedSentence, self).__init__(SSState)
+
+    def game_constants(self):
+        return SSConstants()
 
 
 def main():
