@@ -1,31 +1,28 @@
 import unittest
 
-from gamelib import state
+import pygame.display
 
+import gamelib.main
+import pyntnclick.state
 
-# Monkey-patch albow.resource.get_image to not do alpha-conversion,
-# which would require pygame display intialisation, which we don't
-# really want in the tests.
-import albow.resource
-
-
-def get_image_unoptimized(*names, **kw):
-    kw.setdefault('optimize', False)
-    return albow.resource._get_image(names, **kw)
-
-albow.resource.get_image = get_image_unoptimized
+# Disable alpha conversion which requires a screen
+import pyntnclick.resources
+pyntnclick.resources.Resources.CONVERT_ALPHA = False
 
 
 class GameLogicTestCase(unittest.TestCase):
     CURRENT_SCENE = None
 
     def setUp(self):
-        self.state = state.initial_state()
-        self.state.change_scene(self.CURRENT_SCENE)
+        # Events require us to initialize the display
+        pygame.display.init()
+
+        self.state = gamelib.main.SuspendedSentence().initial_state()
+        self.state.current_scene = self.state.scenes[self.CURRENT_SCENE]
 
     def tearDown(self):
         for item in self.state.items.values():
-            if isinstance(item, state.CloneableItem):
+            if isinstance(item, pyntnclick.state.CloneableItem):
                 type(item)._counter = 0
 
     def set_game_data(self, key, value, thing=None):
