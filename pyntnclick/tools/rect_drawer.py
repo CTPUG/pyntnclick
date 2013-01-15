@@ -54,6 +54,7 @@ class ColourButton(Button):
         self._palette.cur_selection = self
 
     def draw(self, surface):
+        self.do_prepare()
         surface.fill(pygame.color.Color(0, 0, 0), self.rect)
         if self.selected:
             surface.fill(self.sel_colour, self._button_rect)
@@ -274,6 +275,7 @@ class AppImage(Container):
         self.clear_display = True
 
     def draw(self, surface):
+        self.do_prepare()
         if self.clear_display:
             surface.fill(pygame.color.Color(0, 0, 0))
             self.clear_display = False
@@ -521,6 +523,9 @@ class AppImage(Container):
         if self._parent.paused:
             return False
         if self.mode == 'draw':
+            if self.start_pos is None:
+                # We've come here not via a drawing situation, so bail
+                return False
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
@@ -563,6 +568,7 @@ class ModeLabel(LabelWidget):
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
 
     def draw(self, surface):
+        self.do_prepare()
         text = 'Mode : %s' % self.app_image.mode
         if self.text != text:
             self.text = text
