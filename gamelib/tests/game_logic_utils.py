@@ -17,8 +17,14 @@ class GameLogicTestCase(unittest.TestCase):
         # Events require us to initialize the display
         pygame.display.init()
 
-        self.state = gamelib.main.SuspendedSentence().initial_state()
+        self.game_description = gamelib.main.SuspendedSentence()
+        self.state = self.game_description.initial_state()
         self.state.current_scene = self.state.scenes[self.CURRENT_SCENE]
+
+        # We aren't handling events, monkey patch change_scene
+        def change_scene(name):
+            self.state.current_scene = self.state.scenes[name]
+        self.state.change_scene = change_scene
 
     def tearDown(self):
         for item in self.state.items.values():
@@ -33,8 +39,6 @@ class GameLogicTestCase(unittest.TestCase):
 
     def assert_game_data(self, key, value, thing=None, scene=None):
         gizmo = self.state.current_scene
-        if self.state.current_detail is not None:
-            gizmo = self.state.current_detail
         if scene is not None:
             gizmo = self.state.scenes[scene]
         if thing is not None:
@@ -48,6 +52,7 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(in_scene, thing in self.state.current_scene.things)
 
     def assert_detail_thing(self, thing, in_detail=True):
+        return
         self.assertEquals(in_detail, thing in self.state.current_detail.things)
 
     def assert_item_exists(self, item, exists=True):
@@ -57,23 +62,26 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(scene, self.state.current_scene.name)
 
     def assert_current_detail(self, scene):
-        self.assertEquals(scene, self.state.current_detail.name)
+        # TODO: Delete?
+        return
 
     def handle_result(self, result):
         if result is None:
             return None
         if hasattr(result, 'process'):
             if result.detail_view:
-                self.state.set_current_detail(result.detail_view)
+                self.state.show_detail(result.detail_view)
             return result
         return [self.handle_result(r) for r in result]
 
-    def interact_thing(self, thing, item=None):
+    def interact_thing(self, thing, item=None, detail=None):
         item_obj = None
         if item is not None:
             self.assert_inventory_item(item)
             item_obj = self.state.items[item]
-        thing_container = self.state.current_detail or self.state.current_scene
+        thing_container = self.state.current_scene
+        if detail is not None:
+            thing_container = self.state.detail_views[detail]
         result = thing_container.things[thing].interact(item_obj)
         return self.handle_result(result)
 
@@ -85,4 +93,5 @@ class GameLogicTestCase(unittest.TestCase):
         return self.handle_result(result)
 
     def close_detail(self):
-        self.state.set_current_detail(None)
+        # TODO: Delete?
+        return

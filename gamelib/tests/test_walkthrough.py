@@ -27,7 +27,7 @@ class TestWalkthrough(game_logic_utils.GameLogicTestCase):
         self.interact_thing('cryo.unit.1')
         self.assert_current_detail('cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg')
-        self.interact_thing('cryo.titanium_leg')
+        self.interact_thing('cryo.titanium_leg', detail='cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg', False)
         self.assert_inventory_item('titanium_leg')
         self.close_detail()
