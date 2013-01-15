@@ -20,12 +20,11 @@ class Result(object):
     """Result of interacting with a thing"""
 
     def __init__(self, message=None, soundfile=None, detail_view=None,
-                 widget=None, close_detail=False, end_game=False):
+                 widget=None, end_game=False):
         self.message = message
         self.soundfile = soundfile
         self.detail_view = detail_view
         self.widget = widget
-        self.close_detail = close_detail
         self.end_game = end_game
 
     def play_sound(self, screen):
