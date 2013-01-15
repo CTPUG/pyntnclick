@@ -37,10 +37,12 @@ class GameLogicTestCase(unittest.TestCase):
             gizmo = gizmo.things[thing]
         gizmo.set_data(key, value)
 
-    def assert_game_data(self, key, value, thing=None, scene=None):
+    def assert_game_data(self, key, value, thing=None, scene=None, detail=None):
         gizmo = self.state.current_scene
         if scene is not None:
             gizmo = self.state.scenes[scene]
+        if detail is not None:
+            gizmo = self.state.detail_views[detail]
         if thing is not None:
             gizmo = gizmo.things[thing]
         self.assertEquals(value, gizmo.get_data(key))
