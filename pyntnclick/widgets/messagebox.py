@@ -12,7 +12,6 @@ class MessageBox(Box):
         self.font_size = fontsize
         self.post_callback = post_callback
         self.color = color
-        self.prepare()
         self.modal = True
 
     def prepare(self):

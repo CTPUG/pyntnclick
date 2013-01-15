@@ -14,7 +14,9 @@ class JimLabel(WrappedTextLabel):
                 bg_color=pygame.Color(255, 175, 127, 191),
                 color=pygame.Color(0, 0, 0),
                 border_color=pygame.Color(127, 15, 0))
+
+    def prepare(self):
         # Centre the widget
-        # Should this happen automatically in state?
-        self.rect.center = (gd.constants.screen[0] / 2,
-                gd.constants.screen[1] / 2)
+        super(JimLabel, self).prepare()
+        self.rect.center = (self.gd.constants.screen[0] / 2,
+                self.gd.constants.screen[1] / 2)

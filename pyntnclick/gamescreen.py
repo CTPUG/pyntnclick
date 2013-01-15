@@ -15,7 +15,6 @@ from pyntnclick.widgets.text import TextButton, WrappedTextLabel
 from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 
-
 class InventorySlot(ImageButtonWidget):
     SELECTED_COLOR = Color("yellow")
     SELECTED_WIDTH = 2
@@ -148,6 +147,7 @@ class SceneWidget(Container):
         self.is_detail = is_detail
         if is_detail:
             self.close_button = TextButton((0, 0), self.gd, "Close")
+            self.close_button.do_prepare()
             self.close_button.rect.midbottom = self.rect.midbottom
             self.close_button.add_callback('clicked', self.close)
             self.add(self.close_button)
@@ -222,6 +222,7 @@ class ToolBar(Container):
             rect = Rect(rect, (width, self.rect.height))
         tool = cls(rect, *args, **kw)
         self.add(tool)
+        tool.do_prepare()
         self.left += tool.rect.width
         return tool
 
@@ -339,6 +340,7 @@ class GameScreen(CursorScreen):
         rect = Rect((0, 0), (1, 1))
         max_width = self.gd.constants.screen[0] - 100
         widget = WrappedTextLabel(rect, self.gd, message, max_width=max_width)
+        widget.do_prepare()
         widget.rect.center = self.container.rect.center
         self.queue_widget(widget)
 

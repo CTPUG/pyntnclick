@@ -15,6 +15,8 @@ class ToolListWidget(Container):
         super(ToolListWidget, self).__init__(rect, gd)
         self.prev_but = None
         self.next_but = None
+
+    def prepare(self):
         self.fill_page()
 
     def fill_page(self):

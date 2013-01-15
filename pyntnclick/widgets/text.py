@@ -15,7 +15,6 @@ class TextWidget(Widget):
         self.fontname = fontname or constants.font
         self.fontsize = fontsize or constants.font_size
         self.color = color or constants.text_color
-        self.prepare()
 
     def prepare(self):
         self.font = self.resource.get_font(self.fontname, self.fontsize)
@@ -27,6 +26,7 @@ class TextWidget(Widget):
         self.rect.height = max(self.rect.height, height)
 
     def draw(self, surface):
+        self.do_prepare()
         surface.blit(self.surface, self.rect)
 
 
@@ -57,6 +57,7 @@ class LabelWidget(TextWidget):
         self.surface = new_surface
 
     def draw(self, surface):
+        self.do_prepare()
         surface.blit(self.surface, self.rect)
 
 
@@ -108,7 +109,6 @@ class WrappedTextLabel(LabelWidget):
         self._wrap_width = None
         self._text_lines = None
         super(WrappedTextLabel, self).__init__(rect, gd, *args, **kwargs)
-        self.prepare()
 
     def prepare(self):
         if self._wrap_width is None:

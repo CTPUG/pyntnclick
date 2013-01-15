@@ -24,6 +24,7 @@ class Widget(object):
         self.callbacks = collections.defaultdict(list)
         # To track which widget the mouse is over
         self.mouseover_widget = self
+        self.is_prepared = False
 
     def set_parent(self, parent):
         self.parent = parent
@@ -53,17 +54,26 @@ class Widget(object):
         "Override me"
         pass
 
+    def prepare(self):
+        """Override me"""
+        pass
+
+    def do_prepare(self):
+        if not self.is_prepared:
+            self.prepare()
+            self.is_prepared = True
+
     def disable(self):
         if not self.disabled:
             self.disabled = True
-            if hasattr(self, 'prepare'):
-                self.prepare()
+            self.prepare()
+            self.is_prepared = True
 
     def enable(self):
         if self.disabled:
             self.disabled = False
-            if hasattr(self, 'prepare'):
-                self.prepare()
+            self.prepare()
+            self.is_prepared = True
 
     def global_to_local(self, pos):
         x, y = pos
@@ -122,6 +132,7 @@ class Container(Widget):
 
     def add(self, widget):
         widget.set_parent(self)
+        widget.prepare()
         self.children.append(widget)
         self.rect = self.rect.union(widget.rect)
         return widget
@@ -135,6 +146,7 @@ class Container(Widget):
             self.remove(widget)
 
     def draw(self, surface):
+        self.do_prepare()
         for child in self.children:
             child.draw(surface)
 
@@ -170,6 +182,7 @@ class ModalStackContainer(Container):
         return self.top is widget
 
     def draw(self, surface):
+        self.do_prepare()
         obscure = pygame.Surface(self.rect.size, SRCALPHA)
         obscure.fill(self.obscure_color)
         for child in self.children:
@@ -197,6 +210,7 @@ class Box(Container):
     padding = 4
 
     def draw(self, surface):
+        self.do_prepare()
         expandrect = self.rect.move((-self.padding, -self.padding))
         expandrect.width = self.rect.width + 2 * self.padding
         expandrect.height = self.rect.height + 2 * self.padding
@@ -252,6 +266,7 @@ class Image(Widget):
         self.visible = True
 
     def draw(self, surface):
+        self.do_prepare()
         if self.visible:
             surface.blit(self.image, self.rect)
 
@@ -269,6 +284,7 @@ class TranslucentImage(Image):
         self.trans_image = surf
 
     def draw(self, surface):
+        self.do_prepare()
         if self.visible:
             if self.translucent:
                 surface.blit(self.trans_image, self.rect)

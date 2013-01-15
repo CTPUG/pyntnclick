@@ -273,6 +273,7 @@ class Scene(StatefulGizmo):
         if text is None:
             return None
         label = LabelWidget((0, 10), self.gd, text)
+        label.do_prepare()
         label.rect.left += (dest_rect.width - label.rect.width) / 2
         return label
 
