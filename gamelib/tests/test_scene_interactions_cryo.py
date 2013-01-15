@@ -70,11 +70,10 @@ class TestGameLogic(game_logic_utils.GameLogicTestCase):
         "The cryo unit has the leg in it and we touch it. We get the leg."
 
         self.assert_game_data('contains_titanium_leg', True, 'cryo.unit.1')
-        self.state.set_current_detail('cryo_detail')
         self.assert_inventory_item('titanium_leg', False)
         self.assert_detail_thing('cryo.titanium_leg', True)
 
-        self.interact_thing('cryo.titanium_leg')
+        self.interact_thing('cryo.titanium_leg', detail='cryo_detail')
 
         self.assert_inventory_item('titanium_leg', True)
         self.assert_detail_thing('cryo.titanium_leg', False)
