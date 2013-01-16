@@ -234,7 +234,7 @@ class SuperconductorThing(Thing):
 
     def interact_without(self):
         self.game.add_inventory_item('superconductor')
-        self.game.current_scene.things['bridge.massagechair_base'] \
+        self.game.scenes['bridge'].things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
         return (Result("The superconductor module unclips easily."),

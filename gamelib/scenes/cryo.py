@@ -421,7 +421,7 @@ class TitaniumLegThing(Thing):
 
     def interact_without(self):
         self.game.add_inventory_item('titanium_leg')
-        self.game.current_scene.things['cryo.unit.1'].set_data(
+        self.game.scenes['cryo'].things['cryo.unit.1'].set_data(
                 'contains_titanium_leg', False)
         self.scene.remove_thing(self)
         return Result("The skeletal occupant of this cryo unit has an"
