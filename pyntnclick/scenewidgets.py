@@ -11,7 +11,7 @@ from pyntnclick.widgets.text import LabelWidget
 
 # XXX: Needs a way to get at resource:
 from pyntnclick.resources import Resources
-get_image = Resources("Resources").get_image
+get_image = Resources("data").get_image
 
 
 class Interact(object):

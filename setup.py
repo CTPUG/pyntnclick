@@ -44,7 +44,7 @@ setup(
       console=['scripts/testconsole.py'],
       windows=[{
           'script': 'scripts/suspended.py',
-          'icon_resources': [(0, "Resources/icons/suspended_sentence.ico")],
+          'icon_resources': [(0, "data/icons/suspended_sentence.ico")],
       }],
       app=['run_game.py'],
       options={
@@ -77,12 +77,12 @@ setup(
       },
       'py2app': {
           'argv_emulation': 1,
-          'iconfile': 'Resources/icons/suspended_sentence.icns',
+          'iconfile': 'data/icons/suspended_sentence.icns',
 #           'dist_dir': 'dist/suspended-sentence-%s' % version.VERSION_STR,
 #           'bdist_base': 'build/bdist',
           'packages': [
               'logging', 'encodings', 'pygame', 'gamelib',
-              'Resources',
+              'data',
           ],
           'excludes': ['numpy'],
       }},

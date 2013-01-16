@@ -48,8 +48,8 @@ cp -v "${WINE_SYS32}/msvcr71.dll" "${DEST}"
 #mkdir -p "${DEST}/share/pgu/themes"
 #cp -R "${WINE_PYTHON}/share/pgu/themes/default" "${DEST}/share/pgu/themes/"
 
-echo "'Resources' -> '${DEST}/Resources'"
-bzr export -q "${DEST}/Resources" "Resources"
+echo "'data' -> '${DEST}/data'"
+bzr export -q "${DEST}/data" "data"
 #find "${DEST}/data" -name '*.svg' -delete
 
 echo "'${WINE_PYTHON}/Lib/site-packages/pygame' -> '${DEST}'"
@@ -57,7 +57,7 @@ rm -rf "${DEST}/pygame"
 cp -R "${WINE_PYTHON}/Lib/site-packages/pygame" "${DEST}"
 rm -rf "${DEST}/pygame/examples" "${DEST}/pygame/tests" "${DEST}/pygame/docs"
 
-echo "'docs/walkthrough.rst' -> '${DEST}/Resources'"
+echo "'docs/walkthrough.rst' -> '${DEST}'"
 rm -f "${DEST}/walkthrough.rst"
 cp "docs/walkthrough.rst" "${DEST}/walkthrough.rst"
 

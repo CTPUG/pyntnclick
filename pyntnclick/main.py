@@ -42,7 +42,7 @@ class GameDescription(object):
     START_SCREEN = 'menu'
 
     # resource module
-    RESOURCE_MODULE = "Resources"
+    RESOURCE_MODULE = "data"
 
     def __init__(self, custom_data_cls=None):
         if self.INITIAL_SCENE is None:
