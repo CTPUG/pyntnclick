@@ -1,6 +1,7 @@
 import unittest
 
 import pygame.display
+import pygame.event
 
 import pyntnclick.resources
 import pyntnclick.state
@@ -29,6 +30,16 @@ class GameLogicTestCase(unittest.TestCase):
         for item in self.state.items.values():
             if isinstance(item, pyntnclick.state.CloneableItem):
                 type(item)._counter = 0
+
+    def clear_event_queue(self):
+        # Since we aren't handling events, we may overflow the pygame
+        # event buffer if we're generating a lot of events
+        pygame.event.clear()
+
+    def clear_inventory(self):
+        # Remove all items from the inventory, ensuring tool is set to None
+        self.state.set_tool(None)
+        self.state.inventory = []
 
     def set_game_data(self, key, value, thing=None):
         gizmo = self.state.current_scene
