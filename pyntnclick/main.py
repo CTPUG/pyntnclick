@@ -3,13 +3,7 @@
 Contains the entry point used by the run_game.py script.
 
 '''
-
-# Albow looks for stuff in os.path[0], which isn't always where it expects.
-# The following horribleness fixes this.
 import sys
-import os.path
-right_path = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, right_path)
 from optparse import OptionParser
 
 import pygame
