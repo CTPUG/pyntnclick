@@ -5,9 +5,11 @@
 # Usage: darwin-py2app
 
 GAME_NAME="suspended-sentence"
+GAME_MOD="gamelib"
 
-SS_VERSION=`PYTHONPATH=. python -c "from gamelib import version; print version.VERSION_STR"`
-BUILD_NAME="${GAME_NAME}-${SS_VERSION}"
+GAME_VERSION=`PYTHONPATH=. python -c "from ${GAME_MOD} import version; print version.VERSION_STR"`
+GAME_TITLE=`PYTHONPATH=. python -c "from ${GAME_MOD} import version; print version.NAME"`
+BUILD_NAME="${GAME_NAME}-${GAME_VERSION}"
 BUILD_FOLDER="build/${GAME_NAME}"
 DMG_NAME="${BUILD_NAME}.dmg"
 PY2APP_LOG="py2app.log"
@@ -24,7 +26,7 @@ cd ${BUILD_FOLDER}
 
 echo ""
 echo "=== Running python setup.py ==="
-echo "  Suspended Sentence version: ${SS_VERSION}"
+echo "  ${GAME_TITLE} version: ${GAME_VERSION}"
 echo "  Writing log to ${PY2APP_LOG}"
 
 python setup.py py2app >${PY2APP_LOG} 2>&1
@@ -34,7 +36,7 @@ echo "=== Removing useless cruft that just takes up space ==="
 echo ""
 
 for dir in docs examples tests; do
-    find "dist/" -path "*/Resources/lib/*/pygame/${dir}/*" -delete
+    find "dist/" -path "*/data/lib/*/pygame/${dir}/*" -delete
 done
 
 echo "=== Building DMG ==="
