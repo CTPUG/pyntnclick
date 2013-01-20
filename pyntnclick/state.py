@@ -121,7 +121,8 @@ class Game(object):
         self.items[item.name] = item
 
     def load_scenes(self, modname):
-        mod = __import__("gamelib.scenes.%s" % (modname,), fromlist=[modname])
+        mod = __import__('%s.%s' % (self.gd.SCENE_MODULE, modname),
+                         fromlist=[modname])
         for scene_cls in mod.SCENES:
             scene = scene_cls(self)
             self.add_scene(scene)
