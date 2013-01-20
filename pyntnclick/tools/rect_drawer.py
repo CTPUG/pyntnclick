@@ -566,13 +566,16 @@ class ModeLabel(LabelWidget):
         super(ModeLabel, self).__init__(rect,
                 gd, 'Mode : ', fontname=constants.bold_font,
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
+        self.start_rect = self.rect.copy()
 
     def draw(self, surface):
         self.do_prepare()
         text = 'Mode : %s' % self.app_image.mode
         if self.text != text:
             self.text = text
-            self.prepare()
+            self.is_prepared = False
+            self.rect = self.start_rect.copy()
+            self.do_prepare()
         super(ModeLabel, self).draw(surface)
 
 
