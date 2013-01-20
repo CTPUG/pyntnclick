@@ -14,14 +14,12 @@ class MadClickerTestCase(GameLogicTestCase):
 
     def check_result(self, obj):
         """Check that the obj is the sort of result obj/seq we expect"""
-        # We do it this way, becuase we don't allow seqs to contain seqs
-        if obj and not hasattr(obj, 'process'):
+        # We do it this way, because we don't allow seqs to contain seqs
+        if not self.check_result_obj(obj):
             for subobj in obj:
                 if not self.check_result_obj(subobj):
                     return False
-            return True
-        else:
-            return self.check_result_obj(obj)
+        return True
 
     def _format_item(self, item):
         return "%s (%s)" % (item.name, item)
