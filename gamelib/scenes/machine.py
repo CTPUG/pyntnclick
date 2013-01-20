@@ -180,21 +180,21 @@ class LaserWelderButton(Thing):
         else:
             welder_slot.set_data("contents", set())
             welder_slot.update_contents()
-            if self.game.items["cryo_pipes_one"] in self.game.inventory:
+            if self.game.is_in_inventory("cryo_pipes_one"):
                 self.game.replace_inventory_item("cryo_pipes_one",
                                                   "cryo_pipes_two")
                 return Result("With high-precision spitzensparken, you weld"
                               " together a second pipe. You bundle the two"
                               " pipes together.",
                         soundfile='laser.ogg')
-            elif self.game.items["cryo_pipes_two"] in self.game.inventory:
+            elif self.game.is_in_inventory("cryo_pipes_two"):
                 self.game.replace_inventory_item("cryo_pipes_two",
                                                   "cryo_pipes_three")
                 return Result("With high-precision spitzensparken, you create"
                               " yet another pipe. You store it with the other"
                               " two.",
                         soundfile='laser.ogg')
-            elif self.game.items["cryo_pipes_three"] in self.game.inventory:
+            elif self.game.is_in_inventory("cryo_pipes_three"):
                 # just for safety
                 return None
             else:

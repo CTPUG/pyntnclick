@@ -115,14 +115,14 @@ class InventoryView(Container):
             self.up_button.enable()
 
         max_slot = (self.inv_offset + len(self.slots))
-        if max_slot >= len(self.game.inventory):
+        if max_slot >= len(self.game.inventory()):
             self.down_button.disable()
         else:
             self.down_button.enable()
 
     @property
     def slot_items(self):
-        return self.game.inventory[self.inv_offset:][:len(self.slots)]
+        return self.game.inventory()[self.inv_offset:][:len(self.slots)]
 
     def mouse_down(self, event, widget):
         if event.button != 1:
@@ -256,6 +256,9 @@ class GameScreen(CursorScreen):
         getattr(self, 'game_event_%s' % event_name, lambda d: None)(data)
 
     def game_event_restart(self, data):
+        self.reset_game(self.create_initial_state())
+
+    def reset_game(self, game_state=None):
         self._clear_all()
         self.game = self.create_initial_state()
 

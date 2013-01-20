@@ -45,12 +45,18 @@ class Result(object):
             screen.end_game()
 
 
-class GameState(dict):
+class GameState(object):
     """This holds the serializable game state.
 
        Games wanting to do fancier stuff with the state should
        sub-class this and feed the subclass into
        GameDescription via the custom_data parameter."""
+
+    def __init__(self):
+        self._game_state = {'inventories': {'main': []}}
+
+    def __getitem__(self, key):
+        return self._game_state[key]
 
     def get_all_gizmo_data(self, state_key):
         """Get all state for a gizmo - returns a dict"""
@@ -66,12 +72,15 @@ class GameState(dict):
 
     def initialize_state(self, state_key, initial_data):
         """Initialize a gizmo entry"""
-        if state_key not in self:
-            self[state_key] = {}
+        if state_key not in self._game_state:
+            self._game_state[state_key] = {}
             if initial_data:
                 # deep copy of INITIAL_DATA allows lists, sets and
                 # other mutable types to safely be used in INITIAL_DATA
-                self[state_key].update(copy.deepcopy(initial_data))
+                self._game_state[state_key].update(copy.deepcopy(initial_data))
+
+    def inventory(self, name='main'):
+        return self['inventories'][name]
 
 
 class Game(object):
@@ -92,15 +101,20 @@ class Game(object):
         # map of item name -> Item object
         self.items = {}
         # list of item objects in inventory
-        self.inventory = []
+        self.current_inventory = 'main'
         # currently selected tool (item)
         self.tool = None
         # Global game data
-        self.data = GameState()
+        self.data = self.gd.game_state()
         # current scene
         self.current_scene = None
         # debug rects
         self.debug_rects = False
+
+    def inventory(self, name=None):
+        if name is None:
+            name = self.current_inventory
+        return self.data.inventory(name)
 
     def set_custom_data(self, data_object):
         self.data = data_object
@@ -143,16 +157,16 @@ class Game(object):
         ScreenEvent.post('game', 'inventory', None)
 
     def add_inventory_item(self, name):
-        self.inventory.append(self.items[name])
+        self.inventory().append(self.items[name])
         self._update_inventory()
 
     def is_in_inventory(self, name):
         if name in self.items:
-            return self.items[name] in self.inventory
+            return self.items[name] in self.inventory()
         return False
 
     def remove_inventory_item(self, name):
-        self.inventory.remove(self.items[name])
+        self.inventory().remove(self.items[name])
         # Unselect tool if it's removed
         if self.tool == self.items[name]:
             self.set_tool(None)
@@ -161,8 +175,8 @@ class Game(object):
     def replace_inventory_item(self, old_item_name, new_item_name):
         """Try to replace an item in the inventory with a new one"""
         try:
-            index = self.inventory.index(self.items[old_item_name])
-            self.inventory[index] = self.items[new_item_name]
+            index = self.inventory().index(self.items[old_item_name])
+            self.inventory()[index] = self.items[new_item_name]
             if self.tool == self.items[old_item_name]:
                 self.set_tool(self.items[new_item_name])
         except ValueError:

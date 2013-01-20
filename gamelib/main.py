@@ -18,8 +18,8 @@ class SuspendedSentence(GameDescription):
             }
     START_SCREEN = 'menu'
 
-    def __init__(self):
-        super(SuspendedSentence, self).__init__(SSState)
+    def game_state(self):
+        return SSState()
 
     def game_constants(self):
         return SSConstants()

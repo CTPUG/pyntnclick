@@ -39,7 +39,7 @@ class GameLogicTestCase(unittest.TestCase):
     def clear_inventory(self):
         # Remove all items from the inventory, ensuring tool is set to None
         self.state.set_tool(None)
-        self.state.inventory = []
+        self.state.inventory()[:] = []
 
     def set_game_data(self, key, value, thing=None):
         gizmo = self.state.current_scene
