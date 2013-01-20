@@ -185,7 +185,7 @@ class AppImage(Container):
 
     def find_intersecting_rects(self, d):
         """Find if any rect collections intersect"""
-        # I loath N^X brute search algorithm's, but whatever, hey
+        # I loath N^X brute search algorithms, but whatever, hey
         scene = self._scene
         for (num, col) in enumerate(d):
             rect_list = d[col]
