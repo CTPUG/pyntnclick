@@ -478,7 +478,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
         pass
 
     def leave(self):
-        """Called when the cursr leaves the Thing."""
+        """Called when the cursor leaves the Thing."""
         pass
 
     def animate(self):
