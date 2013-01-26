@@ -11,8 +11,7 @@ class PageBase(Thing):
     "Displays manual pages"
 
     def get_page_thing(self):
-        # XXX: This is ugly. better ideas?
-        return self.game.detail_views['manual_detail'].things['manual.page']
+        return self.scene.things['manual.page']
 
     def get_page(self):
         return self.get_page_thing().get_data('page')
