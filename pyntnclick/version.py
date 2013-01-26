@@ -44,7 +44,7 @@ DOCUMENTERS = [
     PEOPLE['Stefano'],
 ]
 
-# SOURCEFORGE_URL = 'http://sourceforge.net/projects/XXXX/'
+# HOMEPAGE = 'http://sourceforge.net/projects/XXXX/'
 # PYPI_URL = 'http://pypi.python.org/pypi/XXXX/'
 
 LICENSE = 'MIT'

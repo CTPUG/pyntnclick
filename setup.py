@@ -24,7 +24,7 @@ setup(
       maintainer=version.MAINTAINER_NAME,
       maintainer_email=version.MAINTAINER_EMAIL,
 
-      # url=version.SOURCEFORGE_URL,
+      # url=version.HOMEPAGE,
       # download_url=version.PYPI_URL,
 
       license=version.LICENSE,
