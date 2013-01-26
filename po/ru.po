@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: suspended-sentence 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-26 18:15+0200\n"
+"POT-Creation-Date: 2013-01-26 18:41+0200\n"
 "PO-Revision-Date: 2011-03-08 23:13+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: gamelib/constants.py:6
+msgid "Suspended Sentence"
+msgstr "Анабиоз"
 
 #: gamelib/scenes/bridge.py:58
 msgid "The brightly coloured wires contrast with the drab walls."
