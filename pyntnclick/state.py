@@ -6,14 +6,7 @@ from widgets.text import LabelWidget
 from pygame.color import Color
 
 from pyntnclick.engine import ScreenEvent
-
-
-def frame_rect(surface, color, rect, thick=1):
-    # FIXME: Stolen from albow
-    surface.fill(color, (rect.left, rect.top, rect.width, thick))
-    surface.fill(color, (rect.left, rect.bottom - thick, rect.width, thick))
-    surface.fill(color, (rect.left, rect.top, thick, rect.height))
-    surface.fill(color, (rect.right - thick, rect.top, thick, rect.height))
+from pyntnclick.tools.utils import draw_rect_image
 
 
 class Result(object):
@@ -491,11 +484,11 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.current_interact.rect = old_rect
         if self.game.debug_rects and self._interact_hilight_color:
             if hasattr(self.rect, 'collidepoint'):
-                frame_rect(surface, self._interact_hilight_color,
+                draw_rect_image(surface, self._interact_hilight_color,
                         self.rect.inflate(1, 1), 1)
             else:
                 for rect in self.rect:
-                    frame_rect(surface, self._interact_hilight_color,
+                    draw_rect_image(surface, self._interact_hilight_color,
                             rect.inflate(1, 1), 1)
 
 
