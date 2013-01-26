@@ -32,6 +32,13 @@ class ResourcesTestCase(TestCase):
                           data_path('en/thing'), data_path('thing')],
                          res.get_paths('thing'))
 
+    def test_get_paths_lang_dialect(self):
+        res = self.get_resource_loader('en_ZA')
+        self.assertEqual([test_path('en_ZA/thing'), test_path('en/thing'),
+                          test_path('thing'), data_path('en_ZA/thing'),
+                          data_path('en/thing'), data_path('thing')],
+                         res.get_paths('thing'))
+
     def test_get_resource_path_missing(self):
         try:
             self.res.get_resource_path('should_not_exist')
