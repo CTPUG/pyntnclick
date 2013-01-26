@@ -6,6 +6,7 @@ from pygame.colordict import THECOLORS
 from pygame.color import Color
 from pygame.rect import Rect
 
+from pyntnclick.i18n import _
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
@@ -54,16 +55,16 @@ class Bridge(Scene):
         self.add_thing(JimPanel())
         self.add_thing(StarField())
         self.add_thing(GenericDescThing('bridge.wires', 1,
-            "The brightly coloured wires contrast with the drab walls.",
+            _("The brightly coloured wires contrast with the drab walls."),
             ((46, 4, 711, 143),)))
         self.add_thing(GenericDescThing('bridge.note', 2,
-            "\"Dammit JIM, I'm a doctor, not an engineer!\"",
+            _("\"Dammit JIM, I'm a doctor, not an engineer!\""),
             (
                 (491, 494, 194, 105),
                 (422, 533, 71, 66),
                 )))
         self.doctor = GenericDescThing('bridge.skel', 3,
-                "A skeleton hangs improbably from the wires.",
+                _("A skeleton hangs improbably from the wires."),
                 (
                     (632, 148, 40, 29),
                     (683, 176, 30, 101),
@@ -108,13 +109,13 @@ class BridgeComputer(Thing):
         return Result(detail_view='bridge_comp_detail')
 
     def interact_with_titanium_leg(self, item):
-        return Result("You can't break the duraplastic screen.")
+        return Result(_("You can't break the duraplastic screen."))
 
     def interact_with_machete(self, item):
-        return Result("Scratching the screen won't help you.")
+        return Result(_("Scratching the screen won't help you."))
 
     def get_description(self):
-        return "The main bridge computer screen."
+        return _("The main bridge computer screen.")
 
 
 class MassageChairBase(Thing):
@@ -137,9 +138,9 @@ class MassageChairBase(Thing):
 
     def get_description(self):
         if self.get_data('contains_superconductor'):
-            return ("A top of the line Massage-o-Matic Captain's Executive"
-                    " Command Chair. It's massaging a skeleton.")
-        return "The chair won't work any more, it has no power."
+            return _("A top of the line Massage-o-Matic Captain's Executive"
+                     " Command Chair. It's massaging a skeleton.")
+        return _("The chair won't work any more, it has no power.")
 
 
 class MassageChair(Thing):
@@ -188,15 +189,15 @@ class StethoscopeThing(Thing):
     INITIAL = 'stethoscope'
 
     def get_description(self):
-        return "A stethoscope hangs from the neck of the skeleton."
+        return _("A stethoscope hangs from the neck of the skeleton.")
 
     def interact_without(self):
         self.game.add_inventory_item('stethoscope')
         self.scene.remove_thing(self)
         # Fill in the doctor's rect
         self.scene.doctor.rect.append(self.rect)
-        return Result("You pick up the stethoscope and verify that the"
-                      " doctor's heart has stopped. Probably a while ago.")
+        return Result(_("You pick up the stethoscope and verify that the"
+                        " doctor's heart has stopped. Probably a while ago."))
 
 
 class TapedSuperconductor(Item):
@@ -216,9 +217,9 @@ class Superconductor(Item):
         taped_superconductor = TapedSuperconductor('taped_superconductor')
         self.game.add_item(taped_superconductor)
         self.game.replace_inventory_item(self.name, taped_superconductor.name)
-        return Result("You rip off a piece of duct tape and stick it on the"
-                      " superconductor. It almost sticks to itself, but you"
-                      " successfully avoid disaster.")
+        return Result(_("You rip off a piece of duct tape and stick it on the"
+                        " superconductor. It almost sticks to itself, but you"
+                        " successfully avoid disaster."))
 
 
 class SuperconductorThing(Thing):
@@ -237,11 +238,11 @@ class SuperconductorThing(Thing):
         self.game.scenes['bridge'].things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
         self.scene.remove_thing(self)
-        return (Result("The superconductor module unclips easily."),
-                make_jim_dialog(("Prisoner %s. That chair you've destroyed"
-                                 " was property of the ship's captain. "
-                                 "You will surely be punished."
-                                 % PLAYER_ID), self.game))
+        return (Result(_("The superconductor module unclips easily.")),
+                make_jim_dialog(_("Prisoner %s. That chair you've destroyed"
+                                  " was property of the ship's captain. "
+                                  "You will surely be punished.")
+                                  % PLAYER_ID, self.game))
 
 
 class StarField(Thing):
@@ -271,9 +272,9 @@ class BlinkingLights(Thing):
 
     def leave(self):
         self.description = random.choice([
-            "The lights flash in interesting patterns.",
-            "The flashing lights don't mean anything to you.",
-            "The console lights flash and flicker.",
+            _("The lights flash in interesting patterns."),
+            _("The flashing lights don't mean anything to you."),
+            _("The console lights flash and flicker."),
             ])
 
     def get_description(self):
@@ -327,7 +328,7 @@ class JimPanel(Thing):
 
     def get_description(self):
         if self.scene.get_data('ai panel') == 'closed':
-            return "The sign reads 'Warning: Authorized Techinicians Only'."
+            return _("The sign reads 'Warning: Authorized Techinicians Only'.")
 
     def select_interact(self):
         status = self.get_data('ai panel')
@@ -338,13 +339,13 @@ class JimPanel(Thing):
         if ai_status == 'online':
             return self.interact_default(None)
         elif self.scene.get_data('ai panel') == 'closed':
-            return Result("You are unable to open the panel with your"
-                          " bare hands.")
+            return Result(_("You are unable to open the panel with your"
+                            " bare hands."))
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
             self.state.break_ai()
             self.set_interact()
-            return Result("You unplug various important-looking wires.")
+            return Result(_("You unplug various important-looking wires."))
 
     def interact_with_machete(self, item):
         ai_status = self.state.get_jim_state()
@@ -353,20 +354,20 @@ class JimPanel(Thing):
         elif self.scene.get_data('ai panel') == 'closed':
             self.scene.set_data('ai panel', 'open')
             self.set_interact()
-            return Result("Using the machete, you lever the panel off.")
+            return Result(_("Using the machete, you lever the panel off."))
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
             self.state.break_ai()
             self.set_interact()
-            return Result("You smash various delicate components with"
-                          " the machete.")
+            return Result(_("You smash various delicate components with"
+                            " the machete."))
 
     def interact_default(self, item):
         if self.state.get_jim_state() == 'online':
-            return (Result('You feel a shock from the panel.'),
-                    make_jim_dialog("Prisoner %s. Please step away from the"
-                                    " panel. You are not an authorized"
-                                    " technician." % PLAYER_ID, self.game))
+            return (Result(_('You feel a shock from the panel.')),
+                    make_jim_dialog(_("Prisoner %s. Please step away from the"
+                                      " panel. You are not an authorized"
+                                      " technician.") % PLAYER_ID, self.game))
 
 
 class ChairDetail(Scene):
@@ -467,16 +468,16 @@ class DestNavPageLine(Thing):
 
     def interact_without(self):
         if self.game.scenes['bridge'].get_data('ai status') == 'online':
-            return make_jim_dialog("You are not authorized to change the"
-                                   " destination.", self.game)
+            return make_jim_dialog(_("You are not authorized to change the"
+                                     " destination."), self.game)
         if not self.ai_blocked:
-            return Result("There's no good reason to choose to go to the"
-                          " penal colony.")
+            return Result(_("There's no good reason to choose to go to the"
+                            " penal colony."))
         if self.game.scenes['bridge'].get_data('ai status') == 'looping':
-            return Result("You could change the destination, but when JIM"
-                          " recovers, it'll just get reset.")
+            return Result(_("You could change the destination, but when JIM"
+                            " recovers, it'll just get reset."))
         if self.game.scenes['bridge'].get_data('ai status') == 'dead':
-            return Result("You change the destination.",
+            return Result(_("You change the destination."),
                           soundfile="beep550.ogg", end_game=True)
 
 

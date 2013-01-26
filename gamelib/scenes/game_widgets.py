@@ -1,6 +1,7 @@
 """Generic, game specific widgets"""
 
 
+from pyntnclick.i18n import _
 from pyntnclick.state import Thing, Result
 
 from gamelib.custom_widgets import JimLabel
@@ -24,7 +25,7 @@ class Door(Thing):
         self.game.change_scene("map")
 
     def get_description(self):
-        return 'An open doorway leads to the rest of the ship.'
+        return _('An open doorway leads to the rest of the ship.')
 
     def interact_default(self, item):
         return self.interact_without()
@@ -49,12 +50,12 @@ class BaseCamera(Thing):
     def get_description(self):
         status = self.state.get_jim_state()
         if status == 'online':
-            return "A security camera watches over the room"
+            return _("A security camera watches over the room")
         elif status == 'looping':
-            return "The security camera is currently offline but should be" \
-                    " working soon"
+            return _("The security camera is currently offline but should be"
+                     " working soon")
         else:
-            return "The security camera is powered down"
+            return _("The security camera is powered down")
 
     def is_interactive(self, tool=None):
         return self.state.get_jim_state() == 'online'
@@ -62,9 +63,10 @@ class BaseCamera(Thing):
     def interact_with_escher_poster(self, item):
         # Order matters here, because of helper function
         if self.state.get_jim_state() == 'online':
-            ai_response = make_jim_dialog("3D scene reconstruction failed."
-                    " Critical error. Entering emergency shutdown.",
-                    self.game)
+            ai_response = make_jim_dialog(_("3D scene reconstruction failed."
+                                            " Critical error."
+                                            " Entering emergency shutdown."),
+                                          self.game)
             self.game.data.loop_ai()
             return ai_response
 
