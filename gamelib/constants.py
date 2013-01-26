@@ -1,5 +1,8 @@
 from pyntnclick.constants import GameConstants
-from pyntnclick.i18n import _
+
+# Anything here has to be explicitly translated
+# This module is imported before we've set up i18n
+_ = lambda x: x
 
 
 class SSConstants(GameConstants):

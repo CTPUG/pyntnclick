@@ -11,6 +11,7 @@ from optparse import OptionParser
 import pygame
 from pygame.locals import SWSURFACE
 
+from pyntnclick.i18n import _
 from pyntnclick.engine import Engine
 from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen, GameScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
@@ -128,7 +129,7 @@ class GameDescription(object):
             for option in self.debug_options:
                 if option in sys.argv:
                     self.warn_debug(option)
-        opts, _ = parser.parse_args(sys.argv)
+        opts, args = parser.parse_args(sys.argv)
         pygame.display.init()
         pygame.font.init()
         if opts.sound:
@@ -159,7 +160,8 @@ class GameDescription(object):
                 pygame.display.set_icon(self.resource.get_image(
                     self.constants.icon, basedir='icons'))
             if self.constants.title:
-                pygame.display.set_caption(self.constants.title)
+                title = _(self.constants.title).encode('utf-8')
+                pygame.display.set_caption(title)
 
             self.engine = Engine(self)
             # Initialize the special screens in the engine
