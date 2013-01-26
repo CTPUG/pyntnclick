@@ -27,13 +27,13 @@ executing `install-po.sh' script.
 
 == How can I mark the string in code as translatable? ==
 
-Just surround it with _( and ) like 
+Just surround it with _( and ) like
   "Hello, world"    ->    _("Hello, world!")
 
 _() is a function in `gamelib/i18n.py' file, so you might want to
 import it first.
 
-  from gamelib.i18n import _
+  from pyntnclick.i18n import _
 
 And don't forget to update message catalogs with new strings. To do
 that just execute `update-po.sh' script. It collects all translatable
