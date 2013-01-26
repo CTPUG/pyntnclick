@@ -331,7 +331,7 @@ class JimPanel(Thing):
             return _("The sign reads 'Warning: Authorized Techinicians Only'.")
 
     def select_interact(self):
-        status = self.get_data('ai panel')
+        status = self.scene.get_data('ai panel')
         return status or self.INITIAL
 
     def interact_without(self):
