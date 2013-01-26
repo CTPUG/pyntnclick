@@ -75,6 +75,7 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(scene, self.state.current_scene.name)
 
     def handle_result(self, result):
+        self.clear_event_queue()
         if result is None:
             return None
         if hasattr(result, 'process'):
