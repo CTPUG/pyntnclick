@@ -220,7 +220,7 @@ class SuperconductorSocket(Thing):
             return Result(_("It's wedged in there pretty firmly, it won't"
                             " come out."))
         elif self.get_data('working'):
-            return Result(_("You decide that working engines are more "
+            return Result(_("You decide that working engines are more"
                             " important than having a shiny superconductor."))
 
     def interact_with_machete(self, item):
