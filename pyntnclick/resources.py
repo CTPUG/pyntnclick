@@ -58,9 +58,10 @@ class Resources(object):
         """
         paths = []
         for module in [self.resource_module, self.DEFAULT_RESOURCE_MODULE]:
-            if self.language:
+            if self.lang_dialect:
                 fn = os.path.join(self.lang_dialect, resource_path)
                 paths.append(resource_filename(module, fn))
+            if self.language != self.lang_dialect:
                 fn = os.path.join(self.language, resource_path)
                 paths.append(resource_filename(module, fn))
             paths.append(resource_filename(module, resource_path))
