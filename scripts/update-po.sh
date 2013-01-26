@@ -2,6 +2,8 @@
 
 # Updates translation catalogs
 
+set -eu
+
 xgettext -f po/POTFILES -o po/suspended-sentence.pot
 
 for f in po/*.po; do
