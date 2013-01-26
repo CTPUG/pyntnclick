@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-08 14:36+0200\n"
+"POT-Creation-Date: 2013-01-26 18:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,141 +17,125 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gamelib/widgets.py:175
-msgid "Quit Game"
-msgstr ""
-
-#: gamelib/widgets.py:176
-msgid "Exit to Main Menu"
-msgstr ""
-
-#: gamelib/gamescreen.py:146
-msgid "Close"
-msgstr ""
-
-#: gamelib/gamescreen.py:218
-msgid "Menu"
-msgstr ""
-
-#: gamelib/scenes/bridge.py:63
+#: gamelib/scenes/bridge.py:58
 msgid "The brightly coloured wires contrast with the drab walls."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:66
+#: gamelib/scenes/bridge.py:61
 msgid "\"Dammit JIM, I'm a doctor, not an engineer!\""
 msgstr ""
 
-#: gamelib/scenes/bridge.py:72
+#: gamelib/scenes/bridge.py:67
 msgid "A skeleton hangs improbably from the wires."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:117
+#: gamelib/scenes/bridge.py:112
 msgid "You can't break the duraplastic screen."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:120
+#: gamelib/scenes/bridge.py:115
 msgid "Scratching the screen won't help you."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:123
+#: gamelib/scenes/bridge.py:118
 msgid "The main bridge computer screen."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:146
+#: gamelib/scenes/bridge.py:141
 msgid ""
 "A top of the line Massage-o-Matic Captain's Executive Command Chair. It's "
 "massaging a skeleton."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:148
+#: gamelib/scenes/bridge.py:143
 msgid "The chair won't work any more, it has no power."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:197
+#: gamelib/scenes/bridge.py:193
 msgid "A stethoscope hangs from the neck of the skeleton."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:204
+#: gamelib/scenes/bridge.py:199
 msgid ""
 "You pick up the stethoscope and verify that the doctor's heart has stopped. "
 "Probably a while ago."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:225
+#: gamelib/scenes/bridge.py:220
 msgid ""
 "You rip off a piece of duct tape and stick it on the superconductor. It "
 "almost sticks to itself, but you successfully avoid disaster."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:245
+#: gamelib/scenes/bridge.py:241
 msgid "The superconductor module unclips easily."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:246
+#: gamelib/scenes/bridge.py:242
 #, python-format
 msgid ""
 "Prisoner %s. That chair you've destroyed was property of the ship's captain. "
 "You will surely be punished."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:278
+#: gamelib/scenes/bridge.py:275
 msgid "The lights flash in interesting patterns."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:279
+#: gamelib/scenes/bridge.py:276
 msgid "The flashing lights don't mean anything to you."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:280
+#: gamelib/scenes/bridge.py:277
 msgid "The console lights flash and flicker."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:323
+#: gamelib/scenes/bridge.py:331
 msgid "The sign reads 'Warning: Authorized Techinicians Only'."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:329
+#: gamelib/scenes/bridge.py:342
 msgid "You are unable to open the panel with your bare hands."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:334
+#: gamelib/scenes/bridge.py:348
 msgid "You unplug various important-looking wires."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:343
+#: gamelib/scenes/bridge.py:357
 msgid "Using the machete, you lever the panel off."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:348
+#: gamelib/scenes/bridge.py:362
 msgid "You smash various delicate components with the machete."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:352
+#: gamelib/scenes/bridge.py:367
 msgid "You feel a shock from the panel."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:353
+#: gamelib/scenes/bridge.py:368
 #, python-format
 msgid ""
 "Prisoner %s. Please step away from the panel. You are not an authorized "
 "technician."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:451
+#: gamelib/scenes/bridge.py:471
 msgid "You are not authorized to change the destination."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:453
+#: gamelib/scenes/bridge.py:474
 msgid "There's no good reason to choose to go to the penal colony."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:455
+#: gamelib/scenes/bridge.py:477
 msgid ""
 "You could change the destination, but when JIM recovers, it'll just get "
 "reset."
 msgstr ""
 
-#: gamelib/scenes/bridge.py:457
+#: gamelib/scenes/bridge.py:480
 msgid "You change the destination."
 msgstr ""
 
@@ -163,34 +147,34 @@ msgstr ""
 msgid "A picture of a cat labelled 'Clementine'"
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:73
+#: gamelib/scenes/crew_quarters.py:80
 msgid "Duct tape. It'll stick to everything except ducts, apparently."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:75
+#: gamelib/scenes/crew_quarters.py:82
 msgid ""
 "The perfectly balanced door swings frictionlessly to and fro. What "
 "craftsmanship!"
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:77
+#: gamelib/scenes/crew_quarters.py:84
 msgid ""
 "The safe is locked. This might be an interesting challenge, if suitable "
 "equipment can be found."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:82
+#: gamelib/scenes/crew_quarters.py:89
 msgid "It's already unlocked. There's no more challenge."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:87
+#: gamelib/scenes/crew_quarters.py:95
 msgid ""
 "Even after centuries of neglect, the tumblers slide almost silently into "
 "place. Turns out the combination was '1 2 3 4 5'. An idiot must keep his "
 "luggage in here."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:91
+#: gamelib/scenes/crew_quarters.py:99
 #, python-format
 msgid ""
 "Prisoner %s, you have been observed committing a felony violation. This will "
@@ -198,69 +182,69 @@ msgid ""
 "twenty years."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:96
+#: gamelib/scenes/crew_quarters.py:106
 msgid "Ah, a vintage Knoxx & Co. model QR3. Quaint, but reasonably secure."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:117
+#: gamelib/scenes/crew_quarters.py:133
 msgid ""
 "What's the point of lugging around a very dead fish and a kilogram or so of "
 "sand?"
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:122
+#: gamelib/scenes/crew_quarters.py:138
 msgid "The fishbowl is useful, but its contents aren't."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:126
+#: gamelib/scenes/crew_quarters.py:142
 msgid "This fishbowl looks exactly like an old science fiction space helmet."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:128
+#: gamelib/scenes/crew_quarters.py:145
 msgid "An evicted dead fish and some sand lie forlornly on the table"
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:142
+#: gamelib/scenes/crew_quarters.py:160
 msgid ""
 "You duct tape the edges of the helmet. The seal is crude, but it will serve "
 "as a workable helmet if needed."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:189
+#: gamelib/scenes/crew_quarters.py:208
 msgid "This poster will go nicely on your bedroom wall."
 msgstr ""
 
-#: gamelib/scenes/crew_quarters.py:192
+#: gamelib/scenes/crew_quarters.py:211
 msgid "A paradoxical poster hangs below the security camera."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:53
+#: gamelib/scenes/cryo.py:49
 msgid "These pipes carry cooling fluid to the cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:64
+#: gamelib/scenes/cryo.py:60
 msgid "An empty cryo chamber."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:65
+#: gamelib/scenes/cryo.py:61
 msgid "Prisoner 81E4-C8900480E635. Embezzlement. 20 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:74 gamelib/scenes/cryo.py:93
+#: gamelib/scenes/cryo.py:70 gamelib/scenes/cryo.py:92
 msgid ""
 "A working cryo chamber. The frosted glass obscures the details of the "
 "occupant."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:75
+#: gamelib/scenes/cryo.py:72
 msgid "Prisoner 9334-CE1EB0243BAB. Murder. 40 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:84
+#: gamelib/scenes/cryo.py:81
 msgid "A broken cryo chamber. The skeleton inside has been picked clean."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:85
+#: gamelib/scenes/cryo.py:83
 msgid ""
 "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter. 15 years."
 msgstr ""
@@ -278,19 +262,19 @@ msgstr ""
 msgid "Prisoner %s. Safecracking, grand larceny. 30 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:109 gamelib/scenes/cryo.py:118
+#: gamelib/scenes/cryo.py:110 gamelib/scenes/cryo.py:119
 msgid "An empty cryo unit."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:110
+#: gamelib/scenes/cryo.py:111
 msgid "Prisoner 83F1-CE32D3234749. Spamming. 5 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:119
+#: gamelib/scenes/cryo.py:120
 msgid "Prisoner A455-9DF9F43C43E5. Medical malpractice. 10 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:135
+#: gamelib/scenes/cryo.py:137
 #, python-format
 msgid ""
 "Greetings, Prisoner %s. I am the Judicial Incarceration Monitor. You have "
@@ -300,152 +284,152 @@ msgid ""
 "destination. Please report to the bridge."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:165
+#: gamelib/scenes/cryo.py:172
 msgid ""
 "It takes more effort than one would expect, but eventually the pipe is "
 "separated from the wall."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:171
+#: gamelib/scenes/cryo.py:178
 #, python-format
 msgid ""
 "Prisoner %s. Vandalism is an offence punishable by a minimum of an "
 "additional 6 months to your sentence."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:181 gamelib/scenes/cryo.py:211
+#: gamelib/scenes/cryo.py:188 gamelib/scenes/cryo.py:219
 msgid "These pipes aren't attached to the wall very solidly."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:186
+#: gamelib/scenes/cryo.py:194
 msgid "These pipes carry cooling fluid to empty cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:187
+#: gamelib/scenes/cryo.py:195
 msgid "There used to be a pipe carrying cooling fluid here."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:204
+#: gamelib/scenes/cryo.py:212
 msgid ""
 "These pipes carry fluid to the working cryo units. Chopping them down "
 "doesn't seem sensible."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:214
+#: gamelib/scenes/cryo.py:223
 msgid "These pipes carry cooling fluid to the working cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:286
+#: gamelib/scenes/cryo.py:295
 msgid ""
 "You hit the chamber that used to hold this very leg. Nothing happens as a "
 "result."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:291
+#: gamelib/scenes/cryo.py:301
 msgid "A broken cryo chamber, with a poor unfortunate corpse inside."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:292
+#: gamelib/scenes/cryo.py:303
 msgid "A broken cryo chamber. The corpse inside is missing a leg."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:313
+#: gamelib/scenes/cryo.py:325
 msgid "You bang on the chamber with the titanium femur. Nothing much happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:314
+#: gamelib/scenes/cryo.py:327
 msgid "Hitting the cryo unit with the femur doesn't achieve anything."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:315
+#: gamelib/scenes/cryo.py:329
 msgid "You hit the chamber with the femur. Nothing happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:339
+#: gamelib/scenes/cryo.py:353
 msgid ""
 "You wedge the titanium femur into the chain and twist. With a satisfying "
 "*snap*, the chain breaks and the door opens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:341
+#: gamelib/scenes/cryo.py:358
 msgid ""
 "You bang on the door with the titanium femur. It makes a clanging sound."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:344
+#: gamelib/scenes/cryo.py:362
 msgid "You wave the femur in the doorway. Nothing happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:350
+#: gamelib/scenes/cryo.py:369
 msgid ""
 "It moves slightly and then stops. A chain on the other side is preventing it "
 "from opening completely."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:368 gamelib/scenes/game_widgets.py:26
+#: gamelib/scenes/cryo.py:392 gamelib/scenes/game_widgets.py:28
 msgid "An open doorway leads to the rest of the ship."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:370
+#: gamelib/scenes/cryo.py:394
 msgid ""
 "A rusty door. It can't open all the way because of a chain on the other side."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:372
+#: gamelib/scenes/cryo.py:396
 msgid "A rusty door. It is currently closed."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:393
+#: gamelib/scenes/cryo.py:417
 msgid "Hitting it with the leg accomplishes nothing."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:396
+#: gamelib/scenes/cryo.py:420
 msgid "A computer terminal, with some text on it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:414
+#: gamelib/scenes/cryo.py:439
 msgid ""
 "The skeletal occupant of this cryo unit has an artificial femur made of "
 "titanium. You take it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:417
+#: gamelib/scenes/cryo.py:443
 msgid "This femur looks synthetic."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:432
+#: gamelib/scenes/cryo.py:458
 msgid "The plaque is welded to the unit. You can't shift it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:435
+#: gamelib/scenes/cryo.py:462
 msgid "'Prisoner 98CC-764E646391EE. War crimes. 45 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:459
+#: gamelib/scenes/cryo.py:486
 msgid "Coolant leaks disturbingly from the bulkheads."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:462
+#: gamelib/scenes/cryo.py:489
 msgid "It's gooey"
 msgstr ""
 
-#: gamelib/scenes/cryo.py:468
+#: gamelib/scenes/cryo.py:495
 msgid "You scoop up some coolant and fill the bottle."
 msgstr ""
 
-#: gamelib/scenes/engine.py:43
+#: gamelib/scenes/engine.py:41
 msgid "Dead. Those cans must have been past their sell-by date."
 msgstr ""
 
-#: gamelib/scenes/engine.py:50
+#: gamelib/scenes/engine.py:48
 msgid "Superconductors. The engines must be power hogs."
 msgstr ""
 
-#: gamelib/scenes/engine.py:58
+#: gamelib/scenes/engine.py:56
 msgid "A gaping hole in the floor of the room. It is clearly irreparable."
 msgstr ""
 
-#: gamelib/scenes/engine.py:68
+#: gamelib/scenes/engine.py:66
 msgid ""
 "Empty chocolate-covered bacon cans? Poor guy, he must have found them "
 "irresistible."
@@ -460,173 +444,190 @@ msgid ""
 "A burned-out laser cutter. It may be responsible for the hole in the floor."
 msgstr ""
 
-#: gamelib/scenes/engine.py:86
+#: gamelib/scenes/engine.py:87
 msgid "The main fuel line for the engines."
 msgstr ""
 
-#: gamelib/scenes/engine.py:106
+#: gamelib/scenes/engine.py:107
 msgid ""
 "The spare fuel line. If something went wrong with the main one, you would "
 "hook that one up."
 msgstr ""
 
-#: gamelib/scenes/engine.py:112
+#: gamelib/scenes/engine.py:114
 msgid "The sign says DANGER. You would be wise to listen to it."
 msgstr ""
 
-#: gamelib/scenes/engine.py:118
+#: gamelib/scenes/engine.py:120
 msgid ""
 "It's one of those glow-in-the-dark signs needed to satisfy the health and "
 "safety inspectors."
 msgstr ""
 
-#: gamelib/scenes/engine.py:131
+#: gamelib/scenes/engine.py:133
 #, python-format
 msgid ""
-"The engines are now operational. You havedone a satisfactory job, Prisoner "
+"The engines are now operational. You have done a satisfactory job, Prisoner "
 "%s."
 msgstr ""
 
-#: gamelib/scenes/engine.py:139
+#: gamelib/scenes/engine.py:141
 msgid ""
 "With your improvised helmet, the automatic airlock allows you into the "
 "engine room. Even if there wasn't a vacuum it would be eerily quiet."
 msgstr ""
 
-#: gamelib/scenes/engine.py:155
+#: gamelib/scenes/engine.py:159
 msgid "All systems are go! Or at least the engines are."
 msgstr ""
 
-#: gamelib/scenes/engine.py:173
+#: gamelib/scenes/engine.py:178
 msgid "A can opener. Looks like you won't be starving"
 msgstr ""
 
-#: gamelib/scenes/engine.py:178
+#: gamelib/scenes/engine.py:182
 msgid ""
 "You pick up the can opener. It looks brand new; the vacuum has kept it in "
 "perfect condition."
 msgstr ""
 
-#: gamelib/scenes/engine.py:200
+#: gamelib/scenes/engine.py:204
 msgid ""
 "That superconductor looks burned out. It's wedged in there pretty firmly."
 msgstr ""
 
-#: gamelib/scenes/engine.py:202
+#: gamelib/scenes/engine.py:207
 msgid "An empty superconductor socket"
 msgstr ""
 
-#: gamelib/scenes/engine.py:204
+#: gamelib/scenes/engine.py:209
 msgid "A working superconductor."
 msgstr ""
 
-#: gamelib/scenes/engine.py:208
+#: gamelib/scenes/engine.py:220
 msgid "It's wedged in there pretty firmly, it won't come out."
 msgstr ""
 
-#: gamelib/scenes/engine.py:210
+#: gamelib/scenes/engine.py:223
 msgid ""
 "You decide that working engines are more important than having a shiny "
 "superconductor."
 msgstr ""
 
-#: gamelib/scenes/engine.py:216
+#: gamelib/scenes/engine.py:230
 msgid "With leverage, the burned-out superconductor snaps out. You discard it."
 msgstr ""
 
-#: gamelib/scenes/engine.py:221
+#: gamelib/scenes/engine.py:235
 msgid "It might help to remove the broken superconductor first"
 msgstr ""
 
-#: gamelib/scenes/engine.py:223
+#: gamelib/scenes/engine.py:238
 msgid ""
 "You plug in the superconductor, and feel a hum as things kick into life. "
 "Unfortunately, it's the wrong size for the socket and just falls out again "
 "when you let go."
 msgstr ""
 
-#: gamelib/scenes/engine.py:234
+#: gamelib/scenes/engine.py:249
 msgid ""
 "The chair's superconductor looks over-specced for this job, but it should "
 "work."
 msgstr ""
 
-#: gamelib/scenes/engine.py:239
+#: gamelib/scenes/engine.py:254
 msgid "It might help to remove the broken superconductor first."
 msgstr ""
 
-#: gamelib/scenes/engine.py:258
+#: gamelib/scenes/engine.py:279
 msgid "Those are coolant reservoirs. They look empty."
 msgstr ""
 
-#: gamelib/scenes/engine.py:259
+#: gamelib/scenes/engine.py:280
 msgid "The coolant reservoirs are full."
 msgstr ""
 
-#: gamelib/scenes/engine.py:279
+#: gamelib/scenes/engine.py:300
 msgid "The receptacles for the coolant reservoirs."
 msgstr ""
 
-#: gamelib/scenes/engine.py:282
+#: gamelib/scenes/engine.py:303
 msgid "You stick your finger in the receptacle. It almost gets stuck."
 msgstr ""
 
-#: gamelib/scenes/engine.py:287
+#: gamelib/scenes/engine.py:308
 msgid ""
 "Pouring the precious cryo fluid into a container connected to a cracked pipe "
 "would be a waste."
 msgstr ""
 
-#: gamelib/scenes/engine.py:292
+#: gamelib/scenes/engine.py:314
 msgid ""
 "You fill the reservoirs. The detergent bottle was just big enough, which is "
 "handy, because it's sprung a leak."
 msgstr ""
 
-#: gamelib/scenes/engine.py:340
+#: gamelib/scenes/engine.py:362
 msgid "These pipes carry coolant to the superconductors. They feel warm."
 msgstr ""
 
-#: gamelib/scenes/engine.py:342
+#: gamelib/scenes/engine.py:364
 msgid "These pipes carry coolant to the superconductors. They are very cold."
 msgstr ""
 
-#: gamelib/scenes/engine.py:368
+#: gamelib/scenes/engine.py:390
 msgid "Power lines. They are delivering power to the engines."
 msgstr ""
 
-#: gamelib/scenes/engine.py:369
+#: gamelib/scenes/engine.py:391
 msgid "Power lines. It looks like they aren't working correctly."
 msgstr ""
 
-#: gamelib/scenes/engine.py:458
+#: gamelib/scenes/engine.py:481
 msgid ""
 "A gaping hole in the floor of the room. You're guessing that's why there's a "
 "vacuum in here."
 msgstr ""
 
-#: gamelib/scenes/engine.py:478
+#: gamelib/scenes/engine.py:501
 msgid "The duct tape appears to be holding."
 msgstr ""
 
-#: gamelib/scenes/engine.py:480
+#: gamelib/scenes/engine.py:503
 msgid "The pipe looks cracked and won't hold fluid until it's fixed."
 msgstr ""
 
-#: gamelib/scenes/engine.py:485
+#: gamelib/scenes/engine.py:513
 msgid "The duct tape already there appears to be sufficient."
 msgstr ""
 
-#: gamelib/scenes/engine.py:490
+#: gamelib/scenes/engine.py:518
 msgid "You apply your trusty duct tape to the creak, sealing it."
 msgstr ""
 
-#: gamelib/scenes/engine.py:510
+#: gamelib/scenes/engine.py:538
 msgid "A computer console. It's alarmingly close to the engine."
 msgstr ""
 
-#: gamelib/scenes/engine.py:567
+#: gamelib/scenes/engine.py:594
 msgid "The airlock leads back to the rest of the ship."
+msgstr ""
+
+#: gamelib/scenes/game_widgets.py:53
+msgid "A security camera watches over the room"
+msgstr ""
+
+#: gamelib/scenes/game_widgets.py:55
+msgid "The security camera is currently offline but should be working soon"
+msgstr ""
+
+#: gamelib/scenes/game_widgets.py:58
+msgid "The security camera is powered down"
+msgstr ""
+
+#: gamelib/scenes/game_widgets.py:66
+msgid ""
+"3D scene reconstruction failed. Critical error. Entering emergency shutdown."
 msgstr ""
 
 #: gamelib/scenes/machine.py:31
@@ -653,23 +654,23 @@ msgstr ""
 msgid "The block for the laser drill press"
 msgstr ""
 
-#: gamelib/scenes/machine.py:119
+#: gamelib/scenes/machine.py:118
 msgid "You really don't want to put your hand in there."
 msgstr ""
 
-#: gamelib/scenes/machine.py:124
+#: gamelib/scenes/machine.py:123
 msgid "There is already a can in the welder."
 msgstr ""
 
-#: gamelib/scenes/machine.py:128
+#: gamelib/scenes/machine.py:127
 msgid "You carefully place the can in the laser welder."
 msgstr ""
 
-#: gamelib/scenes/machine.py:133
+#: gamelib/scenes/machine.py:132
 msgid "There is already a tube fragment in the welder."
 msgstr ""
 
-#: gamelib/scenes/machine.py:137
+#: gamelib/scenes/machine.py:136
 msgid "You carefully place the tube fragments in the laser welder."
 msgstr ""
 
@@ -677,90 +678,90 @@ msgstr ""
 msgid "This is a Smith and Wesson 'zOMG' class high-precision laser welder."
 msgstr ""
 
-#: gamelib/scenes/machine.py:144
+#: gamelib/scenes/machine.py:145
 msgid "The laser welder looks hungry, somehow."
 msgstr ""
 
-#: gamelib/scenes/machine.py:146
+#: gamelib/scenes/machine.py:147
 msgid " It currently contains an empty can."
 msgstr ""
 
-#: gamelib/scenes/machine.py:148
+#: gamelib/scenes/machine.py:149
 msgid " It currently contains a tube fragment."
 msgstr ""
 
-#: gamelib/scenes/machine.py:150
+#: gamelib/scenes/machine.py:151
 msgid "The laser welder looks expectant. "
 msgstr ""
 
-#: gamelib/scenes/machine.py:152
+#: gamelib/scenes/machine.py:153
 msgid " It currently contains an empty can and a tube fragment."
 msgstr ""
 
-#: gamelib/scenes/machine.py:169
+#: gamelib/scenes/machine.py:172
 msgid "The laser welder doesn't currently contain anything weldable."
 msgstr ""
 
-#: gamelib/scenes/machine.py:172
+#: gamelib/scenes/machine.py:176
 msgid "The laser welder needs something to weld the can to."
 msgstr ""
 
-#: gamelib/scenes/machine.py:174
+#: gamelib/scenes/machine.py:179
 msgid "The laser welder needs something to weld the tube fragments to."
 msgstr ""
 
-#: gamelib/scenes/machine.py:180
+#: gamelib/scenes/machine.py:187
 msgid ""
 "With high-precision spitzensparken, you weld together a second pipe. You "
 "bundle the two pipes together."
 msgstr ""
 
-#: gamelib/scenes/machine.py:185
+#: gamelib/scenes/machine.py:193
 msgid ""
 "With high-precision spitzensparken, you create yet another pipe. You store "
 "it with the other two."
 msgstr ""
 
-#: gamelib/scenes/machine.py:193
+#: gamelib/scenes/machine.py:201
 msgid ""
 "With high-precision spitzensparken, the can and tube are welded into a whole "
 "greater than the sum of the parts."
 msgstr ""
 
-#: gamelib/scenes/machine.py:209
+#: gamelib/scenes/machine.py:220
 msgid "The power lights pulse expectantly."
 msgstr ""
 
-#: gamelib/scenes/machine.py:247
+#: gamelib/scenes/machine.py:258
 msgid ""
 "It looks like it eats fingers. Perhaps a different approach is in order?"
 msgstr ""
 
-#: gamelib/scenes/machine.py:251
+#: gamelib/scenes/machine.py:263
 msgid ""
 "After much delicate grinding and a few close calls with various body parts, "
 "the titanium femur now resembles a machete more than a bone. Nice and sharp, "
 "too."
 msgstr ""
 
-#: gamelib/scenes/machine.py:257
+#: gamelib/scenes/machine.py:269
 msgid "A pretty ordinary, albeit rather industrial, grinding machine."
 msgstr ""
 
-#: gamelib/scenes/machine.py:280
+#: gamelib/scenes/machine.py:293
 msgid ""
 "Ah! The ship's instruction manual. You'd feel better if the previous owner "
 "wasn't lying next to it with a gaping hole in his rib cage."
 msgstr ""
 
-#: gamelib/scenes/map.py:42
+#: gamelib/scenes/map.py:41
 msgid ""
 "Under the terms of the emergency conscription act, I have downloaded the "
 "ship's schematics to your neural implant to help you navigate around the "
 "ship."
 msgstr ""
 
-#: gamelib/scenes/map.py:47
+#: gamelib/scenes/map.py:46
 #, python-format
 msgid ""
 "Prisoner %s, you are a class 1 felon. Obtaining access to the ship's "
@@ -780,30 +781,30 @@ msgid ""
 "been obliterated by meteors."
 msgstr ""
 
-#: gamelib/scenes/map.py:201
+#: gamelib/scenes/map.py:202
 msgid ""
 "Peering in through the window, you see that the entire chamber is overgrown "
 "with giant broccoli. It would take you years to cut a path through that."
 msgstr ""
 
-#: gamelib/scenes/mess.py:38
+#: gamelib/scenes/mess.py:35
 msgid "A large collection of rusted, useless cans."
 msgstr ""
 
-#: gamelib/scenes/mess.py:44
+#: gamelib/scenes/mess.py:41
 msgid "An impressively overgrown broccoli."
 msgstr ""
 
-#: gamelib/scenes/mess.py:55
+#: gamelib/scenes/mess.py:52
 msgid ""
 "You bang the cans together. It sounds like two cans being banged together."
 msgstr ""
 
-#: gamelib/scenes/mess.py:64
+#: gamelib/scenes/mess.py:63
 msgid "You'd mangle it beyond usefulness."
 msgstr ""
 
-#: gamelib/scenes/mess.py:70
+#: gamelib/scenes/mess.py:69
 msgid "You open both ends of the can, discarding the hideous contents."
 msgstr ""
 
@@ -811,140 +812,131 @@ msgstr ""
 msgid "Flattening the can doesn't look like a useful thing to do."
 msgstr ""
 
-#: gamelib/scenes/mess.py:83
+#: gamelib/scenes/mess.py:84
 msgid "There's nothing left to open on this can"
 msgstr ""
 
-#: gamelib/scenes/mess.py:96
+#: gamelib/scenes/mess.py:97
 msgid "You club the can with the femur. The can gets dented, but doesn't open."
 msgstr ""
 
-#: gamelib/scenes/mess.py:106
+#: gamelib/scenes/mess.py:108
 msgid ""
 "You club the can with the femur. The dents shift around, but it still "
 "doesn't open."
 msgstr ""
 
-#: gamelib/scenes/mess.py:137
+#: gamelib/scenes/mess.py:147
 msgid "Best before a long time in the past. Better not eat these."
 msgstr ""
 
-#: gamelib/scenes/mess.py:138
+#: gamelib/scenes/mess.py:149
 msgid "Mmmm. Nutritious bacteria stew."
 msgstr ""
 
-#: gamelib/scenes/mess.py:139
+#: gamelib/scenes/mess.py:150
 msgid "Candied silkworms. Who stocked this place?!"
 msgstr ""
 
-#: gamelib/scenes/mess.py:142
+#: gamelib/scenes/mess.py:153
 msgid "The rest of the cans are rusted beyond usefulness."
 msgstr ""
 
-#: gamelib/scenes/mess.py:145
+#: gamelib/scenes/mess.py:157
 msgid "The contents of these cans look synthetic."
 msgstr ""
 
-#: gamelib/scenes/mess.py:167
+#: gamelib/scenes/mess.py:179
 msgid "The broccoli seems to have become entangled with something."
 msgstr ""
 
-#: gamelib/scenes/mess.py:169
+#: gamelib/scenes/mess.py:182
 msgid "These broken pipes look important."
 msgstr ""
 
-#: gamelib/scenes/mess.py:171
+#: gamelib/scenes/mess.py:184
 msgid "The pipes have been repaired but are the repairs aren't airtight, yet"
 msgstr ""
 
-#: gamelib/scenes/mess.py:173
+#: gamelib/scenes/mess.py:187
 msgid "Your fix looks like it's holding up well."
 msgstr ""
 
-#: gamelib/scenes/mess.py:179
+#: gamelib/scenes/mess.py:196
 msgid ""
 "With a flurry of disgusting mutant vegetable chunks, you clear the overgrown "
 "broccoli away from the access panel and reveal some broken tubes. They look "
 "important."
 msgstr ""
 
-#: gamelib/scenes/mess.py:185
+#: gamelib/scenes/mess.py:202
 msgid "It looks broken enough already."
 msgstr ""
 
-#: gamelib/scenes/mess.py:187
+#: gamelib/scenes/mess.py:204
 msgid "Cutting holes won't repair the leaks."
 msgstr ""
 
-#: gamelib/scenes/mess.py:189
+#: gamelib/scenes/mess.py:206
 msgid ""
 "After all that effort fixing it, chopping it to bits doesn't seem very smart."
 msgstr ""
 
-#: gamelib/scenes/mess.py:194 gamelib/scenes/mess.py:207
+#: gamelib/scenes/mess.py:211 gamelib/scenes/mess.py:223
 msgid "It would get lost in the fronds."
 msgstr ""
 
-#: gamelib/scenes/mess.py:201
+#: gamelib/scenes/mess.py:217
 msgid ""
 "The pipes slot neatly into place, but don't make an airtight seal. One of "
 "the pipes has cracked slightly as well."
 msgstr ""
 
-#: gamelib/scenes/mess.py:209
+#: gamelib/scenes/mess.py:225
 msgid "There's quite enough tape on the ducting already."
 msgstr ""
 
-#: gamelib/scenes/mess.py:216
+#: gamelib/scenes/mess.py:232
 msgid ""
 "It takes quite a lot of tape, but eventually everything is airtight and "
 "ready to hold pressure. Who'd've thought duct tape could actually be used to "
 "tape ducts?"
 msgstr ""
 
-#: gamelib/scenes/mess.py:222
+#: gamelib/scenes/mess.py:239
 msgid "The mutant broccoli resists your best efforts."
 msgstr ""
 
-#: gamelib/scenes/mess.py:224
+#: gamelib/scenes/mess.py:241
 msgid "Shoving the broken pipes around doesn't help much."
 msgstr ""
 
-#: gamelib/scenes/mess.py:226
+#: gamelib/scenes/mess.py:244
 msgid "Do you really want to hold it together for the rest of the voyage?"
 msgstr ""
 
-#: gamelib/scenes/mess.py:229
+#: gamelib/scenes/mess.py:247
 #, python-format
 msgid "You don't find any leaks. Good job, Prisoner %s."
 msgstr ""
 
-#: gamelib/scenes/mess.py:288
+#: gamelib/scenes/mess.py:314
 msgid "The remaining bottles leak."
 msgstr ""
 
-#: gamelib/scenes/mess.py:292
+#: gamelib/scenes/mess.py:318
 msgid ""
 "You pick up an empty dishwashing liquid bottle. You can't find any sponges."
 msgstr ""
 
-#: gamelib/scenes/mess.py:295
+#: gamelib/scenes/mess.py:322
 msgid "Empty plastic containers. They used to hold dishwasher soap."
 msgstr ""
 
-#: gamelib/scenes/game_widgets.py:51
-msgid "A security camera watches over the room"
+#: pyntnclick/gamescreen.py:150
+msgid "Close"
 msgstr ""
 
-#: gamelib/scenes/game_widgets.py:53
-msgid "The security camera is currently offline but should be working soon"
-msgstr ""
-
-#: gamelib/scenes/game_widgets.py:55
-msgid "The security camera is powered down"
-msgstr ""
-
-#: gamelib/scenes/game_widgets.py:63
-msgid ""
-"3D scene reconstruction failed. Critical error. Entering emergency shutdown."
+#: pyntnclick/gamescreen.py:208
+msgid "Menu"
 msgstr ""
