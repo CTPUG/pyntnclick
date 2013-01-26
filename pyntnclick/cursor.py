@@ -21,14 +21,16 @@ class CursorSprite(Sprite):
         self.pointer_x = x
         self.pointer_y = y
         self.highlighted = False
+        self.highlight_colour = (255, 100, 100, 255)
 
     def load(self, resources):
         if not hasattr(self, 'plain_image'):
-            self.highlight_transform = Colour((255, 100, 100, 255))
+            self.highlight_transform = Colour(self.highlight_colour)
             self.plain_image = resources.get_image('items', self.filename)
-            self.highlighted_image = resources.get_image('items', self.filename,
-                    transforms=(self.highlight_transform,))
-            self.rect = self.plain_image.get_rect()
+            self.highlighted_image = resources.get_image('items',
+                    self.filename, transforms=(self.highlight_transform,))
+            self.image = self.plain_image
+            self.rect = self.image.get_rect()
             if self.pointer_x is None:
                 self.pointer_x = self.rect.size[0] // 2
             if self.pointer_y is None:
