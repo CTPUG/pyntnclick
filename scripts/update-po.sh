@@ -4,8 +4,8 @@
 
 set -eu
 
-xgettext -f po/POTFILES -o po/suspended-sentence.pot
+xgettext -f data/po/POTFILES -o data/po/suspended-sentence.pot
 
-for f in po/*.po; do
-  msgmerge -U $f po/suspended-sentence.pot;
+for f in data/po/*.po; do
+  msgmerge -U $f data/po/suspended-sentence.pot;
 done
