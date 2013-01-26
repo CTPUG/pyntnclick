@@ -158,7 +158,7 @@ class AppImage(Container):
         # Pylint hates this function
         for thing in scene.things.itervalues():
             for interact_name in thing.interacts:
-                thing.set_interact(interact_name)
+                thing._set_interact(interact_name)
                 if hasattr(thing.rect, 'collidepoint'):
                     thing_rects = [thing.rect]
                 else:
@@ -167,7 +167,7 @@ class AppImage(Container):
                     if thing is thing2:
                         continue
                     for interact2_name in thing2.interacts:
-                        thing2.set_interact(interact2_name)
+                        thing2._set_interact(interact2_name)
                         if hasattr(thing2.rect, 'collidepoint'):
                             thing2_rects = [thing2.rect]
                         else:
@@ -191,7 +191,7 @@ class AppImage(Container):
             rect_list = d[col]
             for thing in scene.things.itervalues():
                 for interact_name in thing.interacts:
-                    thing.set_interact(interact_name)
+                    thing._set_interact(interact_name)
                     if hasattr(thing.rect, 'collidepoint'):
                         thing_rects = [thing.rect]
                     else:
@@ -205,7 +205,7 @@ class AppImage(Container):
                                        % (thing.name, interact_name))
                                 print "     Rects", my_rect, other_rect
                 if thing.INITIAL:
-                    thing.set_interact(thing.INITIAL)
+                    thing._set_interact(thing.INITIAL)
             print
             for (num2, col2) in enumerate(d):
                 if num2 == num:
@@ -496,7 +496,7 @@ class AppImage(Container):
                 else:
                     next_name = cand.interacts.keys()[0]
                 if cand.interacts[next_name] != cur_interact:
-                    cand.set_interact(next_name)
+                    cand._set_interact(next_name)
         elif self.mode == 'draw':
             self.start_pos = pos
             self.end_pos = pos
