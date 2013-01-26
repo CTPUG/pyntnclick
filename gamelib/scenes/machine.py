@@ -2,8 +2,9 @@
 
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.cursor import CursorSprite
-from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
-                                  InteractAnimated, GenericDescThing)
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractImage, InteractAnimated, GenericDescThing,
+    TakeableThing)
 
 from gamelib.scenes.game_widgets import Door
 
@@ -276,7 +277,7 @@ class TitaniumMachete(Item):
     CURSOR = CursorSprite('machete_cursor.png', 23, 1)
 
 
-class ManualThing(Thing):
+class ManualThing(TakeableThing):
 
     NAME = "machine.manual"
 
@@ -285,10 +286,10 @@ class ManualThing(Thing):
     }
 
     INITIAL = "manual"
+    ITEM = 'manual'
 
     def interact_without(self):
-        self.scene.remove_thing(self)
-        self.game.add_inventory_item("manual")
+        self.take()
         return Result("Ah! The ship's instruction manual. You'd feel better"
                       " if the previous owner wasn't lying next to it with a"
                       " gaping hole in his rib cage.")

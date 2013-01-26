@@ -126,6 +126,9 @@ class CansOnShelf(Thing):
         'cans_available': 3,
     }
 
+    def should_add(self):
+        return self.get_data('cans_available') > 0
+
     def select_interact(self):
         return '%icans' % (self.get_data('cans_available'),)
 

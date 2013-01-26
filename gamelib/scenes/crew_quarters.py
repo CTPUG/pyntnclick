@@ -2,8 +2,9 @@
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
-from pyntnclick.scenewidgets import (InteractNoImage, InteractImage,
-                                  InteractAnimated, GenericDescThing)
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractImage, InteractAnimated, GenericDescThing,
+    TakeableThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
@@ -187,7 +188,7 @@ class MonitorCamera(BaseCamera):
     }
 
 
-class PosterThing(Thing):
+class PosterThing(TakeableThing):
     "A innocent poster on the wall"
 
     NAME = 'crew.poster'
@@ -197,10 +198,10 @@ class PosterThing(Thing):
     }
 
     INITIAL = 'poster'
+    ITEM = 'escher_poster'
 
     def interact_without(self):
-        self.game.add_inventory_item('escher_poster')
-        self.scene.remove_thing(self)
+        self.take()
         return Result("This poster will go nicely on your bedroom wall.")
 
     def get_description(self):

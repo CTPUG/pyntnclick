@@ -8,9 +8,9 @@ from pygame.rect import Rect
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
-from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
-                                  InteractImage, InteractAnimated,
-                                  GenericDescThing)
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
+    GenericDescThing, TakeableThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
@@ -176,8 +176,8 @@ class Stethoscope(Item):
     CURSOR = CursorSprite('stethoscope.png')
 
 
-class StethoscopeThing(Thing):
-    "Stehoscope on the doctor"
+class StethoscopeThing(TakeableThing):
+    "Stethoscope on the doctor"
 
     NAME = 'bridge.stethoscope'
 
@@ -186,13 +186,13 @@ class StethoscopeThing(Thing):
     }
 
     INITIAL = 'stethoscope'
+    ITEM = 'stethoscope'
 
     def get_description(self):
         return "A stethoscope hangs from the neck of the skeleton."
 
     def interact_without(self):
-        self.game.add_inventory_item('stethoscope')
-        self.scene.remove_thing(self)
+        self.take()
         # Fill in the doctor's rect
         self.scene.doctor.rect.append(self.rect)
         return Result("You pick up the stethoscope and verify that the"
@@ -221,7 +221,7 @@ class Superconductor(Item):
                       " successfully avoid disaster.")
 
 
-class SuperconductorThing(Thing):
+class SuperconductorThing(TakeableThing):
     "Superconductor from the massage chair."
 
     NAME = 'bridge.superconductor'
@@ -231,12 +231,12 @@ class SuperconductorThing(Thing):
     }
 
     INITIAL = 'superconductor'
+    ITEM = 'superconductor'
 
     def interact_without(self):
-        self.game.add_inventory_item('superconductor')
         self.game.scenes['bridge'].things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
-        self.scene.remove_thing(self)
+        self.take()
         return (Result("The superconductor module unclips easily."),
                 make_jim_dialog(("Prisoner %s. That chair you've destroyed"
                                  " was property of the ship's captain. "

@@ -2,9 +2,9 @@
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
-from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
-                                  InteractImage, InteractAnimated,
-                                  GenericDescThing)
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
+    GenericDescThing, TakeableThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, make_jim_dialog
@@ -68,12 +68,13 @@ class Engine(Scene):
                 (562, 422, 30, 31),
             )
         ))
-        self.add_thing(GenericDescThing('engine.engines', 8,
-            "The engines. They don't look like they are working.",
-            (
-                (342, 261, 109, 81),
-            )
-        ))
+        if not self.get_data('engine online'):
+            self.add_thing(GenericDescThing('engine.engines', 8,
+                "The engines. They don't look like they are working.",
+                (
+                    (342, 261, 109, 81),
+                )
+            ))
         self.add_thing(GenericDescThing('engine.laser_cutter', 9,
             "A burned-out laser cutter. It may be responsible for the"
             " hole in the floor.",
@@ -163,7 +164,7 @@ class CanOpener(Item):
     CURSOR = CursorSprite('can_opener_cursor.png')
 
 
-class CanOpenerThing(Thing):
+class CanOpenerThing(TakeableThing):
     NAME = 'engine.canopener'
 
     INTERACTS = {
@@ -171,13 +172,13 @@ class CanOpenerThing(Thing):
     }
 
     INITIAL = 'canopener'
+    ITEM = 'canopener'
 
     def get_description(self):
         return "A can opener. Looks like you won't be starving"
 
     def interact_without(self):
-        self.game.add_inventory_item('canopener')
-        self.scene.remove_thing(self)
+        self.take()
         return Result("You pick up the can opener. It looks brand new; "
                       "the vacuum has kept it in perfect condition.")
 

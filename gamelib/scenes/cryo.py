@@ -4,9 +4,9 @@ import random
 
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
-from pyntnclick.scenewidgets import (InteractNoImage, InteractRectUnion,
-                                  InteractImage, InteractAnimated,
-                                  GenericDescThing)
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
+    GenericDescThing, TakeableThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, make_jim_dialog
@@ -416,7 +416,7 @@ class CryoComputer(Thing):
         return "A computer terminal, with some text on it."
 
 
-class TitaniumLegThing(Thing):
+class TitaniumLegThing(TakeableThing):
     "Triangle in the cryo room."
 
     NAME = "cryo.titanium_leg"
@@ -426,12 +426,12 @@ class TitaniumLegThing(Thing):
         }
 
     INITIAL = "leg"
+    ITEM = 'titanium_leg'
 
     def interact_without(self):
-        self.game.add_inventory_item('titanium_leg')
         self.game.scenes['cryo'].things['cryo.unit.1'].set_data(
                 'contains_titanium_leg', False)
-        self.scene.remove_thing(self)
+        self.take()
         return Result("The skeletal occupant of this cryo unit has an"
                 " artificial femur made of titanium. You take it.")
 

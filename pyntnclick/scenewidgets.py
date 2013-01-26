@@ -129,6 +129,29 @@ class InteractAnimated(Interact):
         return False
 
 
+class TakeableThing(Thing):
+    "Thing that can be taken."
+
+    INITIAL_DATA = {
+        'taken': False,
+    }
+
+    ITEM = None
+
+    def __init__(self):
+        # In case a subclass replaces INITIAL_DATA and breaks 'taken'.
+        assert self.INITIAL_DATA['taken'] in (True, False)
+        super(TakeableThing, self).__init__()
+
+    def should_add(self):
+        return not self.get_data('taken')
+
+    def take(self):
+        self.set_data('taken', True)
+        self.game.add_inventory_item(self.ITEM)
+        self.scene.remove_thing(self)
+
+
 class GenericDescThing(Thing):
     "Thing with an InteractiveUnionRect and a description"
 

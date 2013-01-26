@@ -199,7 +199,12 @@ class GameDeveloperGizmo(object):
         self.gd = game.gd
         self.resource = self.gd.resource
         self.sound = self.gd.sound
+        self.set_state(self.game.data)
         self.setup()
+
+    def set_state(self, state):
+        """Hack to allow set_state() to be called before setup()."""
+        pass
 
     def setup(self):
         """Game developers should override this to do their setup.
@@ -260,16 +265,14 @@ class Scene(StatefulGizmo):
         self.current_thing = None
         self._background = None
 
-    def set_game(self, game):
-        super(Scene, self).set_game(game)
-        self.set_state(game.data)
-
     def add_item(self, item):
         self.game.add_item(item)
 
     def add_thing(self, thing):
-        self.things[thing.name] = thing
         thing.set_game(self.game)
+        if not thing.should_add():
+            return
+        self.things[thing.name] = thing
         thing.set_scene(self)
 
     def remove_thing(self, thing):
@@ -364,6 +367,9 @@ class Scene(StatefulGizmo):
     def get_image(self, *image_name_fragments, **kw):
         return self.resource.get_image(*image_name_fragments, **kw)
 
+    def set_state(self, state):
+        return super(Scene, self).set_state(state)
+
 
 class InteractiveMixin(object):
     def is_interactive(self, tool=None):
@@ -436,6 +442,9 @@ class Thing(StatefulGizmo, InteractiveMixin):
             self.rect = self.rect.move(self.scene.OFFSET)
         else:
             self.rect = [x.move(self.scene.OFFSET) for x in self.rect]
+
+    def should_add(self):
+        return True
 
     def set_scene(self, scene):
         assert self.scene is None
