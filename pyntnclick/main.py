@@ -6,6 +6,7 @@ Contains the entry point used by the run_game.py script.
 import sys
 import gettext
 import locale
+import os
 from optparse import OptionParser
 
 import pygame
@@ -73,9 +74,28 @@ class GameDescription(object):
                                self.resource.get_resource_path('locale'))
         gettext.textdomain(self.constants.i18n_name)
 
+        self._check_translations()
+
         self.sound = Sound(self.resource)
         self.debug_options = []
         self.running = False
+
+    def _check_translations(self):
+        """Check for outdated mo files"""
+        popath = self.resource.get_resource_path('po')
+        mopath = self.resource.get_resource_path('locale')
+        for candidate in os.listdir(popath):
+            if candidate.endswith('.po'):
+                polang = candidate.split('.', 1)[0]
+                pofile = os.path.join(popath, candidate)
+                mofile = gettext.find(self.constants.i18n_name, mopath,
+                        (polang,))
+                if mofile is None:
+                    print 'Missing mo file for %s' % pofile
+                    continue
+                if os.stat(pofile).st_mtime > os.stat(mofile).st_mtime:
+                    print 'po file %s is newer than mo file %s' % (pofile,
+                            mofile)
 
     def initial_state(self):
         """Create a copy of the initial game state."""
