@@ -217,7 +217,6 @@ class Tubes(Thing):
             self.set_data("status", "fixed")
             self.set_interact("fixed")
             self.scene.set_data('life support status', 'fixed')
-            # TODO: A less anticlimactic climax?
             return Result("It takes quite a lot of tape, but eventually"
                           "everything is airtight and ready to hold pressure."
                           " Who'd've thought duct tape could actually be used"
