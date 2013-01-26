@@ -130,11 +130,7 @@ class GameDescription(object):
                 self._initial_scene = opts.scene
             self._debug_rects = opts.rects
         if self.constants.debug and opts.list_scenes:
-            # FIXME: Horrible hack to avoid image loading issues for
-            # now
-            pygame.display.set_mode(self.constants.screen,
-                                              SWSURFACE)
-            list_scenes(self.initial_state)
+            list_scenes(self.SCENE_MODULE, self._scene_list)
             sys.exit(0)
         if self.constants.debug and opts.rect_drawer:
             if opts.scene is None:

@@ -1,15 +1,18 @@
 # Misc utils I don't know where else to put
 
 
-def list_scenes(get_initial_state):
+def list_scenes(scene_module, scene_list):
     """List the scenes in the state"""
-    state = get_initial_state()
-    print 'Available scenes are : '
-    for scene in state.scenes:
-        print '    ', scene
-    print 'Available details are : '
-    for detail in state.detail_views:
-        print '    ', detail
+    print "Available scenes and details:"
+    for scene in scene_list:
+        scenemod = __import__('%s.%s' % (scene_module, scene),
+                         fromlist=[scene])
+        if scenemod.SCENES:
+            print " * %s" % scene
+        else:
+            print " * %s (details only)" % scene
+        for detailcls in getattr(scenemod, 'DETAIL_VIEWS', []):
+            print "   - %s" % detailcls.NAME
 
 
 def draw_rect_image(surface, color, rect, thickness):
