@@ -23,7 +23,10 @@ class Resources(object):
 
     def __init__(self, resource_module, language=None):
         self.resource_module = resource_module
+        self.lang_dialect = language
         self.language = language
+        if language:
+            self.language = language.split('_', 1)[0]
         self._image_cache = {}
         self._font_cache = {}
         self._transformed_image_cache = {}
@@ -33,8 +36,10 @@ class Resources(object):
 
         The following directories are searched, in order:
 
+         * /<lang>_<dialect>/<resource_module>/
          * /<lang>/<resource_module>/
          * <resource_module>/
+         * /<lang>_<dialect>/<default_resource_module>/
          * /<lang>/<default_resource_module>/
          * <default_resource_module>/
 
@@ -54,6 +59,8 @@ class Resources(object):
         paths = []
         for module in [self.resource_module, self.DEFAULT_RESOURCE_MODULE]:
             if self.language:
+                fn = os.path.join(self.lang_dialect, resource_path)
+                paths.append(resource_filename(module, fn))
                 fn = os.path.join(self.language, resource_path)
                 paths.append(resource_filename(module, fn))
             paths.append(resource_filename(module, resource_path))
