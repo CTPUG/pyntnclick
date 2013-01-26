@@ -96,7 +96,6 @@ class InteractImageRect(InteractImage):
 class InteractAnimated(Interact):
     """Interactive with an animation rather than an image"""
 
-    # FIXME: Assumes all images are the same size
     # anim_seq - sequence of image names
     # delay - number of frames to wait between changing images
 
@@ -112,6 +111,8 @@ class InteractAnimated(Interact):
         self._anim_seq = [get_image(thing.folder, x) for x in self._names]
         self.image = self._anim_seq[0]
         self.rect = Rect(self._pos, self.image.get_size())
+        for image in self._anim_seq:
+            assert image.get_size() == self.rect.size
         self.interact_rect = self.rect
 
     def animate(self):
