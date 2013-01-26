@@ -4,6 +4,8 @@ Contains the entry point used by the run_game.py script.
 
 '''
 import sys
+import gettext
+import locale
 from optparse import OptionParser
 
 import pygame
@@ -60,9 +62,18 @@ class GameDescription(object):
         self._debug_rects = False
         self._screens = self.SCREENS.copy()
         self._screens['game'] = GameScreen
-        self.resource = Resources(self._resource_module)
-        self.sound = Sound(self.resource)
         self.constants = self.game_constants()
+
+        locale.setlocale(locale.LC_ALL, "")
+        lang = locale.getlocale()[0]
+        if '_' in lang:
+            lang = lang.split('_', 1)[0]
+        self.resource = Resources(self._resource_module, lang)
+        gettext.bindtextdomain(self.constants.i18n_name,
+                               self.resource.get_resource_path('locale'))
+        gettext.textdomain(self.constants.i18n_name)
+
+        self.sound = Sound(self.resource)
         self.debug_options = []
         self.running = False
 

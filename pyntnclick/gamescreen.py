@@ -7,6 +7,7 @@ from pygame import Rect, Surface
 from pygame.color import Color
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
+from pyntnclick.i18n import _
 from pyntnclick.cursor import CursorScreen
 from pyntnclick.engine import Screen
 from pyntnclick.widgets.base import (
@@ -146,7 +147,7 @@ class SceneWidget(Container):
         self.add_callback(MOUSEMOTION, self.mouse_move)
         self.is_detail = is_detail
         if is_detail:
-            self.close_button = TextButton((0, 0), self.gd, "Close")
+            self.close_button = TextButton((0, 0), self.gd, _("Close"))
             self.close_button.do_prepare()
             self.close_button.rect.midbottom = self.rect.midbottom
             self.close_button.add_callback('clicked', self.close)
@@ -204,7 +205,7 @@ class ToolBar(Container):
         self.left = self.rect.left
 
         self.menu_button = self.add_tool(
-            0, TextButton, gd, "Menu", fontname=gd.constants.bold_font,
+            0, TextButton, gd, _("Menu"), fontname=gd.constants.bold_font,
             color="red", padding=1, border=0, bg_color="black")
         self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 

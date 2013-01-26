@@ -33,9 +33,9 @@ class Resources(object):
 
         The following directories are searched, in order:
 
-         * <resource_module>/<lang>/
+         * /<lang>/<resource_module>/
          * <resource_module>/
-         * <default_resource_module>/<lang>/
+         * /<lang>/<default_resource_module>/
          * <default_resource_module>/
 
         If the `language` attribute is `None`, the paths with <lang> in them
@@ -44,7 +44,7 @@ class Resources(object):
         resource_name = '/'.join(resource_path_fragments)
         resource_name = os.path.join(*resource_name.split('/'))
         for path in self.get_paths(resource_name):
-            if os.path.isfile(path):
+            if os.path.exists(path):
                 return path
         raise ResourceNotFound(resource_name)
 
