@@ -9,10 +9,6 @@ from pygame.surface import Surface
 from pyntnclick.state import Thing
 from pyntnclick.widgets.text import LabelWidget
 
-# XXX: Needs a way to get at resource:
-from pyntnclick.resources import Resources
-get_image = Resources("data").get_image
-
 
 class Interact(object):
 
@@ -77,9 +73,12 @@ class InteractImage(Interact):
         self._image_name = image_name
 
     def set_thing(self, thing):
-        self.image = get_image(thing.folder, self._image_name)
+        self.image = thing.resource.get_image(thing.folder, self._image_name)
         self.rect = Rect(self._pos, self.image.get_size())
         self.interact_rect = self.rect
+
+    def __repr__(self):
+        return '<InteractImage: %s>' % self._image_name
 
 
 class InteractImageRect(InteractImage):
@@ -108,7 +107,8 @@ class InteractAnimated(Interact):
         self._delay = delay
 
     def set_thing(self, thing):
-        self._anim_seq = [get_image(thing.folder, x) for x in self._names]
+        self._anim_seq = [thing.resource.get_image(thing.folder, x)
+                          for x in self._names]
         self.image = self._anim_seq[0]
         self.rect = Rect(self._pos, self.image.get_size())
         for image in self._anim_seq:
