@@ -68,7 +68,7 @@ class Machine(Scene):
                 (605, 304, 26, 8),
             )))
         self.add_thing(GenericDescThing("machine.drill_press_block", 7,
-            "The block for the laser drill press",  # TODO: fix description
+            "The block for the laser drill press",
             ((461, 446, 38, 27),)))
 
 
