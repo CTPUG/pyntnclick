@@ -430,7 +430,7 @@ msgstr "Это один из тех светящихся в темноте зн�
 
 #: gamelib/scenes/engine.py:131
 #, python-format
-msgid "The engines are now operational. You havedone a satisfactory job, Prisoner %s."
+msgid "The engines are now operational. You have done a satisfactory job, Prisoner %s."
 msgstr "Двигатели теперь работоспособны. Вы проделали удовлетворительную работу, Заключённый %s."
 
 #: gamelib/scenes/engine.py:139
