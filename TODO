@@ -7,6 +7,8 @@ Specific:
 Cleanups:
   * Clean-up finding and loading of speech strings.
   * Fix thing.enter being called multiple times without leaving
+  * Things have lists of rects or a single rect in the rect attribute. This
+    should be refactored for sanity.
 
 Hints:
   * More help with the starting puzzle (another interactable cryo-chamber?)

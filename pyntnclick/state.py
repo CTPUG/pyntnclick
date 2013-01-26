@@ -456,7 +456,6 @@ class Thing(StatefulGizmo, InteractiveMixin):
         if hasattr(self.rect, 'collidepoint'):
             return self.rect.collidepoint(pos)
         else:
-            # FIXME: add sanity check
             for rect in list(self.rect):
                 if rect.collidepoint(pos):
                     return True
