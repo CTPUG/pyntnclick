@@ -66,7 +66,8 @@ class GameDescription(object):
         self.constants = self.game_constants()
 
         locale.setlocale(locale.LC_ALL, "")
-        lang = locale.getlocale()[0]
+        lang = locale.getdefaultlocale(['LANGUAGE', 'LC_ALL', 'LC_CTYPE',
+                                        'LANG'])[0]
         if lang and '_' in lang:
             lang = lang.split('_', 1)[0]
         self.resource = Resources(self._resource_module, lang)
