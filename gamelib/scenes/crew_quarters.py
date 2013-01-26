@@ -62,12 +62,19 @@ class Safe(Thing):
         'has_tape': True,
         }
 
+    def select_interact(self):
+        if self.get_data('is_cracked'):
+            if self.get_data('has_tape'):
+                return 'full_safe'
+            return 'empty_safe'
+        return self.INITIAL
+
     def interact_without(self):
         if self.get_data('is_cracked'):
             if self.get_data('has_tape'):
                 self.set_data('has_tape', False)
                 self.game.add_inventory_item('duct_tape')
-                self.set_interact('empty_safe')
+                self.set_interact()
                 return Result("Duct tape. It'll stick to everything except "
                               "ducts, apparently.")
             return Result("The perfectly balanced door swings frictionlessly "
@@ -81,7 +88,7 @@ class Safe(Thing):
         # TODO: Add years to the sentence for safecracking.
         # TODO: Wax lyrical some more about safecracking.
         self.set_data('is_cracked', True)
-        self.set_interact('full_safe')
+        self.set_interact()
         return (Result("Even after centuries of neglect, the tumblers slide"
                       " almost silently into place. Turns out the combination"
                       " was '1 2 3 4 5'. An idiot must keep his luggage in"
@@ -113,12 +120,17 @@ class FishbowlThing(Thing):
         'has_bowl': True,
         }
 
+    def select_interact(self):
+        if not self.get_data('has_bowl'):
+            return 'fish_no_bowl'
+        return self.INITIAL
+
     def interact_without(self):
         if not self.get_data('has_bowl'):
             return Result("What's the point of lugging around a very dead"
                     " fish and a kilogram or so of sand?")
-        self.set_interact('fish_no_bowl')
         self.set_data('has_bowl', False)
+        self.set_interact()
         self.game.add_inventory_item('fishbowl')
         return Result("The fishbowl is useful, but its contents aren't.")
 

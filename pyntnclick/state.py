@@ -51,6 +51,9 @@ class GameState(object):
     def __getitem__(self, key):
         return self._game_state[key]
 
+    def __contains__(self, key):
+        return key in self._game_state
+
     def get_all_gizmo_data(self, state_key):
         """Get all state for a gizmo - returns a dict"""
         return self[state_key]
@@ -443,14 +446,20 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.set_state(self.game.data)
         for interact in self.interacts.itervalues():
             interact.set_thing(self)
-        self.set_interact(self.INITIAL)
+        self.set_interact()
 
-    def set_interact(self, name):
+    def set_interact(self):
+        return self._set_interact(self.select_interact())
+
+    def _set_interact(self, name):
         self.current_interact = self.interacts[name]
         self.rect = self.current_interact.interact_rect
         if self.scene:
             self._fix_rect()
         assert self.rect is not None, name
+
+    def select_interact(self):
+        return self.INITIAL
 
     def contains(self, pos):
         if hasattr(self.rect, 'collidepoint'):

@@ -20,9 +20,12 @@ class PageBase(Thing):
     def set_page(self, page):
         self.get_page_thing().set_page(page)
 
+    def select_interact(self):
+        return self.get_data('display')
+
     def set_display(self, display):
         self.set_data('display', display)
-        self.set_interact(display)
+        self.set_interact()
 
     def is_interactive(self, tool=None):
         return self.get_data('display') == 'on'
@@ -86,9 +89,12 @@ class ManualPage(Thing):
     def is_interactive(self, tool=None):
         return False
 
+    def select_interact(self):
+        return self.get_data('page')
+
     def set_page(self, page):
         self.set_data('page', page)
-        self.set_interact(page)
+        self.set_interact()
         self.scene.things['manual.page_prior'].set_display('on')
         self.scene.things['manual.page_next'].set_display('on')
         if page == 0:

@@ -68,9 +68,15 @@ class BaseCamera(Thing):
             self.game.data.loop_ai()
             return ai_response
 
+    def select_interact(self):
+        if 'bridge' not in self.state:
+            # We aren't completely set up yet
+            return self.INITIAL
+        return self.state.get_jim_state()
+
     def animate(self):
         ai_status = self.state.get_jim_state()
         if ai_status != self.get_data('status'):
             self.set_data('status', ai_status)
-            self.set_interact(ai_status)
+            self.set_interact()
         super(BaseCamera, self).animate()

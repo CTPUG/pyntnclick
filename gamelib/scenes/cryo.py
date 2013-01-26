@@ -155,13 +155,18 @@ class CryoPipeBase(Thing):
         'fixed': True,
     }
 
+    def select_interact(self):
+        if not self.get_data('fixed'):
+            return 'chopped'
+        return self.INITIAL
+
     def interact_with_machete(self, item):
         if self.get_data('fixed'):
             self.set_data('fixed', False)
             pipe = TubeFragment('tube_fragment')
             self.game.add_item(pipe)
             self.game.add_inventory_item(pipe.name)
-            self.set_interact("chopped")
+            self.set_interact()
             responses = [Result("It takes more effort than one would expect,"
                 " but eventually the pipe is separated from the wall.",
                 soundfile="chop-chop.ogg")]
@@ -367,13 +372,16 @@ class CryoRoomDoor(Door):
     def interact_default(self, item):
         return self.interact_without()
 
+    def select_interact(self):
+        return self.get_data('door') or self.INITIAL
+
     def half_open_door(self):
         self.set_data('door', "ajar")
-        self.set_interact("ajar")
+        self.set_interact()
 
     def open_door(self):
         self.set_data('door', "open")
-        self.set_interact("open")
+        self.set_interact()
 
     def get_description(self):
         if self.get_data('door') == "open":

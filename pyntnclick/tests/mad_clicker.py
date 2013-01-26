@@ -89,14 +89,14 @@ class MadClickerTestCase(GameLogicTestCase):
             self.state.current_scene = scene
             for thing in scene.things.values():
                 for interact_name in thing.interacts:
-                    thing.set_interact(interact_name)
+                    thing._set_interact(interact_name)
                     self.do_thing(thing, None)
                     for item in self.state.items.values():
                         self.do_thing(thing, item)
         for detail in self.state.detail_views.values():
             for thing in detail.things.values():
                 for interact_name in thing.interacts:
-                    thing.set_interact(interact_name)
+                    thing._set_interact(interact_name)
                     self.do_thing(thing, None)
                     for item in self.state.items.values():
                         self.do_thing(thing, item)

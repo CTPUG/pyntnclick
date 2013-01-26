@@ -100,18 +100,17 @@ class LaserWelderSlot(Thing):
         'contents': set(),
     }
 
-    def update_contents(self):
-        """Update the interact after a contents change."""
+    def select_interact(self):
         contents = self.get_data('contents')
         if not contents:
-            self.set_interact("empty")
+            return "empty"
         elif len(contents) == 1:
             if "can" in contents:
-                self.set_interact("can")
+                return "can"
             elif "tube" in contents:
-                self.set_interact("tube")
+                return "tube"
         else:
-            self.set_interact("can_and_tube")
+            return "can_and_tube"
 
     def interact_without(self):
         return Result("You really don't want to put your hand in there.")
@@ -122,7 +121,7 @@ class LaserWelderSlot(Thing):
             return Result("There is already a can in the welder.")
         self.game.remove_inventory_item(item.name)
         contents.add("can")
-        self.update_contents()
+        self.set_interact()
         return Result("You carefully place the can in the laser welder.")
 
     def interact_with_tube_fragment(self, item):
@@ -131,7 +130,7 @@ class LaserWelderSlot(Thing):
             return Result("There is already a tube fragment in the welder.")
         self.game.remove_inventory_item(item.name)
         contents.add("tube")
-        self.update_contents()
+        self.set_interact()
         return Result("You carefully place the tube fragments in the"
                       " laser welder.")
 
@@ -179,7 +178,7 @@ class LaserWelderButton(Thing):
                               " tube fragments to.")
         else:
             welder_slot.set_data("contents", set())
-            welder_slot.update_contents()
+            welder_slot.set_interact()
             if self.game.is_in_inventory("cryo_pipes_one"):
                 self.game.replace_inventory_item("cryo_pipes_one",
                                                   "cryo_pipes_two")

@@ -329,6 +329,10 @@ class JimPanel(Thing):
         if self.scene.get_data('ai panel') == 'closed':
             return "The sign reads 'Warning: Authorized Techinicians Only'."
 
+    def select_interact(self):
+        status = self.get_data('ai panel')
+        return status or self.INITIAL
+
     def interact_without(self):
         ai_status = self.state.get_jim_state()
         if ai_status == 'online':
@@ -339,7 +343,7 @@ class JimPanel(Thing):
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
             self.state.break_ai()
-            self.set_interact('broken')
+            self.set_interact()
             return Result("You unplug various important-looking wires.")
 
     def interact_with_machete(self, item):
@@ -348,12 +352,12 @@ class JimPanel(Thing):
             return self.interact_default(item)
         elif self.scene.get_data('ai panel') == 'closed':
             self.scene.set_data('ai panel', 'open')
-            self.set_interact('open')
+            self.set_interact()
             return Result("Using the machete, you lever the panel off.")
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
             self.state.break_ai()
-            self.set_interact('broken')
+            self.set_interact()
             return Result("You smash various delicate components with"
                           " the machete.")
 
@@ -451,11 +455,12 @@ class DestNavPageLine(Thing):
         # set debugging higlight color for when DEBUG is on.
         self._interact_hilight_color = Color(THECOLORS.keys()[number])
         r = Rect(rect)
+        # We dynamically generate the interact rect here.
         self.interacts = {}
         self.interacts['line'] = InteractNoImage(r.x, r.y, r.w, r.h)
         # Whether JIM blocks this
         self.ai_blocked = ai_blocked
-        self.set_interact('line')
+        self.set_interact()
 
     def is_interactive(self, tool=None):
         return self.game.detail_views[self.COMPUTER].get_data('tab') == 'nav'

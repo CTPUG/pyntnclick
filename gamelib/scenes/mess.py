@@ -126,6 +126,9 @@ class CansOnShelf(Thing):
         'cans_available': 3,
     }
 
+    def select_interact(self):
+        return '%icans' % (self.get_data('cans_available'),)
+
     def interact_without(self):
         starting_cans = self.get_data('cans_available')
         if starting_cans > 0:
@@ -133,7 +136,7 @@ class CansOnShelf(Thing):
             self.game.add_item(can)
             self.game.add_inventory_item(can.name)
             self.set_data('cans_available', starting_cans - 1)
-            self.set_interact('%icans' % (starting_cans - 1))
+            self.set_interact()
             if starting_cans == 1:
                 self.scene.remove_thing(self)
             return Result({
@@ -178,10 +181,13 @@ class Tubes(Thing):
         else:
             return "Your fix looks like it's holding up well."
 
+    def select_interact(self):
+        return self.get_data('status')
+
     def interact_with_machete(self, item):
         if self.get_data("status") == "blocked":
             self.set_data("status", "broken")
-            self.set_interact("broken")
+            self.set_interact()
             return Result("With a flurry of disgusting mutant vegetable "
                           "chunks, you clear the overgrown broccoli away from "
                           "the access panel and reveal some broken tubes. "
@@ -201,7 +207,7 @@ class Tubes(Thing):
         else:
             self.game.remove_inventory_item(item.name)
             self.set_data('status', 'replaced')
-            self.set_interact("replaced")
+            self.set_interact()
             self.scene.set_data('life support status', 'replaced')
             return Result("The pipes slot neatly into place, but don't make"
                           " an airtight seal. One of the pipes has cracked"
@@ -215,7 +221,7 @@ class Tubes(Thing):
         else:
             self.set_data("fixed", True)
             self.set_data("status", "fixed")
-            self.set_interact("fixed")
+            self.set_interact()
             self.scene.set_data('life support status', 'fixed')
             return Result("It takes quite a lot of tape, but eventually"
                           "everything is airtight and ready to hold pressure."
@@ -263,13 +269,13 @@ class Boomslang(Thing):
         if self.get_data('anim_pos') > -1:
             self.current_interact.animate()
             if self.get_data('anim_pos') > self.current_interact._anim_pos:
-                self.set_interact('no_snake')
+                self._set_interact('no_snake')
                 self.set_data('anim_pos', -1)
             else:
                 self.set_data('anim_pos', self.current_interact._anim_pos)
             return True
         if randint(0, 30 * self.game.gd.constants.frame_rate) == 0:
-            self.set_interact('snake')
+            self._set_interact('snake')
             self.set_data('anim_pos', 0)
             hiss.play()
         return False
@@ -291,11 +297,16 @@ class DetergentThing(Thing):
         'taken': False,
     }
 
+    def select_interact(self):
+        if self.get_data('taken'):
+            return 'taken'
+        return self.INITIAL
+
     def interact_without(self):
         if self.get_data('taken'):
             return Result("The remaining bottles leak.")
         self.set_data('taken', True)
-        self.set_interact('taken')
+        self.set_interact()
         self.game.add_inventory_item('detergent_bottle')
         return Result("You pick up an empty dishwashing liquid bottle. You"
                       " can't find any sponges.")

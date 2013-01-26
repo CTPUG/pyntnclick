@@ -207,6 +207,13 @@ class SuperconductorSocket(Thing):
         else:
             return "A working superconductor."
 
+    def select_interact(self):
+        if not self.get_data('present'):
+            return 'removed'
+        if self.get_data('working'):
+            return 'fixed'
+        return self.INITIAL
+
     def interact_without(self):
         if self.get_data('present') and not self.get_data('working'):
             return Result("It's wedged in there pretty firmly, it won't"
@@ -217,8 +224,8 @@ class SuperconductorSocket(Thing):
 
     def interact_with_machete(self, item):
         if self.get_data('present') and not self.get_data('working'):
-            self.set_interact('removed')
             self.set_data('present', False)
+            self.set_interact()
             return Result("With leverage, the burned-out superconductor"
                           " snaps out. You discard it.")
 
@@ -234,9 +241,9 @@ class SuperconductorSocket(Thing):
 
     def interact_with_taped_superconductor(self, item):
         if not self.get_data('present'):
-            self.set_interact('fixed')
             self.set_data('present', True)
             self.set_data('working', True)
+            self.set_interact()
             self.game.remove_inventory_item(item.name)
             results = [Result("The chair's superconductor looks over-specced "
                               "for this job, but it should work.")]
@@ -260,6 +267,11 @@ class CryoContainers(Thing):
     INITIAL_DATA = {
         'filled': False,
     }
+
+    def select_interact(self):
+        if self.get_data('filled'):
+            return 'full'
+        return self.INITIAL
 
     def get_description(self):
         if not self.get_data('filled'):
@@ -296,7 +308,7 @@ class CryoContainerReceptacle(Thing):
                     " container connected to a cracked pipe would be a waste.")
         self.game.remove_inventory_item(item.name)
         self.scene.things['engine.cryo_containers'].set_data('filled', True)
-        self.scene.things['engine.cryo_containers'].set_interact('full')
+        self.scene.things['engine.cryo_containers'].set_interact()
         results = [Result("You fill the reservoirs. "
                           "The detergent bottle was just big enough, which "
                           "is handy, because it's sprung a leak.")]
@@ -489,13 +501,18 @@ class CrackedPipe(Thing):
             return "The pipe looks cracked and won't hold" \
                    " fluid until it's fixed."
 
+    def select_interact(self):
+        if self.get_data('fixed'):
+            return 'taped'
+        return self.INITIAL
+
     def interact_with_duct_tape(self, item):
         if self.get_data('fixed'):
             return Result("The duct tape already there appears to be "
                           "sufficient.")
         else:
             self.set_data('fixed', True)
-            self.set_interact('taped')
+            self.set_interact()
             return Result("You apply your trusty duct tape to the "
                           "creak, sealing it.")
 
