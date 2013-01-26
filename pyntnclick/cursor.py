@@ -9,6 +9,7 @@ import pygame.cursors
 import pygame.mouse
 
 from pyntnclick.engine import Screen
+from pyntnclick.image_transforms import Colour
 
 
 class CursorSprite(Sprite):
@@ -23,18 +24,15 @@ class CursorSprite(Sprite):
 
     def load(self, resources):
         if not hasattr(self, 'plain_image'):
+            self.highlight_transform = Colour((255, 100, 100, 255))
             self.plain_image = resources.get_image('items', self.filename)
-            self.image = self.plain_image
-            self.rect = self.image.get_rect()
-
+            self.highlighted_image = resources.get_image('items', self.filename,
+                    transforms=(self.highlight_transform,))
+            self.rect = self.plain_image.get_rect()
             if self.pointer_x is None:
                 self.pointer_x = self.rect.size[0] // 2
             if self.pointer_y is None:
                 self.pointer_y = self.rect.size[1] // 2
-
-            self.highlight = pygame.Surface(self.rect.size)
-            color = pygame.color.Color(255, 100, 100, 0)
-            self.highlight.fill(color)
 
     def update(self):
         pos = pygame.mouse.get_pos()
@@ -42,14 +40,7 @@ class CursorSprite(Sprite):
         self.rect.top = pos[1] - self.pointer_y
 
     def set_highlight(self, enable):
-        # XXX: Use image transforms and such here.
-        if enable != self.highlighted:
-            #XXX: Do we need this? self.load()
-            self.highlighted = enable
-            self.image = self.plain_image.copy()
-            if enable:
-                self.image.blit(self.highlight, self.highlight.get_rect(),
-                                None, pygame.BLEND_MULT)
+        self.image = self.highlighted_image if enable else self.plain_image
 
 
 HAND = CursorSprite('hand.png', 12, 0)
