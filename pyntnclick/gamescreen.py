@@ -312,7 +312,11 @@ class GameScreen(CursorScreen):
         self._add_scene(self.game.scenes[scene_name])
 
     def show_detail(self, detail_name):
-        self._add_scene(self.game.detail_views[detail_name], True)
+        detail_scene = self.game.detail_views[detail_name]
+        if detail_scene.name == self.scene_modal.top.name:
+            # Don't show the scene if we're already showing it
+            return
+        self._add_scene(detail_scene, True)
 
     def _add_scene(self, scene, detail=False):
         pos = self.scene_modal.rect.topleft
