@@ -262,7 +262,11 @@ class StatefulGizmo(GameDeveloperGizmo):
     def set_state(self, state):
         """Set the state object and initialize if needed"""
         self.state = state
-        self.state.initialize_state(self.state_key, self.INITIAL_DATA)
+        if self.state_key is None:
+            assert self.INITIAL_DATA is None, (
+                "Can't provide self.INITIAL_DATA without self.state_key.")
+        if self.INITIAL_DATA is not None:
+            self.state.initialize_state(self.state_key, self.INITIAL_DATA)
 
     def set_data(self, key, value):
         if self.state:
@@ -486,7 +490,6 @@ class Thing(StatefulGizmo, InteractiveMixin):
         if self.folder is None:
             self.folder = scene.FOLDER
         self.game = scene.game
-        self.set_state(self.game.data)
         for interact in self.interacts.itervalues():
             interact.set_thing(self)
         self.set_interact()
