@@ -8,6 +8,6 @@ def _(s):
     return unicode(gettext(s), "utf-8")
 
 
-def get_module_locale(module):
+def get_module_i18n_path(module, path='locale'):
     """Get the locale data from within the module."""
-    return resource_filename(module, 'locale')
+    return resource_filename(module, path)

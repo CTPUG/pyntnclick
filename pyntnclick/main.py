@@ -12,7 +12,7 @@ from optparse import OptionParser
 import pygame
 from pygame.locals import SWSURFACE
 
-from pyntnclick.i18n import _, get_module_locale
+from pyntnclick.i18n import _, get_module_i18n_path
 from pyntnclick.engine import Engine
 from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen, GameScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
@@ -70,26 +70,25 @@ class GameDescription(object):
         lang = locale.getdefaultlocale(['LANGUAGE', 'LC_ALL', 'LC_CTYPE',
                                         'LANG'])[0]
         self.resource = Resources(self._resource_module, lang)
-        gettext.bindtextdomain(self.constants.short_name,
-                               self.resource.get_resource_path('locale'))
+        locale_path = self.resource.get_resource_path('locale')
+        gettext.bindtextdomain(self.constants.short_name, locale_path)
         gettext.textdomain(self.constants.short_name)
 
-        self._check_translations()
+        popath = self.resource.get_resource_path('po')
+        self._check_translations(popath, locale_path)
 
         self.sound = Sound(self.resource)
         self.debug_options = []
         self.running = False
 
-    def _check_translations(self):
+    def _check_translations(self, popath, locale_path):
         """Check for outdated mo files"""
-        popath = self.resource.get_resource_path('po')
-        mopath = self.resource.get_resource_path('locale')
+        name = gettext.textdomain()  # only check the current app
         for candidate in os.listdir(popath):
             if candidate.endswith('.po'):
                 polang = candidate.split('.', 1)[0]
                 pofile = os.path.join(popath, candidate)
-                mofile = gettext.find(self.constants.short_name, mopath,
-                        (polang,))
+                mofile = gettext.find(name, locale_path, (polang,))
                 if mofile is None:
                     print 'Missing mo file for %s' % pofile
                     continue
@@ -169,9 +168,13 @@ class GameDescription(object):
             if opts.scene is None:
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
-            gettext.bindtextdomain('pyntnclick-tools',
-                    get_module_locale(self.resource.DEFAULT_RESOURCE_MODULE))
+            locale_path = get_module_i18n_path(
+                    self.resource.DEFAULT_RESOURCE_MODULE)
+            gettext.bindtextdomain('pyntnclick-tools', locale_path)
             gettext.textdomain('pyntnclick-tools')
+            popath = get_module_i18n_path(
+                    self.resource.DEFAULT_RESOURCE_MODULE, 'po')
+            self._check_translations(popath, locale_path)
             make_rect_display()
             try:
                 self.engine = RectEngine(self, opts.detail)
