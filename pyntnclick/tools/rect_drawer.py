@@ -636,7 +636,7 @@ class RectApp(Container):
 
         self.image = AppImage(self, gd, state, scene, detail is not None)
         self.add(self.image)
-        mode_label = ModeLabel((805, 0), self.gd, self.image, size=(200, 25))
+        mode_label = ModeLabel((805, 0), self.gd, self.image, size=(200, 50))
         self.add(mode_label)
         y = mode_label.rect.height
         draw = make_button(_('Draw Rect'), gd, self.image.draw_mode, y)
