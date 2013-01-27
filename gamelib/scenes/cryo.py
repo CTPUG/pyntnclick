@@ -177,7 +177,7 @@ class CryoPipeBase(Thing):
                 responses.append(make_jim_dialog(
                     _("Prisoner %s. Vandalism is an offence punishable by a "
                       "minimum of an additional 6 months to your sentence."
-                     ) % PLAYER_ID, self.game))
+                      ) % PLAYER_ID, self.game))
             return responses
 
     def is_interactive(self, tool=None):
@@ -216,8 +216,8 @@ class UncuttableCryoPipes(Thing):
         return True
 
     def interact_without(self):
-        return Result(_("These pipes aren't attached to the wall very solidly."
-                       ))
+        return Result(
+          _("These pipes aren't attached to the wall very solidly."))
 
     def get_description(self):
         return _("These pipes carry cooling fluid to the working cryo units.")
@@ -455,8 +455,8 @@ class PlaqueThing(Thing):
     INITIAL = "plaque"
 
     def interact_without(self):
-        return Result(_("The plaque is welded to the unit. You can't shift it."
-                       ))
+        return Result(
+          _("The plaque is welded to the unit. You can't shift it."))
 
     def get_description(self):
         return _("'Prisoner 98CC-764E646391EE. War crimes. 45 years.")

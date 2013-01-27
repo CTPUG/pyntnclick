@@ -652,12 +652,12 @@ class BridgeCompDetail(Scene):
             ypos += (self._alert_messages['engine offline'].get_size()[1]
                      + self.ALERT_SPACING)
         if (self.game.scenes['mess'].get_data('life support status')
-            == 'broken'):
+                == 'broken'):
             surface.blit(self._alert_messages['life support'], (xpos, ypos))
             ypos += (self._alert_messages['life support'].get_size()[1]
                      + self.ALERT_SPACING)
         if (self.game.scenes['mess'].get_data('life support status')
-            == 'replaced'):
+                == 'replaced'):
             surface.blit(self._alert_messages['life support partial'],
                          (xpos, ypos))
             ypos += (self._alert_messages['life support partial'].get_size()[1]

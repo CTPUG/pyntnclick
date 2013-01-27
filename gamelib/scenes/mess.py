@@ -222,8 +222,8 @@ class Tubes(Thing):
         if self.get_data("status") == "broken":
             return Result(_("It would get lost in the fronds."))
         elif self.get_data("status") == 'fixed':
-            return Result(_("There's quite enough tape on the ducting already."
-                           ))
+            return Result(
+              _("There's quite enough tape on the ducting already."))
         else:
             self.set_data("fixed", True)
             self.set_data("status", "fixed")

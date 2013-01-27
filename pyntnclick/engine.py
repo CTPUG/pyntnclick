@@ -69,7 +69,7 @@ class Screen(object):
 
         self.surface_size = gd.constants.screen
         self.surface = None
-        self.container = Container(pygame.Rect((0, 0),  self.surface_size),
+        self.container = Container(pygame.Rect((0, 0), self.surface_size),
                 self.gd)
         self.setup()
 
