@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-27 12:34+0200\n"
+"POT-Creation-Date: 2013-01-27 13:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,8 @@ msgid "image"
 msgstr ""
 
 #: pyntnclick/tools/rect_drawer.py:175
-msgid "Thing %(thing)s Interact %(interacts"
+#, python-format
+msgid "Thing %(thing)s Interact %(interact)s"
 msgstr ""
 
 #: pyntnclick/tools/rect_drawer.py:180

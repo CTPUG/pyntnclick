@@ -172,7 +172,7 @@ class AppImage(Container):
 
     def _print_thing(self, thing, interact_name):
         """Helper to avoid repeated translations"""
-        print (_("Thing %(thing)s Interact %(interacts") %
+        print (_("Thing %(thing)s Interact %(interact)s") %
                 {'thing': thing.name, 'interact': interact_name})
 
     def _print_rects(self, rect1, rect2):
