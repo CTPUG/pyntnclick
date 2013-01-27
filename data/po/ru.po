@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: suspended-sentence 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-26 19:09+0200\n"
+"POT-Creation-Date: 2013-01-27 13:36+0200\n"
 "PO-Revision-Date: 2011-03-08 23:13+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -1057,11 +1057,11 @@ msgid "Empty plastic containers. They used to hold dishwasher soap."
 msgstr ""
 "Пустые пластиковые контейнеры. В них хранилось средство для мытья посуды."
 
-#: pyntnclick/gamescreen.py:150
+#: pyntnclick/gamescreen.py:151
 msgid "Close"
 msgstr "Закрыть"
 
-#: pyntnclick/gamescreen.py:208
+#: pyntnclick/gamescreen.py:209
 msgid "Menu"
 msgstr "Меню"
 

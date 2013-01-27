@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-27 12:34+0200\n"
+"POT-Creation-Date: 2013-01-27 13:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -937,10 +937,10 @@ msgstr ""
 msgid "Empty plastic containers. They used to hold dishwasher soap."
 msgstr ""
 
-#: pyntnclick/gamescreen.py:150
+#: pyntnclick/gamescreen.py:151
 msgid "Close"
 msgstr ""
 
-#: pyntnclick/gamescreen.py:208
+#: pyntnclick/gamescreen.py:209
 msgid "Menu"
 msgstr ""
