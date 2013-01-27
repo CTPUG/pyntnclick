@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-27 13:37+0200\n"
+"PO-Revision-Date: 2013-01-27 14:11+0200\n"
+"Last-Translator: Neil Muller <drnlmuller@gmail.com>\n"
+"Language-Team: Afrikaans\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: pyntnclick/tools/rect_drawer.py:129
+msgid "Close"
+msgstr "Sluit"
+
+#: pyntnclick/tools/rect_drawer.py:163
+msgid "draw"
+msgstr "teken"
+
+#: pyntnclick/tools/rect_drawer.py:165
+msgid "cycle"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:167
+msgid "delete"
+msgstr "verwyder"
+
+#: pyntnclick/tools/rect_drawer.py:169
+msgid "image"
+msgstr "prent"
+
+#: pyntnclick/tools/rect_drawer.py:175
+#, python-format
+msgid "Thing %(thing)s Interact %(interact)s"
+msgstr "Ding %(thing)s Interact %(interact)s"
+
+#: pyntnclick/tools/rect_drawer.py:180
+msgid "     Rects"
+msgstr "    Reghoeke"
+
+#: pyntnclick/tools/rect_drawer.py:205
+msgid "Existing Intersecting rects"
+msgstr "Bestande reghoeke wat krius"
+
+#: pyntnclick/tools/rect_drawer.py:227 pyntnclick/tools/rect_drawer.py:241
+msgid "Intersecting rects"
+msgstr "Reghoeke wat kruis"
+
+#: pyntnclick/tools/rect_drawer.py:228
+#, python-format
+msgid "  Object %s"
+msgstr " Voorwerp %s"
+
+#: pyntnclick/tools/rect_drawer.py:242
+#, python-format
+msgid "  Object %(object1)s and %(object2)s"
+msgstr " Voorwerpe %(object1)s en %(object2)s"
+
+#: pyntnclick/tools/rect_drawer.py:364
+#, python-format
+msgid "Rect %d : "
+msgstr "Reghoek %d : "
+
+#: pyntnclick/tools/rect_drawer.py:370
+#, python-format
+msgid "Image %d"
+msgstr "Prentjie %d"
+
+#: pyntnclick/tools/rect_drawer.py:592
+msgid "Mode : "
+msgstr "Modus : "
+
+#: pyntnclick/tools/rect_drawer.py:598
+#, python-format
+msgid "Mode : %s"
+msgstr "Modus : %s"
+
+#: pyntnclick/tools/rect_drawer.py:626
+#, python-format
+msgid "Invalid scene: %s"
+msgstr "Ongelidge toneel: %s"
+
+#: pyntnclick/tools/rect_drawer.py:633
+#, python-format
+msgid "Invalid detail: %s"
+msgstr "Ongelidge gedeelte toneel: %s"
+
+#: pyntnclick/tools/rect_drawer.py:643
+msgid "Draw Rect"
+msgstr "Teken Reghoek"
+
+#: pyntnclick/tools/rect_drawer.py:646
+msgid "Load image"
+msgstr "Laai prentjie"
+
+#: pyntnclick/tools/rect_drawer.py:649
+msgid "Place/Move images"
+msgstr "Plass/Beweeg prente"
+
+#: pyntnclick/tools/rect_drawer.py:655
+msgid "Cycle interacts"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:658
+msgid "Delete Objects"
+msgstr "Verwyder Voorwerpe"
+
+#: pyntnclick/tools/rect_drawer.py:664
+msgid "Print objects"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:668
+msgid "Show Things (t)"
+msgstr "Wys Dinge (t)"
+
+#: pyntnclick/tools/rect_drawer.py:672
+msgid "Show Thing Rects (r)"
+msgstr "Wys Ding Reghoeke (r)"
+
+#: pyntnclick/tools/rect_drawer.py:676
+msgid "Show Images (i)"
+msgstr "Wys Prentjies (i)"
+
+#: pyntnclick/tools/rect_drawer.py:680
+msgid "Opaque Images (o)"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:684
+msgid "Show Drawn Rects (d)"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:688
+msgid "Show Toolbar (b)"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:692
+msgid "Show Animations (a)"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:696
+msgid "Zoom (z)"
+msgstr ""
+
+#: pyntnclick/tools/rect_drawer.py:700
+msgid "Quit"
+msgstr ""
