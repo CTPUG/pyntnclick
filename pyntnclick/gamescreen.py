@@ -67,7 +67,7 @@ class DownButton(UpDownButton):
 
 
 class InventoryView(Container):
-    MIN_UPDOWN_WIDTH = 16
+    MIN_UPDOWN_WIDTH = 20
 
     def __init__(self, pos, gd, size, screen):
         self.bsize = gd.constants.button_size
@@ -204,7 +204,8 @@ class ToolBar(Container):
         self.left = self.rect.left
 
         self.menu_button = self.add_tool(
-            None, TextButton, _("Menu"), fontname=gd.constants.bold_font,
+            self.rect.height, TextButton, _("Menu"),
+            fontname=gd.constants.bold_font,
             color="red", padding=1, border=0, bg_color="black")
         self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 
