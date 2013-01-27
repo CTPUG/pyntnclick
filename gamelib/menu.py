@@ -16,3 +16,10 @@ class SSMenuScreen(MenuScreen):
 
     def make_quit_button(self):
         return self.make_image_button((580, 523), 'splash/quit.png')
+
+    def make_load_game_button(self):
+        return self.make_image_button((16, 200), 'splash/load.png')
+
+    def make_save_game_button(self):
+        return self.make_image_button((601, 200), 'splash/save.png')
+
