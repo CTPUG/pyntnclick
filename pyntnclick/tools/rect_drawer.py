@@ -41,8 +41,8 @@ class ColourButton(Button):
     padding = 2
     border = 3
 
-    def __init__(self, rect, gd, colour, palette):
-        super(ColourButton, self).__init__(rect, gd)
+    def __init__(self, rect, gd, colour, palette, size=None):
+        super(ColourButton, self).__init__(rect, gd, size=size)
         self._colour = pygame.color.Color(colour)
         self._button_rect = self.rect.inflate(-self.padding, -self.padding)
         self._colour_rect = self._button_rect.inflate(-self.border,
@@ -77,21 +77,19 @@ class AppPalette(Container):
             'green', 'palegreen1', 'darkgreen', 'aquamarine', 'darkolivegreen',
             ]
 
-    def __init__(self, rect, gd, app_image):
+    def __init__(self, pos, gd, app_image, size=None):
         self.image = app_image
-        super(AppPalette, self).__init__(rect, gd)
+        super(AppPalette, self).__init__(pos, gd, size=size)
         self.selection = 0
         self.image.rect_color = pygame.color.Color(self.colors[self.selection])
 
-        x = rect.left
-        y = rect.top
+        x, y = pos
         for num, col in enumerate(self.colors):
-            if (x - rect.left + self.but_size) >= rect.width:
-                x = rect.left
+            if (x - self.rect.left + self.but_size) >= self.rect.width:
+                x = self.rect.left
                 y += self.but_size
-            button = ColourButton(
-                    pygame.Rect((x, y), (self.but_size, self.but_size)),
-                    gd, col, self)
+            button = ColourButton((x, y),
+                    gd, col, self, size=(self.but_size, self.but_size))
             x += self.but_size
             if num == 0:
                 self.cur_selection = button
@@ -113,8 +111,7 @@ class AppImage(Container):
 
     def __init__(self, parent, gd, state, scene, detail):
         self.state = state
-        super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
-            constants.screen[0], constants.screen[1]), gd)
+        super(AppImage, self).__init__((0, 0), gd, size=constants.screen)
         self.mode = DRAW
         self._scene = scene
         self._parent = parent
@@ -586,11 +583,12 @@ class AppImage(Container):
 
 class ModeLabel(LabelWidget):
 
-    def __init__(self, rect, gd, app_image):
+    def __init__(self, pos, gd, app_image, size=None):
         self.app_image = app_image
-        super(ModeLabel, self).__init__(rect,
+        super(ModeLabel, self).__init__(pos,
                 gd, _('Mode : '), fontname=constants.bold_font,
-                fontsize=15, color=pygame.color.Color(128, 0, 255))
+                fontsize=15, color=pygame.color.Color(128, 0, 255),
+                size=size)
         self.start_rect = self.rect.copy()
 
     def draw(self, surface):
@@ -608,7 +606,9 @@ def make_button(text, gd, action, ypos):
     rect = pygame.rect.Rect(0, 0, constants.menu_width,
             constants.menu_button_height)
     rect.move_ip(805, ypos)
-    button = TextButton(rect, gd, text, fontname=constants.font, fontsize=12,
+    button = TextButton(rect.topleft, gd, text, size=(constants.menu_width,
+        constants.menu_button_height),
+            fontname=constants.font, fontsize=12,
             color=pygame.color.Color(255, 255, 0), border=1, padding=3)
     button.add_callback('clicked', action)
     return button
@@ -636,8 +636,7 @@ class RectApp(Container):
 
         self.image = AppImage(self, gd, state, scene, detail is not None)
         self.add(self.image)
-        mode_label = ModeLabel(pygame.Rect((805, 0), (200, 25)),
-                self.gd, self.image)
+        mode_label = ModeLabel((805, 0), self.gd, self.image, size=(200, 25))
         self.add(mode_label)
         y = mode_label.rect.height
         draw = make_button(_('Draw Rect'), gd, self.image.draw_mode, y)
@@ -658,7 +657,7 @@ class RectApp(Container):
         delete = make_button(_("Delete Objects"), gd, self.image.del_mode, y)
         self.add(delete)
         y += delete.rect.height
-        palette = AppPalette(pygame.Rect((810, y), (200, 0)), gd, self.image)
+        palette = AppPalette((810, y), gd, self.image, size=(200, 0))
         self.add(palette)
         y += palette.rect.height
         print_rects = make_button(_("Print objects"), gd,
@@ -714,7 +713,7 @@ class RectEngine(object):
         self.state = None
         self._gd = gd
         rect = pygame.display.get_surface().get_rect()
-        self.app = RectApp(rect, self._gd, detail)
+        self.app = RectApp(rect.topleft, self._gd, detail)
 
     def run(self):
         """App loop"""
