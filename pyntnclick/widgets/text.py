@@ -15,7 +15,6 @@ class TextWidget(Widget):
         self.fontname = fontname or constants.font
         self.fontsize = fontsize or constants.font_size
         self.color = color or constants.text_color
-        self.visible = True
 
     def prepare(self):
         self.font = self.resource.get_font(self.fontname, self.fontsize)
@@ -59,8 +58,9 @@ class LabelWidget(TextWidget):
         self.surface = new_surface
 
     def draw(self, surface):
-        self.do_prepare()
-        surface.blit(self.surface, self.rect)
+        if self.visible:
+            self.do_prepare()
+            surface.blit(self.surface, self.rect)
 
 
 class TextButton(Button, TextWidget):

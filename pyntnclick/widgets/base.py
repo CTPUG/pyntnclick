@@ -21,6 +21,7 @@ class Widget(object):
         self.modal = False
         self.parent = None
         self.disabled = False
+        self.visible = True
         self.callbacks = collections.defaultdict(list)
         # To track which widget the mouse is over
         self.mouseover_widget = self
@@ -34,7 +35,7 @@ class Widget(object):
 
     def event(self, ev):
         "Don't override this without damn good reason"
-        if self.disabled:
+        if self.disabled or not self.visible:
             return True
 
         type_ = ev.type
@@ -72,6 +73,12 @@ class Widget(object):
     def enable(self):
         if self.disabled:
             self.disabled = False
+            self.prepare()
+            self.is_prepared = True
+
+    def set_visible(self, visible):
+        if self.visible != visible:
+            self.visible = visible
             self.prepare()
             self.is_prepared = True
 
@@ -145,9 +152,10 @@ class Container(Widget):
             self.remove(widget)
 
     def draw(self, surface):
-        self.do_prepare()
-        for child in self.children:
-            child.draw(surface)
+        if self.visible:
+            self.do_prepare()
+            for child in self.children:
+                child.draw(surface)
 
 
 class ModalStackContainer(Container):
@@ -181,12 +189,13 @@ class ModalStackContainer(Container):
         return self.top is widget
 
     def draw(self, surface):
-        self.do_prepare()
-        obscure = pygame.Surface(self.rect.size, SRCALPHA)
-        obscure.fill(self.obscure_color)
-        for child in self.children:
-            surface.blit(obscure, self.rect)
-            child.draw(surface)
+        if self.visible:
+            self.do_prepare()
+            obscure = pygame.Surface(self.rect.size, SRCALPHA)
+            obscure.fill(self.obscure_color)
+            for child in self.children:
+                surface.blit(obscure, self.rect)
+                child.draw(surface)
 
 
 class Box(Container):
@@ -194,18 +203,19 @@ class Box(Container):
     padding = 4
 
     def draw(self, surface):
-        self.do_prepare()
-        # TODO: Why isn't this done in prepare?
-        expandrect = self.rect.move((-self.padding, -self.padding))
-        expandrect.width = self.rect.width + 2 * self.padding
-        expandrect.height = self.rect.height + 2 * self.padding
-        border = pygame.Surface(expandrect.size, SRCALPHA)
-        border.fill(pygame.Color('black'))
-        surface.blit(border, expandrect)
-        background = pygame.Surface(self.rect.size, SRCALPHA)
-        background.fill(pygame.Color('gray'))
-        surface.blit(background, self.rect)
-        super(Box, self).draw(surface)
+        if self.visible:
+            self.do_prepare()
+            # TODO: Why isn't this done in prepare?
+            expandrect = self.rect.move((-self.padding, -self.padding))
+            expandrect.width = self.rect.width + 2 * self.padding
+            expandrect.height = self.rect.height + 2 * self.padding
+            border = pygame.Surface(expandrect.size, SRCALPHA)
+            border.fill(pygame.Color('black'))
+            surface.blit(border, expandrect)
+            background = pygame.Surface(self.rect.size, SRCALPHA)
+            background.fill(pygame.Color('gray'))
+            surface.blit(background, self.rect)
+            super(Box, self).draw(surface)
 
 
 def convert_color(color):

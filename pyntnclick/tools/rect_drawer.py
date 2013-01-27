@@ -57,13 +57,14 @@ class ColourButton(Button):
         self._palette.cur_selection = self
 
     def draw(self, surface):
-        self.do_prepare()
-        surface.fill(pygame.color.Color(0, 0, 0), self.rect)
-        if self.selected:
-            surface.fill(self.sel_colour, self._button_rect)
-        else:
-            surface.fill(self.unsel_colour, self._button_rect)
-        surface.fill(self._colour, self._colour_rect)
+        if self.visible:
+            self.do_prepare()
+            surface.fill(pygame.color.Color(0, 0, 0), self.rect)
+            if self.selected:
+                surface.fill(self.sel_colour, self._button_rect)
+            else:
+                surface.fill(self.unsel_colour, self._button_rect)
+            surface.fill(self._colour, self._colour_rect)
 
 
 class AppPalette(Container):
@@ -259,9 +260,9 @@ class AppImage(Container):
     def toggle_images(self, ev, widget):
         self.draw_images = not self.draw_images
         for image in self.images:
-            image.visible = self.draw_images
+            image.set_visible(self.draw_images)
         if self.current_image:
-            self.current_image.visible = self.draw_images
+            self.current_image.set_visible(self.draw_images)
         self.invalidate()
 
     def toggle_trans_images(self, ev, widget):
@@ -297,10 +298,13 @@ class AppImage(Container):
         self.clear_display = True
 
     def draw(self, surface):
+        if not self.visible:
+            return
         self.do_prepare()
         if self.clear_display:
             surface.fill(pygame.color.Color(0, 0, 0),
-                    pygame.Rect(0, 0, constants.screen[0], constants.screen[1]))
+                    pygame.Rect(0, 0, constants.screen[0],
+                        constants.screen[1]))
             self.clear_display = False
 
         if self.zoom_display:

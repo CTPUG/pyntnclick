@@ -31,7 +31,7 @@ class MenuScreen(Screen):
         self.set_button_state(self._save_game_button, running)
 
     def set_button_state(self, button, enabled):
-        button.visible = enabled
+        button.set_visible(enabled)
         if enabled:
             button.enable()
         else:

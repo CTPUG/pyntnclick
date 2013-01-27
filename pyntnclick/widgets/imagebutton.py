@@ -9,9 +9,7 @@ class ImageButtonWidget(Button):
         if not size:
             self.rect.size = image.get_rect().size
         self.image = image
-        self.visible = True
 
     def draw(self, surface):
-        self.disabled = not self.visible
         if self.visible:
             surface.blit(self.image, self.rect)
