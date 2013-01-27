@@ -299,7 +299,8 @@ class AppImage(Container):
     def draw(self, surface):
         self.do_prepare()
         if self.clear_display:
-            surface.fill(pygame.color.Color(0, 0, 0))
+            surface.fill(pygame.color.Color(0, 0, 0),
+                    pygame.Rect(0, 0, constants.screen[0], constants.screen[1]))
             self.clear_display = False
 
         if self.zoom_display:
