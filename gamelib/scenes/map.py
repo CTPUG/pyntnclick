@@ -125,7 +125,7 @@ class ToEngine(DoorThing):
     INITIAL = 'door'
 
     def interact(self, item):
-        if not self.game.is_in_inventory('helmet'):
+        if not self.game.is_in_inventory('helmet:'):
             return Result(_('The airlock refuses to open. The automated'
                     ' voice says: "Hull breach beyond this door. Personnel'
                     ' must be equipped for vacuum before entry."'))

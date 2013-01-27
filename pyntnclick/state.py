@@ -49,7 +49,11 @@ class GameState(object):
 
     def __init__(self, state_dict=None):
         if state_dict is None:
-            state_dict = {'inventories': {'main': []}, 'current_scene': None}
+            state_dict = {
+                'inventories': {'main': []},
+                'item_factories': {},
+                'current_scene': None,
+                }
         self._game_state = copy.deepcopy(state_dict)
 
     def __getitem__(self, key):
@@ -61,10 +65,6 @@ class GameState(object):
     def export_data(self):
         return copy.deepcopy(self._game_state)
 
-    def get_all_gizmo_data(self, state_key):
-        """Get all state for a gizmo - returns a dict"""
-        return self[state_key]
-
     def get_data(self, state_key, data_key):
         """Get a single entry"""
         return self[state_key].get(data_key, None)
@@ -73,14 +73,18 @@ class GameState(object):
         """Set a single value"""
         self[state_key][data_key] = value
 
+    def _initialize_state(self, state_dict, state_key, initial_data):
+        if state_key not in self._game_state:
+            state_dict[state_key] = copy.deepcopy(initial_data)
+
     def initialize_state(self, state_key, initial_data):
         """Initialize a gizmo entry"""
-        if state_key not in self._game_state:
-            self._game_state[state_key] = {}
-            if initial_data:
-                # deep copy of INITIAL_DATA allows lists, dicts and other
-                # mutable types to safely be used in INITIAL_DATA
-                self._game_state[state_key].update(copy.deepcopy(initial_data))
+        self._initialize_state(self._game_state, state_key, initial_data)
+
+    def initialize_item_factory_state(self, state_key, initial_data):
+        """Initialize an item factory entry"""
+        self._initialize_state(
+            self._game_state['item_factories'], state_key, initial_data)
 
     def inventory(self, name='main'):
         return self['inventories'][name]
@@ -125,8 +129,8 @@ class Game(object):
         self.scenes = {}
         # map of detail view name -> DetailView object
         self.detail_views = {}
-        # map of item name -> Item object
-        self.items = {}
+        # map of item prefix -> ItemFactory object
+        self.item_factories = {}
         # list of item objects in inventory
         self.current_inventory = 'main'
         # currently selected tool (item)
@@ -141,6 +145,16 @@ class Game(object):
         if scene_name is not None:
             return self.scenes[scene_name]
         return None
+
+    def get_item(self, item_name):
+        base_name, _, _suffix = item_name.partition(':')
+        factory = self.item_factories[base_name]
+        return factory.get_item(item_name)
+
+    def create_item(self, base_name):
+        assert ":" not in base_name
+        factory = self.item_factories[base_name]
+        return factory.create_item()
 
     def inventory(self, name=None):
         if name is None:
@@ -161,9 +175,13 @@ class Game(object):
         detail_view.set_game(self)
         self.detail_views[detail_view.name] = detail_view
 
-    def add_item(self, item):
-        item.set_game(self)
-        self.items[item.name] = item
+    def add_item_factory(self, item_class):
+        name = item_class.NAME
+        assert name not in self.item_factories, (
+           "Factory for %s already added." % (name,))
+        factory = item_class.ITEM_FACTORY(item_class)
+        factory.set_game(self)
+        self.item_factories[name] = factory
 
     def load_scenes(self, modname):
         mod = __import__('%s.%s' % (self.gd.SCENE_MODULE, modname),
@@ -187,8 +205,9 @@ class Game(object):
     def _update_inventory(self):
         ScreenEvent.post('game', 'inventory', None)
 
-    def add_inventory_item(self, name):
-        self.inventory().append(name)
+    def add_inventory_item(self, item_name):
+        item = self.create_item(item_name)
+        self.inventory().append(item.name)
         self._update_inventory()
 
     def is_in_inventory(self, name):
@@ -197,7 +216,7 @@ class Game(object):
     def remove_inventory_item(self, name):
         self.inventory().remove(name)
         # Unselect tool if it's removed
-        if self.tool == self.items[name]:
+        if self.tool == self.get_item(name):
             self.set_tool(None)
         self._update_inventory()
 
@@ -205,9 +224,10 @@ class Game(object):
         """Try to replace an item in the inventory with a new one"""
         try:
             index = self.inventory().index(old_item_name)
-            self.inventory()[index] = new_item_name
-            if self.tool == self.items[old_item_name]:
-                self.set_tool(self.items[new_item_name])
+            new_item = self.create_item(new_item_name)
+            self.inventory()[index] = new_item.name
+            if self.tool == self.get_item(old_item_name):
+                self.set_tool(new_item)
         except ValueError:
             return False
         self._update_inventory()
@@ -302,8 +322,8 @@ class Scene(StatefulGizmo):
         self.current_thing = None
         self._background = None
 
-    def add_item(self, item):
-        self.game.add_item(item)
+    def add_item_factory(self, item_factory):
+        self.game.add_item_factory(item_factory)
 
     def add_thing(self, thing):
         thing.set_game(self.game)
@@ -546,13 +566,48 @@ class Thing(StatefulGizmo, InteractiveMixin):
                             rect.inflate(1, 1), 1)
 
 
+class ItemFactory(StatefulGizmo):
+    INITIAL_DATA = {
+        'created': [],
+        }
+
+    def __init__(self, item_class):
+        super(ItemFactory, self).__init__()
+        self.item_class = item_class
+        assert self.item_class.NAME is not None, (
+            "%s has no NAME set" % (self.item_class,))
+        self.state_key = self.item_class.NAME + '_factory'
+        self.items = {}
+
+    def get_item(self, item_name):
+        assert item_name in self.get_data('created'), (
+            "Object %s has not been created" % (item_name,))
+        if item_name not in self.items:
+            item = self.item_class(item_name)
+            item.set_game(self.game)
+            self.items[item_name] = item
+        return self.items[item_name]
+
+    def get_item_suffix(self):
+        return ''
+
+    def create_item(self):
+        item_name = '%s:%s' % (self.item_class.NAME, self.get_item_suffix())
+        created_list = self.get_data('created')
+        assert item_name not in created_list, (
+            "Already created object %s" % (item_name,))
+        created_list.append(item_name)
+        self.set_data('created', created_list)
+        return self.get_item(item_name)
+
+
 class Item(GameDeveloperGizmo, InteractiveMixin):
     """Base class for inventory items."""
 
     # image for inventory
     INVENTORY_IMAGE = None
 
-    # name of item
+    # Base name of item
     NAME = None
 
     # name for interactions (i.e. def interact_with_<TOOL_NAME>)
@@ -561,12 +616,14 @@ class Item(GameDeveloperGizmo, InteractiveMixin):
     # set to instance of CursorSprite
     CURSOR = None
 
+    ITEM_FACTORY = ItemFactory
+
     def __init__(self, name=None):
         GameDeveloperGizmo.__init__(self)
         self.name = self.NAME
         if name is not None:
             self.name = name
-        self.tool_name = name
+        self.tool_name = self.NAME
         if self.TOOL_NAME is not None:
             self.tool_name = self.TOOL_NAME
         self.inventory_image = None
@@ -589,15 +646,15 @@ class Item(GameDeveloperGizmo, InteractiveMixin):
         return False
 
 
+class ClonableItemFactory(ItemFactory):
+    def get_item_suffix(self):
+        # Works as long as we never remove anything from our 'created' list.
+        count = len(self.get_data('created'))
+        assert self.item_class.MAX_COUNT is not None
+        assert count <= self.item_class.MAX_COUNT
+        return str(count)
+
+
 class CloneableItem(Item):
-    _counter = 0
-
-    @classmethod
-    def _get_new_id(cls):
-        cls._counter += 1
-        return cls._counter - 1
-
-    def __init__(self, name=None):
-        super(CloneableItem, self).__init__(name)
-        my_count = self._get_new_id()
-        self.name = "%s.%s" % (self.name, my_count)
+    ITEM_FACTORY = ClonableItemFactory
+    MAX_COUNT = None

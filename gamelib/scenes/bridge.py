@@ -42,8 +42,9 @@ class Bridge(Scene):
 
     def setup(self):
         self.background_playlist = None
-        self.add_item(Superconductor('superconductor'))
-        self.add_item(Stethoscope('stethoscope'))
+        self.add_item_factory(Superconductor)
+        self.add_item_factory(TapedSuperconductor)
+        self.add_item_factory(Stethoscope)
         self.add_thing(ToMap())
         self.add_thing(MonitorCamera())
         self.add_thing(MassageChair())
@@ -173,6 +174,7 @@ class MassageChair(Thing):
 class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
 
+    NAME = 'stethoscope'
     INVENTORY_IMAGE = 'stethoscope.png'
     CURSOR = CursorSprite('stethoscope.png')
 
@@ -203,6 +205,7 @@ class StethoscopeThing(TakeableThing):
 class TapedSuperconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
+    NAME = 'taped_superconductor'
     INVENTORY_IMAGE = 'superconductor_taped.png'
     CURSOR = CursorSprite('superconductor_taped_cursor.png')
 
@@ -210,13 +213,12 @@ class TapedSuperconductor(Item):
 class Superconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
+    NAME = 'superconductor'
     INVENTORY_IMAGE = 'superconductor_fixed.png'
     CURSOR = CursorSprite('superconductor_fixed.png')
 
     def interact_with_duct_tape(self, item):
-        taped_superconductor = TapedSuperconductor('taped_superconductor')
-        self.game.add_item(taped_superconductor)
-        self.game.replace_inventory_item(self.name, taped_superconductor.name)
+        self.game.replace_inventory_item(self.name, 'taped_superconductor')
         return Result(_("You rip off a piece of duct tape and stick it on the"
                         " superconductor. It almost sticks to itself, but you"
                         " successfully avoid disaster."))

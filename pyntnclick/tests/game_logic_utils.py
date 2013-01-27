@@ -37,11 +37,6 @@ class GameLogicTestCase(unittest.TestCase):
         self.scene_stack.pop()
         self.assertTrue(len(self.scene_stack) > 0)
 
-    def tearDown(self):
-        for item in self.state.items.values():
-            if isinstance(item, pyntnclick.state.CloneableItem):
-                type(item)._counter = 0
-
     def clear_event_queue(self):
         # Since we aren't handling events, we may overflow the pygame
         # event buffer if we're generating a lot of events
@@ -80,7 +75,11 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(in_detail, thing in self.scene_stack[-1].things)
 
     def assert_item_exists(self, item, exists=True):
-        self.assertEquals(exists, item in self.state.items)
+        try:
+            self.state.get_item(item)
+            self.assertTrue(exists)
+        except:
+            self.assertFalse(exists)
 
     def assert_current_scene(self, scene):
         self.assertEquals(scene, self.state.get_current_scene().name)
@@ -99,7 +98,7 @@ class GameLogicTestCase(unittest.TestCase):
         item_obj = None
         if item is not None:
             self.assert_inventory_item(item)
-            item_obj = self.state.items[item]
+            item_obj = self.state.get_item(item)
         thing_container = self.scene_stack[-1]
         if detail is not None:
             self.assertEqual(detail, thing_container.name)
@@ -108,7 +107,7 @@ class GameLogicTestCase(unittest.TestCase):
 
     def interact_item(self, target_item, item):
         self.assert_inventory_item(target_item)
-        item_obj = self.state.items[item]
-        target_obj = self.state.items[target_item]
+        item_obj = self.state.get_item(item)
+        target_obj = self.state.get_item(target_item)
         result = target_obj.interact(item_obj)
         return self.handle_result(result)

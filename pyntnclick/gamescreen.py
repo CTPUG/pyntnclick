@@ -124,7 +124,7 @@ class InventoryView(Container):
     @property
     def slot_items(self):
         item_names = self.game.inventory()[self.inv_offset:][:len(self.slots)]
-        return [self.game.items[name] for name in item_names]
+        return [self.game.get_item(name) for name in item_names]
 
     def mouse_down(self, event, widget):
         if event.button != 1:

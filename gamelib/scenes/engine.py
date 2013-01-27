@@ -22,7 +22,7 @@ class Engine(Scene):
         }
 
     def setup(self):
-        self.add_item(CanOpener('canopener'))
+        self.add_item_factory(CanOpener)
         self.add_thing(CanOpenerThing())
         self.add_thing(SuperconductorSocket())
         self.add_thing(PowerLines())
@@ -160,6 +160,7 @@ class Engines(Thing):
 
 
 class CanOpener(Item):
+    NAME = 'canopener'
     INVENTORY_IMAGE = 'can_opener.png'
     CURSOR = CursorSprite('can_opener_cursor.png')
 

@@ -22,11 +22,11 @@ class Machine(Scene):
         self.add_thing(LaserWelderPowerLights())
         self.add_thing(Grinder())
         self.add_thing(ManualThing())
-        self.add_item(TitaniumMachete('machete'))
-        self.add_item(CryoPipesOne('cryo_pipes_one'))
-        self.add_item(CryoPipesTwo('cryo_pipes_two'))
-        self.add_item(CryoPipesThree('cryo_pipes_three'))
-        self.add_item(Manual('manual'))
+        self.add_item_factory(TitaniumMachete)
+        self.add_item_factory(CryoPipesOne)
+        self.add_item_factory(CryoPipesTwo)
+        self.add_item_factory(CryoPipesThree)
+        self.add_item_factory(Manual)
         self.add_thing(GenericDescThing('machine.wires', 2,
             _("Wires run to all the machines in the room"),
             (
@@ -181,19 +181,19 @@ class LaserWelderButton(Thing):
         else:
             welder_slot.set_data("contents", [])
             welder_slot.set_interact()
-            if self.game.is_in_inventory("cryo_pipes_one"):
-                self.game.replace_inventory_item("cryo_pipes_one",
+            if self.game.is_in_inventory("cryo_pipes_one:"):
+                self.game.replace_inventory_item("cryo_pipes_one:",
                                                   "cryo_pipes_two")
                 return Result(_("With high-precision spitzensparken, you weld"
                                 " together a second pipe. You bundle the two"
                                 " pipes together."), soundfile='laser.ogg')
-            elif self.game.is_in_inventory("cryo_pipes_two"):
-                self.game.replace_inventory_item("cryo_pipes_two",
+            elif self.game.is_in_inventory("cryo_pipes_two:"):
+                self.game.replace_inventory_item("cryo_pipes_two:",
                                                   "cryo_pipes_three")
                 return Result(_("With high-precision spitzensparken, you"
                                 " create yet another pipe. You store it with"
                                 " the other two."), soundfile='laser.ogg')
-            elif self.game.is_in_inventory("cryo_pipes_three"):
+            elif self.game.is_in_inventory("cryo_pipes_three:"):
                 # just for safety
                 return None
             else:
@@ -223,6 +223,7 @@ class LaserWelderPowerLights(Thing):
 class CryoPipesOne(Item):
     "A single cryo pipe (made from a tube fragment and can)."
 
+    NAME = 'cryo_pipes_one'
     INVENTORY_IMAGE = "cryo_pipes_one.png"
     CURSOR = CursorSprite('cryo_pipes_one_cursor.png')
     TOOL_NAME = "cryo_pipes_one"
@@ -231,6 +232,7 @@ class CryoPipesOne(Item):
 class CryoPipesTwo(Item):
     "Two cryo pipes (each made from a tube fragment and can)."
 
+    NAME = 'cryo_pipes_two'
     INVENTORY_IMAGE = "cryo_pipes_two.png"
     CURSOR = CursorSprite('cryo_pipes_two_cursor.png')
     TOOL_NAME = "cryo_pipes_two"
@@ -239,6 +241,7 @@ class CryoPipesTwo(Item):
 class CryoPipesThree(Item):
     "Three cryo pipes (each made from a tube fragment and can)."
 
+    NAME = 'cryo_pipes_three'
     INVENTORY_IMAGE = "cryo_pipes_three.png"
     CURSOR = CursorSprite('cryo_pipes_three_cursor.png')
     TOOL_NAME = "cryo_pipes_three"
@@ -273,6 +276,7 @@ class Grinder(Thing):
 class TitaniumMachete(Item):
     "Titanium machete, formerly a leg."
 
+    NAME = 'machete'
     INVENTORY_IMAGE = "machete.png"
     CURSOR = CursorSprite('machete_cursor.png', 23, 1)
 
@@ -298,6 +302,7 @@ class ManualThing(TakeableThing):
 class Manual(Item):
     "A ship instruction manual."
 
+    NAME = 'manual'
     INVENTORY_IMAGE = "manual.png"
     CURSOR = None
 

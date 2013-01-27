@@ -28,7 +28,10 @@ class Mess(Scene):
         self.add_thing(ToMap())
         self.add_thing(DetergentThing())
         self.add_thing(Boomslang())
-        self.add_item(DetergentBottle('detergent_bottle'))
+        self.add_item_factory(DetergentBottle)
+        self.add_item_factory(EmptyCan)
+        self.add_item_factory(FullCan)
+        self.add_item_factory(DentedCan)
         # Flavour items
         # extra cans on shelf
         self.add_thing(GenericDescThing('mess.cans', 1,
@@ -48,6 +51,8 @@ class Mess(Scene):
 class BaseCan(CloneableItem):
     """Base class for the cans"""
 
+    MAX_COUNT = 3
+
     def interact_with_full_can(self, item):
         return Result(_("You bang the cans together. It sounds like two"
                         " cans being banged together."),
@@ -63,9 +68,7 @@ class BaseCan(CloneableItem):
         return Result(_("You'd mangle it beyond usefulness."))
 
     def interact_with_canopener(self, item):
-        empty = EmptyCan('empty_can')
-        self.game.add_item(empty)
-        self.game.replace_inventory_item(self.name, empty.name)
+        self.game.replace_inventory_item(self.name, 'empty_can')
         return Result(_("You open both ends of the can, discarding the"
                         " hideous contents."))
 
@@ -73,6 +76,7 @@ class BaseCan(CloneableItem):
 class EmptyCan(BaseCan):
     "After emptying the full can."
 
+    NAME = 'empty_can'
     INVENTORY_IMAGE = "empty_can.png"
     CURSOR = CursorSprite('empty_can_cursor.png')
 
@@ -87,13 +91,12 @@ class EmptyCan(BaseCan):
 class FullCan(BaseCan):
     "Found on the shelf."
 
+    NAME = 'full_can'
     INVENTORY_IMAGE = "full_can.png"
     CURSOR = CursorSprite('full_can_cursor.png')
 
     def interact_with_titanium_leg(self, item):
-        dented = DentedCan("dented_can")
-        self.game.add_item(dented)
-        self.game.replace_inventory_item(self.name, dented.name)
+        self.game.replace_inventory_item(self.name, 'dented_can')
         return Result(_("You club the can with the femur. The can gets dented,"
                         " but doesn't open."), soundfile="can_hit.ogg")
 
@@ -101,6 +104,7 @@ class FullCan(BaseCan):
 class DentedCan(BaseCan):
     "A can banged on with the femur"
 
+    NAME = 'dented_can'
     INVENTORY_IMAGE = "dented_can.png"
     CURSOR = CursorSprite('dented_can_cursor.png')
 
@@ -136,9 +140,7 @@ class CansOnShelf(Thing):
     def interact_without(self):
         starting_cans = self.get_data('cans_available')
         if starting_cans > 0:
-            can = FullCan("full_can")
-            self.game.add_item(can)
-            self.game.add_inventory_item(can.name)
+            self.game.add_inventory_item('full_can')
             self.set_data('cans_available', starting_cans - 1)
             self.set_interact()
             if starting_cans == 1:
@@ -324,6 +326,7 @@ class DetergentThing(Thing):
 
 
 class DetergentBottle(Item):
+    NAME = 'detergent_bottle'
     INVENTORY_IMAGE = 'bottle_empty.png'
     CURSOR = CursorSprite('bottle_empty_cursor.png', 27, 7)
 

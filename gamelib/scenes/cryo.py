@@ -34,7 +34,9 @@ class Cryo(Scene):
             ]
 
     def setup(self):
-        self.add_item(TitaniumLeg("titanium_leg"))
+        self.add_item_factory(TitaniumLeg)
+        self.add_item_factory(TubeFragment)
+        self.add_item_factory(FullBottle)
         self.add_thing(CryoUnitAlpha())
         self.add_thing(CryoRoomDoor())
         self.add_thing(CryoComputer())
@@ -165,9 +167,7 @@ class CryoPipeBase(Thing):
     def interact_with_machete(self, item):
         if self.get_data('fixed'):
             self.set_data('fixed', False)
-            pipe = TubeFragment('tube_fragment')
-            self.game.add_item(pipe)
-            self.game.add_inventory_item(pipe.name)
+            self.game.add_inventory_item('tube_fragment')
             self.set_interact()
             responses = [Result(_("It takes more effort than one would expect,"
                                   " but eventually the pipe is separated from"
@@ -226,9 +226,11 @@ class UncuttableCryoPipes(Thing):
 class TubeFragment(CloneableItem):
     "Obtained after cutting down a cryo room pipe."
 
+    NAME = "tube_fragment"
     INVENTORY_IMAGE = "tube_fragment.png"
     CURSOR = CursorSprite('tube_fragment_cursor.png')
     TOOL_NAME = "tube_fragment"
+    MAX_COUNT = 3
 
 
 class CryoPipeLeft(CryoPipeBase):
@@ -264,6 +266,7 @@ class CryoPipeRightBottom(CryoPipeBase):
 class TitaniumLeg(Item):
     "Titanium leg, found on a piratical corpse."
 
+    NAME = 'titanium_leg'
     INVENTORY_IMAGE = "titanium_femur.png"
     CURSOR = CursorSprite('titanium_femur_cursor.png', 13, 5)
 
@@ -463,6 +466,7 @@ class PlaqueThing(Thing):
 
 
 class FullBottle(Item):
+    NAME = 'full_detergent_bottle'
     INVENTORY_IMAGE = 'bottle_full.png'
     CURSOR = CursorSprite('bottle_full_cursor.png', 27, 7)
 
@@ -489,9 +493,7 @@ class CryoPools(Thing):
         return Result(_("It's gooey"))
 
     def interact_with_detergent_bottle(self, item):
-        full = FullBottle('full_detergent_bottle')
-        self.game.add_item(full)
-        self.game.replace_inventory_item(item.name, full.name)
+        self.game.replace_inventory_item(item.name, 'full_detergent_bottle')
         return Result(_("You scoop up some coolant and fill the bottle."))
 
 

@@ -22,9 +22,10 @@ class CrewQuarters(Scene):
         self.add_thing(ToMap())
         self.add_thing(Safe())
         self.add_thing(FishbowlThing())
-        self.add_item(Fishbowl('fishbowl'))
-        self.add_item(DuctTape('duct_tape'))
-        self.add_item(EscherPoster('escher_poster'))
+        self.add_item_factory(Fishbowl)
+        self.add_item_factory(DuctTape)
+        self.add_item_factory(EscherPoster)
+        self.add_item_factory(FishbowlHelmet)
         self.add_thing(PosterThing())
         self.add_thing(MonitorCamera())
         self.add_thing(GenericDescThing('crew.plant', 1,
@@ -154,9 +155,7 @@ class Fishbowl(Item):
     NAME = "fishbowl"
 
     def interact_with_duct_tape(self, item):
-        helmet = FishbowlHelmet('helmet')
-        self.game.add_item(helmet)
-        self.game.replace_inventory_item(self.name, helmet.name)
+        self.game.replace_inventory_item(self.name, 'helmet')
         return Result(_("You duct tape the edges of the helmet. The seal is"
                         " crude, but it will serve as a workable helmet if"
                         " needed."))
@@ -173,6 +172,7 @@ class FishbowlHelmet(Item):
 class DuctTape(Item):
     "A bowl. Sans fish."
 
+    NAME = 'duct_tape'
     INVENTORY_IMAGE = 'duct_tape.png'
     CURSOR = CursorSprite('duct_tape.png')
 
