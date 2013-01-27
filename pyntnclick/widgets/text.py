@@ -15,6 +15,7 @@ class TextWidget(Widget):
         self.fontname = fontname or constants.font
         self.fontsize = fontsize or constants.font_size
         self.color = color or constants.text_color
+        self.visible = True
 
     def prepare(self):
         self.font = self.resource.get_font(self.fontname, self.fontsize)
@@ -26,8 +27,9 @@ class TextWidget(Widget):
         self.rect.height = max(self.rect.height, height)
 
     def draw(self, surface):
-        self.do_prepare()
-        surface.blit(self.surface, self.rect)
+        if self.visible:
+            self.do_prepare()
+            surface.blit(self.surface, self.rect)
 
 
 class LabelWidget(TextWidget):

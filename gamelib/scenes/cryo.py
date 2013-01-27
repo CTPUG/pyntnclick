@@ -172,8 +172,8 @@ class CryoPipeBase(Thing):
             responses = [Result(_("It takes more effort than one would expect,"
                                   " but eventually the pipe is separated from"
                                   " the wall."), soundfile="chop-chop.ogg")]
-            if self.game.current_scene.get_data('vandalism_warn'):
-                self.game.current_scene.set_data('vandalism_warn', False)
+            if self.game.get_current_scene().get_data('vandalism_warn'):
+                self.game.get_current_scene().set_data('vandalism_warn', False)
                 responses.append(make_jim_dialog(
                     _("Prisoner %s. Vandalism is an offence punishable by a "
                       "minimum of an additional 6 months to your sentence."

@@ -8,4 +8,4 @@ _ = lambda x: x
 class SSConstants(GameConstants):
     title = _('Suspended Sentence')
     icon = 'suspended_sentence24x24.png'
-    i18n_name = 'suspended-sentence'
+    short_name = 'suspended-sentence'

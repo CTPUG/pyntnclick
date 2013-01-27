@@ -86,7 +86,7 @@ class MadClickerTestCase(GameLogicTestCase):
     def do_mad_clicker(self):
         """Implement frantic clicking behaviour"""
         for scene in self.state.scenes.values():
-            self.state.current_scene = scene
+            self.state.data.set_current_scene(scene.name)
             for thing in scene.things.values():
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)

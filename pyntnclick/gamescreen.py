@@ -123,7 +123,8 @@ class InventoryView(Container):
 
     @property
     def slot_items(self):
-        return self.game.inventory()[self.inv_offset:][:len(self.slots)]
+        item_names = self.game.inventory()[self.inv_offset:][:len(self.slots)]
+        return [self.game.items[name] for name in item_names]
 
     def mouse_down(self, event, widget):
         if event.button != 1:
@@ -257,11 +258,24 @@ class GameScreen(CursorScreen):
         getattr(self, 'game_event_%s' % event_name, lambda d: None)(data)
 
     def game_event_restart(self, data):
-        self.reset_game(self.create_initial_state())
+        self.reset_game()
+
+    def get_save_dir(self):
+        return self.gd.get_default_save_location()
+
+    def game_event_load(self, data):
+        state = self.gd.game_state_class().load_game(
+            self.get_save_dir(), 'savegame')
+        # TODO: Handle this better.
+        if state is not None:
+            self.reset_game(state)
+
+    def game_event_save(self, data):
+        self.game.data.save_game(self.get_save_dir(), 'savegame')
 
     def reset_game(self, game_state=None):
         self._clear_all()
-        self.game = self.create_initial_state()
+        self.game = self.create_initial_state(game_state)
 
         self.screen_modal = self.container.add(
             ModalStackContainer(self.container.rect.copy(), self.gd))
@@ -294,9 +308,8 @@ class GameScreen(CursorScreen):
         for scene_widget in reversed(self.scene_modal.children[:]):
             self.scene_modal.remove(scene_widget)
             scene_widget.scene.leave()
-        scene = self.game.scenes[scene_name]
-        self.game.current_scene = scene
-        self._add_scene(scene)
+        self.game.data.set_current_scene(scene_name)
+        self._add_scene(self.game.scenes[scene_name])
 
     def show_detail(self, detail_name):
         self._add_scene(self.game.detail_views[detail_name], True)

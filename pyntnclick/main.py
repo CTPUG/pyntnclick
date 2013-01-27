@@ -70,9 +70,9 @@ class GameDescription(object):
         lang = locale.getdefaultlocale(['LANGUAGE', 'LC_ALL', 'LC_CTYPE',
                                         'LANG'])[0]
         self.resource = Resources(self._resource_module, lang)
-        gettext.bindtextdomain(self.constants.i18n_name,
+        gettext.bindtextdomain(self.constants.short_name,
                                self.resource.get_resource_path('locale'))
-        gettext.textdomain(self.constants.i18n_name)
+        gettext.textdomain(self.constants.short_name)
 
         self._check_translations()
 
@@ -88,7 +88,7 @@ class GameDescription(object):
             if candidate.endswith('.po'):
                 polang = candidate.split('.', 1)[0]
                 pofile = os.path.join(popath, candidate)
-                mofile = gettext.find(self.constants.i18n_name, mopath,
+                mofile = gettext.find(self.constants.short_name, mopath,
                         (polang,))
                 if mofile is None:
                     print 'Missing mo file for %s' % pofile
@@ -97,17 +97,19 @@ class GameDescription(object):
                     print 'po file %s is newer than mo file %s' % (pofile,
                             mofile)
 
-    def initial_state(self):
+    def initial_state(self, game_state=None):
         """Create a copy of the initial game state."""
-        initial_state = state.Game(self)
+        initial_state = state.Game(self, self.game_state_class()(game_state))
         initial_state.set_debug_rects(self._debug_rects)
         for scene in self._scene_list:
             initial_state.load_scenes(scene)
-        initial_state.change_scene(self._initial_scene)
+        if initial_state.data['current_scene'] is None:
+            initial_state.data.set_current_scene(self._initial_scene)
+        initial_state.change_scene(initial_state.data['current_scene'])
         return initial_state
 
-    def game_state(self):
-        return state.GameState()
+    def game_state_class(self):
+        return state.GameState
 
     def game_constants(self):
         return GameConstants()
@@ -193,3 +195,14 @@ class GameDescription(object):
             self.engine.run()
         except KeyboardInterrupt:
             pass
+
+    def get_default_save_location(self):
+        """Return a default save game location."""
+        app = self.constants.short_name
+        if sys.platform.startswith("win"):
+            if "APPDATA" in os.environ:
+                return os.path.join(os.environ["APPDATA"], app)
+            return os.path.join(os.path.expanduser("~"), "." + app)
+        elif 'XDG_DATA_HOME' in os.environ:
+            return os.path.join(os.environ["XDG_DATA_HOME"], app)
+        return os.path.join(os.path.expanduser("~"), ".local", "share", app)

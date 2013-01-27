@@ -9,7 +9,7 @@ class TestWalkthrough(GameLogicTestCase):
     CURRENT_SCENE = 'cryo'
 
     def move_to(self, target):
-        self.interact_thing(self.state.current_scene.name + '.door')
+        self.interact_thing(self.state.get_current_scene().name + '.door')
         self.assert_current_scene('map')
         self.interact_thing('map.to' + target)
         self.assert_current_scene(target)
@@ -32,6 +32,7 @@ class TestWalkthrough(GameLogicTestCase):
         self.interact_thing('cryo.titanium_leg', detail='cryo_detail')
         self.assert_detail_thing('cryo.titanium_leg', False)
         self.assert_inventory_item('titanium_leg')
+        self.close_detail()
 
         # Open the door the rest of the way.
         self.interact_thing('cryo.door', 'titanium_leg')
@@ -113,6 +114,7 @@ class TestWalkthrough(GameLogicTestCase):
         self.interact_thing('bridge.superconductor', detail='chair_detail')
         self.assert_inventory_item('superconductor')
         self.assert_detail_thing('bridge.superconductor', False)
+        self.close_detail()
 
         # Go to the crew quarters.
         self.move_to('crew_quarters')
@@ -172,41 +174,41 @@ class TestWalkthrough(GameLogicTestCase):
         self.move_to('machine')
 
         # Weld pipes and cans.
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'tube_fragment.0')
         self.assert_inventory_item('tube_fragment.0', False)
-        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.assert_game_data('contents', ['tube'], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.1')
         self.assert_inventory_item('empty_can.1', False)
         self.assert_game_data(
-            'contents', set(['tube', 'can']), 'machine.welder.slot')
+            'contents', ['tube', 'can'], 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_one')
 
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'tube_fragment.2')
         self.assert_inventory_item('tube_fragment.2', False)
-        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.assert_game_data('contents', ['tube'], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.2')
         self.assert_inventory_item('empty_can.2', False)
         self.assert_game_data(
-            'contents', set(['tube', 'can']), 'machine.welder.slot')
+            'contents', ['tube', 'can'], 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_one', False)
         self.assert_inventory_item('cryo_pipes_two')
 
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'tube_fragment.1')
         self.assert_inventory_item('tube_fragment.1', False)
-        self.assert_game_data('contents', set(['tube']), 'machine.welder.slot')
+        self.assert_game_data('contents', ['tube'], 'machine.welder.slot')
         self.interact_thing('machine.welder.slot', 'empty_can.0')
         self.assert_inventory_item('empty_can.0', False)
         self.assert_game_data(
-            'contents', set(['tube', 'can']), 'machine.welder.slot')
+            'contents', ['tube', 'can'], 'machine.welder.slot')
         self.interact_thing('machine.welder.button')
-        self.assert_game_data('contents', set(), 'machine.welder.slot')
+        self.assert_game_data('contents', [], 'machine.welder.slot')
         self.assert_inventory_item('cryo_pipes_two', False)
         self.assert_inventory_item('cryo_pipes_three')
 

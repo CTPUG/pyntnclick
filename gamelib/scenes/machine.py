@@ -99,7 +99,7 @@ class LaserWelderSlot(Thing):
     INITIAL = "empty"
 
     INITIAL_DATA = {
-        'contents': set(),
+        'contents': [],
     }
 
     def select_interact(self):
@@ -122,7 +122,7 @@ class LaserWelderSlot(Thing):
         if "can" in contents:
             return Result(_("There is already a can in the welder."))
         self.game.remove_inventory_item(item.name)
-        contents.add("can")
+        contents.append("can")
         self.set_interact()
         return Result(_("You carefully place the can in the laser welder."))
 
@@ -131,7 +131,7 @@ class LaserWelderSlot(Thing):
         if "tube" in contents:
             return Result(_("There is already a tube fragment in the welder."))
         self.game.remove_inventory_item(item.name)
-        contents.add("tube")
+        contents.append("tube")
         self.set_interact()
         return Result(_("You carefully place the tube fragments in the"
                         " laser welder."))
@@ -179,7 +179,7 @@ class LaserWelderButton(Thing):
                 return Result(_("The laser welder needs something to weld the"
                                 " tube fragments to."))
         else:
-            welder_slot.set_data("contents", set())
+            welder_slot.set_data("contents", [])
             welder_slot.set_interact()
             if self.game.is_in_inventory("cryo_pipes_one"):
                 self.game.replace_inventory_item("cryo_pipes_one",

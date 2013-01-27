@@ -15,7 +15,7 @@ def _get_debug():
 
 class GameConstants(object):
     title = None
-    i18n_name = 'pyntnclick'
+    short_name = 'pyntnclick'
     # Icon for the main window, in the icons basedir
     icon = None
 

@@ -19,12 +19,23 @@ class GameLogicTestCase(unittest.TestCase):
 
         self.game_description = self.GAME_DESCRIPTION_CLASS()
         self.state = self.game_description.initial_state()
-        self.state.current_scene = self.state.scenes[self.CURRENT_SCENE]
+        self.scene_stack = []
 
-        # We aren't handling events, monkey patch change_scene
+        # We aren't handling events, monkey patch change_scene and show_detail
         def change_scene(name):
-            self.state.current_scene = self.state.scenes[name]
+            self.state.data.set_current_scene(name)
+            self.scene_stack = [self.state.get_current_scene()]
         self.state.change_scene = change_scene
+
+        def show_detail(name):
+            self.scene_stack.append(self.state.detail_views[name])
+        self.state.show_detail = show_detail
+
+        self.state.change_scene(self.CURRENT_SCENE)
+
+    def close_detail(self):
+        self.scene_stack.pop()
+        self.assertTrue(len(self.scene_stack) > 0)
 
     def tearDown(self):
         for item in self.state.items.values():
@@ -42,14 +53,14 @@ class GameLogicTestCase(unittest.TestCase):
         self.state.inventory()[:] = []
 
     def set_game_data(self, key, value, thing=None):
-        gizmo = self.state.current_scene
+        gizmo = self.state.get_current_scene()
         if thing is not None:
             gizmo = gizmo.things[thing]
         gizmo.set_data(key, value)
 
     def assert_game_data(self, key, value, thing=None, scene=None,
             detail=None):
-        gizmo = self.state.current_scene
+        gizmo = self.state.get_current_scene()
         if scene is not None:
             gizmo = self.state.scenes[scene]
         if detail is not None:
@@ -62,17 +73,17 @@ class GameLogicTestCase(unittest.TestCase):
         self.assertEquals(in_inventory, self.state.is_in_inventory(item))
 
     def assert_scene_thing(self, thing, in_scene=True):
-        self.assertEquals(in_scene, thing in self.state.current_scene.things)
+        self.assertEquals(
+            in_scene, thing in self.state.get_current_scene().things)
 
     def assert_detail_thing(self, thing, in_detail=True):
-        return
-        self.assertEquals(in_detail, thing in self.state.current_detail.things)
+        self.assertEquals(in_detail, thing in self.scene_stack[-1].things)
 
     def assert_item_exists(self, item, exists=True):
         self.assertEquals(exists, item in self.state.items)
 
     def assert_current_scene(self, scene):
-        self.assertEquals(scene, self.state.current_scene.name)
+        self.assertEquals(scene, self.state.get_current_scene().name)
 
     def handle_result(self, result):
         self.clear_event_queue()
@@ -89,9 +100,9 @@ class GameLogicTestCase(unittest.TestCase):
         if item is not None:
             self.assert_inventory_item(item)
             item_obj = self.state.items[item]
-        thing_container = self.state.current_scene
+        thing_container = self.scene_stack[-1]
         if detail is not None:
-            thing_container = self.state.detail_views[detail]
+            self.assertEqual(detail, thing_container.name)
         result = thing_container.things[thing].interact(item_obj)
         return self.handle_result(result)
 

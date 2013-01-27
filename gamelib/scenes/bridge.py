@@ -163,8 +163,8 @@ class MassageChair(Thing):
     INITIAL = 'chair'
 
     def get_description(self):
-        return self.game.current_scene.things['bridge.massagechair_base'] \
-                   .get_description()
+        base = self.game.get_current_scene().things['bridge.massagechair_base']
+        return base.get_description()
 
     def is_interactive(self, tool=None):
         return False

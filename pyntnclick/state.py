@@ -1,5 +1,7 @@
 """Utilities and base classes for dealing with scenes."""
 
+import os
+import json
 import copy
 
 from widgets.text import LabelWidget
@@ -45,14 +47,19 @@ class GameState(object):
        sub-class this and feed the subclass into
        GameDescription via the custom_data parameter."""
 
-    def __init__(self):
-        self._game_state = {'inventories': {'main': []}}
+    def __init__(self, state_dict=None):
+        if state_dict is None:
+            state_dict = {'inventories': {'main': []}, 'current_scene': None}
+        self._game_state = copy.deepcopy(state_dict)
 
     def __getitem__(self, key):
         return self._game_state[key]
 
     def __contains__(self, key):
         return key in self._game_state
+
+    def export_data(self):
+        return copy.deepcopy(self._game_state)
 
     def get_all_gizmo_data(self, state_key):
         """Get all state for a gizmo - returns a dict"""
@@ -71,12 +78,36 @@ class GameState(object):
         if state_key not in self._game_state:
             self._game_state[state_key] = {}
             if initial_data:
-                # deep copy of INITIAL_DATA allows lists, sets and
-                # other mutable types to safely be used in INITIAL_DATA
+                # deep copy of INITIAL_DATA allows lists, dicts and other
+                # mutable types to safely be used in INITIAL_DATA
                 self._game_state[state_key].update(copy.deepcopy(initial_data))
 
     def inventory(self, name='main'):
         return self['inventories'][name]
+
+    def set_current_scene(self, scene_name):
+        self._game_state['current_scene'] = scene_name
+
+    @classmethod
+    def get_save_fn(cls, save_dir, save_name):
+        return os.path.join(save_dir, '%s.json' % (save_name,))
+
+    @classmethod
+    def load_game(cls, save_dir, save_name):
+        fn = cls.get_save_fn(save_dir, save_name)
+        if os.access(fn, os.R_OK):
+            f = open(fn, 'r')
+            state = json.load(f)
+            f.close()
+            return state
+
+    def save_game(self, save_dir, save_name):
+        fn = self.get_save_fn(save_dir, save_name)
+        if not os.path.isdir(save_dir):
+            os.makedirs(save_dir)
+        f = open(fn, 'w')
+        json.dump(self.export_data(), f)
+        f.close()
 
 
 class Game(object):
@@ -87,7 +118,7 @@ class Game(object):
     * items
     * scenes
     """
-    def __init__(self, gd):
+    def __init__(self, gd, game_state):
         # game description
         self.gd = gd
         # map of scene name -> Scene object
@@ -101,11 +132,15 @@ class Game(object):
         # currently selected tool (item)
         self.tool = None
         # Global game data
-        self.data = self.gd.game_state()
-        # current scene
-        self.current_scene = None
+        self.data = game_state
         # debug rects
         self.debug_rects = False
+
+    def get_current_scene(self):
+        scene_name = self.data['current_scene']
+        if scene_name is not None:
+            return self.scenes[scene_name]
+        return None
 
     def inventory(self, name=None):
         if name is None:
@@ -153,16 +188,14 @@ class Game(object):
         ScreenEvent.post('game', 'inventory', None)
 
     def add_inventory_item(self, name):
-        self.inventory().append(self.items[name])
+        self.inventory().append(name)
         self._update_inventory()
 
     def is_in_inventory(self, name):
-        if name in self.items:
-            return self.items[name] in self.inventory()
-        return False
+        return name in self.inventory()
 
     def remove_inventory_item(self, name):
-        self.inventory().remove(self.items[name])
+        self.inventory().remove(name)
         # Unselect tool if it's removed
         if self.tool == self.items[name]:
             self.set_tool(None)
@@ -171,8 +204,8 @@ class Game(object):
     def replace_inventory_item(self, old_item_name, new_item_name):
         """Try to replace an item in the inventory with a new one"""
         try:
-            index = self.inventory().index(self.items[old_item_name])
-            self.inventory()[index] = self.items[new_item_name]
+            index = self.inventory().index(old_item_name)
+            self.inventory()[index] = new_item_name
             if self.tool == self.items[old_item_name]:
                 self.set_tool(self.items[new_item_name])
         except ValueError:
