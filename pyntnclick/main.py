@@ -12,7 +12,7 @@ from optparse import OptionParser
 import pygame
 from pygame.locals import SWSURFACE
 
-from pyntnclick.i18n import _
+from pyntnclick.i18n import _, get_module_locale
 from pyntnclick.engine import Engine
 from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen, GameScreen
 from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
@@ -169,8 +169,9 @@ class GameDescription(object):
             if opts.scene is None:
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
-            gettext.bindtextdomain('pyntnclick_tools',
-                    self.resource.get_resource_path('locale'))
+            gettext.bindtextdomain('pyntnclick-tools',
+                    get_module_locale(self.resource.DEFAULT_RESOURCE_MODULE))
+            gettext.textdomain('pyntnclick-tools')
             make_rect_display()
             try:
                 self.engine = RectEngine(self, opts.detail)
