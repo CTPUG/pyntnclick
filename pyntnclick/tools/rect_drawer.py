@@ -373,7 +373,7 @@ class AppImage(Container):
 
     def image_load(self, ev, widget):
         if self.filechooser is None:
-            self.filechooser = FileChooser((0, 0), self.gd, os.curdir,
+            self.filechooser = FileChooser((0, 0), self.gd, None, os.curdir,
                     self.do_load_image)
         else:
             self.filechooser.refresh()
