@@ -14,9 +14,9 @@ class EndScreen(Screen):
         self.add_image_button((26, 500), 'won/menu.png', self.main_menu)
         self.add_image_button((250, 500), 'won/quit.png', self.quit)
 
-    def add_image_button(self, rect, image_name, callback):
+    def add_image_button(self, pos, image_name, callback):
         image = self.resource.get_image(image_name)
-        widget = ImageButtonWidget(rect, self.gd, image)
+        widget = ImageButtonWidget(pos, self.gd, image)
         widget.add_callback('clicked', callback)
         self.container.add(widget)
 

@@ -12,12 +12,12 @@ class Widget(object):
 
     highlight_cursor = False
 
-    def __init__(self, rect, gd):
-        if not isinstance(rect, pygame.Rect):
-            rect = pygame.Rect(rect, (0, 0))
-        self.rect = rect
+    def __init__(self, pos, gd, size):
+        self.pos = pos
         self.gd = gd
         self.resource = gd.resource
+        self.size = size
+        self.rect = pygame.Rect(pos, size if size else (0, 0))
         self.modal = False
         self.parent = None
         self.disabled = False
@@ -103,10 +103,8 @@ class Button(Widget):
 
 class Container(Widget):
 
-    def __init__(self, rect, gd):
-        if rect is None:
-            rect = pygame.Rect(0, 0, 0, 0)
-        super(Container, self).__init__(rect, gd)
+    def __init__(self, pos, gd, size=None):
+        super(Container, self).__init__(pos, gd, size)
         self.children = []
 
     def event(self, ev):
@@ -134,7 +132,8 @@ class Container(Widget):
         widget.set_parent(self)
         widget.prepare()
         self.children.append(widget)
-        self.rect = self.rect.union(widget.rect)
+        if not self.size:
+            self.rect = self.rect.union(widget.rect)
         return widget
 
     def remove(self, widget):
@@ -153,8 +152,8 @@ class Container(Widget):
 
 class ModalStackContainer(Container):
 
-    def __init__(self, rect, gd, obscure_color=None):
-        super(ModalStackContainer, self).__init__(rect, gd)
+    def __init__(self, pos, gd, size, obscure_color=None):
+        super(ModalStackContainer, self).__init__(pos, gd, size)
         if obscure_color is None:
             obscure_color = gd.constants.modal_obscure_color
         self.obscure_color = convert_color(obscure_color)
@@ -190,27 +189,13 @@ class ModalStackContainer(Container):
             child.draw(surface)
 
 
-class GridContainer(Container):
-    """Hacky container that only supports grids, won't work with Container
-    children, or modal children.
-    """
-
-    def __init__(self, width, rect=None):
-        super(GridContainer, self).__init__(rect)
-        self.width = width
-
-    def add(self, widget):
-        assert not isinstance(widget, Container)
-        assert not widget.modal
-        super(GridContainer, self).add(widget)
-
-
 class Box(Container):
     """A container that draws a filled background with a border"""
     padding = 4
 
     def draw(self, surface):
         self.do_prepare()
+        # TODO: Why isn't this done in prepare?
         expandrect = self.rect.move((-self.padding, -self.padding))
         expandrect.width = self.rect.width + 2 * self.padding
         expandrect.height = self.rect.height + 2 * self.padding
@@ -236,16 +221,12 @@ class ModalWrapper(Container):
     "A wrapper around a widget that removes itself when a mouse click occurs"
 
     def __init__(self, widget, close_callback=None):
-        super(ModalWrapper, self).__init__(widget.rect, widget.gd)
+        super(ModalWrapper, self).__init__(widget.rect.topleft, widget.gd,
+                                           widget.rect.size)
         self.close_callback = close_callback
         self.add(widget)
         self.add_callback(MOUSEBUTTONDOWN, self.close)
         widget.add_callback(MOUSEBUTTONDOWN, self.close)
-
-    def set_parent(self, parent):
-        super(ModalWrapper, self).set_parent(parent)
-        if parent:
-            self.rect = self.parent.rect
 
     def close(self, ev, widget):
         if self.parent:
@@ -258,11 +239,11 @@ class ModalWrapper(Container):
 class Image(Widget):
     """Basic widget that draws an image, with an associated rect"""
 
-    def __init__(self, rect, gd, image):
-        super(Image, self).__init__(rect, gd)
+    def __init__(self, pos, gd, image, size=None):
+        super(Image, self).__init__(pos, gd, size)
         self.image = image
-        self.rect.width = image.get_rect().width
-        self.rect.height = image.get_rect().height
+        if not size:
+            self.rect.size = image.get_rect().size
         self.visible = True
 
     def draw(self, surface):
@@ -274,8 +255,8 @@ class Image(Widget):
 class TranslucentImage(Image):
     """Image that can also be translucent"""
 
-    def __init__(self, rect, gd, image):
-        super(TranslucentImage, self).__init__(rect, gd, image)
+    def __init__(self, pos, gd, image, size=None):
+        super(TranslucentImage, self).__init__(pos, gd, image, size)
         self.translucent = False
         surf = pygame.surface.Surface((self.rect.width, self.rect.height),
                 SRCALPHA).convert_alpha()

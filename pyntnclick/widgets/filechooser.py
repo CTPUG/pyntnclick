@@ -9,9 +9,9 @@ from pyntnclick.widgets.text import TextButton, LabelWidget
 
 class FileChooser(Box):
 
-    def __init__(self, rect, gd, curdir, ok_callback,
+    def __init__(self, pos, gd, size, curdir, ok_callback,
             page_length=12, padding=2):
-        super(FileChooser, self).__init__(rect, gd)
+        super(FileChooser, self).__init__(pos, gd, size)
         self.page_length = page_length
         self.page = 0
         self.ok_callback = ok_callback
@@ -73,9 +73,9 @@ class FileChooser(Box):
         top = self.rect.top + self.padding
         left = self.rect.left + self.padding
         # Add current directory at the top
-        widget = LabelWidget((0, 0), self.gd, self.curdir[-30:], color='black')
+        widget = LabelWidget((left, top), self.gd, self.curdir[-30:],
+                             color='black')
         widget.do_prepare()
-        widget.rect.topleft = (left, top)
         self.add(widget)
         upbut = TextButton((left + 2 * self.padding + widget.rect.width, top),
                 self.gd, u'\N{LEFTWARDS ARROW WITH HOOK}Back one level')

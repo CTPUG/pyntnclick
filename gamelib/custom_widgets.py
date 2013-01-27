@@ -8,8 +8,9 @@ class JimLabel(WrappedTextLabel):
     """Custom widget for JIM's speech"""
 
     def __init__(self, gd, mesg):
-        rect = pygame.Rect((0, 0), (1, 1))
-        super(JimLabel, self).__init__(rect, gd,
+        pos = (0, 0)
+        size = None
+        super(JimLabel, self).__init__(pos, gd, size=size,
                 text=mesg, fontname='Monospace.ttf', fontsize=20,
                 bg_color=pygame.Color(255, 175, 127, 191),
                 color=pygame.Color(0, 0, 0),

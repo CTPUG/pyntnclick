@@ -7,9 +7,9 @@ from pyntnclick.widgets.base import Widget, Button, convert_color
 
 
 class TextWidget(Widget):
-    def __init__(self, rect, gd, text, fontname=None, fontsize=None,
+    def __init__(self, pos, gd, text, size=None, fontname=None, fontsize=None,
                  color=None):
-        super(TextWidget, self).__init__(rect, gd)
+        super(TextWidget, self).__init__(pos, gd, size)
         self.text = text
         constants = self.gd.constants
         self.fontname = fontname or constants.font
@@ -22,9 +22,8 @@ class TextWidget(Widget):
         self.color = convert_color(self.color)
         self.surface = self.font.render(self.text, True, self.color)
         self.text_rect = self.surface.get_rect()
-        width, height = self.surface.get_rect().size
-        self.rect.width = max(self.rect.width, width)
-        self.rect.height = max(self.rect.height, height)
+        if not self.size:
+            self.rect.size = self.text_rect.size
 
     def draw(self, surface):
         if self.visible:
@@ -33,7 +32,7 @@ class TextWidget(Widget):
 
 
 class LabelWidget(TextWidget):
-    def __init__(self, rect, gd, *args, **kwargs):
+    def __init__(self, pos, gd, *args, **kwargs):
         constants = gd.constants
         self.padding = kwargs.pop('padding', constants.label_padding)
         self.border = kwargs.pop('border', constants.label_border)
@@ -41,12 +40,13 @@ class LabelWidget(TextWidget):
                 kwargs.pop('bg_color', constants.label_bg_color))
         self.border_color = convert_color(
                 kwargs.pop('border_color', constants.label_border_color))
-        super(LabelWidget, self).__init__(rect, gd, *args, **kwargs)
+        super(LabelWidget, self).__init__(pos, gd, *args, **kwargs)
 
     def prepare(self):
         super(LabelWidget, self).prepare()
-        self.rect.width += 2 * self.padding
-        self.rect.height += 2 * self.padding
+        if not self.size:
+            self.rect.width += 2 * self.padding
+            self.rect.height += 2 * self.padding
         new_surface = pygame.Surface(self.rect.size)
         new_surface = new_surface.convert_alpha()
         new_surface.fill(self.bg_color)
@@ -64,7 +64,7 @@ class LabelWidget(TextWidget):
 
 
 class TextButton(Button, TextWidget):
-    def __init__(self, rect, gd, *args, **kwargs):
+    def __init__(self, pos, gd, *args, **kwargs):
         constants = gd.constants
         self.padding = kwargs.pop('padding', constants.label_padding)
         self.border = kwargs.pop('border', constants.label_border)
@@ -76,7 +76,7 @@ class TextButton(Button, TextWidget):
         self.bg_color = convert_color(
                 kwargs.pop('bg_color', constants.button_bg_color))
 
-        super(TextButton, self).__init__(rect, gd, *args, **kwargs)
+        super(TextButton, self).__init__(pos, gd, *args, **kwargs)
 
     def prepare(self):
         super(TextButton, self).prepare()
@@ -86,8 +86,9 @@ class TextButton(Button, TextWidget):
 
         width = text_rect.width + self.padding * 2
         height = text_rect.height + self.padding * 2
-        self.rect.width = max(self.rect.width, width)
-        self.rect.height = max(self.rect.height, height)
+        if not self.size:
+            self.rect.width = max(self.rect.width, width)
+            self.rect.height = max(self.rect.height, height)
         self.surface = pygame.Surface(self.rect.size, SRCALPHA)
         self.surface.fill(self.bg_color)
         offset = (
@@ -106,11 +107,11 @@ class TextButton(Button, TextWidget):
 class WrappedTextLabel(LabelWidget):
     """A Label Widget that wraps the text to a given maximum width"""
 
-    def __init__(self, rect, gd, *args, **kwargs):
+    def __init__(self, pos, gd, *args, **kwargs):
         self.max_width = kwargs.pop('max_width', gd.constants.screen[0] - 50)
         self._wrap_width = None
         self._text_lines = None
-        super(WrappedTextLabel, self).__init__(rect, gd, *args, **kwargs)
+        super(WrappedTextLabel, self).__init__(pos, gd, *args, **kwargs)
 
     def prepare(self):
         if self._wrap_width is None:
@@ -129,8 +130,9 @@ class WrappedTextLabel(LabelWidget):
             self._text_lines = wrap(self.text, self._wrap_width)
             self._render()
             width, height = self.surface.get_rect().size
-        self.rect.width = max(self.rect.width, width)
-        self.rect.height = max(self.rect.height, height)
+        if not self.size:
+            self.rect.width = max(self.rect.width, width)
+            self.rect.height = max(self.rect.height, height)
 
         if self.border:
             pygame.draw.rect(self.surface, self.border_color,

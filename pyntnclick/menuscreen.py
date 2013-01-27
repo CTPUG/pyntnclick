@@ -77,14 +77,14 @@ class MenuScreen(Screen):
         self._quit_button = self.make_quit_button()
         self._quit_button.add_callback('clicked', self.quit)
 
-    def make_text_button(self, rect, text):
-        widget = TextButton(rect, self.gd, text)
+    def make_text_button(self, pos, text):
+        widget = TextButton(pos, self.gd, text)
         self.container.add(widget)
         return widget
 
-    def make_image_button(self, rect, image_name):
+    def make_image_button(self, pos, image_name):
         image = self.resource.get_image(image_name)
-        widget = ImageButtonWidget(rect, self.gd, image)
+        widget = ImageButtonWidget(pos, self.gd, image)
         self.container.add(widget)
         return widget
 

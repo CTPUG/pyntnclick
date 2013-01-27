@@ -3,7 +3,7 @@
 # Main menu for the game
 
 import pygame.draw
-from pygame import Rect, Surface
+from pygame import Surface
 from pygame.color import Color
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
@@ -20,9 +20,9 @@ class InventorySlot(ImageButtonWidget):
     SELECTED_COLOR = Color("yellow")
     SELECTED_WIDTH = 2
 
-    def __init__(self, rect, gd):
+    def __init__(self, pos, gd, size):
         self.item = None
-        super(InventorySlot, self).__init__(rect, gd, None)
+        super(InventorySlot, self).__init__(pos, gd, None, size)
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
 
     def set_item(self, item):
@@ -53,8 +53,9 @@ class InventorySlot(ImageButtonWidget):
 
 class UpDownButton(TextButton):
     # TextButton for now.
-    def __init__(self, rect, gd):
-        super(UpDownButton, self).__init__(rect, gd, self.TEXT, padding=3)
+    def __init__(self, pos, gd, size=None):
+        super(UpDownButton, self).__init__(pos, gd, self.TEXT, size=size,
+                                           padding=3)
 
 
 class UpButton(UpDownButton):
@@ -68,9 +69,9 @@ class DownButton(UpDownButton):
 class InventoryView(Container):
     MIN_UPDOWN_WIDTH = 16
 
-    def __init__(self, rect, gd, screen):
+    def __init__(self, pos, gd, size, screen):
         self.bsize = gd.constants.button_size
-        super(InventoryView, self).__init__(rect, gd)
+        super(InventoryView, self).__init__(pos, gd, size)
         self.screen = screen
         self.game = screen.game
 
@@ -80,22 +81,21 @@ class InventoryView(Container):
 
         self.updown_width = self.rect.width - slots * self.bsize
         ud_left = self.rect.right - self.updown_width
-        self.up_button = self.add(UpButton(Rect(
-                    (ud_left, self.rect.top),
-                    (self.updown_width, self.rect.height / 2)), gd))
+        self.up_button = self.add(UpButton((ud_left, self.rect.top), gd,
+                    (self.updown_width, self.rect.height / 2)))
         self.up_button.add_callback(MOUSEBUTTONDOWN, self.up_callback)
-        self.down_button = self.add(DownButton(Rect(
-                    (ud_left, self.rect.top + self.rect.height / 2),
-                    (self.updown_width, self.rect.height / 2)), gd))
+        self.down_button = self.add(DownButton(
+                    (ud_left, self.rect.top + self.rect.height / 2), gd,
+                    (self.updown_width, self.rect.height / 2)))
         self.down_button.add_callback(MOUSEBUTTONDOWN, self.down_callback)
 
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
         self.update_slots()
 
     def make_slot(self, slot):
-        rect = Rect((self.rect.left + slot * self.bsize, self.rect.top),
-                    (self.bsize, self.rect.height))
-        return InventorySlot(rect, self.gd)
+        pos = (self.rect.left + slot * self.bsize, self.rect.top)
+        size = (self.bsize, self.rect.height)
+        return InventorySlot(pos, self.gd, size)
 
     def up_callback(self, event, widget):
         self.inv_offset = max(self.inv_offset - len(self.slots), 0)
@@ -138,8 +138,8 @@ class SceneWidget(Container):
     DETAIL_BORDER = 4
     DETAIL_BORDER_COLOR = Color("black")
 
-    def __init__(self, rect, gd, scene, screen, is_detail=False):
-        super(SceneWidget, self).__init__(rect, gd)
+    def __init__(self, pos, gd, size, scene, screen, is_detail=False):
+        super(SceneWidget, self).__init__(pos, gd, size)
         self.name = scene.NAME
         self.scene = scene
         self.screen = screen
@@ -150,6 +150,7 @@ class SceneWidget(Container):
         if is_detail:
             self.close_button = TextButton((0, 0), self.gd, _("Close"))
             self.close_button.do_prepare()
+            # TODO: Don't muck around with close_button's rect
             self.close_button.rect.midbottom = self.rect.midbottom
             self.close_button.add_callback('clicked', self.close)
             self.add(self.close_button)
@@ -194,35 +195,32 @@ class SceneWidget(Container):
 
 
 class ToolBar(Container):
-    def __init__(self, rect, gd, screen):
+    def __init__(self, pos, gd, size, screen):
         self.screen = screen
-        button_size = gd.constants.button_size
 
-        if not isinstance(rect, Rect):
-            rect = Rect(rect, (gd.constants.scene_size[0], button_size))
-        super(ToolBar, self).__init__(rect, gd)
+        super(ToolBar, self).__init__(pos, gd, size)
 
         self.bg_color = (31, 31, 31)
         self.left = self.rect.left
 
         self.menu_button = self.add_tool(
-            0, TextButton, gd, _("Menu"), fontname=gd.constants.bold_font,
+            None, TextButton, _("Menu"), fontname=gd.constants.bold_font,
             color="red", padding=1, border=0, bg_color="black")
         self.menu_button.add_callback(MOUSEBUTTONDOWN, self.menu_callback)
 
         hand_image = gd.resource.get_image('items', 'hand.png')
         self.hand_button = self.add_tool(
-            None, ImageButtonWidget, gd, hand_image)
+            None, ImageButtonWidget, hand_image)
         self.hand_button.add_callback(MOUSEBUTTONDOWN, self.hand_callback)
 
         self.inventory = self.add_tool(
-            self.rect.width - self.left, InventoryView, gd, screen)
+            self.rect.width - self.left, InventoryView, screen=screen)
 
     def add_tool(self, width, cls, *args, **kw):
-        rect = (self.left, self.rect.top)
+        pos = (self.left, self.rect.top)
         if width is not None:
-            rect = Rect(rect, (width, self.rect.height))
-        tool = cls(rect, *args, **kw)
+            kw['size'] = (width, self.rect.height)
+        tool = cls(pos, self.gd, *args, **kw)
         self.add(tool)
         tool.do_prepare()
         self.left += tool.rect.width
@@ -278,18 +276,19 @@ class GameScreen(CursorScreen):
         self.game = self.create_initial_state(game_state)
 
         self.screen_modal = self.container.add(
-            ModalStackContainer(self.container.rect.copy(), self.gd))
+            ModalStackContainer(self.container.pos, self.gd,
+                                self.container.size))
         self.inner_container = self.screen_modal.add(
-            Container(self.container.rect.copy(), self.gd))
+            Container(self.container.pos, self.gd, self.container.size))
 
         toolbar_height = self.gd.constants.button_size
-        rect = Rect(0, 0, self.surface_size[0],
-                    self.surface_size[1] - toolbar_height)
 
         self.scene_modal = self.inner_container.add(
-            ModalStackContainer(rect, self.gd))
+            ModalStackContainer((0, 0), self.gd,
+                (self.surface_size[0], self.surface_size[1] - toolbar_height)))
         self.toolbar = self.inner_container.add(
-            ToolBar((0, rect.height), self.gd, self))
+            ToolBar((0, self.surface_size[1] - toolbar_height), self.gd,
+                (self.surface_size[0], toolbar_height), self))
         self.inventory = self.toolbar.inventory
 
         self.gd.running = True
@@ -315,12 +314,15 @@ class GameScreen(CursorScreen):
         self._add_scene(self.game.detail_views[detail_name], True)
 
     def _add_scene(self, scene, detail=False):
-        rect = self.scene_modal.rect.copy()
+        pos = self.scene_modal.rect.topleft
+        size = self.scene_modal.rect.size
         if detail:
-            rect = Rect((0, 0), scene.get_detail_size())
-            rect.center = self.scene_modal.rect.center
+            size = scene.get_detail_size()
+            pos = ((self.scene_modal.rect.width - size[0]) / 2,
+                   (self.scene_modal.rect.height - size[1]) / 2)
 
-        self.scene_modal.add(SceneWidget(rect, self.gd, scene, self, detail))
+        self.scene_modal.add(SceneWidget(pos, self.gd, size, scene, self,
+                                         detail))
         self.handle_result(scene.enter())
 
     def close_detail(self, detail=None):
@@ -354,10 +356,11 @@ class GameScreen(CursorScreen):
         self.show_queued_widget()
 
     def show_message(self, message):
-        rect = Rect((0, 0), (1, 1))
         max_width = self.gd.constants.screen[0] - 100
-        widget = WrappedTextLabel(rect, self.gd, message, max_width=max_width)
+        widget = WrappedTextLabel((0, 0), self.gd, message,
+                                  max_width=max_width)
         widget.do_prepare()
+        # TODO: Use the centering API when it exists
         widget.rect.center = self.container.rect.center
         self.queue_widget(widget)
 

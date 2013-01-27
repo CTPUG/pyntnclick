@@ -321,6 +321,7 @@ class Scene(StatefulGizmo):
             return None
         label = LabelWidget((0, 10), self.gd, text)
         label.do_prepare()
+        # TODO: Centre more cleanly
         label.rect.left += (dest_rect.width - label.rect.width) / 2
         return label
 
