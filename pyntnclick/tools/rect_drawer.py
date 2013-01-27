@@ -9,10 +9,13 @@ import pygame
 import os
 
 import pyntnclick.constants
+from pyntnclick.i18n import _
 from pyntnclick.widgets.text import LabelWidget, TextButton
 from pyntnclick.widgets.base import Container, Button, TranslucentImage
 from pyntnclick.widgets.filechooser import FileChooser
 from pyntnclick.tools.utils import draw_rect_image
+
+DRAW, CYCLE, DELETE, IMAGE = range(4)
 
 
 class RectDrawerError(Exception):
@@ -112,7 +115,7 @@ class AppImage(Container):
         self.state = state
         super(AppImage, self).__init__(pygame.rect.Rect(0, 0,
             constants.screen[0], constants.screen[1]), gd)
-        self.mode = 'draw'
+        self.mode = DRAW
         self._scene = scene
         self._parent = parent
         self._detail = detail
@@ -123,7 +126,7 @@ class AppImage(Container):
         self.rect_color = pygame.color.Color('white')
         self.current_image = None
         self.place_image_menu = None
-        self.close_button = LabelWidget((0, 0), gd, 'Close')
+        self.close_button = LabelWidget((0, 0), gd, _('Close'))
         self.close_button.fg_color = (0, 0, 0)
         self.close_button.bg_color = (0, 0, 0)
         self.draw_rects = True
@@ -152,6 +155,30 @@ class AppImage(Container):
         self.add_callback(MOUSEMOTION, self.mouse_move)
         self.add_callback(KEYDOWN, self.key_down)
 
+    def get_mode_name(self):
+        """Return the translated mode name"""
+        # We do things this way to avoid defining translated strings
+        # at import time
+        if self.mode == DRAW:
+            return _("draw")
+        elif self.mode == CYCLE:
+            return _("cycle")
+        elif self.mode == DELETE:
+            return _("delete")
+        elif self.mode == IMAGE:
+            return _("image")
+        else:
+            raise RuntimeError("Invalid mode")
+
+    def _print_thing(self, thing, interact_name):
+        """Helper to avoid repeated translations"""
+        print (_("Thing %(thing)s Interact %(interacts") %
+                {'thing': thing.name, 'interact': interact_name})
+
+    def _print_rects(self, rect1, rect2):
+        """Helper to avoid repeated translations"""
+        print _("     Rects"), rect1, rect2
+
     def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
         scene = self._scene
@@ -175,12 +202,10 @@ class AppImage(Container):
                         for my_rect in thing_rects:
                             for other_rect in thing2_rects:
                                 if my_rect.colliderect(other_rect):
-                                    print 'Existing Intersecting rects'
-                                    print ("  Thing1 %s Interact %s"
-                                           % (thing.name, interact_name))
-                                    print ("  Thing2 %s Interact %s"
-                                           % (thing2.name, interact2_name))
-                                    print "     Rects", my_rect, other_rect
+                                    print _('Existing Intersecting rects')
+                                    self._print_thing(thing, interact_name)
+                                    self._print_thing(thing2, interact2_name)
+                                    self._print_rects(my_rect, other_rect)
         print
 
     def find_intersecting_rects(self, d):
@@ -199,11 +224,10 @@ class AppImage(Container):
                     for other_rect in thing_rects:
                         for my_rect in rect_list:
                             if my_rect.colliderect(other_rect):
-                                print 'Intersecting rects'
-                                print "  Object %s" % num
-                                print ("  Thing %s Interact %s"
-                                       % (thing.name, interact_name))
-                                print "     Rects", my_rect, other_rect
+                                print _('Intersecting rects')
+                                print _("  Object %s") % num
+                                self._print_thing(thing, interact_name)
+                                self._print_rects(my_rect, other_rect)
                 if thing.INITIAL:
                     thing._set_interact(thing.INITIAL)
             print
@@ -214,9 +238,10 @@ class AppImage(Container):
                 for my_rect in rect_list:
                     for other_rect in other_list:
                         if my_rect.colliderect(other_rect):
-                            print 'Intersecting rects',
-                            print '  Object %s and %s' % (num, num2)
-                            print "     Rects", my_rect, other_rect
+                            print _('Intersecting rects'),
+                            print (_('  Object %(object1)s and %(object2)s') %
+                                    {'object1:' num, 'object2': num2})
+                            self._print_rects(my_rect, other_rect)
             print
             print
 
@@ -264,10 +289,10 @@ class AppImage(Container):
         self.draw_anim = not self.draw_anim
 
     def draw_mode(self, ev, widget):
-        self.mode = 'draw'
+        self.mode = DRAW
 
     def del_mode(self, ev, widget):
-        self.mode = 'del'
+        self.mode = DELETE
         self.start_pos = None
         self.end_pos = None
 
@@ -302,7 +327,7 @@ class AppImage(Container):
             # We duplicate draw logic here, so we zoom the close
             # button correctly
             self.close_button.draw(surface)
-        if self.mode == 'draw' and self.start_pos and self.draw_rects:
+        if self.mode == DRAW and self.start_pos and self.draw_rects:
             rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
                     self.end_pos[0] - self.start_pos[0],
                     self.end_pos[1] - self.start_pos[1])
@@ -313,7 +338,7 @@ class AppImage(Container):
                 draw_rect_image(surface, col, rect, self.rect_thick)
         for image in self.images:
             image.draw(surface)
-        if self.current_image and self.mode == 'image':
+        if self.current_image and self.mode == IMAGE:
             self.current_image.draw(surface)
         if self.draw_toolbar:
             tb_surf = surface.subsurface(0, constants.screen[1]
@@ -336,13 +361,13 @@ class AppImage(Container):
         d = self._make_dict()
         self.find_intersecting_rects(d)
         for (num, col) in enumerate(d):
-            print 'Rect %d : ' % num
+            print _('Rect %d : ') % num
             for rect in d[col]:
                 r = rect.move(self.offset)
                 print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
             print
         for i, image in enumerate(self.images):
-            print 'Image %d' % i
+            print _('Image %d') % i
             rect = image.rect
             r = rect.move(self.offset)
             print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
@@ -376,14 +401,14 @@ class AppImage(Container):
             print 'Unable to load image %s (reason %s)' % (filename, e)
 
     def image_mode(self, ev, widget):
-        self.mode = 'image'
+        self.mode = IMAGE
         self.start_pos = None
         self.end_pos = None
         # So we do the right thing for off screen images
         self.old_mouse_pos = None
 
     def cycle_mode(self, ev, widget):
-        self.mode = 'cycle'
+        self.mode = CYCLE
 
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
@@ -419,7 +444,7 @@ class AppImage(Container):
         self.zoom_offset = tuple(offset)
 
     def key_down(self, ev, widget):
-        if self.mode == 'image' and self.current_image:
+        if self.mode == IMAGE and self.current_image:
             # Move the image by 1 pixel
             cur_pos = self.current_image.rect.center
             if ev.key == K_LEFT:
@@ -462,7 +487,7 @@ class AppImage(Container):
         if self._parent.paused:
             # Ignore this if the filechooser is active
             return False
-        if self.mode == 'del':
+        if self.mode == DELETE:
             cand = None
             # Images are drawn above rectangles, so search those first
             for image in self.images:
@@ -480,7 +505,7 @@ class AppImage(Container):
             if cand:
                 self.rects.remove(cand)
                 self.invalidate()
-        elif self.mode == 'cycle':
+        elif self.mode == CYCLE:
             scene = self._scene
             cand = None
             for thing in scene.things.itervalues():
@@ -497,10 +522,10 @@ class AppImage(Container):
                     next_name = cand.interacts.keys()[0]
                 if cand.interacts[next_name] != cur_interact:
                     cand._set_interact(next_name)
-        elif self.mode == 'draw':
+        elif self.mode == DRAW:
             self.start_pos = pos
             self.end_pos = pos
-        elif self.mode == 'image':
+        elif self.mode == IMAGE:
             if self.current_image:
                 self.images.append(self.current_image)
                 self.current_image = None
@@ -522,7 +547,7 @@ class AppImage(Container):
     def mouse_up(self, ev, widget):
         if self._parent.paused:
             return False
-        if self.mode == 'draw':
+        if self.mode == DRAW:
             if self.start_pos is None:
                 # We've come here not via a drawing situation, so bail
                 return False
@@ -536,7 +561,7 @@ class AppImage(Container):
     def mouse_move(self, ev, widget):
         # We're only interested in this if left mouse button is down or we've
         # got and image
-        if self.mode == 'image' and self.current_image:
+        if self.mode == IMAGE and self.current_image:
             pos = self._conv_pos(ev.pos)
             if self.old_mouse_pos:
                 delta = (pos[0] - self.old_mouse_pos[0],
@@ -549,7 +574,7 @@ class AppImage(Container):
             self.invalidate()
             self.old_mouse_pos = pos
             return True
-        elif ev.buttons[0] == 1 and self.mode == 'draw':
+        elif ev.buttons[0] == 1 and self.mode == DRAW:
             self.end_pos = self._conv_pos(ev.pos)
             return True
         return False
@@ -564,13 +589,13 @@ class ModeLabel(LabelWidget):
     def __init__(self, rect, gd, app_image):
         self.app_image = app_image
         super(ModeLabel, self).__init__(rect,
-                gd, 'Mode : ', fontname=constants.bold_font,
+                gd, _('Mode : '), fontname=constants.bold_font,
                 fontsize=15, color=pygame.color.Color(128, 0, 255))
         self.start_rect = self.rect.copy()
 
     def draw(self, surface):
         self.do_prepare()
-        text = 'Mode : %s' % self.app_image.mode
+        text = _('Mode : %s') % self.app_image.get_mode_name()
         if self.text != text:
             self.text = text
             self.is_prepared = False
@@ -598,14 +623,14 @@ class RectApp(Container):
             state = gd.initial_state()
             scene = state.scenes[gd._initial_scene]
         except KeyError:
-            raise RectDrawerError('Invalid scene: %s' % gd._initial_scene)
+            raise RectDrawerError(_('Invalid scene: %s') % gd._initial_scene)
         gd.sound.disable_sound()  # No sound here
 
         if detail:
             try:
                 scene = state.detail_views[detail]
             except KeyError:
-                raise RectDrawerError('Invalid detail: %s' % detail)
+                raise RectDrawerError(_('Invalid detail: %s') % detail)
 
         self.paused = False
 
@@ -615,63 +640,64 @@ class RectApp(Container):
                 self.gd, self.image)
         self.add(mode_label)
         y = mode_label.rect.height
-        draw = make_button('Draw Rect', gd, self.image.draw_mode, y)
+        draw = make_button(_('Draw Rect'), gd, self.image.draw_mode, y)
         self.add(draw)
         y += draw.rect.height
-        load_image = make_button("Load image", gd, self.image.image_load, y)
+        load_image = make_button(_("Load image"), gd, self.image.image_load, y)
         self.add(load_image)
         y += load_image.rect.height
-        add_image = make_button("Place/Move images", gd,
+        add_image = make_button(_("Place/Move images"), gd,
                 self.image.image_mode, y)
         add_image.enabled = False
         self.add(add_image)
         self.image.place_image_menu = add_image
         y += add_image.rect.height
-        cycle = make_button("Cycle interacts", gd, self.image.cycle_mode, y)
+        cycle = make_button(_("Cycle interacts"), gd, self.image.cycle_mode, y)
         self.add(cycle)
         y += cycle.rect.height
-        delete = make_button("Delete Objects", gd, self.image.del_mode, y)
+        delete = make_button(_("Delete Objects"), gd, self.image.del_mode, y)
         self.add(delete)
         y += delete.rect.height
         palette = AppPalette(pygame.Rect((810, y), (200, 0)), gd, self.image)
         self.add(palette)
         y += palette.rect.height
-        print_rects = make_button("Print objects", gd,
+        print_rects = make_button(_("Print objects"), gd,
                 self.image.print_objs, y)
         self.add(print_rects)
         y += print_rects.rect.height
-        toggle_things = make_button("Show Things (t)", gd,
+        toggle_things = make_button(_("Show Things (t)"), gd,
                 self.image.toggle_things, y)
         self.add(toggle_things)
         y += toggle_things.rect.height
-        toggle_thing_rects = make_button("Show Thing Rects (r)", gd,
+        toggle_thing_rects = make_button(_("Show Thing Rects (r)"), gd,
                 self.image.toggle_thing_rects, y)
         self.add(toggle_thing_rects)
         y += toggle_thing_rects.rect.height
-        toggle_images = make_button("Show Images (i)", gd,
+        toggle_images = make_button(_("Show Images (i)"), gd,
                 self.image.toggle_images, y)
         self.add(toggle_images)
         y += toggle_images.rect.height
-        trans_images = make_button("Opaque Images (o)", gd,
+        trans_images = make_button(_("Opaque Images (o)"), gd,
                 self.image.toggle_trans_images, y)
         self.add(trans_images)
         y += trans_images.rect.height
-        toggle_rects = make_button("Show Drawn Rects (d)", gd,
+        toggle_rects = make_button(_("Show Drawn Rects (d)"), gd,
                 self.image.toggle_rects, y)
         self.add(toggle_rects)
         y += toggle_rects.rect.height
-        toggle_toolbar = make_button("Show Toolbar (b)", gd,
+        toggle_toolbar = make_button(_("Show Toolbar (b)"), gd,
                 self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
         y += toggle_toolbar.rect.height
-        toggle_anim = make_button("Show Animations (a)", gd,
+        toggle_anim = make_button(_("Show Animations (a)"), gd,
                 self.image.toggle_anim, y)
         self.add(toggle_anim)
         y += toggle_anim.rect.height
-        toggle_zoom = make_button("Zoom (z)", gd, self.image.toggle_zoom, y)
+        toggle_zoom = make_button(_("Zoom (z)"), gd,
+                self.image.toggle_zoom, y)
         self.add(toggle_zoom)
         y += toggle_zoom.rect.height
-        quit_but = make_button("Quit", gd, self.quit, 570)
+        quit_but = make_button(_("Quit"), gd, self.quit, 570)
         self.add(quit_but)
 
     def quit(self, ev, widget):
