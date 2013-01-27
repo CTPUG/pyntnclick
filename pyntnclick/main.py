@@ -169,6 +169,8 @@ class GameDescription(object):
             if opts.scene is None:
                 print 'Need to supply a scene to use the rect drawer'
                 sys.exit(1)
+            gettext.bindtextdomain('pyntnclick_tools',
+                    self.resource.get_resource_path('locale'))
             make_rect_display()
             try:
                 self.engine = RectEngine(self, opts.detail)
