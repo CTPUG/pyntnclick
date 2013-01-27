@@ -6,3 +6,5 @@ py2exe.log
 .dir-locals.el
 _trial_temp
 trialscript
+data/locale/[a-z][a-z]*
+pyntnclick/data/locale/[a-z][a-z]*
