@@ -240,7 +240,7 @@ class AppImage(Container):
                         if my_rect.colliderect(other_rect):
                             print _('Intersecting rects'),
                             print (_('  Object %(object1)s and %(object2)s') %
-                                    {'object1:' num, 'object2': num2})
+                                    {'object1': num, 'object2': num2})
                             self._print_rects(my_rect, other_rect)
             print
             print
