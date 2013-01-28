@@ -34,7 +34,7 @@ class InteractNoImage(Interact):
         super(InteractNoImage, self).__init__(None, None, Rect(x, y, w, h))
 
 
-class InteractText(Interact):
+class InteractDebugText(Interact):
     """Display box with text to interact with -- mostly for debugging."""
 
     def __init__(self, x, y, text, bg_color=None):
@@ -49,7 +49,7 @@ class InteractText(Interact):
         image = Surface(label.size)
         rect = Rect((x, y), label.size)
         label.draw_all(image)
-        super(InteractText, self).__init__(image, rect, rect)
+        super(InteractDebugText, self).__init__(image, rect, rect)
 
 
 class InteractRectUnion(Interact):
