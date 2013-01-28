@@ -3,6 +3,7 @@
 
 from pygame import Rect
 from pygame.color import Color
+from pygame.locals import SRCALPHA
 from pygame.colordict import THECOLORS
 from pygame.surface import Surface
 
@@ -52,12 +53,76 @@ class InteractDebugText(Interact):
         super(InteractDebugText, self).__init__(image, rect, rect)
 
 
+class InteractText(Interact):
+    """Display a text string on a transparent background.
+
+       Used so we can easily include translatable strings in the scenes"""
+
+    def __init__(self, x, y, w, h, text, color, max_font_size, font=None):
+        self._text = text
+        self._color = Color(color)
+        self._max_font_size = max_font_size
+        self._font = font
+        rect = Rect((x, y), (w, h))
+        super(InteractText, self).__init__(None, rect, rect)
+
+    def set_thing(self, thing):
+        done = False
+        font_size = self._max_font_size
+        bg_color = Color(0, 0, 0, 0)  # transparent background
+        if not self._font:
+            # Pull the default font out of constants
+            self._font = thing.gd.constants.font
+        surface = Surface(self.rect.size, SRCALPHA).convert_alpha()
+        while not done and font_size > 0:
+            font = thing.resource.get_font(self._font, font_size)
+            text_surf = font.render(self._text, True, self._color)
+            if (text_surf.get_width() > self.rect.width or
+                    text_surf.get_height() > self.rect.height):
+                font_size -= 1
+            else:
+                done = True
+        surface.fill(bg_color)
+        # Centre the text in the rect
+        x = max(0, (self.rect.width - text_surf.get_width()) / 2)
+        y = max(0, (self.rect.height - text_surf.get_height()) / 2)
+        surface.blit(text_surf, (x, y))
+        self.image = surface
+
+
 class InteractRectUnion(Interact):
 
     def __init__(self, rect_list):
         super(InteractRectUnion, self).__init__(None, None, None)
         rect_list = [Rect(x) for x in rect_list]
         self.interact_rect = rect_list
+
+
+class InteractUnion(Interact):
+    """An interact made out of other interacts"""
+
+    def __init__(self, interact_list):
+        super(InteractUnion, self).__init__(None, None, None)
+        self._interact_list = interact_list
+
+    def set_thing(self, thing):
+        interact_list = []
+        for sub_interact in self._interact_list:
+            sub_interact.set_thing(thing)
+            sub_rect = sub_interact.interact_rect
+            if hasattr(sub_rect, 'collidepoint'):
+                interact_list.append(sub_interact.interact_rect)
+            else:
+                interact_list.extend(sub_interact.interact_rect)
+        self.interact_rect = interact_list
+
+    def draw(self, surface):
+        for sub_interact in self._interact_list:
+            sub_interact.draw(surface)
+
+    def animate(self):
+        for sub_interact in self._interact_list:
+            sub_interact.animate()
 
 
 class InteractImage(Interact):
