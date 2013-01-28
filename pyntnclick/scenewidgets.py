@@ -55,13 +55,8 @@ class InteractText(Interact):
 class InteractRectUnion(Interact):
 
     def __init__(self, rect_list):
-        # pygame.rect.Rect.unionall should do this, but is broken
-        # in some pygame versions (including 1.8, it appears)
+        super(InteractRectUnion, self).__init__(None, None, None)
         rect_list = [Rect(x) for x in rect_list]
-        union_rect = rect_list[0]
-        for rect in rect_list[1:]:
-            union_rect = union_rect.union(rect)
-        super(InteractRectUnion, self).__init__(None, None, union_rect)
         self.interact_rect = rect_list
 
 
