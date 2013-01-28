@@ -9,7 +9,8 @@
 
 from pyntnclick.i18n import _
 from pyntnclick.state import Scene, Thing, Result
-from pyntnclick.scenewidgets import InteractRectUnion
+from pyntnclick.scenewidgets import (InteractRectUnion, InteractUnion,
+        InteractText, InteractNoImage)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import make_jim_dialog
@@ -68,9 +69,10 @@ class ToCryo(DoorThing):
     DEST = "cryo"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (515, 158, 56, 68),
-            (361, 519, 245, 29),
+        'door': InteractUnion((
+            InteractNoImage(515, 158, 56, 68),
+            InteractText(361, 512, 245, 33, _("Prisoner cryo chambers"),
+                'white', 20, 'Monospace.ttf'),
         ))
     }
 
@@ -84,9 +86,10 @@ class ToBridge(DoorThing):
     DEST = "bridge"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (36, 260, 60, 83),
-            (26, 177, 71, 21),
+        'door': InteractUnion((
+            InteractNoImage(36, 260, 60, 83),
+            InteractText(26, 170, 71, 33, _("Bridge"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -100,9 +103,10 @@ class ToMess(DoorThing):
     DEST = "mess"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (395, 262, 64, 80),
-            (341, 434, 110, 27),
+        'door': InteractUnion((
+            InteractNoImage(395, 262, 64, 80),
+            InteractText(341, 430, 110, 33, _("Mess hall"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -116,9 +120,10 @@ class ToEngine(DoorThing):
     DEST = "engine"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (691, 279, 76, 54),
-            (662, 500, 128, 23),
+        'door': InteractUnion((
+            InteractNoImage(691, 279, 76, 54),
+            InteractText(662, 496, 128, 33, _("Engine room"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -140,9 +145,10 @@ class ToMachine(DoorThing):
     DEST = "machine"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (608, 156, 57, 72),
-            (578, 91, 140, 23),
+        'door': InteractUnion((
+            InteractNoImage(608, 156, 57, 72),
+            InteractText(578, 83, 140, 33, _("Machine room"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -156,9 +162,10 @@ class ToCrew(DoorThing):
     DEST = "crew_quarters"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (210, 321, 37, 64),
-            (69, 469, 148, 26),
+        'door': InteractUnion((
+            InteractNoImage(210, 321, 37, 64),
+            InteractText(69, 460, 160, 33, _("Crew quarters"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -190,9 +197,10 @@ class HydroponicsArea(Thing):
     NAME = 'map.hydroponics'
 
     INTERACTS = {
-        'areas': InteractRectUnion((
-            (314, 263, 73, 81),
-            (313, 138, 125, 22),
+        'areas': InteractUnion((
+            InteractNoImage(314, 263, 73, 81),
+            InteractText(313, 132, 140, 33, _("Hydroponics"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
