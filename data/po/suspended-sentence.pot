@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-29 14:38+0200\n"
+"POT-Creation-Date: 2013-01-29 15:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,63 +242,63 @@ msgstr ""
 msgid "A paradoxical poster hangs below the security camera."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:51
+#: gamelib/scenes/cryo.py:52
 msgid "These pipes carry cooling fluid to the cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:62
+#: gamelib/scenes/cryo.py:63
 msgid "An empty cryo chamber."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:63
+#: gamelib/scenes/cryo.py:64
 msgid "Prisoner 81E4-C8900480E635. Embezzlement. 20 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:72 gamelib/scenes/cryo.py:94
+#: gamelib/scenes/cryo.py:73 gamelib/scenes/cryo.py:95
 msgid ""
 "A working cryo chamber. The frosted glass obscures the details of the "
 "occupant."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:74
+#: gamelib/scenes/cryo.py:75
 msgid "Prisoner 9334-CE1EB0243BAB. Murder. 40 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:83
+#: gamelib/scenes/cryo.py:84
 msgid "A broken cryo chamber. The skeleton inside has been picked clean."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:85
+#: gamelib/scenes/cryo.py:86
 msgid ""
 "Prisoner BFBC-8BF4C6B7492B. Importing illegal alien biomatter. 15 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:96
+#: gamelib/scenes/cryo.py:97
 msgid "Prisoner B520-99495B8C41CE. Copyright infringement. 60 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:103
+#: gamelib/scenes/cryo.py:104
 msgid "An empty cryo unit. Recently filled by you."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:104
+#: gamelib/scenes/cryo.py:105
 #, python-format
 msgid "Prisoner %s. Safecracking, grand larceny. 30 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:112 gamelib/scenes/cryo.py:121
+#: gamelib/scenes/cryo.py:113 gamelib/scenes/cryo.py:122
 msgid "An empty cryo unit."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:113
+#: gamelib/scenes/cryo.py:114
 msgid "Prisoner 83F1-CE32D3234749. Spamming. 5 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:122
+#: gamelib/scenes/cryo.py:123
 msgid "Prisoner A455-9DF9F43C43E5. Medical malpractice. 10 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:139
+#: gamelib/scenes/cryo.py:140
 #, python-format
 msgid ""
 "Greetings, Prisoner %s. I am the Judicial Incarceration Monitor. You have "
@@ -308,137 +308,165 @@ msgid ""
 "destination. Please report to the bridge."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:172
+#: gamelib/scenes/cryo.py:173
 msgid ""
 "It takes more effort than one would expect, but eventually the pipe is "
 "separated from the wall."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:178
+#: gamelib/scenes/cryo.py:179
 #, python-format
 msgid ""
 "Prisoner %s. Vandalism is an offence punishable by a minimum of an "
 "additional 6 months to your sentence."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:188 gamelib/scenes/cryo.py:220
+#: gamelib/scenes/cryo.py:189 gamelib/scenes/cryo.py:221
 msgid "These pipes aren't attached to the wall very solidly."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:194
+#: gamelib/scenes/cryo.py:195
 msgid "These pipes carry cooling fluid to empty cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:195
+#: gamelib/scenes/cryo.py:196
 msgid "There used to be a pipe carrying cooling fluid here."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:212
+#: gamelib/scenes/cryo.py:213
 msgid ""
 "These pipes carry fluid to the working cryo units. Chopping them down "
 "doesn't seem sensible."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:223
+#: gamelib/scenes/cryo.py:224
 msgid "These pipes carry cooling fluid to the working cryo units."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:298
+#: gamelib/scenes/cryo.py:299
 msgid ""
 "You hit the chamber that used to hold this very leg. Nothing happens as a "
 "result."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:304
+#: gamelib/scenes/cryo.py:305
 msgid "A broken cryo chamber, with a poor unfortunate corpse inside."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:306
+#: gamelib/scenes/cryo.py:307
 msgid "A broken cryo chamber. The corpse inside is missing a leg."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:328
+#: gamelib/scenes/cryo.py:329
 msgid "You bang on the chamber with the titanium femur. Nothing much happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:330
+#: gamelib/scenes/cryo.py:331
 msgid "Hitting the cryo unit with the femur doesn't achieve anything."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:332
+#: gamelib/scenes/cryo.py:333
 msgid "You hit the chamber with the femur. Nothing happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:356
+#: gamelib/scenes/cryo.py:357
 msgid ""
 "You wedge the titanium femur into the chain and twist. With a satisfying "
 "*snap*, the chain breaks and the door opens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:361
+#: gamelib/scenes/cryo.py:362
 msgid ""
 "You bang on the door with the titanium femur. It makes a clanging sound."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:365
+#: gamelib/scenes/cryo.py:366
 msgid "You wave the femur in the doorway. Nothing happens."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:372
+#: gamelib/scenes/cryo.py:373
 msgid ""
 "It moves slightly and then stops. A chain on the other side is preventing it "
 "from opening completely."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:395 gamelib/scenes/game_widgets.py:28
+#: gamelib/scenes/cryo.py:396 gamelib/scenes/game_widgets.py:28
 msgid "An open doorway leads to the rest of the ship."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:397
+#: gamelib/scenes/cryo.py:398
 msgid ""
 "A rusty door. It can't open all the way because of a chain on the other side."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:399
+#: gamelib/scenes/cryo.py:400
 msgid "A rusty door. It is currently closed."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:420
+#: gamelib/scenes/cryo.py:421
 msgid "Hitting it with the leg accomplishes nothing."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:423
+#: gamelib/scenes/cryo.py:424
 msgid "A computer terminal, with some text on it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:442
+#: gamelib/scenes/cryo.py:443
 msgid ""
 "The skeletal occupant of this cryo unit has an artificial femur made of "
 "titanium. You take it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:446
+#: gamelib/scenes/cryo.py:447
 msgid "This femur looks synthetic."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:462
+#: gamelib/scenes/cryo.py:463
 msgid "The plaque is welded to the unit. You can't shift it."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:465
+#: gamelib/scenes/cryo.py:466
 msgid "'Prisoner 98CC-764E646391EE. War crimes. 45 years."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:490
+#: gamelib/scenes/cryo.py:491
 msgid "Coolant leaks disturbingly from the bulkheads."
 msgstr ""
 
-#: gamelib/scenes/cryo.py:493
+#: gamelib/scenes/cryo.py:494
 msgid "It's gooey"
 msgstr ""
 
-#: gamelib/scenes/cryo.py:497
+#: gamelib/scenes/cryo.py:498
 msgid "You scoop up some coolant and fill the bottle."
+msgstr ""
+
+#: gamelib/scenes/cryo.py:516
+msgid "Info"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:518
+msgid "Cryo Units Online: 2, 4"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:520
+msgid "Crew Active: 0"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:522
+msgid "Current Trip Time: 97558 days"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:524
+msgid "Expected Time of Arrival:"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:530
+msgid "397 days"
+msgstr ""
+
+#: gamelib/scenes/cryo.py:534
+msgid "<Error: Division by Zero Error>"
 msgstr ""
 
 #: gamelib/scenes/engine.py:42
