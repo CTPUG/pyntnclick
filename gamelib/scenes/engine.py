@@ -2,6 +2,7 @@
 
 from pyntnclick.i18n import _
 from pyntnclick.cursor import CursorSprite
+from pyntnclick.utils import render_text
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.scenewidgets import (
     InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
@@ -546,9 +547,9 @@ class EngineCompDetail(Scene):
     NAME = "engine_comp_detail"
 
     ALERTS = {
-            'cryo leaking': 'ec_cryo_leaking.png',
-            'cryo empty': 'ec_cryo_reservoir_empty.png',
-            'super malfunction': 'ec_cryo_super_malfunction.png',
+            'cryo leaking': _("Cryo system leaking!"),
+            'cryo empty': _("Cryo reservoir empty!"),
+            'super malfunction': _("Superconductor malfunction!"),
             }
 
     # Point to start drawing changeable alerts
@@ -557,8 +558,9 @@ class EngineCompDetail(Scene):
 
     def setup(self):
         self._alert_messages = {}
-        for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = self.get_image(self.FOLDER, name)
+        for key, msg in self.ALERTS.iteritems():
+            self._alert_messages[key] = render_text(msg, 'DejaVuSans-Bold.ttf',
+                    30, 'red', (0, 0, 0, 0), self.resource, (480, 33), False)
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET

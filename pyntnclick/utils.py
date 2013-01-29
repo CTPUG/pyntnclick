@@ -42,13 +42,16 @@ def convert_color(color):
     return pygame.Color(*color)
 
 
-def render_text(text, fontname, font_size, color, bg_color, resource, size):
+def render_text(text, fontname, font_size, color, bg_color, resource, size,
+        centre=True):
     """Render the text so it will fit in the given size, reducing font
        size as needed.
 
        Note that this does not do any text wrapping."""
     done = False
     width, height = size
+    color = convert_color(color)
+    bg_color = convert_color(bg_color)
     surface = Surface(size, SRCALPHA).convert_alpha()
     surface.fill(bg_color)
     while not done and font_size > 0:
@@ -60,8 +63,11 @@ def render_text(text, fontname, font_size, color, bg_color, resource, size):
             font_size -= 1
         else:
             done = True
-    # Centre the text in the rect
-    x = max(0, (width - text_surf.get_width()) / 2)
-    y = max(0, (height - text_surf.get_height()) / 2)
+    if centre:
+        # Centre the text in the rect
+        x = max(0, (width - text_surf.get_width()) / 2)
+        y = max(0, (height - text_surf.get_height()) / 2)
+    else:
+        x = y = 0
     surface.blit(text_surf, (x, y))
     return surface
