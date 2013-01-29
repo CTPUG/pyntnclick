@@ -3,6 +3,7 @@
 import random
 
 from pyntnclick.i18n import _
+from pyntnclick.utils import render_text
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, CloneableItem, Thing, Result
 from pyntnclick.scenewidgets import (
@@ -501,18 +502,43 @@ class CryoCompDetail(Scene):
 
     FOLDER = "cryo"
     BACKGROUND = "comp_info_detail.png"
-    BACKGROUND_FIXED = "comp_info_detail_fixed.png"
     NAME = "cryo_comp_detail"
 
     def setup(self):
-        self._background_fixed = self.get_image(
-            self.FOLDER, self.BACKGROUND_FIXED)
+        background = self.get_image(
+            self.FOLDER, self.BACKGROUND)
+        # Add the common text strings
+        bg = (0, 0, 0, 0)
+        fg = 'lightgreen'
+        font = 'DejaVuSans-Bold.ttf'
+        size = 18
+
+        background.blit(render_text(_("Info"),
+            font, 24, fg, bg, self.resource, (90, 25), False), (25, 60))
+        background.blit(render_text(_("Cryo Units Online: 2, 4"),
+            font, size, fg, bg, self.resource, (240, 30), False), (15, 120))
+        background.blit(render_text(_("Crew Active: 0"),
+            font, size, fg, bg, self.resource, (240, 30), False), (15, 170))
+        background.blit(render_text(_("Current Trip Time: 97558 days"),
+            font, size, fg, bg, self.resource, (340, 30), False), (15, 210))
+        background.blit(render_text(_("Expected Time of Arrival:"),
+            font, size, fg, bg, self.resource, (340, 30), False), (15, 240))
+
+        self._background_fixed = background.copy()
+        self._background_offline = background.copy()
+
+        self._background_fixed.blit(render_text(_("397 days"),
+            font, size, fg, bg, self.resource, (340, 30), False), (275, 240))
+
+        self._background_offline.blit(render_text(
+            _("<Error: Division by Zero Error>"),
+            font, size, fg, bg, self.resource, (340, 30), False), (275, 240))
 
     def draw_background(self, surface):
         if self.game.scenes['engine'].get_data('engine online'):
             surface.blit(self._background_fixed, self.OFFSET, None)
         else:
-            surface.blit(self._background, self.OFFSET, None)
+            surface.blit(self._background_offline, self.OFFSET, None)
 
 
 class CryoUnitWithCorpse(Scene):
