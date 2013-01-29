@@ -15,3 +15,10 @@ class SSState(GameState):
 
     def break_ai(self):
         self['bridge']['ai status'] = 'dead'
+
+    def get_total_sentence(self):
+        return self['cryo']['sentence']
+
+    def increase_sentence(self, years):
+        if self['bridge']['ai status'] == 'online':
+            self['cryo']['sentence'] += years

@@ -8,7 +8,8 @@ from pyntnclick.scenewidgets import (
     TakeableThing)
 
 from gamelib.scenes.game_constants import PLAYER_ID
-from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
+from gamelib.scenes.game_widgets import (Door, BaseCamera, make_jim_dialog,
+        make_sentence_dialog)
 
 
 class CrewQuarters(Scene):
@@ -89,10 +90,10 @@ class Safe(Thing):
         if self.get_data('is_cracked'):
             return Result(_("It's already unlocked. "
                             "There's no more challenge."))
-        # TODO: Add years to the sentence for safecracking.
         # TODO: Wax lyrical some more about safecracking.
         self.set_data('is_cracked', True)
         self.set_interact()
+        self.state.increase_sentence(20)
         return (Result(_("Even after centuries of neglect, the tumblers slide"
                          " almost silently into place. Turns out the"
                          " combination was '1 2 3 4 5'. An idiot must keep his"
@@ -100,8 +101,9 @@ class Safe(Thing):
                 make_jim_dialog(_("Prisoner %s, you have been observed"
                                   " committing a felony violation. This will"
                                   " go onto your permanent record, and your"
-                                  " sentence may be extended by up to twenty"
-                                  " years.") % PLAYER_ID, self.game))
+                                  " sentence will be extended by twenty"
+                                  " years.") % PLAYER_ID, self.game),
+                make_sentence_dialog(PLAYER_ID, self.game))
 
     def get_description(self):
         return _("Ah, a vintage Knoxx & Co. model QR3. Quaint, but"

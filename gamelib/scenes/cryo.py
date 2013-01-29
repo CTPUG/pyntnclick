@@ -22,6 +22,7 @@ class Cryo(Scene):
     INITIAL_DATA = {
         'greet': True,
         'vandalism_warn': True,
+        'sentence': 30,
         }
 
     # sounds that will be played randomly as background noise

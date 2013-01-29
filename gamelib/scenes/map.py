@@ -13,7 +13,7 @@ from pyntnclick.scenewidgets import (InteractRectUnion, InteractUnion,
         InteractText, InteractNoImage)
 
 from gamelib.scenes.game_constants import PLAYER_ID
-from gamelib.scenes.game_widgets import make_jim_dialog
+from gamelib.scenes.game_widgets import make_jim_dialog, make_sentence_dialog
 
 
 class Map(Scene):
@@ -44,11 +44,12 @@ class Map(Scene):
                   "neural implant to help you navigate around the ship."),
                 self.game)
             if ai1:
+                self.state.increase_sentence(3)
                 return ai1, make_jim_dialog(_("Prisoner %s, you are a "
                 "class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
                 "of an additional 3 years on your sentence.") % PLAYER_ID,
-                self.game)
+                self.game), make_sentence_dialog(PLAYER_ID, self.game)
 
 
 class DoorThing(Thing):
