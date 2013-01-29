@@ -558,13 +558,17 @@ class EngineCompDetail(Scene):
 
     def setup(self):
         self._alert_messages = {}
+        self._alert_header = render_text(_("Alerts"), 'DejaVuSans.ttf',
+                27, 'darkred', (0, 0, 0, 0), self.resource, (120, 33), False)
         for key, msg in self.ALERTS.iteritems():
             self._alert_messages[key] = render_text(msg, 'DejaVuSans-Bold.ttf',
-                    30, 'red', (0, 0, 0, 0), self.resource, (480, 33), False)
+                    30, 'darkred', (0, 0, 0, 0), self.resource, (480, 33),
+                    False)
 
     def _draw_alerts(self, surface):
         xpos, ypos = self.ALERT_OFFSET
         engine = self.game.scenes['engine']
+        surface.blit(self._alert_header, (15, 55))
         if not engine.things['engine.cracked_pipe'].get_data('fixed'):
             image = self._alert_messages['cryo leaking']
             surface.blit(image, (xpos, ypos))
