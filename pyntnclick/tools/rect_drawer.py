@@ -13,7 +13,7 @@ from pyntnclick.i18n import _
 from pyntnclick.widgets.text import LabelWidget, TextButton
 from pyntnclick.widgets.base import Container, Button, TranslucentImage
 from pyntnclick.widgets.filechooser import FileChooser
-from pyntnclick.tools.utils import draw_rect_image
+from pyntnclick.utils import draw_rect_image
 
 DRAW, CYCLE, DELETE, IMAGE = range(4)
 

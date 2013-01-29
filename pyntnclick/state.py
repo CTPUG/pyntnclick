@@ -8,7 +8,7 @@ from widgets.text import LabelWidget
 from pygame.color import Color
 
 from pyntnclick.engine import ScreenEvent
-from pyntnclick.tools.utils import draw_rect_image
+from pyntnclick.utils import draw_rect_image
 
 
 class Result(object):

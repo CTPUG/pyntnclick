@@ -3,11 +3,11 @@
 
 from pygame import Rect
 from pygame.color import Color
-from pygame.locals import SRCALPHA
 from pygame.colordict import THECOLORS
 from pygame.surface import Surface
 
 from pyntnclick.state import Thing
+from pyntnclick.utils import convert_color, render_text
 from pyntnclick.widgets.text import LabelWidget
 
 
@@ -60,34 +60,20 @@ class InteractText(Interact):
 
     def __init__(self, x, y, w, h, text, color, max_font_size, font=None):
         self._text = text
-        self._color = Color(color)
+        self._color = convert_color(color)
         self._max_font_size = max_font_size
         self._font = font
         rect = Rect((x, y), (w, h))
         super(InteractText, self).__init__(None, rect, rect)
 
     def set_thing(self, thing):
-        done = False
         font_size = self._max_font_size
-        bg_color = Color(0, 0, 0, 0)  # transparent background
         if not self._font:
             # Pull the default font out of constants
             self._font = thing.gd.constants.font
-        surface = Surface(self.rect.size, SRCALPHA).convert_alpha()
-        while not done and font_size > 0:
-            font = thing.resource.get_font(self._font, font_size)
-            text_surf = font.render(self._text, True, self._color)
-            if (text_surf.get_width() > self.rect.width or
-                    text_surf.get_height() > self.rect.height):
-                font_size -= 1
-            else:
-                done = True
-        surface.fill(bg_color)
-        # Centre the text in the rect
-        x = max(0, (self.rect.width - text_surf.get_width()) / 2)
-        y = max(0, (self.rect.height - text_surf.get_height()) / 2)
-        surface.blit(text_surf, (x, y))
-        self.image = surface
+        bg_color = Color(0, 0, 0, 0)  # transparent background
+        self.image = render_text(self._text, self._font, font_size,
+                self._color, bg_color, thing.resource, self.rect.size)
 
 
 class InteractRectUnion(Interact):

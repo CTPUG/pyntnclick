@@ -3,7 +3,8 @@ from textwrap import wrap
 import pygame
 from pygame.constants import SRCALPHA
 
-from pyntnclick.widgets.base import Widget, Button, convert_color
+from pyntnclick.widgets.base import Widget, Button
+from pyntnclick.utils import convert_color
 
 
 class TextWidget(Widget):

@@ -22,7 +22,7 @@ from pyntnclick import state
 
 from pyntnclick.tools.rect_drawer import (RectEngine, RectDrawerError,
         make_rect_display)
-from pyntnclick.tools.utils import list_scenes
+from pyntnclick.utils import list_scenes
 
 
 class GameDescriptionError(Exception):
