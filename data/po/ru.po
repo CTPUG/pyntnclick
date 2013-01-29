@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: suspended-sentence 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 18:29+0200\n"
+"POT-Creation-Date: 2013-01-29 14:38+0200\n"
 "PO-Revision-Date: 2011-03-08 23:13+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -137,15 +137,15 @@ msgstr ""
 "Заключённый %s. Пожалуйста, отойдите от панели. Вы не являетесь "
 "авторизованным техником."
 
-#: gamelib/scenes/bridge.py:473
+#: gamelib/scenes/bridge.py:474
 msgid "You are not authorized to change the destination."
 msgstr "Вы не имеете права изменять пункт назначения."
 
-#: gamelib/scenes/bridge.py:476
+#: gamelib/scenes/bridge.py:477
 msgid "There's no good reason to choose to go to the penal colony."
 msgstr "Нет причины выбирать полёт в колонию."
 
-#: gamelib/scenes/bridge.py:479
+#: gamelib/scenes/bridge.py:480
 msgid ""
 "You could change the destination, but when JIM recovers, it'll just get "
 "reset."
@@ -153,9 +153,29 @@ msgstr ""
 "Вы можете изменить пункт назначения, но когда JIM восстановится, он сбросит "
 "его обратно."
 
-#: gamelib/scenes/bridge.py:482
+#: gamelib/scenes/bridge.py:483
 msgid "You change the destination."
 msgstr "Вы изменяете пункт назначения."
+
+#: gamelib/scenes/bridge.py:599
+msgid "1. Bounty Penal Colony Space Port, New South Australia (397 days)"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:602
+msgid "2. Hedonia Space Station (782 days)"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:604
+msgid "3. Spinosa Health Resort, Prunus Secundus (1231 days)"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:606
+msgid "4. Achene Space Port, Indica Prspinosame (1621 days)"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:608
+msgid "5. Opioid Space Port, Gelatinosa Prime (1963 days)"
+msgstr ""
 
 #: gamelib/scenes/crew_quarters.py:32
 msgid "The plant is doing surprisingly well for centuries of neglect"
@@ -470,19 +490,19 @@ msgstr ""
 msgid "You scoop up some coolant and fill the bottle."
 msgstr "Вы зачерпываете немного охладителя и наполняете бутылку."
 
-#: gamelib/scenes/engine.py:41
+#: gamelib/scenes/engine.py:42
 msgid "Dead. Those cans must have been past their sell-by date."
 msgstr "Чёрт. Похоже все эти банки уже просрочены."
 
-#: gamelib/scenes/engine.py:48
+#: gamelib/scenes/engine.py:49
 msgid "Superconductors. The engines must be power hogs."
 msgstr "Сверхпроводники. Двигатели наверняка прожорливы."
 
-#: gamelib/scenes/engine.py:56
+#: gamelib/scenes/engine.py:57
 msgid "A gaping hole in the floor of the room. It is clearly irreparable."
 msgstr "Сквозная дыра в полу комнаты. Её, очевидно, невозможно починить."
 
-#: gamelib/scenes/engine.py:66
+#: gamelib/scenes/engine.py:67
 msgid ""
 "Empty chocolate-covered bacon cans? Poor guy, he must have found them "
 "irresistible."
@@ -490,32 +510,32 @@ msgstr ""
 "Пустые банки из под бекона в шоколаде? Бедный парень, он наверное нашёл их "
 "беззащитными."
 
-#: gamelib/scenes/engine.py:74
+#: gamelib/scenes/engine.py:75
 msgid "The engines. They don't look like they are working."
 msgstr "Двигатели. Непохоже, что они работают."
 
-#: gamelib/scenes/engine.py:80
+#: gamelib/scenes/engine.py:81
 msgid ""
 "A burned-out laser cutter. It may be responsible for the hole in the floor."
 msgstr ""
 "Перегоревший лазерный резак. Он может быть ответственен за дыру в полу."
 
-#: gamelib/scenes/engine.py:87
+#: gamelib/scenes/engine.py:88
 msgid "The main fuel line for the engines."
 msgstr "Главная топливная шина для двигателей."
 
-#: gamelib/scenes/engine.py:107
+#: gamelib/scenes/engine.py:108
 msgid ""
 "The spare fuel line. If something went wrong with the main one, you would "
 "hook that one up."
 msgstr ""
 "Запасная топливная шина. Она задействуется, если что-то случится с главной."
 
-#: gamelib/scenes/engine.py:114
+#: gamelib/scenes/engine.py:115
 msgid "The sign says DANGER. You would be wise to listen to it."
 msgstr "Знак гласит ОПАСНОСТЬ. Будет мудро прислушаться к нему."
 
-#: gamelib/scenes/engine.py:120
+#: gamelib/scenes/engine.py:121
 msgid ""
 "It's one of those glow-in-the-dark signs needed to satisfy the health and "
 "safety inspectors."
@@ -523,7 +543,7 @@ msgstr ""
 "Это один из тех светящихся в темноте знаков выхода, которые там любят "
 "инспекторы СЭС."
 
-#: gamelib/scenes/engine.py:133
+#: gamelib/scenes/engine.py:134
 #, python-format
 msgid ""
 "The engines are now operational. You have done a satisfactory job, Prisoner "
@@ -532,7 +552,7 @@ msgstr ""
 "Двигатели теперь работоспособны. Вы проделали удовлетворительную работу, "
 "Заключённый %s."
 
-#: gamelib/scenes/engine.py:141
+#: gamelib/scenes/engine.py:142
 msgid ""
 "With your improvised helmet, the automatic airlock allows you into the "
 "engine room. Even if there wasn't a vacuum it would be eerily quiet."
@@ -541,15 +561,15 @@ msgstr ""
 "двигательный отсек. Даже если бы здесь не было вакуума, тишина бы была "
 "жуткой."
 
-#: gamelib/scenes/engine.py:159
+#: gamelib/scenes/engine.py:160
 msgid "All systems are go! Or at least the engines are."
 msgstr "Все системы приведены в действие! Ну, по крайней мере, двигатели."
 
-#: gamelib/scenes/engine.py:179
+#: gamelib/scenes/engine.py:180
 msgid "A can opener. Looks like you won't be starving"
 msgstr "Открывашка для консервов. Похоже, вы не умрёте с голоду"
 
-#: gamelib/scenes/engine.py:183
+#: gamelib/scenes/engine.py:184
 msgid ""
 "You pick up the can opener. It looks brand new; the vacuum has kept it in "
 "perfect condition."
@@ -557,24 +577,24 @@ msgstr ""
 "Вы подбираете открывашку для консервов. Она выглядит совершенно новой; "
 "вакуум сохранил её в отличном состоянии."
 
-#: gamelib/scenes/engine.py:205
+#: gamelib/scenes/engine.py:206
 msgid ""
 "That superconductor looks burned out. It's wedged in there pretty firmly."
 msgstr "Сверхпроводник выглядит сгоревшим. Он впаян достаточно крепко."
 
-#: gamelib/scenes/engine.py:208
+#: gamelib/scenes/engine.py:209
 msgid "An empty superconductor socket"
 msgstr "Пустой разъём для сверхпроводника"
 
-#: gamelib/scenes/engine.py:210
+#: gamelib/scenes/engine.py:211
 msgid "A working superconductor."
 msgstr "Рабочий сверхпроводник."
 
-#: gamelib/scenes/engine.py:221
+#: gamelib/scenes/engine.py:222
 msgid "It's wedged in there pretty firmly, it won't come out."
 msgstr "Он впаян достаточно крепко и не вынимается."
 
-#: gamelib/scenes/engine.py:224
+#: gamelib/scenes/engine.py:225
 msgid ""
 "You decide that working engines are more important than having a shiny "
 "superconductor."
@@ -582,16 +602,16 @@ msgstr ""
 "Вы решаете, что иметь работающие двигатели важнее, чем сверкающий "
 "сверхпроводник."
 
-#: gamelib/scenes/engine.py:231
+#: gamelib/scenes/engine.py:232
 msgid "With leverage, the burned-out superconductor snaps out. You discard it."
 msgstr ""
 "С помощью рычага, сгоревший сверхпроводник выскакивает. Вы выбрасываете его."
 
-#: gamelib/scenes/engine.py:236
+#: gamelib/scenes/engine.py:237
 msgid "It might help to remove the broken superconductor first"
 msgstr "Возможно, стоит сначала вынуть сгоревший сверхпроводник"
 
-#: gamelib/scenes/engine.py:239
+#: gamelib/scenes/engine.py:240
 msgid ""
 "You plug in the superconductor, and feel a hum as things kick into life. "
 "Unfortunately, it's the wrong size for the socket and just falls out again "
@@ -601,7 +621,7 @@ msgstr ""
 "оживать. К сожалению, он не подходит к сокету по размеру и выпадает, когда "
 "вы убираете руку."
 
-#: gamelib/scenes/engine.py:250
+#: gamelib/scenes/engine.py:251
 msgid ""
 "The chair's superconductor looks over-specced for this job, but it should "
 "work."
@@ -609,27 +629,27 @@ msgstr ""
 "Сверхпроводник от кресла кажется слишком специфичным для этой работы, но он "
 "работает."
 
-#: gamelib/scenes/engine.py:255
+#: gamelib/scenes/engine.py:256
 msgid "It might help to remove the broken superconductor first."
 msgstr "Может стоит сначала удалить сгоревший сверхпроводник."
 
-#: gamelib/scenes/engine.py:280
+#: gamelib/scenes/engine.py:281
 msgid "Those are coolant reservoirs. They look empty."
 msgstr "Это резервуары для охладителя. Они пусты."
 
-#: gamelib/scenes/engine.py:281
+#: gamelib/scenes/engine.py:282
 msgid "The coolant reservoirs are full."
 msgstr "Резервуары наполнены охладителем."
 
-#: gamelib/scenes/engine.py:301
+#: gamelib/scenes/engine.py:302
 msgid "The receptacles for the coolant reservoirs."
 msgstr "Приёмники для резервуаров с охладителем."
 
-#: gamelib/scenes/engine.py:304
+#: gamelib/scenes/engine.py:305
 msgid "You stick your finger in the receptacle. It almost gets stuck."
 msgstr "Вы засовываете палец в приёмник. Он почти застревает."
 
-#: gamelib/scenes/engine.py:309
+#: gamelib/scenes/engine.py:310
 msgid ""
 "Pouring the precious cryo fluid into a container connected to a cracked pipe "
 "would be a waste."
@@ -637,7 +657,7 @@ msgstr ""
 "Вылить драгоценный охладитель в контейнер, соединённый с треснувшей трубой, "
 "было бы расточительством."
 
-#: gamelib/scenes/engine.py:315
+#: gamelib/scenes/engine.py:316
 msgid ""
 "You fill the reservoirs. The detergent bottle was just big enough, which is "
 "handy, because it's sprung a leak."
@@ -645,50 +665,62 @@ msgstr ""
 "Вы наполняете резервуары. Бутылка очистителя оказалось достаточно большой, "
 "что удобно, поскольку в ней обнаружилась течь."
 
-#: gamelib/scenes/engine.py:363
+#: gamelib/scenes/engine.py:364
 msgid "These pipes carry coolant to the superconductors. They feel warm."
 msgstr "Эти трубы подают охладитель к сверхпроводникам. Они тёплые."
 
-#: gamelib/scenes/engine.py:365
+#: gamelib/scenes/engine.py:366
 msgid "These pipes carry coolant to the superconductors. They are very cold."
 msgstr "Эти трубы подают охладитель к сверхпроводникам. Они очень холодные."
 
-#: gamelib/scenes/engine.py:391
+#: gamelib/scenes/engine.py:392
 msgid "Power lines. They are delivering power to the engines."
 msgstr "Шины питания. По ним подаётся питание на двигатели."
 
-#: gamelib/scenes/engine.py:392
+#: gamelib/scenes/engine.py:393
 msgid "Power lines. It looks like they aren't working correctly."
 msgstr "Шины питания. Похоже, они не работают."
 
-#: gamelib/scenes/engine.py:482
+#: gamelib/scenes/engine.py:483
 msgid ""
 "A gaping hole in the floor of the room. You're guessing that's why there's a "
 "vacuum in here."
 msgstr "Сквозная дыра в полу. Вы полагаете что это причина вакуума здесь."
 
-#: gamelib/scenes/engine.py:502
+#: gamelib/scenes/engine.py:503
 msgid "The duct tape appears to be holding."
 msgstr "Похоже, клейкая лента держится."
 
-#: gamelib/scenes/engine.py:504
+#: gamelib/scenes/engine.py:505
 msgid "The pipe looks cracked and won't hold fluid until it's fixed."
 msgstr ""
 "В трубе трещина и она не сможет удерживать жидкость, пока её не починят."
 
-#: gamelib/scenes/engine.py:514
+#: gamelib/scenes/engine.py:515
 msgid "The duct tape already there appears to be sufficient."
 msgstr "На этом уже достаточно клейкой ленты."
 
-#: gamelib/scenes/engine.py:519
+#: gamelib/scenes/engine.py:520
 msgid "You apply your trusty duct tape to the creak, sealing it."
 msgstr "Вы заклеиваете разрыв вашей надёжной лентой, запечатывая его."
 
-#: gamelib/scenes/engine.py:539
+#: gamelib/scenes/engine.py:540
 msgid "A computer console. It's alarmingly close to the engine."
 msgstr "Компьютерная консоль. Она в опасной близости от двигателя."
 
-#: gamelib/scenes/engine.py:595
+#: gamelib/scenes/engine.py:550
+msgid "Cryo system leaking!"
+msgstr ""
+
+#: gamelib/scenes/engine.py:551
+msgid "Cryo reservoir empty!"
+msgstr ""
+
+#: gamelib/scenes/engine.py:552
+msgid "Superconductor malfunction!"
+msgstr ""
+
+#: gamelib/scenes/engine.py:597
 msgid "The airlock leads back to the rest of the ship."
 msgstr "Шлюз ведёт к оставшей части корабля."
 
