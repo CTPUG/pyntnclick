@@ -11,7 +11,7 @@ from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.scenewidgets import (
     InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
-    GenericDescThing, TakeableThing)
+    GenericDescThing, TakeableThing, InteractText)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
@@ -452,7 +452,7 @@ class DestNavPageLine(Thing):
     INITIAL = 'line'
     COMPUTER = 'bridge_comp_detail'
 
-    def __init__(self, number, rect, ai_blocked):
+    def __init__(self, number, rect, ai_blocked, dest):
         super(DestNavPageLine, self).__init__()
         self.name = 'bridge_comp.nav_line%s' % number
         # set debugging higlight color for when DEBUG is on.
@@ -460,7 +460,8 @@ class DestNavPageLine(Thing):
         r = Rect(rect)
         # We dynamically generate the interact rect here.
         self.interacts = {}
-        self.interacts['line'] = InteractNoImage(r.x, r.y, r.w, r.h)
+        self.interacts['line'] = InteractText(r.x, r.y, r.w, r.h,
+                dest, 'darkblue', 16, 'DejaVuSans-Bold.ttf', False)
         # Whether JIM blocks this
         self.ai_blocked = ai_blocked
         self.set_interact()
@@ -594,11 +595,17 @@ class BridgeCompDetail(Scene):
         for key, name in self.NAVIGATION.iteritems():
             self._nav_messages[key] = self.get_image(self.FOLDER, name)
         self._nav_lines = []
-        self._nav_lines.append(DestNavPageLine(1, (14, 99, 595, 30), False))
-        self._nav_lines.append(DestNavPageLine(2, (14, 135, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(3, (14, 167, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(4, (14, 203, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(5, (14, 239, 595, 30), True))
+        self._nav_lines.append(DestNavPageLine(1, (12, 99, 610, 25), False,
+            _("1. Bounty Penal Colony Space Port, New South Australia"
+                " (397 days)")))
+        self._nav_lines.append(DestNavPageLine(2, (12, 135, 610, 25), True,
+            _("2. Hedonia Space Station (782 days)")))
+        self._nav_lines.append(DestNavPageLine(3, (12, 167, 610, 25), True,
+            _("3. Spinosa Health Resort, Prunus Secundus (1231 days)")))
+        self._nav_lines.append(DestNavPageLine(4, (12, 203, 610, 25), True,
+            _("4. Achene Space Port, Indica Prspinosame (1621 days)")))
+        self._nav_lines.append(DestNavPageLine(5, (12, 239, 610, 25), True,
+            _("5. Opioid Space Port, Gelatinosa Prime (1963 days)")))
         self._logs = [self.get_image(self.FOLDER, x) for x in self.LOGS]
 
     def enter(self):
