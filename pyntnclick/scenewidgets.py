@@ -58,11 +58,13 @@ class InteractText(Interact):
 
        Used so we can easily include translatable strings in the scenes"""
 
-    def __init__(self, x, y, w, h, text, color, max_font_size, font=None):
+    def __init__(self, x, y, w, h, text, color, max_font_size, font=None,
+            centre=True):
         self._text = text
         self._color = convert_color(color)
         self._max_font_size = max_font_size
         self._font = font
+        self._centre = centre
         rect = Rect((x, y), (w, h))
         super(InteractText, self).__init__(None, rect, rect)
 
@@ -73,7 +75,8 @@ class InteractText(Interact):
             self._font = thing.gd.constants.font
         bg_color = Color(0, 0, 0, 0)  # transparent background
         self.image = render_text(self._text, self._font, font_size,
-                self._color, bg_color, thing.resource, self.rect.size)
+                self._color, bg_color, thing.resource, self.rect.size,
+                self._centre)
 
 
 class InteractRectUnion(Interact):
