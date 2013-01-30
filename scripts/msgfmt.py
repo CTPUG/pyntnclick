@@ -60,7 +60,6 @@ def add(id, str, fuzzy):
     if not fuzzy and str:
         MESSAGES[id] = str
     if fuzzy and str:
-        print 'fuzzy', str
         total_fuzzy += 1
     elif not str:
         total_untrans += 1
