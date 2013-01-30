@@ -569,8 +569,9 @@ class BridgeCompDetail(Scene):
     ALERT_OFFSET = (16, 100)
     ALERT_SPACING = 4
 
-    LOGS = ['comp_log_start.png', 'comp_log_1.png',
-            'comp_log_end.png']
+    LOG_BACKGROUND = 'comp_log_start.png'
+
+    LOGS = [_("<Error: Log corrupted. Unable to open Log>")]
 
     NAVIGATION = 'bridge_nav_base.png'
 
@@ -598,8 +599,9 @@ class BridgeCompDetail(Scene):
         self._alert_messages = {}
         self._nav_messages = {}
         for key, text in self.ALERTS.iteritems():
-            self._alert_messages[key] = render_text(text, 'DejaVuSans-Bold.ttf',
-                    18, 'orange', (0, 0, 0, 0), self.resource, (600, 25), False)
+            self._alert_messages[key] = render_text(text,
+                    'DejaVuSans-Bold.ttf', 18, 'orange', (0, 0, 0, 0),
+                    self.resource, (600, 25), False)
         self._nav_background = self.get_image(self.FOLDER, self.NAVIGATION)
         #for key, name in self.NAVIGATION.iteritems():
         #    self._nav_messages[key] = self.get_image(self.FOLDER, name)
@@ -615,7 +617,14 @@ class BridgeCompDetail(Scene):
             _("4. Achene Space Port, Indica Prspinosame (1621 days)")))
         self._nav_lines.append(DestNavPageLine(5, (12, 239, 610, 25), True,
             _("5. Opioid Space Port, Gelatinosa Prime (1963 days)")))
-        self._logs = [self.get_image(self.FOLDER, x) for x in self.LOGS]
+        self._log_background = self.get_image(self.FOLDER, self.LOG_BACKGROUND)
+        self._logs = []
+        for text in self.LOGS:
+            log_page = self._log_background.copy()
+            log_page.blit(render_text(text, 'DejaVuSans-Bold.ttf', 18,
+                'lightgreen', (0, 0, 0, 0), self.resource, (600, 25), False),
+                self.ALERT_OFFSET)
+            self._logs.append(log_page)
 
     def enter(self):
         self._scene_playlist = self.sound.get_current_playlist()
@@ -633,13 +642,8 @@ class BridgeCompDetail(Scene):
         elif self.get_data('tab') == 'log':
             self._clear_navigation()
             self._background = self._logs[self.get_data('log page')].copy()
-            self._draw_log()
         elif self.get_data('tab') == 'nav':
             self._background = self._get_nav_page()
-
-    def _draw_log(self):
-        """Add the log contents to the page"""
-        pass
 
     def _clear_navigation(self):
         "Remove navigation things if necessary"
@@ -678,7 +682,8 @@ class BridgeCompDetail(Scene):
             ypos += (self._alert_messages['ai offline'].get_size()[1]
                      + self.ALERT_SPACING)
         if not self.game.scenes['engine'].get_data('engine online'):
-            self._background.blit(self._alert_messages['engine offline'], (xpos, ypos))
+            self._background.blit(self._alert_messages['engine offline'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['engine offline'].get_size()[1]
                      + self.ALERT_SPACING)
         if (self.game.scenes['mess'].get_data('life support status')
