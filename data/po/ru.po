@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: suspended-sentence 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-29 17:45+0200\n"
+"POT-Creation-Date: 2013-01-30 17:33+0200\n"
 "PO-Revision-Date: 2011-03-08 23:13+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -23,31 +23,31 @@ msgstr ""
 msgid "Suspended Sentence"
 msgstr "Анабиоз"
 
-#: gamelib/scenes/bridge.py:59
+#: gamelib/scenes/bridge.py:60
 msgid "The brightly coloured wires contrast with the drab walls."
 msgstr "Яркие разноцветные провода контрастируют с блеклыми стенами."
 
-#: gamelib/scenes/bridge.py:62
+#: gamelib/scenes/bridge.py:63
 msgid "\"Dammit JIM, I'm a doctor, not an engineer!\""
 msgstr "«Проклятый JIM, я доктор, а не инженер!»"
 
-#: gamelib/scenes/bridge.py:68
+#: gamelib/scenes/bridge.py:69
 msgid "A skeleton hangs improbably from the wires."
 msgstr "Скелет неправдоподобно свисает с проводов."
 
-#: gamelib/scenes/bridge.py:113
+#: gamelib/scenes/bridge.py:114
 msgid "You can't break the duraplastic screen."
 msgstr "Вы не можете разбить дюралепластиковый экран."
 
-#: gamelib/scenes/bridge.py:116
+#: gamelib/scenes/bridge.py:117
 msgid "Scratching the screen won't help you."
 msgstr "Царапание экрана вам не поможет."
 
-#: gamelib/scenes/bridge.py:119
+#: gamelib/scenes/bridge.py:120
 msgid "The main bridge computer screen."
 msgstr "Экран главного компьютера капитанского моста."
 
-#: gamelib/scenes/bridge.py:142
+#: gamelib/scenes/bridge.py:143
 msgid ""
 "A top of the line Massage-o-Matic Captain's Executive Command Chair. It's "
 "massaging a skeleton."
@@ -55,15 +55,15 @@ msgstr ""
 "Лучшее из линейки Массаж-о-матик Кресло Капитана Команды. Оно массажирует "
 "скелет."
 
-#: gamelib/scenes/bridge.py:144
+#: gamelib/scenes/bridge.py:145
 msgid "The chair won't work any more, it has no power."
 msgstr "Кресло больше не будет работать, оно лишено питания."
 
-#: gamelib/scenes/bridge.py:195
+#: gamelib/scenes/bridge.py:196
 msgid "A stethoscope hangs from the neck of the skeleton."
 msgstr "Стетоскоп свисает с шеи скелета."
 
-#: gamelib/scenes/bridge.py:201
+#: gamelib/scenes/bridge.py:202
 msgid ""
 "You pick up the stethoscope and verify that the doctor's heart has stopped. "
 "Probably a while ago."
@@ -71,7 +71,7 @@ msgstr ""
 "Вы берёте стетоскоп и убеждаетесь, что сердце доктора остановилось. Вероятно "
 "уже давно."
 
-#: gamelib/scenes/bridge.py:222
+#: gamelib/scenes/bridge.py:223
 msgid ""
 "You rip off a piece of duct tape and stick it on the superconductor. It "
 "almost sticks to itself, but you successfully avoid disaster."
@@ -79,11 +79,11 @@ msgstr ""
 "Вы отрываете кусок трубопроводной ленты и приклеиваете её к сверхпроводнику. "
 "Она почти прилипает сама к себе, но вы успешно избегаете катастрофы."
 
-#: gamelib/scenes/bridge.py:243
+#: gamelib/scenes/bridge.py:244
 msgid "The superconductor module unclips easily."
 msgstr "Чип сверхпроводника легко отделяется."
 
-#: gamelib/scenes/bridge.py:244
+#: gamelib/scenes/bridge.py:245
 #, python-format
 msgid ""
 "Prisoner %s. That chair you've destroyed was property of the ship's captain. "
@@ -92,43 +92,43 @@ msgstr ""
 "Заключённый %s. Кресло, испорченное вами, было имуществом капитана корабля. "
 "Вы обязательно будете наказаны."
 
-#: gamelib/scenes/bridge.py:277
+#: gamelib/scenes/bridge.py:278
 msgid "The lights flash in interesting patterns."
 msgstr "Огни мигают в интересных комбинациях."
 
-#: gamelib/scenes/bridge.py:278
+#: gamelib/scenes/bridge.py:279
 msgid "The flashing lights don't mean anything to you."
 msgstr "Мигающие огни ничего для вас не значат."
 
-#: gamelib/scenes/bridge.py:279
+#: gamelib/scenes/bridge.py:280
 msgid "The console lights flash and flicker."
 msgstr "Огни консоли мигают и мерцают."
 
-#: gamelib/scenes/bridge.py:333
+#: gamelib/scenes/bridge.py:334
 msgid "The sign reads 'Warning: Authorized Techinicians Only'."
 msgstr "На знаке написано 'Предупреждение: Только Авторизованные Техники'."
 
-#: gamelib/scenes/bridge.py:344
+#: gamelib/scenes/bridge.py:345
 msgid "You are unable to open the panel with your bare hands."
 msgstr "Вы не можете открыть панель голыми руками."
 
-#: gamelib/scenes/bridge.py:350
+#: gamelib/scenes/bridge.py:351
 msgid "You unplug various important-looking wires."
 msgstr "Вы отсоединяете всякие важно выглядящие провода."
 
-#: gamelib/scenes/bridge.py:359
+#: gamelib/scenes/bridge.py:360
 msgid "Using the machete, you lever the panel off."
 msgstr "Используя мачете, вы снимаете панель."
 
-#: gamelib/scenes/bridge.py:364
+#: gamelib/scenes/bridge.py:365
 msgid "You smash various delicate components with the machete."
 msgstr "Вы разбиваете разные хрупкие детали с помощью мачете."
 
-#: gamelib/scenes/bridge.py:369
+#: gamelib/scenes/bridge.py:370
 msgid "You feel a shock from the panel."
 msgstr "Вас бьёт током от панели."
 
-#: gamelib/scenes/bridge.py:370
+#: gamelib/scenes/bridge.py:371
 #, python-format
 msgid ""
 "Prisoner %s. Please step away from the panel. You are not an authorized "
@@ -137,15 +137,27 @@ msgstr ""
 "Заключённый %s. Пожалуйста, отойдите от панели. Вы не являетесь "
 "авторизованным техником."
 
-#: gamelib/scenes/bridge.py:474
+#: gamelib/scenes/bridge.py:395
+msgid "Logs"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:416 gamelib/scenes/engine.py:561
+msgid "Alerts"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:438
+msgid "Navigation"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:478
 msgid "You are not authorized to change the destination."
 msgstr "Вы не имеете права изменять пункт назначения."
 
-#: gamelib/scenes/bridge.py:477
+#: gamelib/scenes/bridge.py:481
 msgid "There's no good reason to choose to go to the penal colony."
 msgstr "Нет причины выбирать полёт в колонию."
 
-#: gamelib/scenes/bridge.py:480
+#: gamelib/scenes/bridge.py:484
 msgid ""
 "You could change the destination, but when JIM recovers, it'll just get "
 "reset."
@@ -153,27 +165,80 @@ msgstr ""
 "Вы можете изменить пункт назначения, но когда JIM восстановится, он сбросит "
 "его обратно."
 
-#: gamelib/scenes/bridge.py:483
+#: gamelib/scenes/bridge.py:487
 msgid "You change the destination."
 msgstr "Вы изменяете пункт назначения."
 
-#: gamelib/scenes/bridge.py:599
+#: gamelib/scenes/bridge.py:559
+msgid "Hull breach detected: Engine Room"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:560
+#, fuzzy
+msgid "AI Status: 3D scene reconstruction failed. Recovery in progress"
+msgstr ""
+"Реконструция 3D-сцены не удалась. Критическая ошибка. Начинаю аварийное "
+"отключение."
+
+#: gamelib/scenes/bridge.py:562
+msgid "AI System Offline"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:563
+msgid "Engine Offline"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:564
+#, python-format
+msgid "Life Support System: 20% operational"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:565
+#, python-format
+msgid "Life Support System: 40% operational"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:574
+msgid "<Error: Log corrupted. Unable to open Log>"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:580
+msgid "Engine Offline: Navigation Disabled"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:582
+msgid "Life Support Marginal."
+msgstr ""
+
+#: gamelib/scenes/bridge.py:583
+msgid "Emergency Navigation Protocol Engaged."
+msgstr ""
+
+#: gamelib/scenes/bridge.py:585
+msgid "Destination locked to:"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:586
+msgid "Bounty Penal Colony Space Port, New South Australia"
+msgstr ""
+
+#: gamelib/scenes/bridge.py:616
 msgid "1. Bounty Penal Colony Space Port, New South Australia (397 days)"
 msgstr ""
 
-#: gamelib/scenes/bridge.py:602
+#: gamelib/scenes/bridge.py:619
 msgid "2. Hedonia Space Station (782 days)"
 msgstr ""
 
-#: gamelib/scenes/bridge.py:604
+#: gamelib/scenes/bridge.py:621
 msgid "3. Spinosa Health Resort, Prunus Secundus (1231 days)"
 msgstr ""
 
-#: gamelib/scenes/bridge.py:606
+#: gamelib/scenes/bridge.py:623
 msgid "4. Achene Space Port, Indica Prspinosame (1621 days)"
 msgstr ""
 
-#: gamelib/scenes/bridge.py:608
+#: gamelib/scenes/bridge.py:625
 msgid "5. Opioid Space Port, Gelatinosa Prime (1963 days)"
 msgstr ""
 
@@ -746,10 +811,6 @@ msgstr ""
 
 #: gamelib/scenes/engine.py:552
 msgid "Superconductor malfunction!"
-msgstr ""
-
-#: gamelib/scenes/engine.py:561
-msgid "Alerts"
 msgstr ""
 
 #: gamelib/scenes/engine.py:601
