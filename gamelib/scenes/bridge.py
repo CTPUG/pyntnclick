@@ -576,8 +576,14 @@ class BridgeCompDetail(Scene):
     NAVIGATION = 'bridge_nav_base.png'
 
     NAV_MESSAGES = {
-            'engine offline': 'bridge_nav_engine.png',
-            'life support': 'bridge_nav_life_support.png',
+            'engine offline': [
+                _("Engine Offline: Navigation Disabled")],
+            'life support': [
+            _("Life Support Marginal."),
+            _("Emergency Navigation Protocol Engaged."),
+            '',
+            _("Destination locked to:"),
+            _("Bounty Penal Colony Space Port, New South Australia")],
             }
 
     BACKGROUND = ALERT_BASE
@@ -653,12 +659,22 @@ class BridgeCompDetail(Scene):
                 del self.things[thing.name]
                 thing.scene = None
 
+    def _draw_nav_text(self, key):
+        surface = self._nav_background.copy()
+        xpos, ypos = self.ALERT_OFFSET
+        for line in self.NAV_MESSAGES[key]:
+            text = render_text(line, 'DejaVuSans-Bold.ttf', 18,
+                    'darkblue', (0, 0, 0, 0), self.resource, (600, 25), False)
+            surface.blit(text, (xpos, ypos))
+            ypos = ypos + text.get_height() + self.ALERT_SPACING
+        return surface
+
     def _get_nav_page(self):
         if not self.game.scenes['engine'].get_data('engine online'):
-            return self._nav_background.copy()
+            return self._draw_nav_text('engine offline')
         elif (not self.game.scenes['mess'].get_data('life support status')
               == 'fixed'):
-            return self._nav_background.copy()
+            return self._draw_nav_text('life support')
         else:
             for thing in self._nav_lines:
                 if thing.name not in self.things:
