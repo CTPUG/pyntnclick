@@ -23,6 +23,10 @@ Options:
     -V
     --version
         Display version information and exit.
+
+    -s
+    --statistics
+        Display fuzzy and untranslated counts
 """
 
 import os
@@ -36,6 +40,8 @@ __version__ = "1.1"
 
 MESSAGES = {}
 
+total_fuzzy = 0
+total_untrans = 0
 
 
 def usage(code, msg=''):
@@ -49,8 +55,15 @@ def usage(code, msg=''):
 def add(id, str, fuzzy):
     "Add a non-fuzzy translation to the dictionary."
     global MESSAGES
+    global total_fuzzy
+    global total_untrans
     if not fuzzy and str:
         MESSAGES[id] = str
+    if fuzzy and str:
+        print 'fuzzy', str
+        total_fuzzy += 1
+    elif not str:
+        total_untrans += 1
 
 
 
@@ -197,13 +210,18 @@ def make(filename, outfile):
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hVo:',
-                                   ['help', 'version', 'output-file='])
+        opts, args = getopt.getopt(sys.argv[1:], 'hVso:',
+                                   ['help', 'version', 'output-file=',
+                                       'statistics'])
     except getopt.error, msg:
         usage(1, msg)
 
     outfile = None
     # parse options
+    stats = False
+    global total_fuzzy
+    global total_untrans
+
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             usage(0)
@@ -212,6 +230,8 @@ def main():
             sys.exit(0)
         elif opt in ('-o', '--output-file'):
             outfile = arg
+        elif opt in ('-s', '--statistics'):
+            stats = True
     # do it
     if not args:
         print >> sys.stderr, 'No input file given'
@@ -220,6 +240,10 @@ def main():
 
     for filename in args:
         make(filename, outfile)
+
+    if stats:
+        print '%s: %d fuzzy strings, %d untranslated strings' % (filename,
+                total_fuzzy, total_untrans)
 
 
 if __name__ == '__main__':
