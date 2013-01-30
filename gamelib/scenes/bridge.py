@@ -7,6 +7,7 @@ from pygame.color import Color
 from pygame.rect import Rect
 
 from pyntnclick.i18n import _
+from pyntnclick.utils import render_text
 from pyntnclick.cursor import CursorSprite
 from pyntnclick.state import Scene, Item, Thing, Result
 from pyntnclick.scenewidgets import (
@@ -391,7 +392,8 @@ class LogTab(Thing):
     NAME = 'bridge_comp.screen'
 
     INTERACTS = {
-            'log tab': InteractNoImage(100, 53, 94, 37),
+            'log tab': InteractText(100, 53, 94, 37,  _("Logs"),
+                'lightgreen', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'log tab'
     COMPUTER = 'bridge_comp_detail'
@@ -411,7 +413,8 @@ class AlertTab(Thing):
     NAME = 'bridge_comp.alert_tab'
 
     INTERACTS = {
-            'alert tab': InteractNoImage(12, 53, 88, 37),
+            'alert tab': InteractText(12, 53, 88, 37, _("Alerts"),
+                'orange', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'alert tab'
     COMPUTER = 'bridge_comp_detail'
@@ -432,7 +435,8 @@ class NavTab(Thing):
     NAME = 'bridge_comp.nav_tab'
 
     INTERACTS = {
-            'nav tab': InteractNoImage(197, 53, 126, 37),
+            'nav tab': InteractText(197, 53, 126, 37, _("Navigation"),
+                'darkblue', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'nav tab'
     COMPUTER = 'bridge_comp_detail'
@@ -552,24 +556,27 @@ class BridgeCompDetail(Scene):
 
     ALERT_BASE = 'comp_alert_base.png'
     ALERTS = {
-            'ai looping': 'comp_alert_ai_looping.png',
-            'ai offline': 'comp_alert_ai_offline.png',
-            'engine offline': 'comp_alert_engine_offline.png',
-            'life support': 'comp_alert_life_support.png',
-            'life support partial': 'comp_alert_life_support_partial.png',
+            'hull breach': _("Hull breach detected: Engine Room"),
+            'ai looping': _("AI Status: 3D scene reconstruction failed."
+                " Recovery in progress"),
+            'ai offline': _("AI System Offline"),
+            'engine offline': _("Engine Offline"),
+            'life support': _("Life Support System: 20% operational"),
+            'life support partial': _("Life Support System: 40% operational"),
             }
 
     # Point to start drawing changeable alerts
-    ALERT_OFFSET = (16, 140)
+    ALERT_OFFSET = (16, 100)
     ALERT_SPACING = 4
 
     LOGS = ['comp_log_start.png', 'comp_log_1.png',
             'comp_log_end.png']
 
-    NAVIGATION = {
+    NAVIGATION = 'bridge_nav_base.png'
+
+    NAV_MESSAGES = {
             'engine offline': 'bridge_nav_engine.png',
             'life support': 'bridge_nav_life_support.png',
-            'final': 'bridge_nav_dest.png',
             }
 
     BACKGROUND = ALERT_BASE
@@ -590,10 +597,12 @@ class BridgeCompDetail(Scene):
         self._alert = self.get_image(self.FOLDER, self.ALERT_BASE)
         self._alert_messages = {}
         self._nav_messages = {}
-        for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = self.get_image(self.FOLDER, name)
-        for key, name in self.NAVIGATION.iteritems():
-            self._nav_messages[key] = self.get_image(self.FOLDER, name)
+        for key, text in self.ALERTS.iteritems():
+            self._alert_messages[key] = render_text(text, 'DejaVuSans-Bold.ttf',
+                    18, 'orange', (0, 0, 0, 0), self.resource, (600, 25), False)
+        self._nav_background = self.get_image(self.FOLDER, self.NAVIGATION)
+        #for key, name in self.NAVIGATION.iteritems():
+        #    self._nav_messages[key] = self.get_image(self.FOLDER, name)
         self._nav_lines = []
         self._nav_lines.append(DestNavPageLine(1, (12, 99, 610, 25), False,
             _("1. Bounty Penal Colony Space Port, New South Australia"
@@ -619,12 +628,18 @@ class BridgeCompDetail(Scene):
     def set_background(self):
         if self.get_data('tab') == 'alert':
             self._clear_navigation()
-            self._background = self._alert
+            self._background = self._alert.copy()
+            self._draw_alerts()
         elif self.get_data('tab') == 'log':
             self._clear_navigation()
-            self._background = self._logs[self.get_data('log page')]
+            self._background = self._logs[self.get_data('log page')].copy()
+            self._draw_log()
         elif self.get_data('tab') == 'nav':
             self._background = self._get_nav_page()
+
+    def _draw_log(self):
+        """Add the log contents to the page"""
+        pass
 
     def _clear_navigation(self):
         "Remove navigation things if necessary"
@@ -636,46 +651,48 @@ class BridgeCompDetail(Scene):
 
     def _get_nav_page(self):
         if not self.game.scenes['engine'].get_data('engine online'):
-            return self._nav_messages['engine offline']
+            return self._nav_background.copy()
         elif (not self.game.scenes['mess'].get_data('life support status')
               == 'fixed'):
-            return self._nav_messages['life support']
+            return self._nav_background.copy()
         else:
             for thing in self._nav_lines:
                 if thing.name not in self.things:
                     self.add_thing(thing)
-            return self._nav_messages['final']
+            return self._nav_background.copy()
 
-    def _draw_alerts(self, surface):
+    def _draw_alerts(self):
         xpos, ypos = self.ALERT_OFFSET
+        self._background.blit(self._alert_messages['hull breach'],
+                (xpos, ypos))
+        ypos += (self._alert_messages['hull breach'].get_size()[1]
+                + self.ALERT_SPACING)
         if self.game.scenes['bridge'].get_data('ai status') == 'looping':
-            surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
+            self._background.blit(self._alert_messages['ai looping'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['ai looping'].get_size()[1]
                      + self.ALERT_SPACING)
         if self.game.scenes['bridge'].get_data('ai status') == 'dead':
-            surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
+            self._background.blit(self._alert_messages['ai offline'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['ai offline'].get_size()[1]
                      + self.ALERT_SPACING)
         if not self.game.scenes['engine'].get_data('engine online'):
-            surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
+            self._background.blit(self._alert_messages['engine offline'], (xpos, ypos))
             ypos += (self._alert_messages['engine offline'].get_size()[1]
                      + self.ALERT_SPACING)
         if (self.game.scenes['mess'].get_data('life support status')
                 == 'broken'):
-            surface.blit(self._alert_messages['life support'], (xpos, ypos))
+            self._background.blit(self._alert_messages['life support'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['life support'].get_size()[1]
                      + self.ALERT_SPACING)
         if (self.game.scenes['mess'].get_data('life support status')
                 == 'replaced'):
-            surface.blit(self._alert_messages['life support partial'],
+            self._background.blit(self._alert_messages['life support partial'],
                          (xpos, ypos))
             ypos += (self._alert_messages['life support partial'].get_size()[1]
                      + self.ALERT_SPACING)
-
-    def draw_things(self, surface):
-        if self.get_data('tab') == 'alert':
-            self._draw_alerts(surface)
-        super(BridgeCompDetail, self).draw_things(surface)
 
 
 SCENES = [Bridge]
