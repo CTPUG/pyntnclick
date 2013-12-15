@@ -37,7 +37,7 @@ class Widget(object):
     def event(self, ev):
         "Don't override this without damn good reason"
         if self.disabled or not self.visible:
-            return True
+            return False
 
         type_ = ev.type
         if type_ == USEREVENT:
