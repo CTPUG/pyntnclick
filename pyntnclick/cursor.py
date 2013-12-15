@@ -5,7 +5,6 @@
 from pygame.sprite import Sprite, RenderUpdates
 import pygame
 import pygame.color
-import pygame.cursors
 import pygame.mouse
 
 from pyntnclick.engine import Screen
