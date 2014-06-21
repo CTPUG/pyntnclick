@@ -4,8 +4,12 @@
 #
 # Usage: wine-py2exe
 
-OFA_VERSION=`PYTHONPATH=. python -c "from gamelib import version; print version.VERSION_STR"`
-BUILD_FOLDER="suspended-sentence-${OFA_VERSION}"
+GAME_NAME="suspended-sentence"
+GAME_MOD="gamelib"
+
+OFA_VERSION=`PYTHONPATH=. python -c "from ${GAME_MOD} import version; print version.VERSION_STR"`
+GAME_TITLE=`PYTHONPATH=. python -c "from ${GAME_MOD} import version; print version.NAME"`
+BUILD_FOLDER="${GAME_NAME}-${OFA_VERSION}"
 ZIP_NAME="${BUILD_FOLDER}.zip"
 PY2EXE_LOG="py2exe.log"
 
@@ -18,7 +22,7 @@ WINE_SYS32=`winepath "C:/windows/system32"`
 
 echo "=== Running wine python setup.py ==="
 echo ""
-echo "  Suspended Sentence version: ${OFA_VERSION}"
+echo "  ${GAME_TITLE} version: ${OFA_VERSION}"
 echo "  Writing log to ${PY2EXE_LOG}."
 echo "  ---"
 echo "  Please make sure you have patched your py2exe run.exe"
@@ -48,8 +52,8 @@ cp -v "${WINE_SYS32}/msvcr71.dll" "${DEST}"
 #mkdir -p "${DEST}/share/pgu/themes"
 #cp -R "${WINE_PYTHON}/share/pgu/themes/default" "${DEST}/share/pgu/themes/"
 
-echo "'Resources' -> '${DEST}/Resources'"
-bzr export -q "${DEST}/Resources" "Resources"
+echo "'data' -> '${DEST}/data'"
+bzr export -q "${DEST}/data" "data"
 #find "${DEST}/data" -name '*.svg' -delete
 
 echo "'${WINE_PYTHON}/Lib/site-packages/pygame' -> '${DEST}'"
@@ -57,7 +61,7 @@ rm -rf "${DEST}/pygame"
 cp -R "${WINE_PYTHON}/Lib/site-packages/pygame" "${DEST}"
 rm -rf "${DEST}/pygame/examples" "${DEST}/pygame/tests" "${DEST}/pygame/docs"
 
-echo "'docs/walkthrough.rst' -> '${DEST}/Resources'"
+echo "'docs/walkthrough.rst' -> '${DEST}'"
 rm -f "${DEST}/walkthrough.rst"
 cp "docs/walkthrough.rst" "${DEST}/walkthrough.rst"
 

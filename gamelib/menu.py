@@ -2,42 +2,24 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
 
-from albow.screen import Screen
-from albow.resource import get_image
-
-from gamelib.widgets import BoomImageButton
+from pyntnclick.menuscreen import MenuScreen
 
 
-class SplashButton(BoomImageButton):
+class SSMenuScreen(MenuScreen):
+    BACKGROUND_IMAGE = 'splash/splash.png'
 
-    FOLDER = 'splash'
+    def make_new_game_button(self):
+        return self.make_image_button((16, 523), 'splash/play.png')
 
+    def make_resume_game_button(self):
+        return self.make_image_button((256, 523), 'splash/resume.png')
 
-class MenuScreen(Screen):
-    def __init__(self, shell):
-        Screen.__init__(self, shell)
-        self._background = get_image('splash', 'splash.png')
-        self._start_button = SplashButton('play.png', 16, 523, self.start)
-        self._resume_button = SplashButton('resume.png', 256, 523, self.resume,
-                                           enable=self.check_running)
-        self._quit_button = SplashButton('quit.png', 580, 523, shell.quit)
-        self.add(self._start_button)
-        self.add(self._resume_button)
-        self.add(self._quit_button)
+    def make_quit_button(self):
+        return self.make_image_button((580, 523), 'splash/quit.png')
 
-    def draw(self, surface):
-        surface.blit(self._background, (0, 0))
-        self._start_button.draw(surface)
-        self._resume_button.draw(surface)
-        self._quit_button.draw(surface)
+    def make_load_game_button(self):
+        return self.make_image_button((16, 200), 'splash/load.png')
 
-    def start(self):
-        self.shell.game_screen.start_game()
-        self.shell.show_screen(self.shell.game_screen)
+    def make_save_game_button(self):
+        return self.make_image_button((601, 200), 'splash/save.png')
 
-    def check_running(self):
-        return self.shell.game_screen.running
-
-    def resume(self):
-        if self.shell.game_screen.running:
-            self.shell.show_screen(self.shell.game_screen)

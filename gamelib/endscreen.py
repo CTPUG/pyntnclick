@@ -2,32 +2,29 @@
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Victory screen for the game
 
-from albow.screen import Screen
-from albow.resource import get_image
-
-from gamelib.widgets import BoomImageButton
-
-
-class EndImageButton(BoomImageButton):
-
-    FOLDER = 'won'
+import pygame.event
+from pygame.locals import QUIT
+from pyntnclick.engine import Screen
+from pyntnclick.widgets.imagebutton import ImageButtonWidget
 
 
 class EndScreen(Screen):
-    def __init__(self, shell):
-        Screen.__init__(self, shell)
-        self.background = get_image('won', 'won.png')
-        self._menu_button = EndImageButton('menu.png', 26, 500,
-                action=self.main_menu)
-        self._quit_button = EndImageButton('quit.png', 250, 500,
-                action=shell.quit)
-        self.add(self._menu_button)
-        self.add(self._quit_button)
+    def setup(self):
+        self._background = self.resource.get_image('won/won.png')
+        self.add_image_button((26, 500), 'won/menu.png', self.main_menu)
+        self.add_image_button((250, 500), 'won/quit.png', self.quit)
 
-    def draw(self, surface):
-        surface.blit(self.background, (0, 0))
-        self._menu_button.draw(surface)
-        self._quit_button.draw(surface)
+    def add_image_button(self, pos, image_name, callback):
+        image = self.resource.get_image(image_name)
+        widget = ImageButtonWidget(pos, self.gd, image)
+        widget.add_callback('clicked', callback)
+        self.container.add(widget)
 
-    def main_menu(self):
-        self.shell.show_screen(self.shell.menu_screen)
+    def draw_background(self):
+        self.surface.blit(self._background, self.surface.get_rect())
+
+    def main_menu(self, ev, widget):
+        self.change_screen('menu')
+
+    def quit(self, ev, widget):
+        pygame.event.post(pygame.event.Event(QUIT))

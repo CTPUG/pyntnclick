@@ -7,11 +7,13 @@
    Many parts of the ship are derelict and inaccessible.
    """
 
-from gamelib.state import Scene, Thing, Result
-from gamelib.scenewidgets import InteractRectUnion
+from pyntnclick.i18n import _
+from pyntnclick.state import Scene, Thing, Result
+from pyntnclick.scenewidgets import (InteractRectUnion, InteractUnion,
+        InteractText, InteractNoImage)
 
 from gamelib.scenes.game_constants import PLAYER_ID
-from gamelib.scenes.game_widgets import make_jim_dialog
+from gamelib.scenes.game_widgets import make_jim_dialog, make_sentence_dialog
 
 
 class Map(Scene):
@@ -23,8 +25,7 @@ class Map(Scene):
         'implant': True,
     }
 
-    def __init__(self, state):
-        super(Map, self).__init__(state)
+    def setup(self):
         self.add_thing(ToCryo())
         self.add_thing(ToBridge())
         self.add_thing(ToMess())
@@ -38,16 +39,17 @@ class Map(Scene):
         if self.get_data('implant'):
             self.set_data('implant', False)
             ai1 = make_jim_dialog(
-                "Under the terms of the emergency conscription "
-                "act, I have downloaded the ship's schematics to your "
-                "neural implant to help you navigate around the ship.",
-                self.state)
+                _("Under the terms of the emergency conscription "
+                  "act, I have downloaded the ship's schematics to your "
+                  "neural implant to help you navigate around the ship."),
+                self.game)
             if ai1:
-                return ai1, make_jim_dialog("Prisoner %s, you are a "
+                self.state.increase_sentence(3)
+                return ai1, make_jim_dialog(_("Prisoner %s, you are a "
                 "class 1 felon. Obtaining access to the ship's schematics "
                 "constitutes a level 2 offence and carries a minimal penalty "
-                "of an additional 3 years on your sentence." % PLAYER_ID,
-                self.state)
+                "of an additional 3 years on your sentence.") % PLAYER_ID,
+                self.game), make_sentence_dialog(PLAYER_ID, self.game)
 
 
 class DoorThing(Thing):
@@ -57,8 +59,8 @@ class DoorThing(Thing):
 
     def interact(self, _item):
         """Go to destination."""
-        if self.DEST in self.state.scenes:
-            self.state.set_current_scene(self.DEST)
+        if self.DEST in self.game.scenes:
+            self.game.change_scene(self.DEST)
 
 
 class ToCryo(DoorThing):
@@ -68,9 +70,10 @@ class ToCryo(DoorThing):
     DEST = "cryo"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (515, 158, 56, 68),
-            (361, 519, 245, 29),
+        'door': InteractUnion((
+            InteractNoImage(515, 158, 56, 68),
+            InteractText(361, 512, 245, 33, _("Prisoner cryo chambers"),
+                'white', 20, 'Monospace.ttf'),
         ))
     }
 
@@ -84,9 +87,10 @@ class ToBridge(DoorThing):
     DEST = "bridge"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (36, 260, 60, 83),
-            (26, 177, 71, 21),
+        'door': InteractUnion((
+            InteractNoImage(36, 260, 60, 83),
+            InteractText(26, 170, 71, 33, _("Bridge"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -100,9 +104,10 @@ class ToMess(DoorThing):
     DEST = "mess"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (395, 262, 64, 80),
-            (341, 434, 110, 27),
+        'door': InteractUnion((
+            InteractNoImage(395, 262, 64, 80),
+            InteractText(341, 430, 110, 33, _("Mess hall"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -116,19 +121,20 @@ class ToEngine(DoorThing):
     DEST = "engine"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (691, 279, 76, 54),
-            (662, 500, 128, 23),
+        'door': InteractUnion((
+            InteractNoImage(691, 279, 76, 54),
+            InteractText(662, 496, 128, 33, _("Engine room"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
     INITIAL = 'door'
 
     def interact(self, item):
-        if not self.state.is_in_inventory('helmet'):
-            return Result('The airlock refuses to open. The automated'
+        if not self.game.is_in_inventory('helmet:'):
+            return Result(_('The airlock refuses to open. The automated'
                     ' voice says: "Hull breach beyond this door. Personnel'
-                    ' must be equipped for vacuum before entry."')
+                    ' must be equipped for vacuum before entry."'))
         else:
             return super(ToEngine, self).interact(item)
 
@@ -140,9 +146,10 @@ class ToMachine(DoorThing):
     DEST = "machine"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (608, 156, 57, 72),
-            (578, 91, 140, 23),
+        'door': InteractUnion((
+            InteractNoImage(608, 156, 57, 72),
+            InteractText(578, 83, 140, 33, _("Machine room"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -156,9 +163,10 @@ class ToCrew(DoorThing):
     DEST = "crew_quarters"
 
     INTERACTS = {
-        'door': InteractRectUnion((
-            (210, 321, 37, 64),
-            (69, 469, 148, 26),
+        'door': InteractUnion((
+            InteractNoImage(210, 321, 37, 64),
+            InteractText(69, 460, 160, 33, _("Crew quarters"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
@@ -181,26 +189,28 @@ class InaccessibleArea(Thing):
     INITIAL = 'areas'
 
     def interact(self, _item):
-        return Result("You look in the door, but just see empty space: "
-                      "that room appears to have been obliterated by meteors.")
+        return Result(_("You look in the door, but just see empty space: "
+                        "that room appears to have been obliterated by "
+                        "meteors."))
 
 
 class HydroponicsArea(Thing):
     NAME = 'map.hydroponics'
 
     INTERACTS = {
-        'areas': InteractRectUnion((
-            (314, 263, 73, 81),
-            (313, 138, 125, 22),
+        'areas': InteractUnion((
+            InteractNoImage(314, 263, 73, 81),
+            InteractText(313, 132, 140, 33, _("Hydroponics"), 'white', 20,
+                'Monospace.ttf'),
         ))
     }
 
     INITIAL = 'areas'
 
     def interact(self, _item):
-        return Result("Peering in through the window, you see that the entire "
-                      "chamber is overgrown with giant broccoli. It would "
-                      "take you years to cut a path through that.")
+        return Result(_("Peering in through the window, you see that the "
+                        "entire chamber is overgrown with giant broccoli. "
+                        "It would take you years to cut a path through that."))
 
 
 SCENES = [Map]

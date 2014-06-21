@@ -43,7 +43,7 @@ DOCUMENTERS = [
     PEOPLE['Simon'],
 ]
 
-# SOURCEFORGE_URL = 'http://sourceforge.net/projects/XXXX/'
+# HOMEPAGE = 'http://sourceforge.net/projects/XXXX/'
 # PYPI_URL = 'http://pypi.python.org/pypi/XXXX/'
 
 LICENSE = 'MIT'
@@ -78,5 +78,4 @@ INSTALL_REQUIRES = [
 NON_EGG_REQUIREMENTS = [
     'setuptools',
     'pygame',
-    'albow',
 ]

@@ -5,16 +5,14 @@ import random
 from pygame.colordict import THECOLORS
 from pygame.color import Color
 from pygame.rect import Rect
-from albow.music import change_playlist, get_music, PlayList
-from albow.resource import get_image
 
-from gamelib.cursor import CursorSprite
-from gamelib.state import Scene, Item, Thing, Result
-from gamelib.sound import get_current_playlist
-from gamelib.constants import DEBUG
-from gamelib.scenewidgets import (InteractNoImage, InteractRectUnion,
-                                  InteractImage, InteractAnimated,
-                                  GenericDescThing)
+from pyntnclick.i18n import _
+from pyntnclick.utils import render_text
+from pyntnclick.cursor import CursorSprite
+from pyntnclick.state import Scene, Item, Thing, Result
+from pyntnclick.scenewidgets import (
+    InteractNoImage, InteractRectUnion, InteractImage, InteractAnimated,
+    GenericDescThing, TakeableThing, InteractText)
 
 from gamelib.scenes.game_constants import PLAYER_ID
 from gamelib.scenes.game_widgets import Door, BaseCamera, make_jim_dialog
@@ -43,11 +41,11 @@ class Bridge(Scene):
         'ai panel': 'closed',  # closed, open, broken
         }
 
-    def __init__(self, state):
-        super(Bridge, self).__init__(state)
+    def setup(self):
         self.background_playlist = None
-        self.add_item(Superconductor('superconductor'))
-        self.add_item(Stethoscope('stethoscope'))
+        self.add_item_factory(Superconductor)
+        self.add_item_factory(TapedSuperconductor)
+        self.add_item_factory(Stethoscope)
         self.add_thing(ToMap())
         self.add_thing(MonitorCamera())
         self.add_thing(MassageChair())
@@ -59,16 +57,16 @@ class Bridge(Scene):
         self.add_thing(JimPanel())
         self.add_thing(StarField())
         self.add_thing(GenericDescThing('bridge.wires', 1,
-            "The brightly coloured wires contrast with the drab walls.",
+            _("The brightly coloured wires contrast with the drab walls."),
             ((46, 4, 711, 143),)))
         self.add_thing(GenericDescThing('bridge.note', 2,
-            "\"Dammit JIM, I'm a doctor, not an engineer!\"",
+            _("\"Dammit JIM, I'm a doctor, not an engineer!\""),
             (
                 (491, 494, 194, 105),
                 (422, 533, 71, 66),
                 )))
         self.doctor = GenericDescThing('bridge.skel', 3,
-                "A skeleton hangs improbably from the wires.",
+                _("A skeleton hangs improbably from the wires."),
                 (
                     (632, 148, 40, 29),
                     (683, 176, 30, 101),
@@ -78,12 +76,13 @@ class Bridge(Scene):
         self.add_thing(self.doctor)
 
     def enter(self):
-        pieces = [get_music(x, prefix='sounds') for x in self.MUSIC]
-        self.background_playlist = PlayList(pieces, random=True, repeat=True)
-        change_playlist(self.background_playlist)
+        pieces = [self.sound.get_music(x) for x in self.MUSIC]
+        self.background_playlist = self.sound.get_playlist(pieces, random=True,
+                                                           repeat=True)
+        self.sound.change_playlist(self.background_playlist)
 
     def leave(self):
-        change_playlist(None)
+        self.sound.change_playlist(None)
 
 
 class ToMap(Door):
@@ -112,13 +111,13 @@ class BridgeComputer(Thing):
         return Result(detail_view='bridge_comp_detail')
 
     def interact_with_titanium_leg(self, item):
-        return Result("You can't break the duraplastic screen.")
+        return Result(_("You can't break the duraplastic screen."))
 
     def interact_with_machete(self, item):
-        return Result("Scratching the screen won't help you.")
+        return Result(_("Scratching the screen won't help you."))
 
     def get_description(self):
-        return "The main bridge computer screen."
+        return _("The main bridge computer screen.")
 
 
 class MassageChairBase(Thing):
@@ -141,9 +140,9 @@ class MassageChairBase(Thing):
 
     def get_description(self):
         if self.get_data('contains_superconductor'):
-            return ("A top of the line Massage-o-Matic Captain's Executive"
-                    " Command Chair. It's massaging a skeleton.")
-        return "The chair won't work any more, it has no power."
+            return _("A top of the line Massage-o-Matic Captain's Executive"
+                     " Command Chair. It's massaging a skeleton.")
+        return _("The chair won't work any more, it has no power.")
 
 
 class MassageChair(Thing):
@@ -166,8 +165,8 @@ class MassageChair(Thing):
     INITIAL = 'chair'
 
     def get_description(self):
-        return self.state.current_scene.things['bridge.massagechair_base'] \
-                   .get_description()
+        base = self.game.get_current_scene().things['bridge.massagechair_base']
+        return base.get_description()
 
     def is_interactive(self, tool=None):
         return False
@@ -176,12 +175,13 @@ class MassageChair(Thing):
 class Stethoscope(Item):
     "Used for cracking safes. Found on the doctor on the chair"
 
+    NAME = 'stethoscope'
     INVENTORY_IMAGE = 'stethoscope.png'
     CURSOR = CursorSprite('stethoscope.png')
 
 
-class StethoscopeThing(Thing):
-    "Stehoscope on the doctor"
+class StethoscopeThing(TakeableThing):
+    "Stethoscope on the doctor"
 
     NAME = 'bridge.stethoscope'
 
@@ -190,22 +190,23 @@ class StethoscopeThing(Thing):
     }
 
     INITIAL = 'stethoscope'
+    ITEM = 'stethoscope'
 
     def get_description(self):
-        return "A stethoscope hangs from the neck of the skeleton."
+        return _("A stethoscope hangs from the neck of the skeleton.")
 
     def interact_without(self):
-        self.state.add_inventory_item('stethoscope')
-        self.scene.remove_thing(self)
+        self.take()
         # Fill in the doctor's rect
         self.scene.doctor.rect.append(self.rect)
-        return Result("You pick up the stethoscope and verify that the"
-                      " doctor's heart has stopped. Probably a while ago.")
+        return Result(_("You pick up the stethoscope and verify that the"
+                        " doctor's heart has stopped. Probably a while ago."))
 
 
 class TapedSuperconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
+    NAME = 'taped_superconductor'
     INVENTORY_IMAGE = 'superconductor_taped.png'
     CURSOR = CursorSprite('superconductor_taped_cursor.png')
 
@@ -213,19 +214,18 @@ class TapedSuperconductor(Item):
 class Superconductor(Item):
     "Used for connecting high-powered parts of the ship up"
 
+    NAME = 'superconductor'
     INVENTORY_IMAGE = 'superconductor_fixed.png'
     CURSOR = CursorSprite('superconductor_fixed.png')
 
     def interact_with_duct_tape(self, item):
-        taped_superconductor = TapedSuperconductor('taped_superconductor')
-        self.state.add_item(taped_superconductor)
-        self.state.replace_inventory_item(self.name, taped_superconductor.name)
-        return Result("You rip off a piece of duct tape and stick it on the"
-                      " superconductor. It almost sticks to itself, but you"
-                      " successfully avoid disaster.")
+        self.game.replace_inventory_item(self.name, 'taped_superconductor')
+        return Result(_("You rip off a piece of duct tape and stick it on the"
+                        " superconductor. It almost sticks to itself, but you"
+                        " successfully avoid disaster."))
 
 
-class SuperconductorThing(Thing):
+class SuperconductorThing(TakeableThing):
     "Superconductor from the massage chair."
 
     NAME = 'bridge.superconductor'
@@ -235,17 +235,17 @@ class SuperconductorThing(Thing):
     }
 
     INITIAL = 'superconductor'
+    ITEM = 'superconductor'
 
     def interact_without(self):
-        self.state.add_inventory_item('superconductor')
-        self.state.current_scene.things['bridge.massagechair_base'] \
+        self.game.scenes['bridge'].things['bridge.massagechair_base'] \
                           .set_data('contains_superconductor', False)
-        self.scene.remove_thing(self)
-        return (Result("The superconductor module unclips easily."),
-                make_jim_dialog(("Prisoner %s. That chair you've destroyed"
-                                 " was property of the ship's captain. "
-                                 "You will surely be punished."
-                                 % PLAYER_ID), self.state))
+        self.take()
+        return (Result(_("The superconductor module unclips easily.")),
+                make_jim_dialog(_("Prisoner %s. That chair you've destroyed"
+                                  " was property of the ship's captain. "
+                                  "You will surely be punished.")
+                                  % PLAYER_ID, self.game))
 
 
 class StarField(Thing):
@@ -267,8 +267,7 @@ class StarField(Thing):
 
 class BlinkingLights(Thing):
 
-    def __init__(self):
-        super(BlinkingLights, self).__init__()
+    def setup(self):
         self.description = None
 
     def is_interactive(self, tool=None):
@@ -276,9 +275,9 @@ class BlinkingLights(Thing):
 
     def leave(self):
         self.description = random.choice([
-            "The lights flash in interesting patterns.",
-            "The flashing lights don't mean anything to you.",
-            "The console lights flash and flicker.",
+            _("The lights flash in interesting patterns."),
+            _("The flashing lights don't mean anything to you."),
+            _("The console lights flash and flicker."),
             ])
 
     def get_description(self):
@@ -332,40 +331,46 @@ class JimPanel(Thing):
 
     def get_description(self):
         if self.scene.get_data('ai panel') == 'closed':
-            return "The sign reads 'Warning: Authorized Techinicians Only'."
+            return _("The sign reads 'Warning: Authorized Techinicians Only'.")
+
+    def select_interact(self):
+        status = self.scene.get_data('ai panel')
+        return status or self.INITIAL
 
     def interact_without(self):
-        if self.scene.get_data('ai status') == 'online':
+        ai_status = self.state.get_jim_state()
+        if ai_status == 'online':
             return self.interact_default(None)
         elif self.scene.get_data('ai panel') == 'closed':
-            return Result("You are unable to open the panel with your"
-                          " bare hands.")
+            return Result(_("You are unable to open the panel with your"
+                            " bare hands."))
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
-            self.scene.set_data('ai status', 'dead')
-            self.set_interact('broken')
-            return Result("You unplug various important-looking wires.")
+            self.state.break_ai()
+            self.set_interact()
+            return Result(_("You unplug various important-looking wires."))
 
     def interact_with_machete(self, item):
-        if self.scene.get_data('ai status') == 'online':
+        ai_status = self.state.get_jim_state()
+        if ai_status == 'online':
             return self.interact_default(item)
         elif self.scene.get_data('ai panel') == 'closed':
             self.scene.set_data('ai panel', 'open')
-            self.set_interact('open')
-            return Result("Using the machete, you lever the panel off.")
+            self.set_interact()
+            return Result(_("Using the machete, you lever the panel off."))
         elif self.scene.get_data('ai panel') == 'open':
             self.scene.set_data('ai panel', 'broken')
-            self.scene.set_data('ai status', 'dead')
-            self.set_interact('broken')
-            return Result("You smash various delicate components with"
-                          " the machete.")
+            self.state.break_ai()
+            self.set_interact()
+            return Result(_("You smash various delicate components with"
+                            " the machete."))
 
     def interact_default(self, item):
-        if self.scene.get_data('ai status') == 'online':
-            return (Result('You feel a shock from the panel.'),
-                    make_jim_dialog("Prisoner %s. Please step away from the"
-                                    " panel. You are not an authorized"
-                                    " technician." % PLAYER_ID, self.state))
+        if self.state.get_jim_state() == 'online':
+            return (Result(_('You feel a shock from the panel.')),
+                    make_jim_dialog(_("Prisoner %s. Please step away from the"
+                                      " panel. You are not an authorized"
+                                      " technician.") % PLAYER_ID, self.game))
 
 
 class ChairDetail(Scene):
@@ -374,8 +379,7 @@ class ChairDetail(Scene):
     BACKGROUND = 'chair_detail.png'
     NAME = 'chair_detail'
 
-    def __init__(self, state):
-        super(ChairDetail, self).__init__(state)
+    def setup(self):
         self.add_thing(SuperconductorThing())
 
 
@@ -388,17 +392,18 @@ class LogTab(Thing):
     NAME = 'bridge_comp.screen'
 
     INTERACTS = {
-            'log tab': InteractNoImage(100, 53, 94, 37),
+            'log tab': InteractText(100, 53, 94, 37,  _("Logs"),
+                'lightgreen', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'log tab'
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'log'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') != 'log'
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'log')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'log')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -408,18 +413,19 @@ class AlertTab(Thing):
     NAME = 'bridge_comp.alert_tab'
 
     INTERACTS = {
-            'alert tab': InteractNoImage(12, 53, 88, 37),
+            'alert tab': InteractText(12, 53, 88, 37, _("Alerts"),
+                'orange', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'alert tab'
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return (self.state.detail_views[self.COMPUTER].get_data('tab')
+        return (self.game.detail_views[self.COMPUTER].get_data('tab')
                 != 'alert')
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'alert')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'alert')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -429,17 +435,18 @@ class NavTab(Thing):
     NAME = 'bridge_comp.nav_tab'
 
     INTERACTS = {
-            'nav tab': InteractNoImage(197, 53, 126, 37),
+            'nav tab': InteractText(197, 53, 126, 37, _("Navigation"),
+                'darkblue', 20, 'DejaVuSans-Bold.ttf', True),
             }
     INITIAL = 'nav tab'
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') != 'nav'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') != 'nav'
 
     def interact_without(self):
-        self.state.detail_views[self.COMPUTER].set_data('tab', 'nav')
-        self.state.detail_views[self.COMPUTER].set_background()
+        self.game.detail_views[self.COMPUTER].set_data('tab', 'nav')
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -449,33 +456,35 @@ class DestNavPageLine(Thing):
     INITIAL = 'line'
     COMPUTER = 'bridge_comp_detail'
 
-    def __init__(self, number, rect, ai_blocked):
+    def __init__(self, number, rect, ai_blocked, dest):
         super(DestNavPageLine, self).__init__()
         self.name = 'bridge_comp.nav_line%s' % number
-        if DEBUG:
-            self._interact_hilight_color = Color(THECOLORS.keys()[number])
+        # set debugging higlight color for when DEBUG is on.
+        self._interact_hilight_color = Color(THECOLORS.keys()[number])
         r = Rect(rect)
+        # We dynamically generate the interact rect here.
         self.interacts = {}
-        self.interacts['line'] = InteractNoImage(r.x, r.y, r.w, r.h)
+        self.interacts['line'] = InteractText(r.x, r.y, r.w, r.h,
+                dest, 'darkblue', 16, 'DejaVuSans-Bold.ttf', False)
         # Whether JIM blocks this
         self.ai_blocked = ai_blocked
-        self.set_interact('line')
+        self.set_interact()
 
     def is_interactive(self, tool=None):
-        return self.state.detail_views[self.COMPUTER].get_data('tab') == 'nav'
+        return self.game.detail_views[self.COMPUTER].get_data('tab') == 'nav'
 
     def interact_without(self):
-        if self.state.scenes['bridge'].get_data('ai status') == 'online':
-            return make_jim_dialog("You are not authorized to change the"
-                                   " destination.", self.state)
+        if self.game.scenes['bridge'].get_data('ai status') == 'online':
+            return make_jim_dialog(_("You are not authorized to change the"
+                                     " destination."), self.game)
         if not self.ai_blocked:
-            return Result("There's no good reason to choose to go to the"
-                          " penal colony.")
-        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
-            return Result("You could change the destination, but when JIM"
-                          " recovers, it'll just get reset.")
-        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
-            return Result("You change the destination.",
+            return Result(_("There's no good reason to choose to go to the"
+                            " penal colony."))
+        if self.game.scenes['bridge'].get_data('ai status') == 'looping':
+            return Result(_("You could change the destination, but when JIM"
+                            " recovers, it'll just get reset."))
+        if self.game.scenes['bridge'].get_data('ai status') == 'dead':
+            return Result(_("You change the destination."),
                           soundfile="beep550.ogg", end_game=True)
 
 
@@ -491,14 +500,14 @@ class CompUpButton(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
+        tab = self.game.detail_views[self.COMPUTER].get_data('tab')
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
         return tab == 'log' and page > 0
 
     def interact_without(self):
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        self.state.detail_views[self.COMPUTER].set_data('log page', page - 1)
-        self.state.detail_views[self.COMPUTER].set_background()
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        self.game.detail_views[self.COMPUTER].set_data('log page', page - 1)
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -514,15 +523,15 @@ class CompDownButton(Thing):
     COMPUTER = 'bridge_comp_detail'
 
     def is_interactive(self, tool=None):
-        tab = self.state.detail_views[self.COMPUTER].get_data('tab')
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        max_page = self.state.detail_views[self.COMPUTER].get_data('max page')
+        tab = self.game.detail_views[self.COMPUTER].get_data('tab')
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        max_page = self.game.detail_views[self.COMPUTER].get_data('max page')
         return tab == 'log' and (page + 1) < max_page
 
     def interact_without(self):
-        page = self.state.detail_views[self.COMPUTER].get_data('log page')
-        self.state.detail_views[self.COMPUTER].set_data('log page', page + 1)
-        self.state.detail_views[self.COMPUTER].set_background()
+        page = self.game.detail_views[self.COMPUTER].get_data('log page')
+        self.game.detail_views[self.COMPUTER].set_data('log page', page + 1)
+        self.game.detail_views[self.COMPUTER].set_background()
         return Result(soundfile='beep550.ogg')
 
 
@@ -547,24 +556,34 @@ class BridgeCompDetail(Scene):
 
     ALERT_BASE = 'comp_alert_base.png'
     ALERTS = {
-            'ai looping': 'comp_alert_ai_looping.png',
-            'ai offline': 'comp_alert_ai_offline.png',
-            'engine offline': 'comp_alert_engine_offline.png',
-            'life support': 'comp_alert_life_support.png',
-            'life support partial': 'comp_alert_life_support_partial.png',
+            'hull breach': _("Hull breach detected: Engine Room"),
+            'ai looping': _("AI Status: 3D scene reconstruction failed."
+                " Recovery in progress"),
+            'ai offline': _("AI System Offline"),
+            'engine offline': _("Engine Offline"),
+            'life support': _("Life Support System: 20% operational"),
+            'life support partial': _("Life Support System: 40% operational"),
             }
 
     # Point to start drawing changeable alerts
-    ALERT_OFFSET = (16, 140)
+    ALERT_OFFSET = (16, 100)
     ALERT_SPACING = 4
 
-    LOGS = ['comp_log_start.png', 'comp_log_1.png',
-            'comp_log_end.png']
+    LOG_BACKGROUND = 'comp_log_start.png'
 
-    NAVIGATION = {
-            'engine offline': 'bridge_nav_engine.png',
-            'life support': 'bridge_nav_life_support.png',
-            'final': 'bridge_nav_dest.png',
+    LOGS = [_("<Error: Log corrupted. Unable to open Log>")]
+
+    NAVIGATION = 'bridge_nav_base.png'
+
+    NAV_MESSAGES = {
+            'engine offline': [
+                _("Engine Offline: Navigation Disabled")],
+            'life support': [
+            _("Life Support Marginal."),
+            _("Emergency Navigation Protocol Engaged."),
+            '',
+            _("Destination locked to:"),
+            _("Bounty Penal Colony Space Port, New South Australia")],
             }
 
     BACKGROUND = ALERT_BASE
@@ -575,45 +594,60 @@ class BridgeCompDetail(Scene):
             'max page': len(LOGS),
     }
 
-    def __init__(self, state):
-        super(BridgeCompDetail, self).__init__(state)
-
+    def setup(self):
         self.add_thing(LogTab())
         self.add_thing(AlertTab())
         self.add_thing(NavTab())
         #self.add_thing(CompUpButton())
         #self.add_thing(CompDownButton())
         self._scene_playlist = None
-        self._alert = get_image(self.FOLDER, self.ALERT_BASE)
+        self._alert = self.get_image(self.FOLDER, self.ALERT_BASE)
         self._alert_messages = {}
         self._nav_messages = {}
-        for key, name in self.ALERTS.iteritems():
-            self._alert_messages[key] = get_image(self.FOLDER, name)
-        for key, name in self.NAVIGATION.iteritems():
-            self._nav_messages[key] = get_image(self.FOLDER, name)
+        for key, text in self.ALERTS.iteritems():
+            self._alert_messages[key] = render_text(text,
+                    'DejaVuSans-Bold.ttf', 18, 'orange', (0, 0, 0, 0),
+                    self.resource, (600, 25), False)
+        self._nav_background = self.get_image(self.FOLDER, self.NAVIGATION)
+        #for key, name in self.NAVIGATION.iteritems():
+        #    self._nav_messages[key] = self.get_image(self.FOLDER, name)
         self._nav_lines = []
-        self._nav_lines.append(DestNavPageLine(1, (14, 99, 595, 30), False))
-        self._nav_lines.append(DestNavPageLine(2, (14, 135, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(3, (14, 167, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(4, (14, 203, 595, 30), True))
-        self._nav_lines.append(DestNavPageLine(5, (14, 239, 595, 30), True))
-        self._logs = [get_image(self.FOLDER, x) for x in self.LOGS]
+        self._nav_lines.append(DestNavPageLine(1, (12, 99, 610, 25), False,
+            _("1. Bounty Penal Colony Space Port, New South Australia"
+                " (397 days)")))
+        self._nav_lines.append(DestNavPageLine(2, (12, 135, 610, 25), True,
+            _("2. Hedonia Space Station (782 days)")))
+        self._nav_lines.append(DestNavPageLine(3, (12, 167, 610, 25), True,
+            _("3. Spinosa Health Resort, Prunus Secundus (1231 days)")))
+        self._nav_lines.append(DestNavPageLine(4, (12, 203, 610, 25), True,
+            _("4. Achene Space Port, Indica Prspinosame (1621 days)")))
+        self._nav_lines.append(DestNavPageLine(5, (12, 239, 610, 25), True,
+            _("5. Opioid Space Port, Gelatinosa Prime (1963 days)")))
+        self._log_background = self.get_image(self.FOLDER, self.LOG_BACKGROUND)
+        self._logs = []
+        for text in self.LOGS:
+            log_page = self._log_background.copy()
+            log_page.blit(render_text(text, 'DejaVuSans-Bold.ttf', 18,
+                'lightgreen', (0, 0, 0, 0), self.resource, (600, 25), False),
+                self.ALERT_OFFSET)
+            self._logs.append(log_page)
 
     def enter(self):
-        self._scene_playlist = get_current_playlist()
-        change_playlist(None)
+        self._scene_playlist = self.sound.get_current_playlist()
+        self.sound.change_playlist(None)
         self.set_background()
 
     def leave(self):
-        change_playlist(self._scene_playlist)
+        self.sound.change_playlist(self._scene_playlist)
 
     def set_background(self):
         if self.get_data('tab') == 'alert':
             self._clear_navigation()
-            self._background = self._alert
+            self._background = self._alert.copy()
+            self._draw_alerts()
         elif self.get_data('tab') == 'log':
             self._clear_navigation()
-            self._background = self._logs[self.get_data('log page')]
+            self._background = self._logs[self.get_data('log page')].copy()
         elif self.get_data('tab') == 'nav':
             self._background = self._get_nav_page()
 
@@ -625,48 +659,61 @@ class BridgeCompDetail(Scene):
                 del self.things[thing.name]
                 thing.scene = None
 
+    def _draw_nav_text(self, key):
+        surface = self._nav_background.copy()
+        xpos, ypos = self.ALERT_OFFSET
+        for line in self.NAV_MESSAGES[key]:
+            text = render_text(line, 'DejaVuSans-Bold.ttf', 18,
+                    'darkblue', (0, 0, 0, 0), self.resource, (600, 25), False)
+            surface.blit(text, (xpos, ypos))
+            ypos = ypos + text.get_height() + self.ALERT_SPACING
+        return surface
+
     def _get_nav_page(self):
-        if not self.state.scenes['engine'].get_data('engine online'):
-            return self._nav_messages['engine offline']
-        elif (not self.state.scenes['mess'].get_data('life support status')
+        if not self.game.scenes['engine'].get_data('engine online'):
+            return self._draw_nav_text('engine offline')
+        elif (not self.game.scenes['mess'].get_data('life support status')
               == 'fixed'):
-            return self._nav_messages['life support']
+            return self._draw_nav_text('life support')
         else:
             for thing in self._nav_lines:
                 if thing.name not in self.things:
                     self.add_thing(thing)
-            return self._nav_messages['final']
+            return self._nav_background.copy()
 
-    def _draw_alerts(self, surface):
+    def _draw_alerts(self):
         xpos, ypos = self.ALERT_OFFSET
-        if self.state.scenes['bridge'].get_data('ai status') == 'looping':
-            surface.blit(self._alert_messages['ai looping'], (xpos, ypos))
+        self._background.blit(self._alert_messages['hull breach'],
+                (xpos, ypos))
+        ypos += (self._alert_messages['hull breach'].get_size()[1]
+                + self.ALERT_SPACING)
+        if self.game.scenes['bridge'].get_data('ai status') == 'looping':
+            self._background.blit(self._alert_messages['ai looping'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['ai looping'].get_size()[1]
                      + self.ALERT_SPACING)
-        if self.state.scenes['bridge'].get_data('ai status') == 'dead':
-            surface.blit(self._alert_messages['ai offline'], (xpos, ypos))
+        if self.game.scenes['bridge'].get_data('ai status') == 'dead':
+            self._background.blit(self._alert_messages['ai offline'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['ai offline'].get_size()[1]
                      + self.ALERT_SPACING)
-        if not self.state.scenes['engine'].get_data('engine online'):
-            surface.blit(self._alert_messages['engine offline'], (xpos, ypos))
+        if not self.game.scenes['engine'].get_data('engine online'):
+            self._background.blit(self._alert_messages['engine offline'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['engine offline'].get_size()[1]
                      + self.ALERT_SPACING)
-        if (self.state.scenes['mess'].get_data('life support status')
-            == 'broken'):
-            surface.blit(self._alert_messages['life support'], (xpos, ypos))
+        if (self.game.scenes['mess'].get_data('life support status')
+                == 'broken'):
+            self._background.blit(self._alert_messages['life support'],
+                    (xpos, ypos))
             ypos += (self._alert_messages['life support'].get_size()[1]
                      + self.ALERT_SPACING)
-        if (self.state.scenes['mess'].get_data('life support status')
-            == 'replaced'):
-            surface.blit(self._alert_messages['life support partial'],
+        if (self.game.scenes['mess'].get_data('life support status')
+                == 'replaced'):
+            self._background.blit(self._alert_messages['life support partial'],
                          (xpos, ypos))
             ypos += (self._alert_messages['life support partial'].get_size()[1]
                      + self.ALERT_SPACING)
-
-    def draw_things(self, surface):
-        if self.get_data('tab') == 'alert':
-            self._draw_alerts(surface)
-        super(BridgeCompDetail, self).draw_things(surface)
 
 
 SCENES = [Bridge]

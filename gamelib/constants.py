@@ -1,18 +1,11 @@
-# Useful constants
-# copyright boomslang team (see COPYRIGHT file for details)
+from pyntnclick.constants import GameConstants
+
+# Anything here has to be explicitly translated
+# This module is imported before we've set up i18n
+_ = lambda x: x
 
 
-SCREEN = (800, 600)
-FREQ = 44100   # same as audio CD
-BITSIZE = -16  # unsigned 16 bit
-CHANNELS = 2   # 1 == mono, 2 == stereo
-BUFFER = 1024  # audio buffer size in no. of samples
-
-BUTTON_SIZE = 50
-SCENE_SIZE = (SCREEN[0], SCREEN[1] - BUTTON_SIZE)
-# Animation frame rate
-FRAME_RATE = 25
-
-DEBUG = False
-
-ENTER, LEAVE = 1, 2
+class SSConstants(GameConstants):
+    title = _('Suspended Sentence')
+    icon = 'suspended_sentence24x24.png'
+    short_name = 'suspended-sentence'
