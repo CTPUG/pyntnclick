@@ -5,26 +5,6 @@ gettext catalogs like `poedit' or `virtaal'. In case you are familiar
 with gettext ".po" format any text editor will do.
 
 
-== How do I translate suspended-sentence into my language? ==
-
-First of all look if there is already translation catalog for
-your locale in `po/' subdirectory. The file should be named like
-`<locale>.po' where <locale> is the language code for your locale.
-For example, catalog for German is called `de.po'. If it is there
-you can start translating.
-
-If there is no file for your locale you need to generate it. To do
-this navigate to the `po/' directory in terminal and type command
-
-  msginit -l <locale>
-
-where <locale> is two-letters-language-code you need. Then translate
-generated file using your preferred editor.
-
-To get new translation to work you need to compile and install it by
-executing `install-po.sh' script.
-
-
 == How can I mark the string in code as translatable? ==
 
 Just surround it with _( and ) like
