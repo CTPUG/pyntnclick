@@ -10,7 +10,7 @@ with gettext ".po" format any text editor will do.
 Just surround it with _( and ) like
   "Hello, world"    ->    _("Hello, world!")
 
-_() is a function in `gamelib/i18n.py' file, so you might want to
+_() is a function in `pyntnclick/i18n.py' file, so you might want to
 import it first.
 
   from pyntnclick.i18n import _
