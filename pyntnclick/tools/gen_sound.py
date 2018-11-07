@@ -6,6 +6,8 @@
 # Output is written the file beep<freq>.pcm
 # Convert to ogg with oggenc -r <file>
 
+from __future__ import print_function, division
+
 import sys
 import math
 import struct
@@ -17,10 +19,10 @@ MAX = 105 * 256  # Max value for sine wave
 def gen_sine(freq, secs):
     filename = 'beep%s.pcm' % freq
     # We need to generate freq cycles and sample that CDDA_RATE times
-    samples_per_cycle = CDDA_RATE / freq
+    samples_per_cycle = CDDA_RATE // freq
     data = []
     for x in range(samples_per_cycle):
-        rad = float(x) / samples_per_cycle * 2 * math.pi
+        rad = x / samples_per_cycle * 2 * math.pi
         y = MAX * math.sin(rad)
         data.append(struct.pack('<i', y))
     output = open(filename, 'w')
@@ -31,27 +33,27 @@ def gen_sine(freq, secs):
 
 
 def usage():
-    print 'Unexpected input'
-    print 'Usage: gen_sound.py <freq> [<length>]'
-    print ' where <freq> is the frequency in Hz (integer)'
-    print ' and [<length>] is the time is seconds (float)'
+    print('Unexpected input')
+    print('Usage: gen_sound.py <freq> [<length>]')
+    print(' where <freq> is the frequency in Hz (integer)')
+    print(' and [<length>] is the time is seconds (float)')
 
 if __name__ == "__main__":
     try:
         freq = int(sys.argv[1])
-    except Exception, exc:
+    except Exception as exc:
         usage()
-        print 'Error was: %s' % exc
+        print('Error was: %s' % exc)
         sys.exit(1)
 
     if len(sys.argv) > 2:
         try:
             secs = float(sys.argv[2])
-        except Exception, exc:
+        except Exception as exc:
             usage()
-            print 'Error was: %s' % exc
+            print('Error was: %s' % exc)
             sys.exit(1)
     else:
         secs = 0.25
     output = gen_sine(freq, secs)
-    print 'Wrote sample to %s' % output
+    print('Wrote sample to %s' % output)

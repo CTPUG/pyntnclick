@@ -3,8 +3,8 @@ import unittest
 import pygame.display
 import pygame.event
 
-import pyntnclick.resources
-import pyntnclick.state
+from .. import resources
+from .. import state
 
 
 class GameLogicTestCase(unittest.TestCase):

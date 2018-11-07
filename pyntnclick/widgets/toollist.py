@@ -1,5 +1,5 @@
-from pyntntclick.widgets.base import Container
-from pyntntclick.widgets.text import TextButton
+from .base import Container
+from .text import TextButton
 
 
 class ToolListWidget(Container):

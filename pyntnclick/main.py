@@ -3,6 +3,8 @@
 Contains the entry point used by the run_game.py script.
 
 '''
+from __future__ import print_function
+
 import sys
 import gettext
 import locale
@@ -12,17 +14,17 @@ from optparse import OptionParser
 import pygame
 from pygame.locals import SWSURFACE
 
-from pyntnclick.i18n import _, get_module_i18n_path
-from pyntnclick.engine import Engine
-from pyntnclick.gamescreen import DefMenuScreen, DefEndScreen, GameScreen
-from pyntnclick.constants import GameConstants, DEBUG_ENVVAR
-from pyntnclick.resources import Resources
-from pyntnclick.sound import Sound
-from pyntnclick import state
+from .i18n import _, get_module_i18n_path
+from .engine import Engine
+from .gamescreen import DefMenuScreen, DefEndScreen, GameScreen
+from .constants import GameConstants, DEBUG_ENVVAR
+from .resources import Resources
+from .sound import Sound
+from . import state
 
-from pyntnclick.tools.rect_drawer import (RectEngine, RectDrawerError,
+from .tools.rect_drawer import (RectEngine, RectDrawerError,
         make_rect_display)
-from pyntnclick.utils import list_scenes
+from .utils import list_scenes
 
 
 class GameDescriptionError(Exception):
@@ -90,11 +92,11 @@ class GameDescription(object):
                 pofile = os.path.join(popath, candidate)
                 mofile = gettext.find(name, locale_path, (polang,))
                 if mofile is None:
-                    print 'Missing mo file for %s' % pofile
+                    print('Missing mo file for %s' % pofile)
                     continue
                 if os.stat(pofile).st_mtime > os.stat(mofile).st_mtime:
-                    print 'po file %s is newer than mo file %s' % (pofile,
-                            mofile)
+                    print('po file %s is newer than mo file %s' % (pofile,
+                            mofile))
 
     def initial_state(self, game_state=None):
         """Create a copy of the initial game state."""
@@ -138,8 +140,8 @@ class GameDescription(object):
 
     def warn_debug(self, option):
         """Warn the user that he needs debug mode"""
-        print '%s is only valid in debug mode' % option
-        print 'set %s to enable debug mode' % DEBUG_ENVVAR
+        print('%s is only valid in debug mode' % option)
+        print('set %s to enable debug mode' % DEBUG_ENVVAR)
         print
 
     def main(self):
@@ -166,7 +168,7 @@ class GameDescription(object):
             sys.exit(0)
         if self.constants.debug and opts.rect_drawer:
             if opts.scene is None:
-                print 'Need to supply a scene to use the rect drawer'
+                print('Need to supply a scene to use the rect drawer')
                 sys.exit(1)
             locale_path = get_module_i18n_path(
                     self.resource.DEFAULT_RESOURCE_MODULE)
@@ -178,8 +180,8 @@ class GameDescription(object):
             make_rect_display()
             try:
                 self.engine = RectEngine(self, opts.detail)
-            except RectDrawerError, e:
-                print 'RectDrawer failed with: %s' % e
+            except RectDrawerError as e:
+                print('RectDrawer failed with: %s' % e)
                 sys.exit(1)
         else:
             pygame.display.set_mode(self.constants.screen, SWSURFACE)
@@ -187,12 +189,14 @@ class GameDescription(object):
                 pygame.display.set_icon(self.resource.get_image(
                     self.constants.icon, basedir='icons'))
             if self.constants.title:
-                title = _(self.constants.title).encode('utf-8')
+                title = _(self.constants.title)
+                if sys.version_info.major == 2:
+                    title = title.encode('utf-8')
                 pygame.display.set_caption(title)
 
             self.engine = Engine(self)
             # Initialize the special screens in the engine
-            for name, cls in self._screens.iteritems():
+            for name, cls in self._screens.items():
                 screen = cls(self)
                 self.engine.add_screen(name, screen)
             # Should we allow the menu not to be the opening screen?

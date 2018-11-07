@@ -1,4 +1,4 @@
-from pyntnclick.tests.game_logic_utils import GameLogicTestCase
+from .game_logic_utils import GameLogicTestCase
 
 
 class MadClickerTestCase(GameLogicTestCase):
@@ -62,7 +62,7 @@ class MadClickerTestCase(GameLogicTestCase):
                 self.format_error(thing, item, None))
         except self.failureException:
             raise
-        except Exception, details:
+        except Exception as details:
             raise self.failureException(self.format_error(thing, item,
                 details))
         self.clear_inventory()
@@ -77,7 +77,7 @@ class MadClickerTestCase(GameLogicTestCase):
                 self.format_error(item, item2, None))
         except self.failureException:
             raise
-        except Exception, details:
+        except Exception as details:
             raise self.failureException(self.format_error(item, item2,
                 details))
         self.clear_inventory()

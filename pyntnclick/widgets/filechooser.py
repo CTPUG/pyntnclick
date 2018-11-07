@@ -3,8 +3,8 @@
 
 import os
 
-from pyntnclick.widgets.base import Box
-from pyntnclick.widgets.text import TextButton, LabelWidget
+from .base import Box
+from .text import TextButton, LabelWidget
 
 
 class FileChooser(Box):

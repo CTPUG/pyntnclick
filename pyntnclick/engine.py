@@ -62,7 +62,7 @@ class Screen(object):
 
     def __init__(self, gd):
         # Avoid import loop
-        from pyntnclick.widgets.base import Container
+        from .widgets.base import Container
 
         self.gd = gd
         self.resource = gd.resource

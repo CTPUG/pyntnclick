@@ -1,14 +1,17 @@
 """Utilities and base classes for dealing with scenes."""
+from __future__ import division
 
 import os
 import json
 import copy
 
-from widgets.text import LabelWidget
+from collections import OrderedDict
+
 from pygame.color import Color
 
-from pyntnclick.engine import ScreenEvent
-from pyntnclick.utils import draw_rect_image
+from .engine import ScreenEvent
+from .utils import draw_rect_image
+from .widgets.text import LabelWidget
 
 
 class Result(object):
@@ -318,7 +321,9 @@ class Scene(StatefulGizmo):
         self.name = self.NAME if self.NAME is not None else self.FOLDER
         self.state_key = self.name
         # map of thing names -> Thing objects
-        self.things = {}
+        # We use an OrderedDict, so we can control the order we compare
+        # objects for interact checks
+        self.things = OrderedDict()
         self.current_thing = None
         self._background = None
 
@@ -346,7 +351,7 @@ class Scene(StatefulGizmo):
         label = LabelWidget((0, 10), self.gd, text)
         label.do_prepare()
         # TODO: Centre more cleanly
-        label.rect.left += (dest_rect.width - label.rect.width) / 2
+        label.rect.left += (dest_rect.width - label.rect.width) // 2
         return label
 
     def draw_description(self, surface):
@@ -367,7 +372,7 @@ class Scene(StatefulGizmo):
             surface.fill((200, 200, 200))
 
     def draw_things(self, surface):
-        for thing in self.things.itervalues():
+        for thing in self.things.values():
             thing.draw(surface)
 
     def draw(self, surface):
@@ -389,7 +394,7 @@ class Scene(StatefulGizmo):
 
            Return true if any of them need to queue a redraw"""
         result = False
-        for thing in self.things.itervalues():
+        for thing in self.things.values():
             if thing.animate():
                 result = True
         return result
@@ -405,7 +410,7 @@ class Scene(StatefulGizmo):
             if not self.current_thing.contains(pos):
                 self.current_thing.leave()
                 self.current_thing = None
-        for thing in self.things.itervalues():
+        for thing in self.things.values():
             if thing.contains(pos):
                 thing.enter(self.game.tool)
                 self.current_thing = thing
@@ -510,7 +515,7 @@ class Thing(StatefulGizmo, InteractiveMixin):
         if self.folder is None:
             self.folder = scene.FOLDER
         self.game = scene.game
-        for interact in self.interacts.itervalues():
+        for interact in self.interacts.values():
             interact.set_thing(self)
         self.set_interact()
 

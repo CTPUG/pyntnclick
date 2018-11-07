@@ -1,19 +1,19 @@
 # gamescreen.py
 # Copyright Boomslang team, 2010 (see COPYING File)
 # Main menu for the game
+from __future__ import division
 
 import pygame.draw
 from pygame import Surface
 from pygame.color import Color
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEMOTION, KEYDOWN, K_ESCAPE
 
-from pyntnclick.i18n import _
-from pyntnclick.cursor import CursorScreen
-from pyntnclick.engine import Screen
-from pyntnclick.widgets.base import (
-    Container, ModalStackContainer, ModalWrapper)
-from pyntnclick.widgets.text import TextButton, WrappedTextLabel
-from pyntnclick.widgets.imagebutton import ImageButtonWidget
+from .i18n import _
+from .cursor import CursorScreen
+from .engine import Screen
+from .widgets.base import (Container, ModalStackContainer, ModalWrapper)
+from .widgets.text import TextButton, WrappedTextLabel
+from .widgets.imagebutton import ImageButtonWidget
 
 
 class InventorySlot(ImageButtonWidget):
@@ -75,18 +75,18 @@ class InventoryView(Container):
         self.screen = screen
         self.game = screen.game
 
-        slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) / self.bsize
+        slots = (self.rect.width - self.MIN_UPDOWN_WIDTH) // self.bsize
         self.slots = [self.add(self.make_slot(i)) for i in range(slots)]
         self.inv_offset = 0
 
         self.updown_width = self.rect.width - slots * self.bsize
         ud_left = self.rect.right - self.updown_width
         self.up_button = self.add(UpButton((ud_left, self.rect.top), gd,
-                    (self.updown_width, self.rect.height / 2)))
+                    (self.updown_width, self.rect.height // 2)))
         self.up_button.add_callback(MOUSEBUTTONDOWN, self.up_callback)
         self.down_button = self.add(DownButton(
-                    (ud_left, self.rect.top + self.rect.height / 2), gd,
-                    (self.updown_width, self.rect.height / 2)))
+                    (ud_left, self.rect.top + self.rect.height // 2), gd,
+                    (self.updown_width, self.rect.height // 2)))
         self.down_button.add_callback(MOUSEBUTTONDOWN, self.down_callback)
 
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
@@ -323,8 +323,8 @@ class GameScreen(CursorScreen):
         size = self.scene_modal.rect.size
         if detail:
             size = scene.get_detail_size()
-            pos = ((self.scene_modal.rect.width - size[0]) / 2,
-                   (self.scene_modal.rect.height - size[1]) / 2)
+            pos = ((self.scene_modal.rect.width - size[0]) // 2,
+                   (self.scene_modal.rect.height - size[1]) // 2)
 
         self.scene_modal.add(SceneWidget(pos, self.gd, size, scene, self,
                                          detail))

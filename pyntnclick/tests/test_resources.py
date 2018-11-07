@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from pygame.surface import Surface
 
-from pyntnclick.resources import Resources, ResourceNotFound
+from ..resources import Resources, ResourceNotFound
 
 
 TEST_PATH = os.path.dirname(__file__)
@@ -43,7 +43,7 @@ class ResourcesTestCase(TestCase):
         try:
             self.res.get_resource_path('should_not_exist')
             self.fail('Expected ResourceNotFound error.')
-        except ResourceNotFound, e:
+        except ResourceNotFound as e:
             self.assertEqual('should_not_exist', e.args[0])
 
     def test_get_resource_path_in_test(self):
@@ -71,5 +71,5 @@ class ResourcesTestCase(TestCase):
         try:
             self.res.get_image('should_not_exist')
             self.fail('Expected ResourceNotFound error.')
-        except ResourceNotFound, e:
+        except ResourceNotFound as e:
             self.assertEqual('images/should_not_exist', e.args[0])

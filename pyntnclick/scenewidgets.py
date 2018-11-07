@@ -3,12 +3,11 @@
 
 from pygame import Rect
 from pygame.color import Color
-from pygame.colordict import THECOLORS
 from pygame.surface import Surface
 
-from pyntnclick.state import Thing
-from pyntnclick.utils import convert_color, render_text
-from pyntnclick.widgets.text import LabelWidget
+from .state import Thing
+from .utils import convert_color, render_text, lookup_debug_color
+from .widgets.text import LabelWidget
 
 
 class Interact(object):
@@ -213,8 +212,7 @@ class GenericDescThing(Thing):
         self.interacts = {
                 'description': InteractRectUnion(areas)
                 }
-        # Individual colors to make debugging easier
-        self._interact_hilight_color = Color(THECOLORS.keys()[number])
+        self._interact_hilight_color = lookup_debug_color(number)
 
     def get_description(self):
         return self.description

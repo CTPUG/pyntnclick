@@ -1,6 +1,8 @@
 # Quickly hacked together helper for working out
 # interactive regions in Suspended Sentence
 
+from __future__ import print_function, division
+
 from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
                            K_a, K_t, K_d, K_i, K_r, K_o, K_b, K_z,
                            QUIT, MOUSEBUTTONDOWN, MOUSEMOTION,
@@ -8,12 +10,13 @@ from pygame.locals import (K_LEFT, K_RIGHT, K_UP, K_DOWN,
 import pygame
 import os
 
-import pyntnclick.constants
-from pyntnclick.i18n import _
-from pyntnclick.widgets.text import LabelWidget, TextButton
-from pyntnclick.widgets.base import Container, Button, TranslucentImage
-from pyntnclick.widgets.filechooser import FileChooser
-from pyntnclick.utils import draw_rect_image
+from .. import constants
+from ..i18n import _
+from ..utils import draw_rect_image
+
+from ..widgets.text import LabelWidget, TextButton
+from ..widgets.base import Container, Button, TranslucentImage
+from ..widgets.filechooser import FileChooser
 
 DRAW, CYCLE, DELETE, IMAGE = range(4)
 
@@ -22,7 +25,7 @@ class RectDrawerError(Exception):
     """Raised when initilaization failed"""
 
 
-class RectDrawerConstants(pyntnclick.constants.GameConstants):
+class RectDrawerConstants(constants.GameConstants):
     debug = True
     menu_width = 200
     menu_button_height = 25
@@ -170,12 +173,12 @@ class AppImage(Container):
 
     def _print_thing(self, thing, interact_name):
         """Helper to avoid repeated translations"""
-        print (_("Thing %(thing)s Interact %(interact)s") %
-                {'thing': thing.name, 'interact': interact_name})
+        print(_("Thing %(thing)s Interact %(interact)s") %
+               {'thing': thing.name, 'interact': interact_name})
 
     def _print_rects(self, rect1, rect2):
         """Helper to avoid repeated translations"""
-        print _("     Rects"), rect1, rect2
+        print(_("     Rects"), rect1, rect2)
 
     def find_existing_intersects(self):
         """Parse the things in the scene for overlaps"""
@@ -200,7 +203,7 @@ class AppImage(Container):
                         for my_rect in thing_rects:
                             for other_rect in thing2_rects:
                                 if my_rect.colliderect(other_rect):
-                                    print _('Existing Intersecting rects')
+                                    print(_('Existing Intersecting rects'))
                                     self._print_thing(thing, interact_name)
                                     self._print_thing(thing2, interact2_name)
                                     self._print_rects(my_rect, other_rect)
@@ -222,8 +225,8 @@ class AppImage(Container):
                     for other_rect in thing_rects:
                         for my_rect in rect_list:
                             if my_rect.colliderect(other_rect):
-                                print _('Intersecting rects')
-                                print _("  Object %s") % num
+                                print(_('Intersecting rects'))
+                                print(_("  Object %s") % num)
                                 self._print_thing(thing, interact_name)
                                 self._print_rects(my_rect, other_rect)
                 if thing.INITIAL:
@@ -236,9 +239,9 @@ class AppImage(Container):
                 for my_rect in rect_list:
                     for other_rect in other_list:
                         if my_rect.colliderect(other_rect):
-                            print _('Intersecting rects'),
-                            print (_('  Object %(object1)s and %(object2)s') %
-                                    {'object1': num, 'object2': num2})
+                            print(_('Intersecting rects'))
+                            print(_('  Object %(object1)s and %(object2)s') %
+                                  {'object1': num, 'object2': num2})
                             self._print_rects(my_rect, other_rect)
             print
             print
@@ -362,18 +365,18 @@ class AppImage(Container):
         d = self._make_dict()
         self.find_intersecting_rects(d)
         for (num, col) in enumerate(d):
-            print _('Rect %d : ') % num
+            print(_('Rect %d : ') % num)
             for rect in d[col]:
                 r = rect.move(self.offset)
-                print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
-            print
+                print('   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h))
+            print()
         for i, image in enumerate(self.images):
-            print _('Image %d') % i
+            print(_('Image %d') % i)
             rect = image.rect
             r = rect.move(self.offset)
-            print '   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h)
-            print
-        print
+            print('   (%d, %d, %d, %d),' % (r.x, r.y, r.w, r.h))
+            print()
+        print()
 
     def image_load(self, ev, widget):
         if self.filechooser is None:
@@ -398,8 +401,8 @@ class AppImage(Container):
                     constants.screen[0] + constants.menu_width,
                     constants.screen[1])
             self.image_mode(None, None)
-        except pygame.error, e:
-            print 'Unable to load image %s (reason %s)' % (filename, e)
+        except pygame.error as e:
+            print('Unable to load image %s (reason %s)' % (filename, e))
 
     def image_mode(self, ev, widget):
         self.mode = IMAGE
@@ -413,8 +416,8 @@ class AppImage(Container):
 
     def _conv_pos(self, mouse_pos):
         if self.zoom_display:
-            pos = ((mouse_pos[0] + self.zoom_offset[0]) / constants.zoom,
-                   (mouse_pos[1] + self.zoom_offset[1]) / constants.zoom)
+            pos = ((mouse_pos[0] + self.zoom_offset[0]) // constants.zoom,
+                   (mouse_pos[1] + self.zoom_offset[1]) // constants.zoom)
         else:
             pos = mouse_pos
         return pos
@@ -432,8 +435,8 @@ class AppImage(Container):
 
     def _make_zoom_offset(self, pos):
         zoom_pos = (pos[0] * constants.zoom, pos[1] * constants.zoom)
-        offset = [zoom_pos[0] - constants.screen[0] / 2,
-                zoom_pos[1] - constants.screen[1] / 2]
+        offset = [zoom_pos[0] - constants.screen[0] // 2,
+                zoom_pos[1] - constants.screen[1] // 2]
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
 

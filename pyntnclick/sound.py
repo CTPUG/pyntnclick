@@ -1,4 +1,5 @@
 # sound management for pyntnclick
+from __future__ import print_function
 
 from random import randrange
 
@@ -9,14 +10,14 @@ try:
     from pygame.mixer import Sound as pygame_Sound
     from pygame.mixer import music
     pygame_import_error = None
-except ImportError, e:
+except ImportError as e:
     # Save error, so we don't crash and can do the right thing later
     pygame_import_error = e
     pygame_Sound = None
     music = None
 
-from pyntnclick.resources import ResourceNotFound
-from pyntnclick.engine import MUSIC_ENDED
+from .resources import ResourceNotFound
+from .engine import MUSIC_ENDED
 
 
 class PlayList(object):
@@ -95,16 +96,16 @@ class Sound(object):
                               constants.snd_buffer)
             self.sound_enabled = True
             music.set_endevent(MUSIC_ENDED)
-        except pygame.error, exc:
+        except pygame.error as exc:
             self.disable_sound(exc)
 
     def disable_sound(self, exc=None):
         """Disable the sound system"""
         self.sound_enabled = False
         if exc is not None:
-            print 'Failed to initialise sound system'
-            print 'Error: %s' % exc
-            print 'Sound disabled'
+            print('Failed to initialise sound system')
+            print('Error: %s' % exc)
+            print('Sound disabled')
 
     def get_sound(self, *names):
         if not self.sound_enabled:
@@ -114,7 +115,7 @@ class Sound(object):
             path = self._resource_finder.get_resource_path("sounds", *names)
             sound = self.sound_cache.get(path, None)
         except ResourceNotFound:
-            print "Sound file not found: %s" % names
+            print("Sound file not found: %s" % names)
             # Cache failed lookup
             sound = DummySound()
             self.sound_cache[path] = sound
@@ -122,7 +123,7 @@ class Sound(object):
             try:
                 sound = pygame_Sound(path)
             except pygame.error:
-                print "Sound file not found: %s" % names
+                print("Sound file not found: %s" % names)
                 sound = DummySound()
             self.sound_cache[path] = sound
         return sound

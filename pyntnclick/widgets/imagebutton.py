@@ -1,4 +1,4 @@
-from pyntnclick.widgets.base import Button
+from .base import Button
 
 
 class ImageButtonWidget(Button):

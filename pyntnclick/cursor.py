@@ -7,8 +7,8 @@ import pygame
 import pygame.color
 import pygame.mouse
 
-from pyntnclick.engine import Screen
-from pyntnclick.image_transforms import Colour
+from .engine import Screen
+from .image_transforms import Colour
 
 
 class CursorSprite(Sprite):

@@ -1,22 +1,34 @@
 # Misc utils I don't know where else to put
 
+from __future__ import print_function, division
+
+import sys
+
 import pygame
+from pygame.color import Color
+from pygame.colordict import THECOLORS
 from pygame.locals import SRCALPHA
 from pygame.surface import Surface
 
 
+if sys.version_info.major == 2:
+    str_type = basestring
+else:
+    str_type = str
+
+
 def list_scenes(scene_module, scene_list):
     """List the scenes in the state"""
-    print "Available scenes and details:"
+    print("Available scenes and details:")
     for scene in scene_list:
         scenemod = __import__('%s.%s' % (scene_module, scene),
                          fromlist=[scene])
         if scenemod.SCENES:
-            print " * %s" % scene
+            print(" * %s" % scene)
         else:
-            print " * %s (details only)" % scene
+            print(" * %s (details only)" % scene)
         for detailcls in getattr(scenemod, 'DETAIL_VIEWS', []):
-            print "   - %s" % detailcls.NAME
+            print("   - %s" % detailcls.NAME)
 
 
 def draw_rect_image(surface, color, rect, thickness):
@@ -37,10 +49,14 @@ def convert_color(color):
     """Give me a pygame Color, dammit"""
     if isinstance(color, pygame.Color):
         return color
-    if isinstance(color, basestring):
+    if isinstance(color, str_type):
         return pygame.Color(color)
     return pygame.Color(*color)
 
+
+def lookup_debug_color(number):
+    """Choose a unique colour for this number, to aid debugging"""
+    return Color(list(THECOLORS.keys())[number])
 
 def render_text(text, fontname, font_size, color, bg_color, resource, size,
         centre=True):
@@ -65,9 +81,19 @@ def render_text(text, fontname, font_size, color, bg_color, resource, size,
             done = True
     if centre:
         # Centre the text in the rect
-        x = max(0, (width - text_surf.get_width()) / 2)
-        y = max(0, (height - text_surf.get_height()) / 2)
+        x = max(0, (width - text_surf.get_width()) // 2)
+        y = max(0, (height - text_surf.get_height()) // 2)
     else:
         x = y = 0
     surface.blit(text_surf, (x, y))
     return surface
+
+
+def make_reversible_list(seq):
+    """Turns a list of images into a symmetric sequence that runs through
+       the list first forward and then backwards.
+
+       i.e. Given the sequence [a, b, c, d, e], it will return the sequence
+       [a, b, c, d, e, d, c, b].
+       This is intended as a helper for constructing looping animations."""
+    return seq + seq[-2:0:-1]

@@ -4,9 +4,9 @@
 
 import pygame.event
 from pygame.locals import QUIT
-from pyntnclick.engine import Screen
-from pyntnclick.widgets.imagebutton import ImageButtonWidget
-from pyntnclick.widgets.text import TextButton
+from .engine import Screen
+from .widgets.imagebutton import ImageButtonWidget
+from .widgets.text import TextButton
 
 
 class MenuScreen(Screen):

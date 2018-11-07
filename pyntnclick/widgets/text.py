@@ -1,10 +1,13 @@
+
+from __future__ import division
+
 from textwrap import wrap
 
 import pygame
 from pygame.constants import SRCALPHA
 
-from pyntnclick.widgets.base import Widget, Button
-from pyntnclick.utils import convert_color
+from .base import Widget, Button
+from ..utils import convert_color
 
 
 class TextWidget(Widget):
@@ -93,8 +96,8 @@ class TextButton(Button, TextWidget):
         self.surface = pygame.Surface(self.rect.size, SRCALPHA)
         self.surface.fill(self.bg_color)
         offset = (
-            (self.rect.width - width) / 2 + self.padding,
-            (self.rect.height - height) / 2 + self.padding)
+            (self.rect.width - width) // 2 + self.padding,
+            (self.rect.height - height) // 2 + self.padding)
         self.surface.blit(text, text.get_rect().move(offset))
 
         if self.border:
@@ -127,7 +130,7 @@ class WrappedTextLabel(LabelWidget):
         width, height = self.surface.get_rect().size
         while width > self.max_width:
             # Very simplistic approach
-            self._wrap_width = self._wrap_width / 2
+            self._wrap_width = self._wrap_width // 2
             self._text_lines = wrap(self.text, self._wrap_width)
             self._render()
             width, height = self.surface.get_rect().size

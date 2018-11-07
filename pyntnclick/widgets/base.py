@@ -5,8 +5,8 @@ from pygame.locals import (MOUSEBUTTONDOWN, MOUSEBUTTONUP,
                            MOUSEMOTION, SRCALPHA, USEREVENT,
                            BLEND_RGBA_MIN)
 
-from pyntnclick.engine import UserEvent
-from pyntnclick.utils import convert_color
+from ..engine import UserEvent
+from ..utils import convert_color
 
 
 class Widget(object):
