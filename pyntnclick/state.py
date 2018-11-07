@@ -323,6 +323,9 @@ class Scene(StatefulGizmo):
         # map of thing names -> Thing objects
         # We use an OrderedDict, so we can control the order we compare
         # objects for interact checks
+        # FIXME: We should replace this some system of priority or layers,
+        # since relying just on the order of objects is fragile and not
+        # very flexible.
         self.things = OrderedDict()
         self.current_thing = None
         self._background = None
