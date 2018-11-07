@@ -68,7 +68,12 @@ def render_text(text, fontname, font_size, color, bg_color, resource, size,
     width, height = size
     color = convert_color(color)
     bg_color = convert_color(bg_color)
-    surface = Surface(size, SRCALPHA).convert_alpha()
+    surface = Surface(size, SRCALPHA)
+    if resource.CONVERT_ALPHA:
+        surface = surface.convert_alpha()
+    else:
+        # Don't actually render the text when testing
+        return surface
     surface.fill(bg_color)
     while not done and font_size > 0:
         # We bail at font_size 1 and just clip in that case, since we're
