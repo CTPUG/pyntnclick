@@ -73,10 +73,10 @@ PLATFORMS = [
 ]
 
 INSTALL_REQUIRES = [
+    'pygame',
+    'setuptools',
 ]
 
 # Install these manually
 NON_EGG_REQUIREMENTS = [
-    'setuptools',
-    'pygame',
 ]
