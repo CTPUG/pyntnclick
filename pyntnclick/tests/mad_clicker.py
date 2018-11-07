@@ -87,14 +87,19 @@ class MadClickerTestCase(GameLogicTestCase):
         """Implement frantic clicking behaviour"""
         for scene in self.state.scenes.values():
             self.state.data.set_current_scene(scene.name)
-            for thing in scene.things.values():
+            values = list(scene.things.values())
+            # We may change the things dict, so iterate over
+            # a copy
+            for thing in values:
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)
                     self.do_thing(thing, None)
                     for item in self.state.inventory():
                         self.do_thing(thing, item)
-        for detail in self.state.detail_views.values():
-            for thing in detail.things.values():
+        values = list(self.state.detail_views.values())
+        for detail in values:
+            det_values = list(detail.things.values())
+            for thing in det_values:
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)
                     self.do_thing(thing, None)
