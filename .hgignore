@@ -1,0 +1,12 @@
+syntax: glob
+
+*.pyc
+*~
+.*.swp
+*.egg-info
+ve
+dist
+build
+__pycache__
+pyntnclick/data/locale/[a-z][a-z]*
+data/locale/[a-z][a-z]*
