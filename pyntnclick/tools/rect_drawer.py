@@ -184,14 +184,14 @@ class AppImage(Container):
         """Parse the things in the scene for overlaps"""
         scene = self._scene
         # Pylint hates this function
-        for thing in scene.things.itervalues():
+        for thing in scene.things.values():
             for interact_name in thing.interacts:
                 thing._set_interact(interact_name)
                 if hasattr(thing.rect, 'collidepoint'):
                     thing_rects = [thing.rect]
                 else:
                     thing_rects = thing.rect
-                for thing2 in scene.things.itervalues():
+                for thing2 in scene.things.values():
                     if thing is thing2:
                         continue
                     for interact2_name in thing2.interacts:
@@ -215,7 +215,7 @@ class AppImage(Container):
         scene = self._scene
         for (num, col) in enumerate(d):
             rect_list = d[col]
-            for thing in scene.things.itervalues():
+            for thing in scene.things.values():
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)
                     if hasattr(thing.rect, 'collidepoint'):
@@ -252,7 +252,7 @@ class AppImage(Container):
     def toggle_thing_rects(self, ev, widget):
         self.draw_thing_rects = not self.draw_thing_rects
         scene = self._scene
-        for thing in scene.things.itervalues():
+        for thing in scene.things.values():
             if not self.draw_thing_rects:
                 if not hasattr(thing, 'old_colour'):
                     thing.old_colour = thing._interact_hilight_color
@@ -512,18 +512,20 @@ class AppImage(Container):
         elif self.mode == CYCLE:
             scene = self._scene
             cand = None
-            for thing in scene.things.itervalues():
+            for thing in scene.things.values():
                 if thing.contains(pos):
                     cand = thing
                     break
             if cand:
                 # Find current interacts in this thing
                 cur_interact = cand.current_interact
-                j = cand.interacts.values().index(cur_interact)
-                if j + 1 < len(cand.interacts):
-                    next_name = cand.interacts.keys()[j + 1]
+                values = list(cand.interacts.values())
+                keys = list(cand.interacts.keys())
+                j = values.index(cur_interact)
+                if j + 1 < len(keys):
+                    next_name = keys[j + 1]
                 else:
-                    next_name = cand.interacts.keys()[0]
+                    next_name = keys[0]
                 if cand.interacts[next_name] != cur_interact:
                     cand._set_interact(next_name)
         elif self.mode == DRAW:

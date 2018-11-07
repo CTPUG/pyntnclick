@@ -41,7 +41,7 @@ class Widget(object):
 
         type_ = ev.type
         if type_ == USEREVENT:
-            for k in self.callbacks.iterkeys():
+            for k in self.callbacks:
                 if (isinstance(k, type) and issubclass(k, UserEvent)
                         and k.matches(ev)):
                     type_ = k
