@@ -15,7 +15,7 @@ class GameLogicTestCase(unittest.TestCase):
         # Events require us to initialize the display
         pygame.display.init()
         # Disable alpha conversion which requires a screen
-        pyntnclick.resources.Resources.CONVERT_ALPHA = False
+        resources.Resources.CONVERT_ALPHA = False
 
         self.game_description = self.GAME_DESCRIPTION_CLASS()
         self.state = self.game_description.initial_state()
