@@ -91,16 +91,16 @@ class MadClickerTestCase(GameLogicTestCase):
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)
                     self.do_thing(thing, None)
-                    for item in self.state.items.values():
+                    for item in self.state.inventory():
                         self.do_thing(thing, item)
         for detail in self.state.detail_views.values():
             for thing in detail.things.values():
                 for interact_name in thing.interacts:
                     thing._set_interact(interact_name)
                     self.do_thing(thing, None)
-                    for item in self.state.items.values():
+                    for item in self.state.inventory():
                         self.do_thing(thing, item)
-        for item in self.state.items.values():
+        for item in self.state.inventory():
             self.do_item(item, None)
-            for item2 in self.state.items.values():
+            for item2 in self.state.inventory():
                 self.do_item(item, item2)
