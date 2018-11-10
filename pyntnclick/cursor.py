@@ -26,8 +26,8 @@ class CursorSprite(Sprite):
         if not hasattr(self, 'plain_image'):
             self.highlight_transform = Colour(self.highlight_colour)
             self.plain_image = resources.get_image('items', self.filename)
-            self.highlighted_image = resources.get_image('items',
-                    self.filename, transforms=(self.highlight_transform,))
+            self.highlighted_image = resources.get_image(
+                'items', self.filename, transforms=(self.highlight_transform,))
             self.image = self.plain_image
             self.rect = self.image.get_rect()
             if self.pointer_x is None:

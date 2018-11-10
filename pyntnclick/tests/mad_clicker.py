@@ -34,21 +34,21 @@ class MadClickerTestCase(GameLogicTestCase):
                     interact_name = name
                     break
         if interact_name:
-            return "%s:%s (%s %s)" % (thing.name, interact_name,
-                    thing, thing.current_interact)
+            return "%s:%s (%s %s)" % (
+                thing.name, interact_name, thing, thing.current_interact)
         elif thing.current_interact:
-            return "%s:<no name found> (%s %s)" % (thing.name, thing,
-                    thing.current_interact)
+            return "%s:<no name found> (%s %s)" % (
+                thing.name, thing, thing.current_interact)
         else:
             return "%s:<no interact> (%s %s)" % (thing.name, thing)
 
     def format_error(self, thing, item, exception):
         if not item:
             msg = ("Unexpected result for interact with no item for %s"
-                    % self._format_thing(thing))
+                   % self._format_thing(thing))
         else:
             msg = ("Unexpected result for interact with item %s with %s" %
-                    (self._format_item(item), self._format_thing(thing)))
+                   (self._format_item(item), self._format_thing(thing)))
         if exception:
             return "Exception raised %s:\nTest failed: %s" % (exception, msg)
         return msg
@@ -58,13 +58,14 @@ class MadClickerTestCase(GameLogicTestCase):
             if item:
                 # We're interacting with an item in the inventory
                 self.state.add_inventory_item(item.name)
-            self.assertEqual(self.check_result(thing.interact(item)), True,
+            self.assertEqual(
+                self.check_result(thing.interact(item)), True,
                 self.format_error(thing, item, None))
         except self.failureException:
             raise
         except Exception as details:
-            raise self.failureException(self.format_error(thing, item,
-                details))
+            raise self.failureException(
+                self.format_error(thing, item, details))
         self.clear_inventory()
         self.clear_event_queue()
 
@@ -73,13 +74,14 @@ class MadClickerTestCase(GameLogicTestCase):
             self.state.add_inventory_item(item.name)
             if item2:
                 self.state.add_inventory_item(item2.name)
-            self.assertEqual(self.check_result(item.interact(item2)), True,
+            self.assertEqual(
+                self.check_result(item.interact(item2)), True,
                 self.format_error(item, item2, None))
         except self.failureException:
             raise
         except Exception as details:
-            raise self.failureException(self.format_error(item, item2,
-                details))
+            raise self.failureException(
+                self.format_error(item, item2, details))
         self.clear_inventory()
         self.clear_event_queue()
 

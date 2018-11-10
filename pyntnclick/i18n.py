@@ -7,7 +7,7 @@ from pkg_resources import resource_filename
 
 def _(s):
     if sys.version_info.major == 2:
-        return unicode(gettext(s), "utf-8")
+        return unicode(gettext(s), "utf-8")  # noqa: available in Python 2
     # python3's gettext already returns unicode strings
     return gettext(s)
 

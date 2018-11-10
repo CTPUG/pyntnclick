@@ -37,8 +37,8 @@ class ToolListWidget(Container):
         else:
             self.prev_but.rect.top = max(button_height, self.prev_but.rect.top)
         if not self.next_but:
-            self.next_but = TextButton((button_left + 100, button_height),
-                    u'\N{RIGHTWARDS ARROW}')
+            self.next_but = TextButton(
+                (button_left + 100, button_height), u'\N{RIGHTWARDS ARROW}')
             self.next_but.add_callback('clicked', self.change_page, 1)
         else:
             self.next_but.rect.top = max(button_height, self.next_but.rect.top)

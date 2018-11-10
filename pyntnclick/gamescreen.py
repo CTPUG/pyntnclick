@@ -81,12 +81,13 @@ class InventoryView(Container):
 
         self.updown_width = self.rect.width - slots * self.bsize
         ud_left = self.rect.right - self.updown_width
-        self.up_button = self.add(UpButton((ud_left, self.rect.top), gd,
-                    (self.updown_width, self.rect.height // 2)))
+        self.up_button = self.add(UpButton(
+            (ud_left, self.rect.top), gd,
+            (self.updown_width, self.rect.height // 2)))
         self.up_button.add_callback(MOUSEBUTTONDOWN, self.up_callback)
         self.down_button = self.add(DownButton(
-                    (ud_left, self.rect.top + self.rect.height // 2), gd,
-                    (self.updown_width, self.rect.height // 2)))
+            (ud_left, self.rect.top + self.rect.height // 2), gd,
+            (self.updown_width, self.rect.height // 2)))
         self.down_button.add_callback(MOUSEBUTTONDOWN, self.down_callback)
 
         self.add_callback(MOUSEBUTTONDOWN, self.mouse_down)
@@ -285,10 +286,12 @@ class GameScreen(CursorScreen):
         toolbar_height = self.gd.constants.button_size
 
         self.scene_modal = self.inner_container.add(
-            ModalStackContainer((0, 0), self.gd,
+            ModalStackContainer(
+                (0, 0), self.gd,
                 (self.surface_size[0], self.surface_size[1] - toolbar_height)))
         self.toolbar = self.inner_container.add(
-            ToolBar((0, self.surface_size[1] - toolbar_height), self.gd,
+            ToolBar(
+                (0, self.surface_size[1] - toolbar_height), self.gd,
                 (self.surface_size[0], toolbar_height), self))
         self.inventory = self.toolbar.inventory
 

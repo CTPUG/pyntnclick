@@ -32,6 +32,7 @@ class RectDrawerConstants(constants.GameConstants):
     zoom = 4
     zoom_step = 100
 
+
 constants = RectDrawerConstants()
 
 
@@ -48,8 +49,8 @@ class ColourButton(Button):
         super(ColourButton, self).__init__(rect, gd, size=size)
         self._colour = pygame.color.Color(colour)
         self._button_rect = self.rect.inflate(-self.padding, -self.padding)
-        self._colour_rect = self._button_rect.inflate(-self.border,
-                -self.border)
+        self._colour_rect = self._button_rect.inflate(
+            -self.border, -self.border)
         self.selected = False
         self._palette = palette
         self.add_callback('clicked', self.fix_selection)
@@ -92,8 +93,8 @@ class AppPalette(Container):
             if (x - self.rect.left + self.but_size) >= self.rect.width:
                 x = self.rect.left
                 y += self.but_size
-            button = ColourButton((x, y),
-                    gd, col, self, size=(self.but_size, self.but_size))
+            button = ColourButton(
+                (x, y), gd, col, self, size=(self.but_size, self.but_size))
             x += self.but_size
             if num == 0:
                 self.cur_selection = button
@@ -173,8 +174,9 @@ class AppImage(Container):
 
     def _print_thing(self, thing, interact_name):
         """Helper to avoid repeated translations"""
-        print(_("Thing %(thing)s Interact %(interact)s") %
-               {'thing': thing.name, 'interact': interact_name})
+        print(_(
+            "Thing %(thing)s Interact %(interact)s")
+            % {'thing': thing.name, 'interact': interact_name})
 
     def _print_rects(self, rect1, rect2):
         """Helper to avoid repeated translations"""
@@ -305,17 +307,18 @@ class AppImage(Container):
             return
         self.do_prepare()
         if self.clear_display:
-            surface.fill(pygame.color.Color(0, 0, 0),
-                    pygame.Rect(0, 0, constants.screen[0],
-                        constants.screen[1]))
+            surface.fill(
+                pygame.color.Color(0, 0, 0),
+                pygame.Rect(0, 0, constants.screen[0], constants.screen[1]))
             self.clear_display = False
 
         if self.zoom_display:
             base_surface = surface.copy()
             self.do_unzoomed_draw(base_surface)
-            zoomed = pygame.transform.scale(base_surface,
-                            (constants.zoom * base_surface.get_width(),
-                             constants.zoom * base_surface.get_height()))
+            zoomed = pygame.transform.scale(
+                base_surface, (
+                    constants.zoom * base_surface.get_width(),
+                    constants.zoom * base_surface.get_height()))
             area = pygame.rect.Rect(self.zoom_offset[0], self.zoom_offset[1],
                                     constants.screen[0], constants.screen[1])
             surface.blit(zoomed, (0, 0), area)
@@ -332,9 +335,10 @@ class AppImage(Container):
             # button correctly
             self.close_button.draw(surface)
         if self.mode == DRAW and self.start_pos and self.draw_rects:
-            rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
-                    self.end_pos[0] - self.start_pos[0],
-                    self.end_pos[1] - self.start_pos[1])
+            rect = pygame.rect.Rect(
+                self.start_pos[0], self.start_pos[1],
+                self.end_pos[0] - self.start_pos[0],
+                self.end_pos[1] - self.start_pos[1])
             rect.normalize()
             draw_rect_image(surface, self.rect_color, rect, self.draw_thick)
         if self.draw_rects:
@@ -345,13 +349,12 @@ class AppImage(Container):
         if self.current_image and self.mode == IMAGE:
             self.current_image.draw(surface)
         if self.draw_toolbar:
-            tb_surf = surface.subsurface(0, constants.screen[1]
-                                            - constants.button_size,
-                                         constants.screen[0],
-                                         constants.button_size).convert_alpha()
+            tb_surf = surface.subsurface(
+                0, constants.screen[1] - constants.button_size,
+                constants.screen[0], constants.button_size).convert_alpha()
             tb_surf.fill(pygame.color.Color(127, 0, 0, 191))
-            surface.blit(tb_surf, (0, constants.screen[1]
-                                      - constants.button_size))
+            surface.blit(
+                tb_surf, (0, constants.screen[1] - constants.button_size))
 
     def _make_dict(self):
         d = {}
@@ -380,8 +383,8 @@ class AppImage(Container):
 
     def image_load(self, ev, widget):
         if self.filechooser is None:
-            self.filechooser = FileChooser((0, 0), self.gd, None, os.curdir,
-                    self.do_load_image)
+            self.filechooser = FileChooser(
+                (0, 0), self.gd, None, os.curdir, self.do_load_image)
         else:
             self.filechooser.refresh()
         self.invalidate()
@@ -390,8 +393,8 @@ class AppImage(Container):
 
     def do_load_image(self, filename):
         try:
-            self.current_image = TranslucentImage((0, 0), self.gd,
-                    pygame.image.load(filename))
+            self.current_image = TranslucentImage(
+                (0, 0), self.gd, pygame.image.load(filename))
             if not self.draw_images:
                 # Selecting an image makes image visible
                 self.toggle_images(None, None)
@@ -435,8 +438,9 @@ class AppImage(Container):
 
     def _make_zoom_offset(self, pos):
         zoom_pos = (pos[0] * constants.zoom, pos[1] * constants.zoom)
-        offset = [zoom_pos[0] - constants.screen[0] // 2,
-                zoom_pos[1] - constants.screen[1] // 2]
+        offset = [
+            zoom_pos[0] - constants.screen[0] // 2,
+            zoom_pos[1] - constants.screen[1] // 2]
         self._check_limits(offset)
         self.zoom_offset = tuple(offset)
 
@@ -557,9 +561,10 @@ class AppImage(Container):
             if self.start_pos is None:
                 # We've come here not via a drawing situation, so bail
                 return False
-            rect = pygame.rect.Rect(self.start_pos[0], self.start_pos[1],
-                    self.end_pos[0] - self.start_pos[0],
-                    self.end_pos[1] - self.start_pos[1])
+            rect = pygame.rect.Rect(
+                self.start_pos[0], self.start_pos[1],
+                self.end_pos[0] - self.start_pos[0],
+                self.end_pos[1] - self.start_pos[1])
             rect.normalize()
             self.rects.append((self.rect_color, rect))
             self.start_pos = self.end_pos = None
@@ -594,10 +599,9 @@ class ModeLabel(LabelWidget):
 
     def __init__(self, pos, gd, app_image, size=None):
         self.app_image = app_image
-        super(ModeLabel, self).__init__(pos,
-                gd, _('Mode : '), fontname=constants.bold_font,
-                fontsize=15, color=pygame.color.Color(128, 0, 255),
-                size=size)
+        super(ModeLabel, self).__init__(
+            pos, gd, _('Mode : '), fontname=constants.bold_font,
+            fontsize=15, color=pygame.color.Color(128, 0, 255), size=size)
         self.start_rect = self.rect.copy()
 
     def draw(self, surface):
@@ -612,13 +616,14 @@ class ModeLabel(LabelWidget):
 
 
 def make_button(text, gd, action, ypos):
-    rect = pygame.rect.Rect(0, 0, constants.menu_width,
-            constants.menu_button_height)
+    rect = pygame.rect.Rect(
+        0, 0, constants.menu_width, constants.menu_button_height)
     rect.move_ip(805, ypos)
-    button = TextButton(rect.topleft, gd, text, size=(constants.menu_width,
-        constants.menu_button_height),
-            fontname=constants.font, fontsize=12,
-            color=pygame.color.Color(255, 255, 0), border=1, padding=3)
+    button = TextButton(
+        rect.topleft, gd, text,
+        size=(constants.menu_width, constants.menu_button_height),
+        fontname=constants.font, fontsize=12,
+        color=pygame.color.Color(255, 255, 0), border=1, padding=3)
     button.add_callback('clicked', action)
     return button
 
@@ -654,8 +659,8 @@ class RectApp(Container):
         load_image = make_button(_("Load image"), gd, self.image.image_load, y)
         self.add(load_image)
         y += load_image.rect.height
-        add_image = make_button(_("Place/Move images"), gd,
-                self.image.image_mode, y)
+        add_image = make_button(
+            _("Place/Move images"), gd, self.image.image_mode, y)
         add_image.enabled = False
         self.add(add_image)
         self.image.place_image_menu = add_image
@@ -669,40 +674,40 @@ class RectApp(Container):
         palette = AppPalette((810, y), gd, self.image, size=(200, 0))
         self.add(palette)
         y += palette.rect.height
-        print_rects = make_button(_("Print objects"), gd,
-                self.image.print_objs, y)
+        print_rects = make_button(
+            _("Print objects"), gd, self.image.print_objs, y)
         self.add(print_rects)
         y += print_rects.rect.height
-        toggle_things = make_button(_("Show Things (t)"), gd,
-                self.image.toggle_things, y)
+        toggle_things = make_button(
+            _("Show Things (t)"), gd, self.image.toggle_things, y)
         self.add(toggle_things)
         y += toggle_things.rect.height
-        toggle_thing_rects = make_button(_("Show Thing Rects (r)"), gd,
-                self.image.toggle_thing_rects, y)
+        toggle_thing_rects = make_button(
+            _("Show Thing Rects (r)"), gd, self.image.toggle_thing_rects, y)
         self.add(toggle_thing_rects)
         y += toggle_thing_rects.rect.height
-        toggle_images = make_button(_("Show Images (i)"), gd,
-                self.image.toggle_images, y)
+        toggle_images = make_button(
+            _("Show Images (i)"), gd, self.image.toggle_images, y)
         self.add(toggle_images)
         y += toggle_images.rect.height
-        trans_images = make_button(_("Opaque Images (o)"), gd,
-                self.image.toggle_trans_images, y)
+        trans_images = make_button(
+            _("Opaque Images (o)"), gd, self.image.toggle_trans_images, y)
         self.add(trans_images)
         y += trans_images.rect.height
-        toggle_rects = make_button(_("Show Drawn Rects (d)"), gd,
-                self.image.toggle_rects, y)
+        toggle_rects = make_button(
+            _("Show Drawn Rects (d)"), gd, self.image.toggle_rects, y)
         self.add(toggle_rects)
         y += toggle_rects.rect.height
-        toggle_toolbar = make_button(_("Show Toolbar (b)"), gd,
-                self.image.toggle_toolbar, y)
+        toggle_toolbar = make_button(
+            _("Show Toolbar (b)"), gd, self.image.toggle_toolbar, y)
         self.add(toggle_toolbar)
         y += toggle_toolbar.rect.height
-        toggle_anim = make_button(_("Show Animations (a)"), gd,
-                self.image.toggle_anim, y)
+        toggle_anim = make_button(
+            _("Show Animations (a)"), gd, self.image.toggle_anim, y)
         self.add(toggle_anim)
         y += toggle_anim.rect.height
-        toggle_zoom = make_button(_("Zoom (z)"), gd,
-                self.image.toggle_zoom, y)
+        toggle_zoom = make_button(
+            _("Zoom (z)"), gd, self.image.toggle_zoom, y)
         self.add(toggle_zoom)
         y += toggle_zoom.rect.height
         quit_but = make_button(_("Quit"), gd, self.quit, 570)
@@ -744,5 +749,6 @@ class RectEngine(object):
 def make_rect_display():
     pygame.display.init()
     pygame.font.init()
-    pygame.display.set_mode((constants.screen[0]
-        + constants.menu_width, constants.screen[1]))
+    pygame.display.set_mode(
+        (constants.screen[0] + constants.menu_width,
+         constants.screen[1]))

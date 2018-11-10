@@ -38,6 +38,7 @@ def usage():
     print(' where <freq> is the frequency in Hz (integer)')
     print(' and [<length>] is the time is seconds (float)')
 
+
 if __name__ == "__main__":
     try:
         freq = int(sys.argv[1])

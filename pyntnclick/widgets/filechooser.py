@@ -9,7 +9,8 @@ from .text import TextButton, LabelWidget
 
 class FileChooser(Box):
 
-    def __init__(self, pos, gd, size, curdir, ok_callback,
+    def __init__(
+            self, pos, gd, size, curdir, ok_callback,
             page_length=12, padding=2):
         super(FileChooser, self).__init__(pos, gd, size)
         self.page_length = page_length
@@ -45,9 +46,9 @@ class FileChooser(Box):
         self.fill_page()
 
     def _dir_button(self, entry):
-        widget = TextButton((0, 0), self.gd, entry + '/',
-                fontname=self.gd.constants.bold_font,
-                fontsize=10)
+        widget = TextButton(
+            (0, 0), self.gd, entry + '/',
+            fontname=self.gd.constants.bold_font, fontsize=10)
         widget.do_prepare()
         widget.add_callback('clicked', self.change_dir, entry)
         return widget
@@ -55,11 +56,13 @@ class FileChooser(Box):
     def _file_button(self, entry):
         if entry == self.selected:
             # highlight
-            widget = TextButton((0, 0), self.gd, entry,
-                    fontsize=10, border=2, color='yellow')
+            widget = TextButton(
+                (0, 0), self.gd, entry,
+                fontsize=10, border=2, color='yellow')
         else:
-            widget = TextButton((0, 0), self.gd, entry, border=0,
-                    fontsize=10)
+            widget = TextButton(
+                (0, 0), self.gd, entry, border=0,
+                fontsize=10)
         widget.do_prepare()
         widget.add_callback('clicked', self.change_selection, entry)
         return widget
@@ -77,8 +80,9 @@ class FileChooser(Box):
                              color='black')
         widget.do_prepare()
         self.add(widget)
-        upbut = TextButton((left + 2 * self.padding + widget.rect.width, top),
-                self.gd, u'\N{LEFTWARDS ARROW WITH HOOK}Back one level')
+        upbut = TextButton(
+            (left + 2 * self.padding + widget.rect.width, top),
+            self.gd, u'\N{LEFTWARDS ARROW WITH HOOK}Back one level')
         upbut.do_prepare()
         upbut.add_callback('clicked', self.change_dir, os.pardir)
         self.add(upbut)
@@ -105,8 +109,9 @@ class FileChooser(Box):
             self.next_but = TextButton((0, 0), self.gd, u'\N{DOWNWARDS ARROW}')
             self.next_but.do_prepare()
             self.next_but.add_callback('clicked', self.change_page, +1)
-        page_top = max(top - self.next_but.rect.height,
-                self.prev_but.rect.bottom + self.padding)
+        page_top = max(
+            top - self.next_but.rect.height,
+            self.prev_but.rect.bottom + self.padding)
         self.next_but.rect.topleft = (page_left, page_top)
         if self.page > 0:
             self.prev_but.enable()
@@ -119,8 +124,9 @@ class FileChooser(Box):
         self.add(self.next_but)
         self.add(self.prev_but)
         # Add OK and Cancel buttons
-        top = max(self.prev_but.rect.bottom + self.padding,
-                top + 2 * self.padding)
+        top = max(
+            self.prev_but.rect.bottom + self.padding,
+            top + 2 * self.padding)
         ok_but = TextButton((left, top), self.gd, 'OK')
         ok_but.add_callback('clicked', self.ok)
         self.add(ok_but)
@@ -159,6 +165,6 @@ class FileChooser(Box):
             self.parent.paused = False
         self.parent.remove(self)
         if self.selected:
-            self.ok_callback(os.path.normpath(os.path.join(self.curdir,
-                self.selected)))
+            self.ok_callback(
+                os.path.normpath(os.path.join(self.curdir, self.selected)))
         return True
