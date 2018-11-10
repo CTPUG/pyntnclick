@@ -9,8 +9,13 @@ from ..resources import Resources, ResourceNotFound
 TEST_PATH = os.path.dirname(__file__)
 DATA_PATH = os.path.join(os.path.dirname(TEST_PATH), 'data')
 
-test_path = lambda p: os.path.join(TEST_PATH, p)
-data_path = lambda p: os.path.join(DATA_PATH, p)
+
+def test_path(p):
+    return os.path.join(TEST_PATH, p)
+
+
+def data_path(p):
+    return os.path.join(DATA_PATH, p)
 
 
 class ResourcesTestCase(TestCase):
