@@ -133,8 +133,8 @@ class Sound(object):
 
     def get_music(self, name):
         if self.sound_enabled:
-            music_file = self._resource_finder.get_resource_path("sounds",
-                    name)
+            music_file = self._resource_finder.get_resource_path(
+                "sounds", name)
             return music_file
         return None
 

@@ -4,7 +4,6 @@ import pygame.display
 import pygame.event
 
 from .. import resources
-from .. import state
 
 
 class GameLogicTestCase(unittest.TestCase):
@@ -53,8 +52,8 @@ class GameLogicTestCase(unittest.TestCase):
             gizmo = gizmo.things[thing]
         gizmo.set_data(key, value)
 
-    def assert_game_data(self, key, value, thing=None, scene=None,
-            detail=None):
+    def assert_game_data(
+            self, key, value, thing=None, scene=None, detail=None):
         gizmo = self.state.get_current_scene()
         if scene is not None:
             gizmo = self.state.scenes[scene]
@@ -78,7 +77,7 @@ class GameLogicTestCase(unittest.TestCase):
         try:
             self.state.get_item(item)
             self.assertTrue(exists)
-        except:
+        except Exception:
             self.assertFalse(exists)
 
     def assert_current_scene(self, scene):

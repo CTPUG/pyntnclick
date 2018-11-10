@@ -22,8 +22,8 @@ from .resources import Resources
 from .sound import Sound
 from . import state
 
-from .tools.rect_drawer import (RectEngine, RectDrawerError,
-        make_rect_display)
+from .tools.rect_drawer import (
+    RectEngine, RectDrawerError, make_rect_display)
 from .utils import list_scenes
 
 
@@ -95,8 +95,8 @@ class GameDescription(object):
                     print('Missing mo file for %s' % pofile)
                     continue
                 if os.stat(pofile).st_mtime > os.stat(mofile).st_mtime:
-                    print('po file %s is newer than mo file %s' % (pofile,
-                            mofile))
+                    print('po file %s is newer than mo file %s'
+                          % (pofile, mofile))
 
     def initial_state(self, game_state=None):
         """Create a copy of the initial game state."""
@@ -117,25 +117,33 @@ class GameDescription(object):
 
     def option_parser(self):
         parser = OptionParser()
-        parser.add_option("--no-sound", action="store_false", default=True,
-                dest="sound", help="disable sound")
+        parser.add_option(
+            "--no-sound", action="store_false", default=True,
+            dest="sound", help="disable sound")
         # We flag these, so we can warn the user that these require debug mode
-        self.debug_options = ['--scene', '--no-rects', '--rect-drawer',
-                '--list-scenes', '--details']
+        self.debug_options = [
+            '--scene', '--no-rects', '--rect-drawer',
+            '--list-scenes', '--details']
         if self.constants.debug:
-            parser.add_option("--scene", type="str", default=None,
+            parser.add_option(
+                "--scene", type="str", default=None,
                 dest="scene", help="initial scene")
-            parser.add_option("--no-rects", action="store_false", default=True,
+            parser.add_option(
+                "--no-rects", action="store_false", default=True,
                 dest="rects", help="disable debugging rects")
-            parser.add_option("--rect-drawer", action="store_true",
-                    default=False, dest="rect_drawer",
-                    help="Launch the rect drawing helper tool. Specify the"
-                    " scene with --scene")
-            parser.add_option("--list-scenes", action="store_true",
-                    default=False, dest='list_scenes', help="List all scenes"
-                    " that can be used with --scene and exit.")
-            parser.add_option("--detail", type="str", default=None,
-                    dest="detail", help="Detailed view for rect_drawer")
+            parser.add_option(
+                "--rect-drawer", action="store_true",
+                default=False, dest="rect_drawer",
+                help=(
+                    "Launch the rect drawing helper tool. Specify the"
+                    " scene with --scene"))
+            parser.add_option(
+                "--list-scenes", action="store_true",
+                default=False, dest='list_scenes',
+                help="List all scenes that can be used with --scene and exit.")
+            parser.add_option(
+                "--detail", type="str", default=None,
+                dest="detail", help="Detailed view for rect_drawer")
         return parser
 
     def warn_debug(self, option):

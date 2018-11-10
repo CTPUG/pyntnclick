@@ -260,8 +260,8 @@ class TranslucentImage(Image):
     def __init__(self, pos, gd, image, size=None):
         super(TranslucentImage, self).__init__(pos, gd, image, size)
         self.translucent = False
-        surf = pygame.surface.Surface((self.rect.width, self.rect.height),
-                SRCALPHA).convert_alpha()
+        surf = pygame.surface.Surface(
+            (self.rect.width, self.rect.height), SRCALPHA).convert_alpha()
         surf.fill(pygame.color.Color(255, 255, 255, 96))
         surf.blit(self.image, (0, 0), None, BLEND_RGBA_MIN)
         self.trans_image = surf

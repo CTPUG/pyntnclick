@@ -12,7 +12,7 @@ from pygame.surface import Surface
 
 
 if sys.version_info.major == 2:
-    str_type = basestring
+    str_type = basestring  # noqa: available in Python 2
 else:
     str_type = str
 
@@ -21,8 +21,8 @@ def list_scenes(scene_module, scene_list):
     """List the scenes in the state"""
     print("Available scenes and details:")
     for scene in scene_list:
-        scenemod = __import__('%s.%s' % (scene_module, scene),
-                         fromlist=[scene])
+        scenemod = __import__(
+            '%s.%s' % (scene_module, scene), fromlist=[scene])
         if scenemod.SCENES:
             print(" * %s" % scene)
         else:
@@ -36,13 +36,13 @@ def draw_rect_image(surface, color, rect, thickness):
     # top
     surface.fill(color, (rect.left, rect.top, rect.width, thickness))
     # bottom
-    surface.fill(color, (rect.left, rect.bottom - thickness, rect.width,
-        thickness))
+    surface.fill(
+        color, (rect.left, rect.bottom - thickness, rect.width, thickness))
     # left
     surface.fill(color, (rect.left, rect.top, thickness, rect.height))
     # right
-    surface.fill(color, (rect.right - thickness, rect.top, thickness,
-        rect.height))
+    surface.fill(
+        color, (rect.right - thickness, rect.top, thickness, rect.height))
 
 
 def convert_color(color):
@@ -58,7 +58,9 @@ def lookup_debug_color(number):
     """Choose a unique colour for this number, to aid debugging"""
     return Color(list(THECOLORS.keys())[number])
 
-def render_text(text, fontname, font_size, color, bg_color, resource, size,
+
+def render_text(
+        text, fontname, font_size, color, bg_color, resource, size,
         centre=True):
     """Render the text so it will fit in the given size, reducing font
        size as needed.

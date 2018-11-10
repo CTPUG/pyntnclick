@@ -566,12 +566,14 @@ class Thing(StatefulGizmo, InteractiveMixin):
         self.current_interact.rect = old_rect
         if self.game.debug_rects and self._interact_hilight_color:
             if hasattr(self.rect, 'collidepoint'):
-                draw_rect_image(surface, self._interact_hilight_color,
-                        self.rect.inflate(1, 1), 1)
+                draw_rect_image(
+                    surface, self._interact_hilight_color,
+                    self.rect.inflate(1, 1), 1)
             else:
                 for rect in self.rect:
-                    draw_rect_image(surface, self._interact_hilight_color,
-                            rect.inflate(1, 1), 1)
+                    draw_rect_image(
+                        surface, self._interact_hilight_color,
+                        rect.inflate(1, 1), 1)
 
 
 class ItemFactory(StatefulGizmo):
