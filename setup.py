@@ -40,6 +40,6 @@ setup(
 
       data_files=[
           'COPYING',
-          #'README.txt',
+          'README.md',
       ],
      )
