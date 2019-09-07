@@ -37,9 +37,5 @@ setup(
       install_requires=version.INSTALL_REQUIRES,
 
       packages=find_packages(),
-
-      data_files=[
-          'COPYING',
-          'README.md',
-      ],
+      include_package_data=True,
      )
