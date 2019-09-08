@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-30 17:33+0200\n"
+"POT-Creation-Date: 2019-09-07 14:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,138 +17,138 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: pyntnclick/tools/rect_drawer.py:127
+#: pyntnclick/tools/rect_drawer.py:131
 msgid "Close"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:161
+#: pyntnclick/tools/rect_drawer.py:165
 msgid "draw"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:163
+#: pyntnclick/tools/rect_drawer.py:167
 msgid "cycle"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:165
+#: pyntnclick/tools/rect_drawer.py:169
 msgid "delete"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:167
+#: pyntnclick/tools/rect_drawer.py:171
 msgid "image"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:173
+#: pyntnclick/tools/rect_drawer.py:178
 #, python-format
 msgid "Thing %(thing)s Interact %(interact)s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:178
+#: pyntnclick/tools/rect_drawer.py:183
 msgid "     Rects"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:203
+#: pyntnclick/tools/rect_drawer.py:208
 msgid "Existing Intersecting rects"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:225 pyntnclick/tools/rect_drawer.py:239
+#: pyntnclick/tools/rect_drawer.py:230 pyntnclick/tools/rect_drawer.py:244
 msgid "Intersecting rects"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:226
+#: pyntnclick/tools/rect_drawer.py:231
 #, python-format
 msgid "  Object %s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:240
+#: pyntnclick/tools/rect_drawer.py:245
 #, python-format
 msgid "  Object %(object1)s and %(object2)s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:365
+#: pyntnclick/tools/rect_drawer.py:371
 #, python-format
 msgid "Rect %d : "
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:371
+#: pyntnclick/tools/rect_drawer.py:377
 #, python-format
 msgid "Image %d"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:593
+#: pyntnclick/tools/rect_drawer.py:603
 msgid "Mode : "
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:600
+#: pyntnclick/tools/rect_drawer.py:609
 #, python-format
 msgid "Mode : %s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:630
+#: pyntnclick/tools/rect_drawer.py:640
 #, python-format
 msgid "Invalid scene: %s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:637
+#: pyntnclick/tools/rect_drawer.py:647
 #, python-format
 msgid "Invalid detail: %s"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:646
+#: pyntnclick/tools/rect_drawer.py:656
 msgid "Draw Rect"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:649
+#: pyntnclick/tools/rect_drawer.py:659
 msgid "Load image"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:652
+#: pyntnclick/tools/rect_drawer.py:663
 msgid "Place/Move images"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:658
+#: pyntnclick/tools/rect_drawer.py:668
 msgid "Cycle interacts"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:661
+#: pyntnclick/tools/rect_drawer.py:671
 msgid "Delete Objects"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:667
+#: pyntnclick/tools/rect_drawer.py:678
 msgid "Print objects"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:671
+#: pyntnclick/tools/rect_drawer.py:682
 msgid "Show Things (t)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:675
+#: pyntnclick/tools/rect_drawer.py:686
 msgid "Show Thing Rects (r)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:679
+#: pyntnclick/tools/rect_drawer.py:690
 msgid "Show Images (i)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:683
+#: pyntnclick/tools/rect_drawer.py:694
 msgid "Opaque Images (o)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:687
+#: pyntnclick/tools/rect_drawer.py:698
 msgid "Show Drawn Rects (d)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:691
+#: pyntnclick/tools/rect_drawer.py:702
 msgid "Show Toolbar (b)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:695
+#: pyntnclick/tools/rect_drawer.py:706
 msgid "Show Animations (a)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:699
+#: pyntnclick/tools/rect_drawer.py:710
 msgid "Zoom (z)"
 msgstr ""
 
-#: pyntnclick/tools/rect_drawer.py:703
+#: pyntnclick/tools/rect_drawer.py:713
 msgid "Quit"
 msgstr ""

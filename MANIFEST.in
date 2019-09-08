@@ -1,0 +1,4 @@
+include *.md
+include COPYING
+recursive-include pyntnclick/data/images/pyntnclick *.png
+recursive-include pyntnclick/data/locale *.mo

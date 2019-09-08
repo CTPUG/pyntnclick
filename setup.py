@@ -4,6 +4,11 @@
 
 """Setuptools setup.py file for pyntnclick."""
 
+import os
+import subprocess
+from distutils.command.build import build
+from distutils.command.sdist import sdist
+
 from setuptools import setup, find_packages
 from pyntnclick import version
 
@@ -11,6 +16,21 @@ try:
     import py2exe
 except ImportError:
     pass
+
+
+class BuildCommand(build):
+    def run(self):
+        if os.path.exists('scripts/install-po.sh'):
+            subprocess.check_call('scripts/install-po.sh')
+        build.run(self)
+
+
+class SDistCommand(sdist):
+    def run(self):
+        if os.path.exists('scripts/install-po.sh'):
+            subprocess.check_call('scripts/install-po.sh')
+        sdist.run(self)
+
 
 setup(
       # Metadata
@@ -37,9 +57,10 @@ setup(
       install_requires=version.INSTALL_REQUIRES,
 
       packages=find_packages(),
+      include_package_data=True,
 
-      data_files=[
-          'COPYING',
-          #'README.txt',
-      ],
+      cmdclass={
+        'build': BuildCommand,
+        'sdist': SDistCommand,
+      },
      )
