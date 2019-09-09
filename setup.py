@@ -32,11 +32,19 @@ class SDistCommand(sdist):
         sdist.run(self)
 
 
+def readme_contents():
+    with open('README.md') as f:
+        return f.read().strip()
+
+
 setup(
       # Metadata
       name=version.NAME,
       version=version.VERSION_STR,
       description=version.DESCRIPTION,
+
+      long_description=readme_contents(),
+      long_description_content_type='text/markdown',
 
       author=version.AUTHOR_NAME,
       author_email=version.AUTHOR_EMAIL,
@@ -44,8 +52,8 @@ setup(
       maintainer=version.MAINTAINER_NAME,
       maintainer_email=version.MAINTAINER_EMAIL,
 
-      # url=version.HOMEPAGE,
-      # download_url=version.PYPI_URL,
+      url='https://github.com/CTPUG/pyntnclick',
+      download_url='https://pypi.org/project/pyntnclick/',
 
       license=version.LICENSE,
 
