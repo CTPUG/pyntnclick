@@ -44,8 +44,8 @@ setup(
       maintainer=version.MAINTAINER_NAME,
       maintainer_email=version.MAINTAINER_EMAIL,
 
-      # url=version.HOMEPAGE,
-      # download_url=version.PYPI_URL,
+      url='https://github.com/CTPUG/pyntnclick',
+      download_url='https://pypi.org/project/pyntnclick/',
 
       license=version.LICENSE,
 
