@@ -1,6 +1,6 @@
 """Pyntnclick Version Information"""
 
-VERSION = (0, 0, 1, 'alpha', 0)
+VERSION = (0, 0, 1, 'final', 0)
 BASE_VERSION_STR = '.'.join([str(x) for x in VERSION[:3]])
 VERSION_STR = {
     'final': BASE_VERSION_STR,
