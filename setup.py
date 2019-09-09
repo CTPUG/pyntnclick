@@ -32,11 +32,19 @@ class SDistCommand(sdist):
         sdist.run(self)
 
 
+def readme_contents():
+    with open('README.md') as f:
+        return f.read().strip()
+
+
 setup(
       # Metadata
       name=version.NAME,
       version=version.VERSION_STR,
       description=version.DESCRIPTION,
+
+      long_description=readme_contents(),
+      long_description_content_type='text/markdown',
 
       author=version.AUTHOR_NAME,
       author_email=version.AUTHOR_EMAIL,
